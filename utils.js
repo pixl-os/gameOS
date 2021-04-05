@@ -338,6 +338,8 @@ function fanArt(data) {
     if (data.assets.boxFront.includes("/header.jpg")) 
       return steamHero(data);
     else {
+      if (data.assets.marquee != "")
+        return data.assets.marquee;
       if (data.assets.background != "")
         return data.assets.background;
       else if (data.assets.screenshots[0])

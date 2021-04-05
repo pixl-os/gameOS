@@ -338,7 +338,8 @@ id: root
 
                         width: parent.height - vpx(20)
                         height: width
-                        source: Utils.logo(modelData)
+                        source: (modelData.assets.marquee == "") ? Utils.logo(modelData) : ""
+                        //source: Utils.logo(modelData)
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
                         //sourceSize: Qt.size(specialLogo.width, specialLogo.height)
