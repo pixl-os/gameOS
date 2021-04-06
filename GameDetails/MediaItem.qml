@@ -54,7 +54,7 @@ id: root
             Text {
             id: bubbletitle
 
-                text: isVideo ? "Video" : "Screenshot"
+                text: isVideo ? "Video" : "Picture"
                 color: theme.text
                 font {
                     family: subtitleFont.name
