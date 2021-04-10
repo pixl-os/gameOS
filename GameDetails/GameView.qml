@@ -52,8 +52,11 @@ id: root
     // Combine the video and the screenshot arrays into one
     function mediaArray() {
         let mediaList = [];
-        if (game && game.assets.video)
-            game.assets.videoList.forEach(v => mediaList.push(v));
+        if (game && game.assets.video) game.assets.videoList.forEach(v => mediaList.push(v));
+        
+        if (game && game.assets.manual) {
+                                         mediaList.push(game.assets.manual); 
+                                         }
 
         if (game) {
             game.assets.screenshotList.forEach(v => mediaList.push(v));
@@ -81,8 +84,6 @@ id: root
             //if (game.assets.music != "") mediaList.push(game.assets.music);//RFU
             
             if (game.assets.titlescreen != "") mediaList.push(game.assets.titlescreen);
-            
-            //if (game.assets.manual != "") mediaList.push(game.assets.manual); //RFU
             
         }
 

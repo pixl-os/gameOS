@@ -26,6 +26,7 @@ id: root
     property string mediaItem: ""
     property bool selected
     property bool isVideo: mediaItem.includes(".mp4") || mediaItem.includes(".webm")
+    property bool isManual: mediaItem.includes(".pdf")
 
     scale: selected ? 1.05 : 1
     Behavior on scale { NumberAnimation { duration: 100 } }
@@ -54,7 +55,7 @@ id: root
             Text {
             id: bubbletitle
 
-                text: isVideo ? "Video" : "Picture"
+                text: isVideo ? "Video" : (isManual ? "Manual" : "Picture")
                 color: theme.text
                 font {
                     family: subtitleFont.name
