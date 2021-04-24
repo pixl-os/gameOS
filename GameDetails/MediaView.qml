@@ -15,6 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import QtQuick 2.0
+//import QtWebEngine 1.0
+import QtWebEngine 1.9
 import QtQuick.Layouts 1.11
 import QtGraphicalEffects 1.0
 import QtQml.Models 2.10
@@ -28,7 +30,8 @@ id: root
     property var mediaModel: []
     property int mediaIndex: 0
     property bool isVideo: mediaModel.length ? mediaModel[mediaIndex].includes(".mp4") || mediaModel[mediaIndex].includes(".webm") : false
-
+    property bool isManual: mediaModel.length ? mediaModel[mediaIndex].includes(".pdf") : false
+    
     function next() {
         if (mediaIndex == mediaModel.length-1)
             mediaIndex = 0;
@@ -45,10 +48,11 @@ id: root
     Rectangle {
         
         anchors.fill: parent
-        color: "black"
-        opacity: 0.95
+        color: "#808080"
+        opacity: 1.0
     }
 
+    // to load Video
     Component {
     id: videoWrapper
 
@@ -62,15 +66,71 @@ id: root
 
     }
 
-    // Video
     Loader {
     id: videoLoader
-        
         sourceComponent: root.focus && isVideo ? videoWrapper : undefined
         asynchronous: true
         anchors { fill: parent }
+    }    
+
+    // to load Manual
+    Component {
+    id: manualWrapper
+        WebEngineView {
+            id: webview
+            anchors.fill: parent
+            url: "../pdfjs/web/viewer.html" + "?file=" + (isManual ? mediaModel[mediaIndex]: "") + "#zoom=page-fit"
+            
+            Component.onCompleted: {
+                console.log("WebEngineView.onCompleted");
+                webview.focus = true;
+                manualLoader.focus = true;
+            }
+        }
     }
-    
+
+    Loader {
+    id: manualLoader
+        sourceComponent: root.focus && isManual ? manualWrapper : undefined
+        asynchronous: true
+        anchors { fill: parent }
+        
+        // Input handling
+        //Keys.forwardTo: [sourceComponent];
+        Keys.onPressed: {
+                console.log("Key presssed in manualLoader");
+                // Back
+                if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                    //event.accepted = true;
+                    medialist.focus = true;
+                }    
+                //rotate with X
+                if (api.keys.isDetails(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_R);
+                } 
+                //zoom + / R1
+                if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_Plus, Qt.ControlModifier);
+                } 
+                //zoom - / L1
+                if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_Minus, Qt.ControlModifier);
+                } 
+                //Next page / R2
+                if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_N);
+                }
+                //Next page / A
+                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_N);
+                }                 
+                //Previous page - / L2
+                if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
+                    keyEmitter.keyPressed(appWindow, Qt.Key_P);
+                } 
+        }
+    }
+        
     ListView {
     id: medialist
 
@@ -92,14 +152,16 @@ id: root
 
             width: root.width
             height: root.height
-            source: modelData.includes(".mp4") || modelData.includes(".webm") ? "" : modelData
+            source: modelData.includes(".mp4") || modelData.includes(".webm") || modelData.includes(".pdf") ? "" : modelData
             smooth: true
             fillMode: Image.PreserveAspectFit
-            visible: !isVideo
+            visible: !isVideo && !isManual
             asynchronous: true
         }
+        
         Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
         Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+        
     }
 
     Row {
@@ -129,17 +191,29 @@ id: root
         onClicked: close();
     }
 
+    Keys.forwardTo: [manualLoader];
+    
     // Input handling
     Keys.onPressed: {
+
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
             close();
         }
+        
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            close();
+            if (!isManual) {
+                event.accepted = true;
+                close();
+            }
+            else
+            {
+                //console.log("Key presssed on Manual");
+                //set focus on pdf viewer
+                manualLoader.focus = true;
+            }
         }
     }
 

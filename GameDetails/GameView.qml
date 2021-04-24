@@ -52,12 +52,39 @@ id: root
     // Combine the video and the screenshot arrays into one
     function mediaArray() {
         let mediaList = [];
-        if (game && game.assets.video)
-            game.assets.videoList.forEach(v => mediaList.push(v));
+        if (game && game.assets.video) game.assets.videoList.forEach(v => mediaList.push(v));
+        
+        if (game && game.assets.manual) {
+                                         mediaList.push(game.assets.manual); 
+                                         }
 
         if (game) {
             game.assets.screenshotList.forEach(v => mediaList.push(v));
             game.assets.backgroundList.forEach(v => mediaList.push(v));
+            
+            //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
+            if ((game.assets.boxFront != "") && (game.assets.boxFront != game.assets.screenshots[0]) && (game.assets.boxFront != game.assets.background)) mediaList.push(game.assets.boxFront);
+            if (game.assets.boxBack != "") mediaList.push(game.assets.boxBack);
+            if (game.assets.boxSpine != "") mediaList.push(game.assets.boxSpine);
+            if (game.assets.boxFull != "") mediaList.push(game.assets.boxFull);
+            if ((game.assets.cartridge != "") && (game.assets.cartridge != game.assets.boxFront)) mediaList.push(game.assets.cartridge);
+            if (game.assets.logo !== "") mediaList.push(game.assets.logo);
+            if (game.assets.poster != "") mediaList.push(game.assets.poster);
+
+            if (game.assets.marquee != "") mediaList.push(game.assets.marquee);
+            if (game.assets.bezel != "") mediaList.push(game.assets.bezel);
+            if (game.assets.panel != "") mediaList.push(game.assets.panel);
+            if (game.assets.cabinetLeft != "") mediaList.push(game.assets.cabinetLeft);
+            if (game.assets.cabinetRight != "") mediaList.push(game.assets.cabinetRight);
+
+            if (game.assets.tile != "") mediaList.push(game.assets.tile);
+            if (game.assets.steam != "") mediaList.push(game.assets.steam);    
+            if (game.assets.banner != "") mediaList.push(game.assets.banner);
+            
+            //if (game.assets.music != "") mediaList.push(game.assets.music);//RFU
+            
+            if (game.assets.titlescreen != "") mediaList.push(game.assets.titlescreen);
+            
         }
 
         return mediaList;
