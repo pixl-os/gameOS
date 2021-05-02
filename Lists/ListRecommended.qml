@@ -19,6 +19,7 @@
 
 import QtQuick 2.0
 import SortFilterProxyModel 0.2
+import "../utils.js" as Utils
 
 Item {
 id: root
@@ -30,18 +31,15 @@ id: root
     property var randomletter: "";
     property var randomvalue: "";
     property var randomhashletter: "";
-    
-     property var lastindex: 0;
-    property var lastresult: false;
-        
+
+//TO INIT VALUES        
      onGamesChanged: {
-        lastindex = 0;
-        lastresult = false;
         randomletter: "";
         randomvalue: "";
         randomhashletter: "";
     }
 
+//LOCAL UTILS FUNCTION
     function random(min, max)
     {
         do {
@@ -52,7 +50,7 @@ id: root
         //console.log("randomvalue : ",value);
         return value;
     }
-
+         
     function generateRandomLetter() {
         do{
             const alphabet = "012345678abcdefghijklmnopqrstuvwxyz"
@@ -71,19 +69,30 @@ id: root
         randomhashletter = randomhashletter + value;
         //console.log("randomhashletter : ",value);
         return value;
+    }
+
+// REGEX FUNCTION
+    function regExpForRatingFiltering() {
+         return "(" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + ")";
+    }
+
+    function regExpForHashFiltering() {
+        //4 values today
+        return "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter();
     }    
 
+//FILTERING
     SortFilterProxyModel {
     id: gamesRecommended
         sourceModel: api.allGames
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-        filters:[RegExpFilter { roleName: "rating"; pattern: "(" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + ")"; caseSensitivity: Qt.CaseInsensitive; },
-                 //RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },
-                 RegExpFilter { roleName: "hash"; pattern: "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter(); caseSensitivity: Qt.CaseInsensitive; },
+        filters:[RegExpFilter { roleName: "rating"; pattern: regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
+                 //RFU (not necessary finally): RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },
+                 RegExpFilter { roleName: "hash"; pattern: regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
                  ExpressionFilter {
                         expression: {
-                              //to take on 1% only of games
-                              return (Math.random() <= 0.01)
+                              //to randomized and keep on 5% only of games -> best diversifications
+                              return (Math.random() <= 0.05)
                         }
                  }
                 ]
