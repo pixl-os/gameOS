@@ -468,6 +468,33 @@ id: root
                 }
 
                 Text {
+                id: title
+                    text: {
+                          if(modelData.name == "Screenshots") 
+                              return (modelData.games.count + ((modelData.games.count)!=1 ? " screenshots" : " screenshot"));
+                          else 
+                              return (modelData.games.count + ((modelData.games.count)!=1 ? " games" : " game"));
+                          }
+                    color: theme.text
+                    font {
+                        family: subtitleFont.name
+                        pixelSize: vpx(12)
+                        bold: true
+                    }
+
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    anchors.top: parent.bottom
+
+                    width: parent.width
+
+                    opacity: 0.2
+                    visible: settings.AlwaysShowTitles === "Yes" || selected
+                }
+
+                Text {
                 id: platformname
 
                     text: modelData.name

@@ -16,6 +16,9 @@
 
 // This file contains some helper scripts for formatting data
 
+//
+// Updated by Bozo the Geek for recalbox integration 30/04/2021
+//
 
 // For multiplayer games, show the player count as '1-N'
 function formatPlayers(playerCount) {
@@ -418,4 +421,17 @@ function shuffleArray(array) {
 
 function returnRandom(array) {
   return array[Math.floor(Math.random() * array.length)];
+}
+
+function toRoundNumber(value,factor) {
+    return Math.round(value/ factor)*factor;
+}
+
+function toNumberString(num) { 
+    if (Number.isInteger(num)) { 
+        return num + ".0"
+    }
+    else {
+        return num.toFixed(1).toString(); 
+    }
 }

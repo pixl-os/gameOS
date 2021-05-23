@@ -334,7 +334,7 @@ id: root
         width: parent.width
         height: parent.height/2
         start: Qt.point(0, 0)
-        end: Qt.point(0, height)
+        end: Qt.point(0, height*1.25) //updated to reduce gradient effect on background screenshot/fanart or video
         gradient: Gradient {
             GradientStop { position: 0.0; color: theme.gradientstart }
             GradientStop { position: 0.7; color: theme.gradientend }
@@ -570,7 +570,7 @@ id: root
             property bool selected: parent.focus
             focus: selected
             width: parent.width
-            height: vpx(50)
+            height: vpx(110) // to put media more at the bottom
             model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
