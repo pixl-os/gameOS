@@ -228,13 +228,19 @@ id: root
         Rectangle {
         id: settingsbutton
 
-            width: height
+            width: vpx(40)
             height: vpx(40)
-            anchors { right: parent.right; rightMargin: globalMargin }
+            anchors { 
+			verticalCenter: parent.verticalCenter
+			right: (settings.HideClock === "No" ? sysTime.left : parent.right); rightMargin: vpx(10)
+			}
             color: focus ? theme.accent : "white"
             radius: height/2
             opacity: focus ? 1 : 0.2
-            anchors.verticalCenter: parent.verticalCenter
+            anchors {
+			verticalCenter: parent.verticalCenter
+			right: settingsButton.left; rightMargin: vpx(50)
+			}
             onFocusChanged: {
                 sfxNav.play()
                 if (focus)
@@ -276,6 +282,34 @@ id: root
             asynchronous: true
             source: "../assets/images/settingsicon.svg"
             opacity: root.focus ? 0.8 : 0.5
+        }
+		
+       Text {
+        id: sysTime
+
+            function set() {
+                sysTime.text = Qt.formatTime(new Date(), "hh:mm AP")
+            }
+
+            Timer {
+                id: textTimer
+                interval: 60000 // Run the timer every minute
+                repeat: true
+                running: true
+                triggeredOnStart: true
+                onTriggered: sysTime.set()
+            }
+
+            anchors {
+                top: parent.top; bottom: parent.bottom
+                right: parent.right; rightMargin: vpx(25)
+            }
+            color: "white"
+            font.pixelSize: vpx(18)
+            font.family: subtitleFont.name
+            horizontalAlignment: Text.Right
+            verticalAlignment: Text.AlignVCenter
+	    visible: settings.HideClock === "No"
         }
     }
 

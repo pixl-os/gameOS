@@ -47,6 +47,9 @@ id: root
             AllowThumbVideoAudio:          api.memory.has("Play video thumbnail audio") ? api.memory.get("Play video thumbnail audio") : "No",
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
+            HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
+	    ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Dark Green",
+			ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Black",
             MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
             AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
             AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
@@ -88,7 +91,7 @@ id: root
 
     // Filtering options
     property bool showFavs: false
-    property var sortByFilter: ["sort_title", "lastPlayed", "playCount", "rating"]
+    property var sortByFilter: ["title", "lastPlayed", "playCount", "rating"]
     property int sortByIndex: 0
     property var orderBy: Qt.AscendingOrder
     property string searchTerm: ""
@@ -184,18 +187,130 @@ id: root
     }
 
     // Theme settings
-    property var theme: {
-        return {
-            main:           "#1d253d",
-            secondary:      "#202a44",
-            accent:         "#f00980",
-            highlight:      "#f00980",
-            text:           "#ececec",
-            button:         "#f00980",
-            gradientstart:  "#000d111d",
-            gradientend:    "#FF0d111d"
-        }
-    }
+	    property var theme: {
+			
+			var background = 		"#000000";
+                        var text = 		        "#ebebeb";
+			var gradientstart = 	        "#001f1f1f";
+			var gradientend = 		"#FF000000";
+			var secondary = 		"#303030";
+			
+			if (settings.ColorBackground === "Original") {
+				background = 	 "#1d253d";
+				text =           "#ececec";
+            			gradientstart =  "#000d111d";
+			        gradientend =    "#FF0d111d";
+			}
+                        else if (settings.ColorBackground === "Black") {
+				background = 	"#000000";
+				gradientstart = "#001f1f1f";
+				gradientend = 	"#FF000000";
+			}
+                        else if (settings.ColorBackground === "White") {
+						background = 	"#ebebeb";
+						gradientstart = "#00ebebeb";
+						gradientend = 	"#FFebebeb";
+	                 	                text         = 	"#101010";
+			}
+			else if (settings.ColorBackground === "Gray") {
+				background = 	"#1f1f1f";
+				gradientstart = "#001f1f1f";
+				gradientend = 	"#FF1F1F1F";
+			}
+			else if (settings.ColorBackground === "Blue") {
+				background = 	"#1d253d";
+				gradientstart = "#001d253d";
+				gradientend = 	"#FF1d253d";
+			}
+		    else if (settings.ColorBackground === "Green") {
+				background = 	"#054b16";
+				gradientstart = "#00054b16";
+				gradientend = 	"#00054b16";
+			}
+		    else if (settings.ColorBackground === "Red") {
+				background = 	"#520000";
+				gradientstart = "#00520000";
+				gradientend = 	"#FF520000";
+			}
+
+		    var accent = "#288928";
+			if (settings.ColorLayout === "Original") {
+				accent = "#f00980";
+				secondary = "#202a44";
+		    	}
+			else if (settings.ColorLayout === "Dark Green") {
+				accent = "#288928";
+			} 
+			else if (settings.ColorLayout === "Light Green") {
+				accent = "#65b032";
+			} 
+	            else if (settings.ColorLayout === "Turquoise") {
+					accent = "#288e80";
+				}
+	            else if (settings.ColorLayout === "Dark Red") {
+					accent = "#ab283b";
+				}
+	            else if (settings.ColorLayout === "Light Red") {
+					accent = "#e52939";
+				}
+	            else if (settings.ColorLayout === "Dark Pink") {
+					accent = "#c52884";
+				}
+	            else if (settings.ColorLayout === "Light Pink") {
+					accent = "#ee6694";
+				}
+	            else if (settings.ColorLayout === "Dark Blue") {
+					accent = "#30519c";
+				}
+	            else if (settings.ColorLayout === "Light Blue") {
+					accent = "#288dcf";
+				}
+	            else if (settings.ColorLayout === "Orange") {
+					accent = "#ed5b28";
+				}
+	            else if (settings.ColorLayout === "Yellow") {
+					accent = "#ed9728";
+				}
+	            else if (settings.ColorLayout === "Magenta") {
+					accent = "#b857c6";
+				}
+	            else if (settings.ColorLayout === "Purple") {
+					accent = "#825fb1";
+				}
+	            else if (settings.ColorLayout === "Dark Gray") {
+					accent = "#5e5c5d";
+				}
+	            else if (settings.ColorLayout === "Light Gray") {
+					accent = "#818181";
+				}
+	            else if (settings.ColorLayout === "Dark Gray") {
+					accent = "#5e5c5d";
+				}
+	            else if (settings.ColorLayout === "Steel") {
+					accent = "#768294";
+				}
+	            else if (settings.ColorLayout === "Stone") {
+					accent = "#658780";
+				}
+	            else if (settings.ColorLayout === "Dark Brown") {
+					accent = "#806044";
+				}
+	            else if (settings.ColorLayout === "Light Brown") {
+					accent = "#7e715c";
+				}
+				return {
+					main:           background,
+					secondary:      secondary,
+					accent:         accent,
+					highlight:      accent,
+					text:           text,
+					button:         accent,
+					gradientstart:  gradientstart,
+					gradientend:    gradientend
+				};
+		
+        };
+    
 
     property real globalMargin: vpx(30)
     property real helpMargin: buttonbar.height
