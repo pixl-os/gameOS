@@ -55,6 +55,18 @@ id: root
             settingName: "Hide button help"
             setting: "No,Yes"
         }
+	ListElement {
+            settingName: "Hide Clock"
+            setting: "No,Yes"
+        }
+	ListElement {
+            settingName: "Color Layout"
+            setting: "Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
+        }
+	ListElement {
+		settingName: "Color Background"
+		setting: "Original,Black,Gray,Blue,Green,Red"
+        }
     }
 
     property var generalPage: {
