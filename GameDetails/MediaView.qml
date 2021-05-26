@@ -79,10 +79,10 @@ id: root
         WebEngineView {
             id: webview
             anchors.fill: parent
-            url: "../pdfjs/web/viewer.html" + "?file=" + (isManual ? mediaModel[mediaIndex]: "") + "#zoom=page-fit"
-            
+            url: "../pdfjs/web/viewer.html" + "?file=" + encodeURIComponent(isManual ? mediaModel[mediaIndex]: "") + "#zoom=page-fit"
             Component.onCompleted: {
-                console.log("WebEngineView.onCompleted");
+                //console.log("Url pdf: ", webview.url);
+                //console.log("WebEngineView.onCompleted");
                 webview.focus = true;
                 manualLoader.focus = true;
             }
