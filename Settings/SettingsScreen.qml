@@ -67,6 +67,10 @@ id: root
 		settingName: "Color Background"
 		setting: "Original,Black,Gray,Blue,Green,Red"
         }
+	ListElement {
+		settingName: "System Logo Style"
+		setting: "White,Color"
+        }
     }
 
     property var generalPage: {

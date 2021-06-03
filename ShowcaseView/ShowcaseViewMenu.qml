@@ -491,7 +491,16 @@ id: root
                     anchors.fill: parent
                     anchors.centerIn: parent
                     anchors.margins: vpx(15)
-                    source: "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png"
+                    source: {
+                        if(settings.SystemLogoStyle === "White")
+                        {
+                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                        }
+                        else
+                        {
+                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                        }
+                    }    
                     sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
