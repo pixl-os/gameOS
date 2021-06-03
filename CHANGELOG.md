@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [logo-settings] - 2021-06-03
+- add support of settings for logo sets
+- fix color layout/background to be set as "Original" for default value
+- add one logo as example for "color" style
+- add and rename some logo to match with recalbox systems
+
+## [recalbox-integration] - 2021-05-26
+- Manual : fix to manage '&' character in name of pdf using EncodeURIComponent
+
 ## [xboxos-reuse] - 2021-05-24
 - Get Clock from XboxOS (adding of setting to hide it)
 - Get management of colors in settings from XboxOS (but adding of Original GameOS colors)

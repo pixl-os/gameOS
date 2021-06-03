@@ -55,7 +55,16 @@ id: root
                 left: parent.left; leftMargin: globalMargin
             }
             fillMode: Image.PreserveAspectFit
-            source: "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png"
+            source: {
+                if(settings.SystemLogoStyle === "White")
+                {
+                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png";
+                }
+                else
+                {
+                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                }
+            }
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: false
