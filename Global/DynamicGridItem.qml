@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 Item {
@@ -32,11 +32,11 @@ id: root
 
 
     function logo(data) {
-    if (data != null) {
+    if (data !== null) {
         if (data.assets.boxFront.includes("header.jpg")) 
             return steamLogo(data);
         else {
-            if (data.assets.logo != "")
+            if (data.assets.logo !== "")
                 return data.assets.logo;
             }
         }
@@ -52,7 +52,7 @@ id: root
 
 
     // In order to use the retropie icons here we need to do a little collection specific hack
-    property bool playVideo: gameData ? gameData.assets.videoList.length && (settings.AllowThumbVideo == "Yes") : ""
+    property bool playVideo: gameData ? gameData.assets.videoList.length && (settings.AllowThumbVideo === "Yes") : ""
     scale: selected ? 1 : 0.95
     Behavior on scale { NumberAnimation { duration: 100 } }
     z: selected ? 10 : 1
@@ -73,7 +73,7 @@ id: root
 
         interval: 1200
         onTriggered: {
-            if (settings.HideLogo == "Yes")
+            if (settings.HideLogo === "Yes")
                 container.opacity = 0;
             else
                 screenshot.opacity = 0;
@@ -256,7 +256,7 @@ id: root
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onExited: { unhighlighted(); }
         onClicked: {

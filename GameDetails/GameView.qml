@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.8
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 import SortFilterProxyModel 0.2
-import QtQml.Models 2.10
-import QtMultimedia 5.9
+import QtQml.Models 2.15
+import QtMultimedia 5.12
 import "../Global"
 import "../GridView"
 import "../Lists"
@@ -63,27 +63,27 @@ id: root
             game.assets.backgroundList.forEach(v => mediaList.push(v));
             
             //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
-            if ((game.assets.boxFront != "") && (game.assets.boxFront != game.assets.screenshots[0]) && (game.assets.boxFront != game.assets.background)) mediaList.push(game.assets.boxFront);
-            if (game.assets.boxBack != "") mediaList.push(game.assets.boxBack);
-            if (game.assets.boxSpine != "") mediaList.push(game.assets.boxSpine);
-            if (game.assets.boxFull != "") mediaList.push(game.assets.boxFull);
-            if ((game.assets.cartridge != "") && (game.assets.cartridge != game.assets.boxFront)) mediaList.push(game.assets.cartridge);
+            if ((game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
+            if (game.assets.boxBack !== "") mediaList.push(game.assets.boxBack);
+            if (game.assets.boxSpine !== "") mediaList.push(game.assets.boxSpine);
+            if (game.assets.boxFull !== "") mediaList.push(game.assets.boxFull);
+            if ((game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
             if (game.assets.logo !== "") mediaList.push(game.assets.logo);
-            if (game.assets.poster != "") mediaList.push(game.assets.poster);
+            if (game.assets.poster !== "") mediaList.push(game.assets.poster);
 
-            if (game.assets.marquee != "") mediaList.push(game.assets.marquee);
-            if (game.assets.bezel != "") mediaList.push(game.assets.bezel);
-            if (game.assets.panel != "") mediaList.push(game.assets.panel);
-            if (game.assets.cabinetLeft != "") mediaList.push(game.assets.cabinetLeft);
-            if (game.assets.cabinetRight != "") mediaList.push(game.assets.cabinetRight);
+            if (game.assets.marquee !== "") mediaList.push(game.assets.marquee);
+            if (game.assets.bezel !== "") mediaList.push(game.assets.bezel);
+            if (game.assets.panel !== "") mediaList.push(game.assets.panel);
+            if (game.assets.cabinetLeft !== "") mediaList.push(game.assets.cabinetLeft);
+            if (game.assets.cabinetRight !== "") mediaList.push(game.assets.cabinetRight);
 
-            if (game.assets.tile != "") mediaList.push(game.assets.tile);
-            if (game.assets.steam != "") mediaList.push(game.assets.steam);    
-            if (game.assets.banner != "") mediaList.push(game.assets.banner);
+            if (game.assets.tile !== "") mediaList.push(game.assets.tile);
+            if (game.assets.steam !== "") mediaList.push(game.assets.steam);
+            if (game.assets.banner !== "") mediaList.push(game.assets.banner);
             
             //if (game.assets.music != "") mediaList.push(game.assets.music);//RFU
             
-            if (game.assets.titlescreen != "") mediaList.push(game.assets.titlescreen);
+            if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
             
         }
 
@@ -264,7 +264,7 @@ id: root
         source: "../assets/images/scanlines_v3.png"
         asynchronous: true
         opacity: 0.2
-        visible: !iamsteam && (settings.ShowScanlines == "Yes")
+        visible: !iamsteam && (settings.ShowScanlines === "Yes")
     }
 
     // Clear logo
@@ -455,7 +455,7 @@ id: root
             // Mouse/touch functionality
             MouseArea {
                 anchors.fill: parent
-                hoverEnabled: settings.MouseHover == "Yes"
+                hoverEnabled: settings.MouseHover === "Yes"
                 onClicked: previousScreen();
             }
         }
@@ -485,7 +485,7 @@ id: root
             // Mouse/touch functionality
             MouseArea {
                 anchors.fill: parent
-                hoverEnabled: settings.MouseHover == "Yes"
+                hoverEnabled: settings.MouseHover === "Yes"
                 onClicked: previousScreen();
             }
         }

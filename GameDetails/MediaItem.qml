@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
 Item {
@@ -138,7 +138,7 @@ id: root
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onExited: {}
         onClicked: activated();

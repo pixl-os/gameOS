@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
 import QtGraphicalEffects 1.0
-import QtMultimedia 5.9
-import QtQml.Models 2.10
+import QtMultimedia 5.15
+import QtQml.Models 2.12
 import "../Global"
 import "../GridView"
 import "../Lists"
@@ -142,14 +142,14 @@ id: root
         }
         Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
 
-        /*Image {
-            anchors.fill: parent
-            source: "../assets/images/ftueBG01.jpeg"
-            sourceSize { width: root.width; height: root.height}
-            fillMode: Image.PreserveAspectCrop
-            smooth: true
-            asynchronous: true
-        }*/
+//        Image {
+//            anchors.fill: parent
+//            source: "../assets/images/ftueBG01.jpeg"
+//            sourceSize { width: root.width; height: root.height}
+//            fillMode: Image.PreserveAspectCrop
+//            smooth: true
+//            asynchronous: true
+//        }
 
         Rectangle {
             anchors.fill: parent
@@ -171,7 +171,7 @@ id: root
                 target: videocomponent;
                 from: 0;
                 to: 1;
-                duration: 1000;
+//                duration: 1000;
                 running: true;
             }
 
@@ -265,7 +265,7 @@ id: root
             // Mouse/touch functionality
             MouseArea {
                 anchors.fill: parent
-                hoverEnabled: settings.MouseHover == "Yes"
+                hoverEnabled: settings.MouseHover === "Yes"
                 onEntered: settingsbutton.focus = true;
                 onExited: settingsbutton.focus = false;
                 onClicked: settingsScreen();
@@ -372,7 +372,7 @@ id: root
 
                         width: parent.height - vpx(20)
                         height: width
-                        source: (modelData.assets.marquee == "") ? Utils.logo(modelData) : ""
+                        source: (modelData.assets.marquee === "") ? Utils.logo(modelData) : ""
                         //source: Utils.logo(modelData)
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
@@ -393,7 +393,7 @@ id: root
                     // Mouse/touch functionality
                     MouseArea {
                         anchors.fill: parent
-                        hoverEnabled: settings.MouseHover == "Yes"
+                        hoverEnabled: settings.MouseHover === "Yes"
                         onEntered: { sfxNav.play(); mainList.currentIndex = 0; }
                         onClicked: {
                             if (selected)
@@ -513,10 +513,10 @@ id: root
                 Text {
                 id: title
                     text: {
-                          if(modelData.name == "Screenshots") 
-                              return (modelData.games.count + ((modelData.games.count)!=1 ? " screenshots" : " screenshot"));
+                          if(modelData.name === "Screenshots")
+                              return (modelData.games.count + ((modelData.games.count)!==1 ? " screenshots" : " screenshot"));
                           else 
-                              return (modelData.games.count + ((modelData.games.count)!=1 ? " games" : " game"));
+                              return (modelData.games.count + ((modelData.games.count)!==1 ? " games" : " game"));
                           }
                     color: theme.text
                     font {
@@ -561,7 +561,7 @@ id: root
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
-                    hoverEnabled: settings.MouseHover == "Yes"
+                    hoverEnabled: settings.MouseHover === "Yes"
                     onEntered: { sfxNav.play(); mainList.currentIndex = platformlist.ObjectModel.index; platformlist.savedIndex = index; platformlist.currentIndex = index; }
                     onExited: {}
                     onClicked: {
