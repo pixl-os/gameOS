@@ -69,7 +69,7 @@ id: root
         }
 	ListElement {
 		settingName: "System Logo Style"
-		setting: "White,Color"
+		setting: "White,Black,Color,Steel,Carbon"
         }
     }
 
