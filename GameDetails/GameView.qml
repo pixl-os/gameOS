@@ -19,7 +19,7 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 import SortFilterProxyModel 0.2
 import QtQml.Models 2.15
-import QtMultimedia 5.12
+import QtMultimedia 5.15
 import "../Global"
 import "../GridView"
 import "../Lists"
