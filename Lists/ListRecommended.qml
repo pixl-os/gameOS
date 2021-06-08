@@ -22,7 +22,7 @@ import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
 Item {
-id: root
+    id: root
     
     readonly property var games: gamesFiltered;
     function currentGame(index) { return api.allGames.get(gamesRecommended.mapToSource(index)) }
@@ -32,25 +32,25 @@ id: root
     property var randomvalue: "";
     property var randomhashletter: "";
 
-//TO INIT VALUES        
-     onGamesChanged: {
+    //TO INIT VALUES
+    onGamesChanged: {
         randomletter: "";
         randomvalue: "";
         randomhashletter: "";
     }
 
-//LOCAL UTILS FUNCTION
+    //LOCAL UTILS FUNCTION
     function random(min, max)
     {
         do {
             var value = (Math.random() * (max - min)) + min;
             value = Utils.toNumberString(Utils.toRoundNumber(value,0.05));
-            } while (randomvalue.includes(value));
+        } while (randomvalue.includes(value));
         randomvalue = randomvalue + value;
         //console.log("randomvalue : ",value);
         return value;
     }
-         
+
     function generateRandomLetter() {
         do{
             const alphabet = "012345678abcdefghijklmnopqrstuvwxyz"
@@ -71,35 +71,35 @@ id: root
         return value;
     }
 
-// REGEX FUNCTION
+    // REGEX FUNCTION
     function regExpForRatingFiltering() {
-         return "(" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + ")";
+        return "(" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + ")";
     }
 
     function regExpForHashFiltering() {
         //4 values today
         return "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter();
-    }    
+    }
 
-//FILTERING
+    //FILTERING
     SortFilterProxyModel {
-    id: gamesRecommended
+        id: gamesRecommended
         sourceModel: api.allGames
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
         filters:[RegExpFilter { roleName: "rating"; pattern: regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
-                 //RFU (not necessary finally): RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },
-                 RegExpFilter { roleName: "hash"; pattern: regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
-                 ExpressionFilter {
-                        expression: {
-                              //to randomized and keep on 5% only of games -> best diversifications
-                              return (Math.random() <= 0.05)
-                        }
-                 }
-                ]
+            //RFU (not necessary finally): RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },
+            RegExpFilter { roleName: "hash"; pattern: regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
+            ExpressionFilter {
+                expression: {
+                    //to randomized and keep on 5% only of games -> best diversifications
+                    return (Math.random() <= 0.05)
+                }
+            }
+        ]
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
         sourceModel: gamesRecommended
         filters: IndexFilter { maximumIndex: max - 1 }
     }

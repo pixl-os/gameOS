@@ -18,7 +18,7 @@ import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesWithLimit
     function currentGame(index) { return api.allGames.get(gamesFiltered.mapToSource(index)) }
@@ -45,14 +45,14 @@ id: root
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: api.allGames
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
     }
 
     SortFilterProxyModel {
-    id: gamesWithLimit
+        id: gamesWithLimit
 
         sourceModel: gamesFiltered
         filters: IndexFilter { maximumIndex: max - 1 }

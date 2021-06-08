@@ -18,14 +18,14 @@ import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(gamesFiltered.mapToSource(index)) }
     property int max: gamesFiltered.count
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: api.allGames
         filters: IndexFilter { maximumIndex: max - 1 }

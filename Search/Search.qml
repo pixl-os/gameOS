@@ -19,7 +19,7 @@ import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
 Item {
-id: root
+    id: root
 
     readonly property alias games: filteredModel
     function currentGame(index) { return api.allGames.get(filteredModel.mapToSource(index)) }
@@ -41,7 +41,7 @@ id: root
     }*/
 
     SortFilterProxyModel {
-    id: filteredModel
+        id: filteredModel
 
         sourceModel: api.allGames
         filters: [
@@ -70,7 +70,7 @@ id: root
                 enabled: years.length
                 expression: releaseYear == 0 || (years[0] <= releaseYear && releaseYear <= years[1])
             },
-            IndexFilter { 
+            IndexFilter {
                 enabled: maxResults != 0
                 maximumIndex: maxResults - 1
             }/*,
@@ -87,7 +87,7 @@ id: root
 
         sorters: [
             RoleSorter {
-            id: sorter
+                id: sorter
 
                 roleName: sortBy
                 sortOrder: descending ? Qt.DescendingOrder : Qt.AscendingOrder

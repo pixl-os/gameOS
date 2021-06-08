@@ -18,7 +18,7 @@ import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     property var collection: api.collections.get(currentCollectionIndex)
@@ -26,7 +26,7 @@ id: root
     property int max
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: collection.games
         filters: [

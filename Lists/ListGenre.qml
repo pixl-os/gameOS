@@ -18,7 +18,7 @@ import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(genreGames.mapToSource(index)) }
@@ -26,7 +26,7 @@ id: root
     property string genre: ""
 
     SortFilterProxyModel {
-    id: genreGames
+        id: genreGames
 
         sourceModel: api.allGames
         filters: RegExpFilter { roleName: "genre"; pattern: genre; caseSensitivity: Qt.CaseInsensitive; }
@@ -34,7 +34,7 @@ id: root
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: genreGames
         filters: IndexFilter { maximumIndex: max - 1 }

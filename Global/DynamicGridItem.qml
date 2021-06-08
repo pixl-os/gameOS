@@ -18,7 +18,7 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 Item {
-id: root
+    id: root
     
     // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
     function steamAppID (gameData) {
@@ -32,12 +32,12 @@ id: root
 
 
     function logo(data) {
-    if (data !== null) {
-        if (data.assets.boxFront.includes("header.jpg")) 
-            return steamLogo(data);
-        else {
-            if (data.assets.logo !== "")
-                return data.assets.logo;
+        if (data !== null) {
+            if (data.assets.boxFront.includes("header.jpg"))
+                return steamLogo(data);
+            else {
+                if (data.assets.logo !== "")
+                    return data.assets.logo;
             }
         }
         return "";
@@ -69,7 +69,7 @@ id: root
 
     // NOTE: Fade out the bg so there is a smooth transition into the video
     Timer {
-    id: fadescreenshot
+        id: fadescreenshot
 
         interval: 1200
         onTriggered: {
@@ -80,15 +80,15 @@ id: root
         }
     }
 
-    Item 
+    Item
     {
-    id: container
+        id: container
 
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 200 } }
 
         Image {
-        id: screenshot
+            id: screenshot
 
             anchors.fill: parent
             anchors.margins: vpx(2)
@@ -101,7 +101,7 @@ id: root
         }
 
         Image {
-        id: favelogo
+            id: favelogo
 
             anchors.fill: parent
             anchors.centerIn: parent
@@ -118,15 +118,15 @@ id: root
         }
 
         Rectangle {
-        id: overlay
-        
+            id: overlay
+
             anchors.fill: parent
             color: screenshot.source == "" ? theme.secondary : "black"
             opacity: screenshot.source == "" ? 1 : selected ? 0.1 : 0.2
         }
         
         Rectangle {
-        id: regborder
+            id: regborder
 
             anchors.fill: parent
             color: "transparent"
@@ -138,7 +138,7 @@ id: root
     }
 
     Loader {
-    id: borderloader
+        id: borderloader
 
         active: selected
         anchors.fill: parent
@@ -147,13 +147,13 @@ id: root
     }
 
     Component {
-    id: border
+        id: border
 
         ItemBorder { }
     }
 
     Text {
-    id: title
+        id: title
 
         text: modelData ? modelData.title : ''
         color: theme.text
@@ -178,7 +178,7 @@ id: root
     }
 
     Text {
-    id: platformname
+        id: platformname
 
         text: modelData.title
         anchors { fill: parent; margins: vpx(10) }
@@ -199,11 +199,11 @@ id: root
     }
 
     Rectangle {
-    id: favicon
+        id: favicon
 
-        anchors { 
-            right: parent.right; rightMargin: vpx(10); 
-            top: parent.top; topMargin: vpx(10) 
+        anchors {
+            right: parent.right; rightMargin: vpx(10);
+            top: parent.top; topMargin: vpx(10)
         }
         width: parent.width / 12
         height: width
@@ -219,7 +219,7 @@ id: root
     }
 
     Loader {
-    id: spinnerloader
+        id: spinnerloader
 
         anchors.centerIn: parent
         active: screenshot.status === Image.Loading
@@ -227,9 +227,9 @@ id: root
     }
 
     Component {
-    id: loaderspinner
-    
-        Image {        
+        id: loaderspinner
+
+        Image {
             source: "../assets/images/loading.png"
             width: vpx(50)
             height: vpx(50)
@@ -249,7 +249,7 @@ id: root
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            activated();        
+            activated();
         }
     }
 

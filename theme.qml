@@ -26,7 +26,7 @@ import "ShowcaseView"
 import "Settings"
 
 FocusScope {
-id: root
+    id: root
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
@@ -49,7 +49,7 @@ id: root
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
             HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
-			ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
+            ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
             SystemLogoStyle:               api.memory.has("System Logo Style") ? api.memory.get("System Logo Style") : "Color",
             MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
             AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
@@ -78,7 +78,7 @@ id: root
     // Collections
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex)    
+    property var currentCollection: api.collections.get(currentCollectionIndex)
     property var currentGame
 
     // Stored variables for page navigation
@@ -129,13 +129,13 @@ id: root
     function launchGame(game) {
         if (game !== null) {
             //if (game.collections.get(0).name === "Steam")
-                launchGameScreen();
+            launchGameScreen();
 
             saveCurrentState(game);
             game.launch();
         } else {
             //if (currentGame.collections.get(0).name === "Steam")
-                launchGameScreen();
+            launchGameScreen();
 
             saveCurrentState(currentGame);
             currentGame.launch();
@@ -188,129 +188,129 @@ id: root
     }
 
     // Theme settings
-	    property var theme: {
-			
-			var background = 		"#000000";
-                        var text = 		        "#ebebeb";
-			var gradientstart = 	        "#001f1f1f";
-			var gradientend = 		"#FF000000";
-			var secondary = 		"#303030";
-			
-			if (settings.ColorBackground === "Original") {
-				background = 	 "#1d253d";
-				text =           "#ececec";
-            			gradientstart =  "#000d111d";
-			        gradientend =    "#FF0d111d";
-			}
-                        else if (settings.ColorBackground === "Black") {
-				background = 	"#000000";
-				gradientstart = "#001f1f1f";
-				gradientend = 	"#FF000000";
-			}
-                        else if (settings.ColorBackground === "White") {
-						background = 	"#ebebeb";
-						gradientstart = "#00ebebeb";
-						gradientend = 	"#FFebebeb";
-	                 	                text         = 	"#101010";
-			}
-			else if (settings.ColorBackground === "Gray") {
-				background = 	"#1f1f1f";
-				gradientstart = "#001f1f1f";
-				gradientend = 	"#FF1F1F1F";
-			}
-			else if (settings.ColorBackground === "Blue") {
-				background = 	"#1d253d";
-				gradientstart = "#001d253d";
-				gradientend = 	"#FF1d253d";
-			}
-		    else if (settings.ColorBackground === "Green") {
-				background = 	"#054b16";
-				gradientstart = "#00054b16";
-				gradientend = 	"#00054b16";
-			}
-		    else if (settings.ColorBackground === "Red") {
-				background = 	"#520000";
-				gradientstart = "#00520000";
-				gradientend = 	"#FF520000";
-			}
+    property var theme: {
 
-		    var accent = "#288928";
-			if (settings.ColorLayout === "Original") {
-				accent = "#f00980";
-				secondary = "#202a44";
-		    	}
-			else if (settings.ColorLayout === "Dark Green") {
-				accent = "#288928";
-			} 
-			else if (settings.ColorLayout === "Light Green") {
-				accent = "#65b032";
-			} 
-	            else if (settings.ColorLayout === "Turquoise") {
-					accent = "#288e80";
-				}
-	            else if (settings.ColorLayout === "Dark Red") {
-					accent = "#ab283b";
-				}
-	            else if (settings.ColorLayout === "Light Red") {
-					accent = "#e52939";
-				}
-	            else if (settings.ColorLayout === "Dark Pink") {
-					accent = "#c52884";
-				}
-	            else if (settings.ColorLayout === "Light Pink") {
-					accent = "#ee6694";
-				}
-	            else if (settings.ColorLayout === "Dark Blue") {
-					accent = "#30519c";
-				}
-	            else if (settings.ColorLayout === "Light Blue") {
-					accent = "#288dcf";
-				}
-	            else if (settings.ColorLayout === "Orange") {
-					accent = "#ed5b28";
-				}
-	            else if (settings.ColorLayout === "Yellow") {
-					accent = "#ed9728";
-				}
-	            else if (settings.ColorLayout === "Magenta") {
-					accent = "#b857c6";
-				}
-	            else if (settings.ColorLayout === "Purple") {
-					accent = "#825fb1";
-				}
-	            else if (settings.ColorLayout === "Dark Gray") {
-					accent = "#5e5c5d";
-				}
-	            else if (settings.ColorLayout === "Light Gray") {
-					accent = "#818181";
-				}
-	            else if (settings.ColorLayout === "Dark Gray") {
-					accent = "#5e5c5d";
-				}
-	            else if (settings.ColorLayout === "Steel") {
-					accent = "#768294";
-				}
-	            else if (settings.ColorLayout === "Stone") {
-					accent = "#658780";
-				}
-	            else if (settings.ColorLayout === "Dark Brown") {
-					accent = "#806044";
-				}
-	            else if (settings.ColorLayout === "Light Brown") {
-					accent = "#7e715c";
-				}
-				return {
-					main:           background,
-					secondary:      secondary,
-					accent:         accent,
-					highlight:      accent,
-					text:           text,
-					button:         accent,
-					gradientstart:  gradientstart,
-					gradientend:    gradientend
-				};
-		
+        var background = 		"#000000";
+        var text = 		        "#ebebeb";
+        var gradientstart = 	        "#001f1f1f";
+        var gradientend = 		"#FF000000";
+        var secondary = 		"#303030";
+
+        if (settings.ColorBackground === "Original") {
+            background = 	 "#1d253d";
+            text =           "#ececec";
+            gradientstart =  "#000d111d";
+            gradientend =    "#FF0d111d";
+        }
+        else if (settings.ColorBackground === "Black") {
+            background = 	"#000000";
+            gradientstart = "#001f1f1f";
+            gradientend = 	"#FF000000";
+        }
+        else if (settings.ColorBackground === "White") {
+            background = 	"#ebebeb";
+            gradientstart = "#00ebebeb";
+            gradientend = 	"#FFebebeb";
+            text         = 	"#101010";
+        }
+        else if (settings.ColorBackground === "Gray") {
+            background = 	"#1f1f1f";
+            gradientstart = "#001f1f1f";
+            gradientend = 	"#FF1F1F1F";
+        }
+        else if (settings.ColorBackground === "Blue") {
+            background = 	"#1d253d";
+            gradientstart = "#001d253d";
+            gradientend = 	"#FF1d253d";
+        }
+        else if (settings.ColorBackground === "Green") {
+            background = 	"#054b16";
+            gradientstart = "#00054b16";
+            gradientend = 	"#00054b16";
+        }
+        else if (settings.ColorBackground === "Red") {
+            background = 	"#520000";
+            gradientstart = "#00520000";
+            gradientend = 	"#FF520000";
+        }
+
+        var accent = "#288928";
+        if (settings.ColorLayout === "Original") {
+            accent = "#f00980";
+            secondary = "#202a44";
+        }
+        else if (settings.ColorLayout === "Dark Green") {
+            accent = "#288928";
+        }
+        else if (settings.ColorLayout === "Light Green") {
+            accent = "#65b032";
+        }
+        else if (settings.ColorLayout === "Turquoise") {
+            accent = "#288e80";
+        }
+        else if (settings.ColorLayout === "Dark Red") {
+            accent = "#ab283b";
+        }
+        else if (settings.ColorLayout === "Light Red") {
+            accent = "#e52939";
+        }
+        else if (settings.ColorLayout === "Dark Pink") {
+            accent = "#c52884";
+        }
+        else if (settings.ColorLayout === "Light Pink") {
+            accent = "#ee6694";
+        }
+        else if (settings.ColorLayout === "Dark Blue") {
+            accent = "#30519c";
+        }
+        else if (settings.ColorLayout === "Light Blue") {
+            accent = "#288dcf";
+        }
+        else if (settings.ColorLayout === "Orange") {
+            accent = "#ed5b28";
+        }
+        else if (settings.ColorLayout === "Yellow") {
+            accent = "#ed9728";
+        }
+        else if (settings.ColorLayout === "Magenta") {
+            accent = "#b857c6";
+        }
+        else if (settings.ColorLayout === "Purple") {
+            accent = "#825fb1";
+        }
+        else if (settings.ColorLayout === "Dark Gray") {
+            accent = "#5e5c5d";
+        }
+        else if (settings.ColorLayout === "Light Gray") {
+            accent = "#818181";
+        }
+        else if (settings.ColorLayout === "Dark Gray") {
+            accent = "#5e5c5d";
+        }
+        else if (settings.ColorLayout === "Steel") {
+            accent = "#768294";
+        }
+        else if (settings.ColorLayout === "Stone") {
+            accent = "#658780";
+        }
+        else if (settings.ColorLayout === "Dark Brown") {
+            accent = "#806044";
+        }
+        else if (settings.ColorLayout === "Light Brown") {
+            accent = "#7e715c";
+        }
+        return {
+            main:           background,
+            secondary:      secondary,
+            accent:         accent,
+            highlight:      accent,
+            text:           text,
+            button:         accent,
+            gradientstart:  gradientstart,
+            gradientend:    gradientend
         };
+
+    };
     
 
     property real globalMargin: vpx(30)
@@ -348,11 +348,11 @@ id: root
         lastState.push(state);
         searchTerm = "";
         switch(settings.PlatformView) {
-            case "Grid":
-                root.state = "softwaregridscreen";
-                break;
-            default:
-                root.state = "softwarescreen";
+        case "Grid":
+            root.state = "softwaregridscreen";
+            break;
+        default:
+            root.state = "softwarescreen";
         }
     }
 
@@ -406,7 +406,7 @@ id: root
     }
 
     // Set default state to the platform screen
-    Component.onCompleted: { 
+    Component.onCompleted: {
         root.state = "showcasescreen";
 
         if (fromGame)
@@ -415,14 +415,14 @@ id: root
 
     // Background
     Rectangle {
-    id: background
+        id: background
         
         anchors.fill: parent
         color: theme.main
     }
 
     Loader  {
-    id: showcaseLoader
+        id: showcaseLoader
 
         focus: (root.state === "showcasescreen")
         active: opacity !== 0
@@ -435,7 +435,7 @@ id: root
     }
 
     Loader  {
-    id: gridviewloader
+        id: gridviewloader
 
         focus: (root.state === "softwaregridscreen")
         active: opacity !== 0
@@ -448,7 +448,7 @@ id: root
     }
 
     Loader  {
-    id: listviewloader
+        id: listviewloader
 
         focus: (root.state === "softwarescreen")
         active: opacity !== 0
@@ -461,7 +461,7 @@ id: root
     }
 
     Loader  {
-    id: gameviewloader
+        id: gameviewloader
 
         focus: (root.state === "gameviewscreen")
         active: opacity !== 0
@@ -476,7 +476,7 @@ id: root
     }
 
     Loader  {
-    id: launchgameloader
+        id: launchgameloader
 
         focus: (root.state === "launchgamescreen")
         active: opacity !== 0
@@ -489,7 +489,7 @@ id: root
     }
 
     Loader  {
-    id: settingsloader
+        id: settingsloader
 
         focus: (root.state === "settingsscreen")
         active: opacity !== 0
@@ -502,25 +502,25 @@ id: root
     }
 
     Component {
-    id: showcaseview
+        id: showcaseview
 
         ShowcaseViewMenu { focus: true }
     }
 
     Component {
-    id: gridview
+        id: gridview
 
         GridViewMenu { focus: true }
     }
 
     Component {
-    id: listview
+        id: listview
 
         SoftwareListMenu { focus: true }
     }
 
     Component {
-    id: gameview
+        id: gameview
 
         GameView {
             focus: true
@@ -529,13 +529,13 @@ id: root
     }
 
     Component {
-    id: launchgameview
+        id: launchgameview
 
         LaunchGame { focus: true }
     }
 
     Component {
-    id: settingsview
+        id: settingsview
 
         SettingsScreen { focus: true }
     }
@@ -544,7 +544,7 @@ id: root
     // Button help
     property var currentHelpbarModel
     ButtonHelpBar {
-    id: buttonbar
+        id: buttonbar
 
         height: vpx(50)
         anchors {

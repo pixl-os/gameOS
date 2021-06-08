@@ -17,7 +17,7 @@
 import QtQuick 2.15
 
 FocusScope {
-id: root
+    id: root
 
     property bool selected
     property alias text: buttonlabel.text
@@ -30,7 +30,7 @@ id: root
     signal highlighted
 
     Rectangle {
-    id: container
+        id: container
 
         width: (buttonlabel.text !== "") ? buttonlabel.x + buttonlabel.contentWidth + buttonMargin : height
         Behavior on width { NumberAnimation { duration: 100 } }
@@ -42,7 +42,7 @@ id: root
         opacity: selected ? 1 : 0.2
         
         Image {
-        id: buttonicon
+            id: buttonicon
 
             source: "../assets/images/icon_play.svg"
             width: parent.height - vpx(30)
@@ -61,7 +61,7 @@ id: root
         }
         
         Text {
-        id: buttonlabel
+            id: buttonlabel
 
             font.family: subtitleFont.name
             font.pixelSize: vpx(16)
@@ -86,7 +86,7 @@ id: root
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onExited: {}
         onClicked: activated();

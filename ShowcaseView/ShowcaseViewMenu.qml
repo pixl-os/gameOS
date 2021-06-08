@@ -17,7 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
-import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.12
 import QtMultimedia 5.15
 import QtQml.Models 2.12
 import "../Global"
@@ -26,7 +26,7 @@ import "../Lists"
 import "../utils.js" as Utils
 
 FocusScope {
-id: root
+    id: root
 
     // Pull in our custom lists and define
     ListAllGames    { id: listNone;        max: 0 }
@@ -53,52 +53,52 @@ id: root
         var width = root.width - globalMargin * 2;
 
         switch (collectionThumbnail) {
-            case "Square":
-                collection.itemWidth = (width / 6.0);
-                collection.itemHeight = collection.itemWidth;
-                break;
-            case "Tall":
-                collection.itemWidth = (width / 8.0);
-                collection.itemHeight = collection.itemWidth / settings.TallRatio;
-                break;
-            case "Wide":
-            default:
-                collection.itemWidth = (width / 4.0);
-                collection.itemHeight = collection.itemWidth * settings.WideRatio;
-                break;
+        case "Square":
+            collection.itemWidth = (width / 6.0);
+            collection.itemHeight = collection.itemWidth;
+            break;
+        case "Tall":
+            collection.itemWidth = (width / 8.0);
+            collection.itemHeight = collection.itemWidth / settings.TallRatio;
+            break;
+        case "Wide":
+        default:
+            collection.itemWidth = (width / 4.0);
+            collection.itemHeight = collection.itemWidth * settings.WideRatio;
+            break;
             
         }
 
         collection.height = collection.itemHeight + vpx(40) + globalMargin
 
         switch (collectionName) {
-            case "Favorites":
-                collection.search = listFavorites;
-                break;
-            case "Recently Played":
-                collection.search = listLastPlayed;
-                break;
-            case "Most Played":
-                collection.search = listMostPlayed;
-                break;
-            case "Recommended":
-                collection.search = listRecommended;
-                break;
-            case "Top by Publisher":
-                collection.search = listPublisher;
-                break;
-            case "Top by Genre":
-                collection.search = listGenre;
-                break;
-            case "None":
-                collection.enabled = false;
-                collection.height = 0;
+        case "Favorites":
+            collection.search = listFavorites;
+            break;
+        case "Recently Played":
+            collection.search = listLastPlayed;
+            break;
+        case "Most Played":
+            collection.search = listMostPlayed;
+            break;
+        case "Recommended":
+            collection.search = listRecommended;
+            break;
+        case "Top by Publisher":
+            collection.search = listPublisher;
+            break;
+        case "Top by Genre":
+            collection.search = listGenre;
+            break;
+        case "None":
+            collection.enabled = false;
+            collection.height = 0;
 
-                collection.search = listNone;
-                break;
-            default:
-                collection.search = listAllGames;
-                break;
+            collection.search = listNone;
+            break;
+        default:
+            collection.search = listAllGames;
+            break;
         }
 
         collection.title = collection.search.collection.name;
@@ -121,35 +121,35 @@ id: root
     anchors.fill: parent
 
     Item {
-    id: ftueContainer
+        id: ftueContainer
 
         width: parent.width
         height: vpx(360)
         visible: ftue
         opacity: {
             switch (mainList.currentIndex) {
-                case 0:
-                    return 1;
-                case 1:
-                    return 0.3;
-                case 2:
-                    return 0.1;
-                case -1:
-                    return 0.3;
-                default:
-                    return 0
+            case 0:
+                return 1;
+            case 1:
+                return 0.3;
+            case 2:
+                return 0.1;
+            case -1:
+                return 0.3;
+            default:
+                return 0
             }
         }
         Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
 
-//        Image {
-//            anchors.fill: parent
-//            source: "../assets/images/ftueBG01.jpeg"
-//            sourceSize { width: root.width; height: root.height}
-//            fillMode: Image.PreserveAspectCrop
-//            smooth: true
-//            asynchronous: true
-//        }
+        //        Image {
+        //            anchors.fill: parent
+        //            source: "../assets/images/ftueBG01.jpeg"
+        //            sourceSize { width: root.width; height: root.height}
+        //            fillMode: Image.PreserveAspectCrop
+        //            smooth: true
+        //            asynchronous: true
+        //        }
 
         Rectangle {
             anchors.fill: parent
@@ -158,7 +158,7 @@ id: root
         }
 
         Video {
-        id: videocomponent
+            id: videocomponent
 
             anchors.fill: parent
             source: "../assets/video/ftue.mp4"
@@ -171,14 +171,14 @@ id: root
                 target: videocomponent;
                 from: 0;
                 to: 1;
-//                duration: 1000;
+                //                duration: 1000;
                 running: true;
             }
 
         }
 
         Image {
-        id: ftueLogo
+            id: ftueLogo
 
             width: vpx(350)
             anchors { left: parent.left; leftMargin: globalMargin }
@@ -206,13 +206,13 @@ id: root
     }
 
     Item {
-    id: header
+        id: header
 
         width: parent.width
         height: vpx(70)
         z: 10
         Image {
-        id: logo
+            id: logo
 
             width: vpx(150)
             anchors { left: parent.left; leftMargin: globalMargin }
@@ -226,21 +226,21 @@ id: root
         }
 
         Rectangle {
-        id: settingsbutton
+            id: settingsbutton
 
             width: vpx(40)
             height: vpx(40)
-            anchors { 
-			verticalCenter: parent.verticalCenter
-			right: (settings.HideClock === "No" ? sysTime.left : parent.right); rightMargin: vpx(10)
-			}
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: (settings.HideClock === "No" ? sysTime.left : parent.right); rightMargin: vpx(10)
+            }
             color: focus ? theme.accent : "white"
             radius: height/2
             opacity: focus ? 1 : 0.2
             anchors {
-			verticalCenter: parent.verticalCenter
-			right: settingsButton.left; rightMargin: vpx(50)
-			}
+                verticalCenter: parent.verticalCenter
+                right: settingsButton.left; rightMargin: vpx(50)
+            }
             onFocusChanged: {
                 sfxNav.play()
                 if (focus)
@@ -254,7 +254,7 @@ id: root
                 // Accept
                 if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                     event.accepted = true;
-                    settingsScreen();            
+                    settingsScreen();
                 }
                 // Back
                 if (api.keys.isCancel(event) && !event.isAutoRepeat) {
@@ -273,7 +273,7 @@ id: root
         }
 
         Image {
-        id: settingsicon
+            id: settingsicon
 
             width: height
             height: vpx(24)
@@ -283,9 +283,9 @@ id: root
             source: "../assets/images/settingsicon.svg"
             opacity: root.focus ? 0.8 : 0.5
         }
-		
-       Text {
-        id: sysTime
+
+        Text {
+            id: sysTime
 
             function set() {
                 sysTime.text = Qt.formatTime(new Date(), "hh:mm AP")
@@ -309,16 +309,16 @@ id: root
             font.family: subtitleFont.name
             horizontalAlignment: Text.Right
             verticalAlignment: Text.AlignVCenter
-	    visible: settings.HideClock === "No"
+            visible: settings.HideClock === "No"
         }
     }
 
     // Using an object model to build the list
     ObjectModel {
-    id: mainModel
+        id: mainModel
 
         ListView {
-        id: featuredlist
+            id: featuredlist
 
             property bool selected: ListView.isCurrentItem
             focus: selected
@@ -341,10 +341,10 @@ id: root
             delegate: featuredDelegate
 
             Component {
-            id: featuredDelegate
+                id: featuredDelegate
 
                 AnimatedImage {
-                id: background
+                    id: background
 
                     property bool selected: ListView.isCurrentItem && featuredlist.focus
                     width: featuredlist.width
@@ -353,7 +353,7 @@ id: root
                     //sourceSize { width: featuredlist.width; height: featuredlist.height }
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
-                        
+
                     onSelectedChanged: {
                         if (selected)
                             logoAnim.start()
@@ -368,7 +368,7 @@ id: root
                     }
 
                     AnimatedImage {
-                    id: specialLogo
+                        id: specialLogo
 
                         width: parent.height - vpx(20)
                         height: width
@@ -381,11 +381,11 @@ id: root
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: featuredlist.focus ? 1 : 0.5
 
-                        PropertyAnimation { 
-                        id: logoAnim; 
-                            target: specialLogo; 
-                            properties: "y"; 
-                            from: specialLogo.y-vpx(50); 
+                        PropertyAnimation {
+                            id: logoAnim;
+                            target: specialLogo;
+                            properties: "y";
+                            from: specialLogo.y-vpx(50);
                             duration: 100
                         }
                     }
@@ -397,7 +397,7 @@ id: root
                         onEntered: { sfxNav.play(); mainList.currentIndex = 0; }
                         onClicked: {
                             if (selected)
-                                gameDetails(modelData);  
+                                gameDetails(modelData);
                             else
                                 mainList.currentIndex = 0;
                         }
@@ -406,7 +406,7 @@ id: root
             }
             
             Row {
-            id: blips
+                id: blips
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors { bottom: parent.bottom; bottomMargin: vpx(20) }
@@ -433,14 +433,14 @@ id: root
                     event.accepted = true;
                     storedHomeSecondaryIndex = featuredlist.currentIndex;
                     if (!ftue)
-                        gameDetails(featuredCollection.currentGame(currentIndex));            
+                        gameDetails(featuredCollection.currentGame(currentIndex));
                 }
             }
         }
         
         // Collections list
         ListView {
-        id: platformlist
+            id: platformlist
 
             property bool selected: ListView.isCurrentItem
             property int myIndex: ObjectModel.index
@@ -451,7 +451,7 @@ id: root
                 left: parent.left; leftMargin: globalMargin
                 right: parent.right; rightMargin: globalMargin
             }
-            spacing: vpx(10)
+            spacing: vpx(12)
             orientation: ListView.Horizontal
             preferredHighlightBegin: vpx(0)
             preferredHighlightEnd: parent.width - vpx(60)
@@ -477,16 +477,18 @@ id: root
                 property bool selected: ListView.isCurrentItem && platformlist.focus
                 width: (root.width - globalMargin * 2) / 7.0
                 height: width * settings.WideRatio
-                color: selected ? theme.accent : theme.secondary
-                scale: selected ? 1.1 : 1
+                //                color: selected ? theme.accent : theme.secondary
+                color: selected ? theme.accent : "transparent"
+
+                scale: selected ? 1.25 : 1
                 Behavior on scale { NumberAnimation { duration: 100 } }
-                border.width: vpx(1)
-                border.color: "#19FFFFFF"
+                //                border.width: vpx(1)
+                //                border.color: "#19FFFFFF"
 
                 anchors.verticalCenter: parent.verticalCenter
 
                 Image {
-                id: collectionlogo
+                    id: collectionlogo
 
                     anchors.fill: parent
                     anchors.centerIn: parent
@@ -500,7 +502,7 @@ id: root
                         {
                             return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                         }
-                    }    
+                    }
                     sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
@@ -511,13 +513,13 @@ id: root
                 }
 
                 Text {
-                id: title
+                    id: title
                     text: {
-                          if(modelData.name === "Screenshots")
-                              return (modelData.games.count + ((modelData.games.count)!==1 ? " screenshots" : " screenshot"));
-                          else 
-                              return (modelData.games.count + ((modelData.games.count)!==1 ? " games" : " game"));
-                          }
+                        if(modelData.name === "Screenshots")
+                            return (modelData.games.count + ((modelData.games.count)!==1 ? " screenshots" : " screenshot"));
+                        else
+                            return (modelData.games.count + ((modelData.games.count)!==1 ? " games" : " game"));
+                    }
                     color: theme.text
                     font {
                         family: subtitleFont.name
@@ -538,7 +540,7 @@ id: root
                 }
 
                 Text {
-                id: platformname
+                    id: platformname
 
                     text: modelData.name
                     anchors { fill: parent; margins: vpx(10) }
@@ -586,14 +588,14 @@ id: root
                 if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                     event.accepted = true;
                     currentCollectionIndex = platformlist.currentIndex;
-                    softwareScreen();            
+                    softwareScreen();
                 }
             }
 
         }
 
         HorizontalCollection {
-        id: list1
+            id: list1
             property bool selected: ListView.isCurrentItem
             property var currentList: list1
             property var collection: collection1
@@ -621,7 +623,7 @@ id: root
         }
 
         HorizontalCollection {
-        id: list2
+            id: list2
             property bool selected: ListView.isCurrentItem
             property var currentList: list2
             property var collection: collection2
@@ -649,7 +651,7 @@ id: root
         }
 
         HorizontalCollection {
-        id: list3
+            id: list3
             property bool selected: ListView.isCurrentItem
             property var currentList: list3
             property var collection: collection3
@@ -677,7 +679,7 @@ id: root
         }
 
         HorizontalCollection {
-        id: list4
+            id: list4
             property bool selected: ListView.isCurrentItem
             property var currentList: list4
             property var collection: collection4
@@ -705,7 +707,7 @@ id: root
         }
 
         HorizontalCollection {
-        id: list5
+            id: list5
             property bool selected: ListView.isCurrentItem
             property var currentList: list5
             property var collection: collection5
@@ -735,13 +737,13 @@ id: root
     }
 
     ListView {
-    id: mainList
+        id: mainList
 
         anchors.fill: parent
         model: mainModel
         focus: true
         highlightMoveDuration: 200
-        highlightRangeMode: ListView.ApplyRange 
+        highlightRangeMode: ListView.ApplyRange
         preferredHighlightBegin: header.height
         preferredHighlightEnd: parent.height - (helpMargin * 2)
         snapMode: ListView.SnapOneItem
@@ -788,7 +790,7 @@ id: root
         }
     }
 
-    onFocusChanged: { 
+    onFocusChanged: {
         if (focus)
             currentHelpbarModel = gridviewHelpModel;
     }

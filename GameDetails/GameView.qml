@@ -26,7 +26,7 @@ import "../Lists"
 import "../utils.js" as Utils
 
 FocusScope {
-id: root
+    id: root
 
     property var game: api.allGames.get(0)
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
@@ -55,8 +55,8 @@ id: root
         if (game && game.assets.video) game.assets.videoList.forEach(v => mediaList.push(v));
         
         if (game && game.assets.manual) {
-                                         mediaList.push(game.assets.manual); 
-                                         }
+            mediaList.push(game.assets.manual);
+        }
 
         if (game) {
             game.assets.screenshotList.forEach(v => mediaList.push(v));
@@ -134,7 +134,7 @@ id: root
     anchors.fill: parent
 
     GridSpacer {
-    id: fakebox
+        id: fakebox
         
         width: vpx(100); height: vpx(100)
     }
@@ -142,22 +142,22 @@ id: root
     // Video
     // Show/hide the video
     function toggleVideo(toggle) {
-      if (!toggle)
-      {
-        // Turn off video
-        screenshot.opacity = 1;
-        stopvideo.restart();
-      } else {
-        stopvideo.stop();
-        // Turn on video
-        if (canPlayVideo)
-            videoDelay.restart();
-      }
+        if (!toggle)
+        {
+            // Turn off video
+            screenshot.opacity = 1;
+            stopvideo.restart();
+        } else {
+            stopvideo.stop();
+            // Turn on video
+            if (canPlayVideo)
+                videoDelay.restart();
+        }
     }
 
     // Timer to show the video
     Timer {
-    id: videoDelay
+        id: videoDelay
 
         interval: 1000
         onTriggered: {
@@ -170,7 +170,7 @@ id: root
 
     // NOTE: Next fade out the bg so there is a smooth transition into the video
     Timer {
-    id: fadescreenshot
+        id: fadescreenshot
 
         interval: 1000
         onTriggered: {
@@ -181,7 +181,7 @@ id: root
     }
 
     Timer {
-    id: stopvideo
+        id: stopvideo
 
         interval: 1000
         onTriggered: {
@@ -193,10 +193,10 @@ id: root
 
     // NOTE: Video Preview
     Component {
-    id: videoPreviewWrapper
+        id: videoPreviewWrapper
 
         Video {
-        id: videocomponent
+            id: videocomponent
 
             property bool videoExists: game ? game.assets.videos.length : false
             source: videoExists ? game.assets.videos[0] : ""
@@ -212,7 +212,7 @@ id: root
 
     // Video
     Loader {
-    id: videoPreviewLoader
+        id: videoPreviewLoader
 
         asynchronous: true
         anchors { fill: parent }
@@ -220,7 +220,7 @@ id: root
 
     // Background
     Image {
-    id: screenshot
+        id: screenshot
 
         anchors.fill: parent
         asynchronous: true
@@ -258,7 +258,7 @@ id: root
 
     // Scanlines
     Image {
-    id: scanlines
+        id: scanlines
 
         anchors.fill: parent
         source: "../assets/images/scanlines_v3.png"
@@ -269,9 +269,9 @@ id: root
 
     // Clear logo
     Image {
-    id: logo
+        id: logo
 
-        anchors { 
+        anchors {
             top: parent.top; //topMargin: vpx(70)
             left: parent.left; leftMargin: vpx(70)
         }
@@ -287,7 +287,7 @@ id: root
     }
 
     DropShadow {
-    id: logoshadow
+        id: logoshadow
 
         anchors.fill: logo
         horizontalOffset: 0
@@ -303,7 +303,7 @@ id: root
 
     // Platform title
     Text {
-    id: gametitle
+        id: gametitle
         
         text: game.title
         
@@ -329,7 +329,7 @@ id: root
 
     // Gradient
     LinearGradient {
-    id: bggradient
+        id: bggradient
 
         width: parent.width
         height: parent.height/2
@@ -344,7 +344,7 @@ id: root
     }
 
     Rectangle {
-    id: overlay
+        id: overlay
 
         color: theme.gradientend
         anchors {
@@ -357,7 +357,7 @@ id: root
 
     // Details screen
     Item {
-    id: detailsScreen
+        id: detailsScreen
         
         anchors.fill: parent
         visible: opacity !== 0
@@ -371,9 +371,9 @@ id: root
         }
 
         Item {
-        id: details 
+            id: details
 
-            anchors { 
+            anchors {
                 top: parent.top; topMargin: vpx(100)
                 left: parent.left; leftMargin: vpx(70)
                 right: parent.right; rightMargin: vpx(70)
@@ -381,7 +381,7 @@ id: root
             height: vpx(450) - header.height
 
             Image {
-            id: boxart
+                id: boxart
 
                 source: Utils.boxArt(game);
                 //width: vpx(350)
@@ -392,7 +392,7 @@ id: root
             }
 
             GameInfo {
-            id: info
+                id: info
 
                 anchors {
                     left: boxart.right; leftMargin: vpx(30)
@@ -404,17 +404,17 @@ id: root
 
     // Header
     Item {
-    id: header
+        id: header
 
         anchors {
-            left: parent.left; 
+            left: parent.left;
             right: parent.right
         }
         height: vpx(75)
 
         // Platform logo
         Image {
-        id: logobg
+            id: logobg
 
             anchors.fill: platformlogo
             source: "../assets/images/gradient.png"
@@ -423,7 +423,7 @@ id: root
         }
 
         Image {
-        id: platformlogo
+            id: platformlogo
 
             anchors {
                 top: parent.top; topMargin: vpx(20)
@@ -444,7 +444,7 @@ id: root
             sourceSize: Qt.size(width, height)
             smooth: true
             visible: false
-            asynchronous: true           
+            asynchronous: true
         }
 
         OpacityMask {
@@ -462,7 +462,7 @@ id: root
 
         // Platform title
         Text {
-        id: softwareplatformtitle
+            id: softwareplatformtitle
             
             text: game.collections.get(0).name
             
@@ -495,16 +495,16 @@ id: root
 
     // Game menu
     ObjectModel {
-    id: menuModel
+        id: menuModel
 
-        Button { 
-        id: button1 
+        Button {
+            id: button1
 
             text: "Play game"
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            onActivated: 
+            onActivated:
                 if (selected) {
                     sfxAccept.play();
                     launchGame(game);
@@ -514,14 +514,14 @@ id: root
                 }
         }
 
-        Button { 
-        id: button2 
+        Button {
+            id: button2
 
             icon: "../assets/images/icon_details.svg"
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            onActivated: 
+            onActivated:
                 if (selected) {
                     sfxToggle.play();
                     showDetails();
@@ -531,8 +531,8 @@ id: root
                 }
         }
 
-        Button { 
-        id: button3 
+        Button {
+            id: button3
 
             property string buttonText: game && game.favorite ? "Unfavorite" : "Add favorite"
             //text: buttonText
@@ -540,7 +540,7 @@ id: root
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            onActivated: 
+            onActivated:
                 if (selected) {
                     sfxToggle.play();
                     game.favorite = !game.favorite;
@@ -550,19 +550,19 @@ id: root
                 }
         }
         
-        Button { 
-        id: button4
+        Button {
+            id: button4
 
             //text: "Back"
             icon: "../assets/images/icon_back.svg"
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            onActivated: 
-                if (selected) 
+            onActivated:
+                if (selected)
                     previousScreen();
                 else {
-                    sfxNav.play(); 
+                    sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
         }
@@ -570,11 +570,11 @@ id: root
 
     // Full list
     ObjectModel {
-    id: extrasModel
+        id: extrasModel
 
         // Game menu
         ListView {
-        id: menu
+            id: menu
 
             property bool selected: parent.focus
             focus: selected
@@ -589,14 +589,14 @@ id: root
         }
 
         HorizontalCollection {
-        id: media
+            id: media
 
             width: root.width - vpx(70) - globalMargin
             height: ((root.width - globalMargin * 2) / 6.0) + vpx(60)
             title: "Media"
             model: game ? mediaArray() : []
             delegate: MediaItem {
-            id: mediadelegate
+                id: mediadelegate
 
                 width: (root.width - globalMargin * 2) / 6.0
                 height: width
@@ -604,28 +604,28 @@ id: root
                 mediaItem: modelData
 
                 onHighlighted: {
-                    sfxNav.play(); 
+                    sfxNav.play();
                     media.currentIndex = index;
                     content.currentIndex = media.ObjectModel.index;
                 }
 
                 onActivated: {
-                if (selected)
-                    showMedia(index);
-                else
-                {
-                    sfxNav.play(); 
-                    media.currentIndex = index;
-                    content.currentIndex = media.ObjectModel.index;
+                    if (selected)
+                        showMedia(index);
+                    else
+                    {
+                        sfxNav.play();
+                        media.currentIndex = index;
+                        content.currentIndex = media.ObjectModel.index;
+                    }
                 }
-            }
             }
             
         }
 
         // More by publisher
         HorizontalCollection {
-        id: list1
+            id: list1
 
             property bool selected: ListView.isCurrentItem
             focus: selected
@@ -641,7 +641,7 @@ id: root
 
         // More in genre
         HorizontalCollection {
-        id: list2
+            id: list2
 
             property bool selected: ListView.isCurrentItem
             focus: selected
@@ -658,7 +658,7 @@ id: root
     }
 
     ListView {
-    id: content
+        id: content
 
         anchors {
             left: parent.left; leftMargin: vpx(70)
@@ -675,9 +675,9 @@ id: root
         highlightMoveDuration: 100
         displayMarginEnd: 150
         cacheBuffer: 250
-        onCurrentIndexChanged: { 
+        onCurrentIndexChanged: {
             if (content.currentIndex === 0) {
-                toggleVideo(true); 
+                toggleVideo(true);
             } else {
                 toggleVideo(false);
             }
@@ -688,7 +688,7 @@ id: root
     }
 
     MediaView {
-    id: mediaScreen
+        id: mediaScreen
         
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 100 } }
@@ -735,11 +735,11 @@ id: root
         }
     }
     
-    onFocusChanged: { 
-        if (focus) { 
+    onFocusChanged: {
+        if (focus) {
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
-            menu.currentIndex = 0; 
+            menu.currentIndex = 0;
         } else {
             screenshot.opacity = 1;
             toggleVideo(false);

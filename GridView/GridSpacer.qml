@@ -17,7 +17,7 @@
 import QtQuick 2.15
 import "../utils.js" as Utils
 Image {
-id: root
+    id: root
 
     property var games
 

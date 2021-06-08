@@ -18,10 +18,10 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.12
 
 FocusScope {
-id: root
+    id: root
 
     ListModel {
-    id: settingsModel
+        id: settingsModel
 
         /*ListElement {
             settingName: "Game View"
@@ -55,21 +55,21 @@ id: root
             settingName: "Hide button help"
             setting: "No,Yes"
         }
-	ListElement {
+        ListElement {
             settingName: "Hide Clock"
             setting: "No,Yes"
         }
-	ListElement {
+        ListElement {
             settingName: "Color Layout"
             setting: "Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
         }
-	ListElement {
-		settingName: "Color Background"
-		setting: "Original,Black,Gray,Blue,Green,Red"
+        ListElement {
+            settingName: "Color Background"
+            setting: "Original,Black,Gray,Blue,Green,Red"
         }
-	ListElement {
-		settingName: "System Logo Style"
-		setting: "White,Color"
+        ListElement {
+            settingName: "System Logo Style"
+            setting: "White,Color"
         }
     }
 
@@ -100,7 +100,7 @@ id: root
     }
 
     ListModel {
-    id: showcaseSettingsModel
+        id: showcaseSettingsModel
         ListElement {
             settingName: "Number of games showcased"
             setting: "15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,1,2,3,4,5,6,7,8,9,10,11,12,13,14"
@@ -156,7 +156,7 @@ id: root
     }
 
     ListModel {
-    id: gridSettingsModel
+        id: gridSettingsModel
 
         ListElement {
             settingName: "Grid Thumbnail"
@@ -176,7 +176,7 @@ id: root
     }
 
     ListModel {
-    id: gameSettingsModel
+        id: gameSettingsModel
 
         ListElement {
             settingName: "Game Background"
@@ -224,7 +224,7 @@ id: root
     property real itemheight: vpx(50)
 
     Rectangle {
-    id: header
+        id: header
 
         anchors {
             top: parent.top
@@ -237,7 +237,7 @@ id: root
 
         // Platform title
         Text {
-        id: headertitle
+            id: headertitle
             
             text: "Settings"
             
@@ -267,8 +267,8 @@ id: root
     }
 
     ListView {
-    id: pagelist
-    
+        id: pagelist
+
         focus: true
         anchors {
             top: header.bottom
@@ -278,10 +278,10 @@ id: root
         width: vpx(300)
         model: settingsArr
         delegate: Component {
-        id: pageDelegate
-        
+            id: pageDelegate
+
             Item {
-            id: pageRow
+                id: pageRow
 
                 property bool selected: ListView.isCurrentItem
 
@@ -290,8 +290,8 @@ id: root
 
                 // Page name
                 Text {
-                id: oageNameText
-                
+                    id: oageNameText
+
                     text: modelData.pageName
                     color: theme.text
                     font.family: subtitleFont.name
@@ -320,7 +320,7 @@ id: root
                 }
 
             }
-        } 
+        }
 
         Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
         Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
@@ -351,13 +351,13 @@ id: root
     }
 
     ListView {
-    id: settingsList
+        id: settingsList
 
         model: settingsArr[pagelist.currentIndex].listmodel
         delegate: settingsDelegate
         
         anchors {
-            top: header.bottom; bottom: parent.bottom; 
+            top: header.bottom; bottom: parent.bottom;
             left: pagelist.right; leftMargin: globalMargin
             right: parent.right; rightMargin: globalMargin
         }
@@ -373,10 +373,10 @@ id: root
         clip: true
 
         Component {
-        id: settingsDelegate
-        
+            id: settingsDelegate
+
             Item {
-            id: settingRow
+                id: settingRow
 
                 property bool selected: ListView.isCurrentItem && settingsList.focus
                 property variant settingList: setting.split(',')
@@ -406,8 +406,8 @@ id: root
 
                 // Setting name
                 Text {
-                id: settingNameText
-                
+                    id: settingNameText
+
                     text: settingName + ": "
                     color: theme.text
                     font.family: subtitleFont.name
@@ -422,10 +422,10 @@ id: root
                     }
                 }
                 // Setting value
-                Text { 
-                id: settingtext; 
-                
-                    text: settingList[savedIndex]; 
+                Text {
+                    id: settingtext;
+
+                    text: settingList[savedIndex];
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -439,7 +439,7 @@ id: root
                 }
 
                 Rectangle {
-                    anchors { 
+                    anchors {
                         left: parent.left; leftMargin: vpx(25)
                         right: parent.right; rightMargin: vpx(25)
                         bottom: parent.bottom
@@ -486,7 +486,7 @@ id: root
                     onEntered: { sfxNav.play(); }
                     onClicked: {
                         sfxToggle.play();
-                        if(selected){ 
+                        if(selected){
                             nextSetting();
                             saveSetting();
                         } else {
@@ -496,7 +496,7 @@ id: root
                     }
                 }
             }
-        } 
+        }
 
         Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
         Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }

@@ -18,7 +18,7 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
 Item {
-id: root
+    id: root
 
     signal activated
     signal highlighted
@@ -33,7 +33,7 @@ id: root
     z: selected ? 10 : 1
 
     Image {
-    id: border
+        id: border
 
         anchors.fill: parent
         source: "../assets/images/gradient.png"
@@ -41,7 +41,7 @@ id: root
         asynchronous: true
 
         Rectangle {
-        id: titlecontainer
+            id: titlecontainer
 
             width: bubbletitle.contentWidth + vpx(20)
             height: bubbletitle.contentHeight + vpx(8)
@@ -53,7 +53,7 @@ id: root
             radius: height/2
 
             Text {
-            id: bubbletitle
+                id: bubbletitle
 
                 text: isVideo ? "Video" : (isManual ? "Manual" : "Picture")
                 color: theme.text
@@ -70,7 +70,7 @@ id: root
     }
 
     Image {
-    id: bg
+        id: bg
 
         anchors.fill: parent
         anchors.margins: vpx(4)
@@ -79,7 +79,7 @@ id: root
         asynchronous: true
 
         Rectangle {
-        id: videopreview
+            id: videopreview
 
             anchors.fill: parent
             color: theme.secondary
@@ -87,7 +87,7 @@ id: root
         }
 
         Image {
-        id: iconFill
+            id: iconFill
 
             anchors.fill: parent
             source: "../assets/images/gradient.png"
@@ -97,7 +97,7 @@ id: root
         }
 
         Image {
-        id: mask
+            id: mask
 
             source: "../assets/images/icon_mediaplayer.svg"
             anchors.centerIn: parent
@@ -131,7 +131,7 @@ id: root
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            activated();        
+            activated();
         }
     }
 
