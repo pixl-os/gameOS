@@ -67,9 +67,9 @@ FocusScope {
             settingName: "Color Background"
             setting: "Original,Black,Gray,Blue,Green,Red"
         }
-        ListElement {
-            settingName: "System Logo Style"
-            setting: "White,Color"
+	ListElement {
+		settingName: "System Logo Style"
+		setting: "White,Black,Color,Steel,Carbon"
         }
     }
 
