@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 
 Item {
-id: root
+    id: root
 
     Component {
         id: buttonhelpDelegate
@@ -30,7 +30,7 @@ id: root
                 height: vpx(30)
                 asynchronous: true
             }
-            Text { 
+            Text {
                 text: name
                 font.family: subtitleFont.name
                 font.pixelSize: vpx(16)
@@ -57,39 +57,39 @@ id: root
     function processButtonArt(button) {
         var buttonModel;
         switch (button) {
-            case "accept":
+        case "accept":
             buttonModel = api.keys.accept;
             break;
-            case "cancel":
+        case "cancel":
             buttonModel = api.keys.cancel;
             break;
-            case "filters":
+        case "filters":
             buttonModel = api.keys.filters;
             break;
-            case "details":
+        case "details":
             buttonModel = api.keys.details;
             break;
-            case "nextPage":
+        case "nextPage":
             buttonModel = api.keys.nextPage;
             break;
-            case "prevPage":
+        case "prevPage":
             buttonModel = api.keys.prevPage;
             break;
-            case "pageUp":
+        case "pageUp":
             buttonModel = api.keys.pageUp;
             break;
-            case "pageDown":
-                buttonModel = api.keys.pageDown;
-                break;
-            default:
+        case "pageDown":
+            buttonModel = api.keys.pageDown;
+            break;
+        default:
             buttonModel = api.keys.accept;
         }
 
         var i;
         for (i = 0; buttonModel.length; i++) {
             if (buttonModel[i].name().includes("Gamepad")) {
-            var buttonValue = buttonModel[i].key.toString(16)
-            return buttonValue.substring(buttonValue.length-1, buttonValue.length);
+                var buttonValue = buttonModel[i].key.toString(16)
+                return buttonValue.substring(buttonValue.length-1, buttonValue.length);
             }
         }
     }

@@ -14,18 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import "qrc:/qmlutils" as PegasusUtils
 
 Item {
-id: infocontainer
+    id: infocontainer
 
     property var gameData: currentGame
 
     // Game title
     Text {
-    id: gametitle
+        id: gametitle
         
         text: gameData ? gameData.title : ""
         
@@ -46,18 +46,18 @@ id: infocontainer
 
     // Meta data
     Item {
-    id: metarow
+        id: metarow
 
         height: vpx(50)
         anchors {
-            top: gametitle.bottom; 
+            top: gametitle.bottom;
             left: parent.left
             right: parent.right
         }
 
         // Rating box
         Text {
-        id: ratingtitle
+            id: ratingtitle
 
             width: contentWidth
             height: parent.height
@@ -71,7 +71,7 @@ id: infocontainer
         }
 
         Text {
-        id: ratingtext
+            id: ratingtext
             
             property real processedRating: gameData ? Math.round(gameData.rating * 100) / 100 : ""
             width: contentWidth
@@ -85,7 +85,7 @@ id: infocontainer
         }
 
         Rectangle {
-        id: divider1
+            id: divider1
             width: vpx(2)
             anchors {
                 left: ratingtext.right; leftMargin: (25)
@@ -97,7 +97,7 @@ id: infocontainer
 
         // Players box
         Text {
-        id: playerstitle
+            id: playerstitle
 
             width: contentWidth
             height: parent.height
@@ -111,7 +111,7 @@ id: infocontainer
         }
 
         Text {
-        id: playerstext
+            id: playerstext
 
             width: contentWidth
             height: parent.height
@@ -124,7 +124,7 @@ id: infocontainer
         }
 
         Rectangle {
-        id: divider2
+            id: divider2
             width: vpx(2)
             anchors {
                 left: playerstext.right; leftMargin: (25)
@@ -136,7 +136,7 @@ id: infocontainer
 
         // Genre box
         Text {
-        id: genretitle
+            id: genretitle
 
             width: contentWidth
             height: parent.height
@@ -150,9 +150,9 @@ id: infocontainer
         }
 
         Text {
-        id: genretext
+            id: genretext
 
-            anchors { 
+            anchors {
                 left: genretitle.right; leftMargin: vpx(5)
                 right: parent.right
                 top: parent.top
@@ -170,10 +170,10 @@ id: infocontainer
     // Description
     PegasusUtils.AutoScroll
     {
-    id: gameDescription
-    
+        id: gameDescription
+
         anchors {
-            left: parent.left; 
+            left: parent.left;
             right: parent.right;
             top: metarow.bottom
             bottom: parent.bottom;

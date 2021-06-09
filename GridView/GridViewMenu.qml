@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.12
 import "../Global"
 import "../Lists"
 import "../utils.js" as Utils
 
 FocusScope {
-id: root
+    id: root
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
@@ -48,7 +48,7 @@ id: root
                 return '';
             }
         } else { // Scroll up
-            if (charCode == firstAlpha - 1) {
+            if (charCode === firstAlpha - 1) {
                 return '';
             }
             if (charCode < firstAlpha || charCode > lastAlpha || isNaN(charCode)) {
@@ -64,17 +64,17 @@ id: root
             return false;
         }
 
-        if (sortByFilter[sortByIndex].toLowerCase() != "title") {
+        if (sortByFilter[sortByIndex].toLowerCase() !== "title") {
             return false;
         }
 
         var currentIndex = gamegrid.currentIndex;
-        if (currentIndex == -1) {
+        if (currentIndex === -1) {
             gamegrid.currentIndex = 0;
         }
         else {
             // NOTE: We should be using the scroll proxy here, but this is significantly faster.
-            if (sortedGames == null) {
+            if (sortedGames === null) {
                 sortedGames = list.collection.games.toVarArray().map(g => g.title.toLowerCase()).sort((a, b) => a.localeCompare(b));
             }
 
@@ -95,16 +95,16 @@ id: root
                 do {
                     nextLetter = nextChar(nextLetter, modifier);
 
-                    if (currentLetter == nextLetter) {
+                    if (currentLetter === nextLetter) {
                         break;
                     }
 
-                    if (nextLetter == '') {
+                    if (nextLetter === '') {
                         if (sortedGames.some(g => g.toLowerCase().charCodeAt(0) < firstAlpha || g.toLowerCase().charCodeAt(0) > lastAlpha)) {
                             break;
                         }
                     }
-                    else if (sortedGames.some(g => g.charAt(0) == nextLetter)) {
+                    else if (sortedGames.some(g => g.charAt(0) === nextLetter)) {
                         break;
                     }
                 } while (true)
@@ -140,21 +140,21 @@ id: root
     property int titleMargin: settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0
 
     GridSpacer {
-    id: fakebox
+        id: fakebox
 
         width: vpx(100); height: vpx(100)
         games: list.games
     }
 
     Rectangle {
-    id: navigationOverlay
+        id: navigationOverlay
         anchors.fill: parent;
         color: theme.main
         opacity: 0
         z: 10
 
         Text {
-        id: navigationLetter
+            id: navigationLetter
             antialiasing: true
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferNoHinting
@@ -166,7 +166,7 @@ id: root
         }
 
         SequentialAnimation {
-        id: navigationLetterOpacityAnimator
+            id: navigationLetterOpacityAnimator
             PauseAnimation { duration: 500 }
             OpacityAnimator {
 
@@ -179,7 +179,7 @@ id: root
     }
 
     Rectangle {
-    id: header
+        id: header
 
         anchors {
             top:    parent.top
@@ -191,7 +191,7 @@ id: root
         z: 5
 
         HeaderBar {
-        id: headercontainer
+            id: headercontainer
 
             anchors.fill: parent
         }
@@ -203,7 +203,7 @@ id: root
     }
 
     Item {
-    id: gridContainer
+        id: gridContainer
 
         anchors {
             top: header.bottom; topMargin: globalMargin
@@ -213,14 +213,14 @@ id: root
         }
 
         GridView {
-        id: gamegrid
+            id: gamegrid
 
             // Figuring out the aspect ratio for box art
             property real cellHeightRatio: fakebox.paintedHeight / fakebox.paintedWidth
             property real savedCellHeight: {
-                if (settings.GridThumbnail == "Tall") {
+                if (settings.GridThumbnail === "Tall") {
                     return cellWidth / settings.TallRatio;
-                } else if (settings.GridThumbnail == "Square") {
+                } else if (settings.GridThumbnail === "Square") {
                     return cellWidth;
                 } else {
                     return cellWidth * settings.WideRatio;
@@ -256,7 +256,7 @@ id: root
             delegate: (showBoxes) ? boxartdelegate : dynamicDelegate
 
             Component {
-            id: boxartdelegate
+                id: boxartdelegate
 
                 BoxArtGridItem {
                     selected: GridView.isCurrentItem && root.focus
@@ -287,10 +287,10 @@ id: root
             }
 
             Component {
-            id: dynamicDelegate
+                id: dynamicDelegate
 
                 DynamicGridItem {
-                id: dynamicdelegatecontainer
+                    id: dynamicdelegatecontainer
 
                     selected: GridView.isCurrentItem && root.focus
 
@@ -318,7 +318,7 @@ id: root
             }
 
             Component {
-            id: highlightcomponent
+                id: highlightcomponent
 
                 ItemHighlight {
                     width: gamegrid.cellWidth

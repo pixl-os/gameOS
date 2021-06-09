@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
 
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(mostPlayedGames.mapToSource(index)) }
     property int max: mostPlayedGames.count
 
     SortFilterProxyModel {
-    id: mostPlayedGames
+        id: mostPlayedGames
 
         sourceModel: api.allGames
         sorters: RoleSorter { roleName: "playCount"; sortOrder: Qt.DescendingOrder }
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: mostPlayedGames
         filters: IndexFilter { maximumIndex: max - 1 }

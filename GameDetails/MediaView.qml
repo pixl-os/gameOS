@@ -14,17 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 //import QtWebEngine 1.0
 import QtWebEngine 1.9
-import QtQuick.Layouts 1.11
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
-import QtQml.Models 2.10
-import QtMultimedia 5.9
+import QtQml.Models 2.12
+import QtMultimedia 5.15
 import "../Global"
 
 FocusScope {
-id: root
+    id: root
 
     signal close
     property var mediaModel: []
@@ -54,7 +54,7 @@ id: root
 
     // to load Video
     Component {
-    id: videoWrapper
+        id: videoWrapper
 
         Video {
             source: isVideo ? mediaModel[mediaIndex] : ""
@@ -67,15 +67,15 @@ id: root
     }
 
     Loader {
-    id: videoLoader
+        id: videoLoader
         sourceComponent: root.focus && isVideo ? videoWrapper : undefined
         asynchronous: true
         anchors { fill: parent }
-    }    
+    }
 
     // to load Manual
     Component {
-    id: manualWrapper
+        id: manualWrapper
         WebEngineView {
             id: webview
             anchors.fill: parent
@@ -90,7 +90,7 @@ id: root
     }
 
     Loader {
-    id: manualLoader
+        id: manualLoader
         sourceComponent: root.focus && isManual ? manualWrapper : undefined
         asynchronous: true
         anchors { fill: parent }
@@ -98,41 +98,41 @@ id: root
         // Input handling
         //Keys.forwardTo: [sourceComponent];
         Keys.onPressed: {
-                console.log("Key presssed in manualLoader");
-                // Back
-                if (api.keys.isCancel(event) && !event.isAutoRepeat) {
-                    //event.accepted = true;
-                    medialist.focus = true;
-                }    
-                //rotate with X
-                if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_R);
-                } 
-                //zoom + / R1
-                if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_Plus, Qt.ControlModifier);
-                } 
-                //zoom - / L1
-                if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_Minus, Qt.ControlModifier);
-                } 
-                //Next page / R2
-                if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_N);
-                }
-                //Next page / A
-                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_N);
-                }                 
-                //Previous page - / L2
-                if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
-                    keyEmitter.keyPressed(appWindow, Qt.Key_P);
-                } 
+            console.log("Key presssed in manualLoader");
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                //event.accepted = true;
+                medialist.focus = true;
+            }
+            //rotate with X
+            if (api.keys.isDetails(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_R);
+            }
+            //zoom + / R1
+            if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_Plus, Qt.ControlModifier);
+            }
+            //zoom - / L1
+            if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_Minus, Qt.ControlModifier);
+            }
+            //Next page / R2
+            if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_N);
+            }
+            //Next page / A
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_N);
+            }
+            //Previous page - / L2
+            if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
+                keyEmitter.keyPressed(appWindow, Qt.Key_P);
+            }
         }
     }
-        
+
     ListView {
-    id: medialist
+        id: medialist
 
         focus: true
         currentIndex: mediaIndex
@@ -148,7 +148,7 @@ id: root
         keyNavigationWraps: true
         model: mediaModel
         delegate: Image {
-        id: imageholder
+            id: imageholder
 
             width: root.width
             height: root.height
@@ -165,7 +165,7 @@ id: root
     }
 
     Row {
-    id: blips
+        id: blips
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors { bottom: parent.bottom; bottomMargin: vpx(20) }
@@ -227,8 +227,8 @@ id: root
         }
     }
     
-    onFocusChanged: { 
-        if (focus) { 
+    onFocusChanged: {
+        if (focus) {
             currentHelpbarModel = mediaviewHelpModel;
         }
     }

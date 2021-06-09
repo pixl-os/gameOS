@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(publisherGames.mapToSource(index)) }
@@ -27,7 +27,7 @@ id: root
     property string publisher: "Nintendo"
 
     SortFilterProxyModel {
-    id: publisherGames
+        id: publisherGames
 
         sourceModel: api.allGames
         filters: RegExpFilter { roleName: "publisher"; pattern: publisher; caseSensitivity: Qt.CaseInsensitive; }
@@ -35,7 +35,7 @@ id: root
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: publisherGames
         filters: IndexFilter { maximumIndex: max - 1 }

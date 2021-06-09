@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.10
-import QtQml.Models 2.1
+import QtQml.Models 2.12
 import "../utils.js" as Utils
 
 FocusScope {
-id: root
+    id: root
 
     property bool searchActive
 
@@ -32,13 +32,13 @@ id: root
     }
 
     Item {
-    id: container
+        id: container
 
         anchors.fill: parent
 
         // Platform logo
         Image {
-        id: logobg
+            id: logobg
 
             anchors.fill: platformlogo
             source: "../assets/images/gradient.png"
@@ -47,7 +47,7 @@ id: root
         }
 
         Image {
-        id: platformlogo
+            id: platformlogo
 
             anchors {
                 top: parent.top; topMargin: vpx(20)
@@ -68,7 +68,7 @@ id: root
             sourceSize: Qt.size(parent.width, parent.height)
             smooth: true
             visible: false
-            asynchronous: true           
+            asynchronous: true
         }
 
         OpacityMask {
@@ -85,7 +85,7 @@ id: root
 
         // Platform title
         Text {
-        id: softwareplatformtitle
+            id: softwareplatformtitle
             
             text: currentCollection.name
             
@@ -114,11 +114,11 @@ id: root
         }
 
         ObjectModel {
-        id: headermodel
+            id: headermodel
 
             // Search bar
             Item {
-            id: searchbar
+                id: searchbar
                 
                 property bool selected: ListView.isCurrentItem && root.focus
                 onSelectedChanged: if (!selected && searchActive) toggleSearch();
@@ -140,11 +140,11 @@ id: root
                 }
 
                 Image {
-                id: searchicon
+                    id: searchicon
 
                     width: height
                     height: vpx(18)
-                    anchors { 
+                    anchors {
                         left: parent.left; leftMargin: vpx(11)
                         top: parent.top; topMargin: vpx(10)
                     }
@@ -154,9 +154,9 @@ id: root
                 }
 
                 TextInput {
-                id: searchInput
+                    id: searchInput
                     
-                    anchors { 
+                    anchors {
                         left: searchicon.right; leftMargin: vpx(10)
                         top: parent.top; bottom: parent.bottom
                         right: parent.right; rightMargin: vpx(15)
@@ -205,14 +205,14 @@ id: root
 
             // Ascending/descending
             Item {
-            id: directionbutton
+                id: directionbutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: directiontitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
@@ -220,10 +220,10 @@ id: root
                 }
 
                 Text {
-                id: directiontitle
+                    id: directiontitle
                     
                     text: (orderBy === Qt.AscendingOrder) ? "Ascending" : "Descending"
-                                    
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -242,14 +242,14 @@ id: root
 
             // Order by title
             Item {
-            id: titlebutton
+                id: titlebutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: ordertitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
@@ -257,10 +257,10 @@ id: root
                 }
 
                 Text {
-                id: ordertitle
+                    id: ordertitle
                     
                     text: "By " + sortByFilter[sortByIndex]
-                                    
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -279,14 +279,14 @@ id: root
             
             // Filters menu
             Item {
-            id: filterbutton
+                id: filterbutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: filtertitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
@@ -295,10 +295,10 @@ id: root
                 
                 // Filter title
                 Text {
-                id: filtertitle
+                    id: filtertitle
                     
                     text: (showFavs) ? "Favorites" : "All games"
-                                    
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -318,7 +318,7 @@ id: root
 
         // Buttons
         ListView {
-        id: buttonbar
+            id: buttonbar
 
             focus: true
             model: headermodel

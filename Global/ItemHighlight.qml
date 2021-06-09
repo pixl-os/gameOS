@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
-import QtMultimedia 5.9
+import QtMultimedia 5.15
 
 Item {
-id: root
+    id: root
 
     property var game
     property bool selected
@@ -42,7 +42,7 @@ id: root
 
     // Timer to show the video
     Timer {
-    id: videoDelay
+        id: videoDelay
 
         interval: 600
         onTriggered: {
@@ -53,7 +53,7 @@ id: root
     }
 
     Timer {
-    id: stopvideo
+        id: stopvideo
 
         interval: 1000
         onTriggered: {
@@ -64,10 +64,10 @@ id: root
 
     // NOTE: Video Preview
     Component {
-    id: videoPreviewWrapper
+        id: videoPreviewWrapper
 
         Video {
-        id: videocomponent
+            id: videocomponent
 
             anchors.fill: parent
             source: game.assets.videoList.length ? game.assets.videoList[0] : ""
@@ -82,7 +82,7 @@ id: root
     }
 
     DropShadow {
-    id: outershadow
+        id: outershadow
 
         anchors.fill: videocontainer
         horizontalOffset: 0
@@ -97,13 +97,13 @@ id: root
     }
 
     Item {
-    id: videocontainer
+        id: videocontainer
 
         anchors.fill: parent
 
         // Video
         Loader {
-        id: videoPreviewLoader
+            id: videoPreviewLoader
 
             asynchronous: true
             anchors { fill: parent }

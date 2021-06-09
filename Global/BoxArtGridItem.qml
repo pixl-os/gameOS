@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 Item {
-id: root
+    id: root
 
     // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
     function steamAppID (gameData) {
@@ -29,22 +29,22 @@ id: root
         return steamAppID(gameData) + '/library_600x900_2x.jpg';
     }
     function boxArt(data) {
-        if (data != null) {
-            if (data.assets.boxFront.includes("/header.jpg")) 
-            return steamBoxArt(data);
+        if (data !== null) {
+            if (data.assets.boxFront.includes("/header.jpg"))
+                return steamBoxArt(data);
             else {
-            if (data.assets.boxFront != "")
-                return data.assets.boxFront;
-            else if (data.assets.poster != "")
-                return data.assets.poster;
-            else if (data.assets.banner != "")
-                return data.assets.banner;
-            else if (data.assets.tile != "")
-                return data.assets.tile;
-            else if (data.assets.cartridge != "")
-                return data.assets.cartridge;
-            else if (data.assets.logo != "")
-                return data.assets.logo;
+                if (data.assets.boxFront !== "")
+                    return data.assets.boxFront;
+                else if (data.assets.poster !== "")
+                    return data.assets.poster;
+                else if (data.assets.banner !== "")
+                    return data.assets.banner;
+                else if (data.assets.tile !== "")
+                    return data.assets.tile;
+                else if (data.assets.cartridge !== "")
+                    return data.assets.cartridge;
+                else if (data.assets.logo !== "")
+                    return data.assets.logo;
             }
         }
         return "";
@@ -61,16 +61,16 @@ id: root
     signal activate()
     signal highlighted()
 
-    Item 
+    Item
     {
-    id: container
+        id: container
 
         anchors.fill: parent
         anchors.margins: vpx(6)
         Behavior on opacity { NumberAnimation { duration: 200 } }
-                       
+
         Image {
-        id: screenshot
+            id: screenshot
             anchors.fill: parent
             anchors.margins: vpx(2)
 
@@ -82,11 +82,11 @@ id: root
             anchors.verticalCenter: parent.verticalCenter
 
             Rectangle {
-            id: favicon
+                id: favicon
 
-                anchors { 
-                    right: parent.right; rightMargin: vpx(7); 
-                    top: parent.top; topMargin: vpx(7) 
+                anchors {
+                    right: parent.right; rightMargin: vpx(7);
+                    top: parent.top; topMargin: vpx(7)
                 }
                 width: vpx(20)
                 height: width
@@ -97,13 +97,13 @@ id: root
                     source: "../assets/images/favicon.svg"
                     asynchronous: true
                     anchors.fill: parent
-                    anchors.margins: vpx(4)            
+                    anchors.margins: vpx(4)
                 }
             }
         }
 
         Rectangle {
-        id: regborder
+            id: regborder
 
             anchors.fill: parent
             color: "transparent"
@@ -114,8 +114,8 @@ id: root
         }
 
         Rectangle {
-        id: overlay
-        
+            id: overlay
+
             width: screenshot.paintedWidth
             height: screenshot.paintedHeight
             anchors.centerIn: screenshot
@@ -135,13 +135,13 @@ id: root
     }
 
     Component {
-    id: border
+        id: border
 
         ItemBorder { }
     }
 
     Text {
-    id: title
+        id: title
 
         text: modelData ? modelData.title : ''
         color: theme.text
@@ -165,7 +165,7 @@ id: root
     }
 
     Text {
-    id: platformname
+        id: platformname
 
         text: modelData.title
         anchors { fill: parent; margins: vpx(10) }
@@ -186,7 +186,7 @@ id: root
     }
 
     Loader {
-    id: spinnerloader
+        id: spinnerloader
 
         anchors.centerIn: parent
         active: screenshot.status === Image.Loading
@@ -194,8 +194,8 @@ id: root
     }
 
     Component {
-    id: loaderspinner
-    
+        id: loaderspinner
+
         Image {
             source: "../assets/images/loading.png"
             width: vpx(50)
@@ -216,14 +216,14 @@ id: root
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            activate();        
+            activate();
         }
     }
 
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onClicked: {
             sfxNav.play();

@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
 Item {
-id: root
+    id: root
 
     readonly property alias games: filteredModel
     function currentGame(index) { return api.allGames.get(filteredModel.mapToSource(index)) }
@@ -41,7 +41,7 @@ id: root
     }*/
 
     SortFilterProxyModel {
-    id: filteredModel
+        id: filteredModel
 
         sourceModel: api.allGames
         filters: [
@@ -70,7 +70,7 @@ id: root
                 enabled: years.length
                 expression: releaseYear == 0 || (years[0] <= releaseYear && releaseYear <= years[1])
             },
-            IndexFilter { 
+            IndexFilter {
                 enabled: maxResults != 0
                 maximumIndex: maxResults - 1
             }/*,
@@ -87,7 +87,7 @@ id: root
 
         sorters: [
             RoleSorter {
-            id: sorter
+                id: sorter
 
                 roleName: sortBy
                 sortOrder: descending ? Qt.DescendingOrder : Qt.AscendingOrder

@@ -14,20 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 import "../utils.js" as Utils
 import QtGraphicalEffects 1.0
 
 
 FocusScope {
-id: root
+    id: root
 
     property var game: currentGame
     focus: true
 
     // Background
     Image {
-    id: screenshot
+        id: screenshot
 
         anchors.fill: parent
         asynchronous: true
@@ -55,18 +55,18 @@ id: root
 
     // Scanlines
     Image {
-    id: scanlines
+        id: scanlines
 
         anchors.fill: parent
         source: "../assets/images/scanlines_v3.png"
         asynchronous: true
         opacity: 0.2
-        visible: (settings.ShowScanlines == "Yes")
+        visible: (settings.ShowScanlines === "Yes")
     }
 
     // Clear logo
     Image {
-    id: logo
+        id: logo
 
         width: vpx(500)
         height: vpx(500)
@@ -79,7 +79,7 @@ id: root
     }
 
     DropShadow {
-    id: logoshadow
+        id: logoshadow
 
         anchors.fill: logo
         horizontalOffset: 0
@@ -92,7 +92,7 @@ id: root
     }
 
     Item {
-    id: container
+        id: container
 
         width: launchText.width + vpx(50)
         height: launchText.height + vpx(50)
@@ -107,7 +107,7 @@ id: root
         //color: theme.secondary
 
         Rectangle {
-        id: regborder
+            id: regborder
 
             anchors.fill: parent
             color: "black"
@@ -118,7 +118,7 @@ id: root
         }
 
         Text {
-        id: launchText
+            id: launchText
 
             text: "Press any button to return"//"Launching " + currentGame.title
             width: contentWidth

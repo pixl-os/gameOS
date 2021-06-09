@@ -14,18 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 import "../Global"
 
 FocusScope {
-id: root
+    id: root
 
     property real itemheight: vpx(50)
     property int skipnum: 10
 
     Image {
-    id: screenshot
+        id: screenshot
 
         anchors {
             top: parent.top
@@ -39,7 +39,7 @@ id: root
         smooth: true
 
         GameInfo {
-        id: info
+            id: info
 
             anchors {
                 left: parent.left; leftMargin: globalMargin
@@ -51,7 +51,7 @@ id: root
     }
 
     HeaderBar {
-    id: header
+        id: header
         
         anchors {
             top:    parent.top
@@ -63,7 +63,7 @@ id: root
     
     // Software list
     ListView {
-    id: softwarelist
+        id: softwarelist
 
         currentIndex: currentGameIndex
         onCurrentIndexChanged: {
@@ -94,10 +94,10 @@ id: root
 
         // List item
         Component {
-        id: softwarelistdelegate
+            id: softwarelistdelegate
 
             Item {
-            id: delegatecontainer
+                id: delegatecontainer
 
                 width: ListView.view.width
                 height: itemheight
@@ -105,17 +105,17 @@ id: root
 
                 Rectangle {
                     width: vpx(3)
-                    anchors { 
+                    anchors {
                         left: parent.left; leftMargin: vpx(11)
                         top: parent.top; topMargin: vpx(5)
                         bottom: parent.bottom; bottomMargin: vpx(5)
-                        }
+                    }
                     color: theme.text
                     visible: selected
                 }
 
                 Text {
-                id: gametitle
+                    id: gametitle
 
                     text: modelData.title
                     
