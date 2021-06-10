@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [logo-settings] - 2021-06-09
+- bump all qt5 module on lastest version
+- add logo sets systems on : white, black, color, steel, carbon
+
 ## [logo-settings] - 2021-06-03
 - add support of settings for logo sets
 - fix color layout/background to be set as "Original" for default value
