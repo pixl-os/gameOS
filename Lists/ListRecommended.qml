@@ -17,7 +17,7 @@
 // updated by Bozo the Geek / 30/04/2021 for recalbox integration/performance
 //
 
-import QtQuick 2.15
+import QtQuick 2.12
 import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 

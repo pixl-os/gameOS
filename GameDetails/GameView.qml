@@ -1,5 +1,5 @@
 // gameOS theme
-// Copyright (C) 2018-2020 Seth Powell 
+// Copyright (C) 2018-2020 Seth Powell
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.15
+import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 import SortFilterProxyModel 0.2
-import QtQml.Models 2.15
-import QtMultimedia 5.15
+import QtQml.Models 2.12
+import QtMultimedia 5.12
 import "../Global"
 import "../GridView"
 import "../Lists"
@@ -45,7 +45,7 @@ FocusScope {
             return ""
         }
     }
-    
+
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
     ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10 }
 
@@ -53,7 +53,7 @@ FocusScope {
     function mediaArray() {
         let mediaList = [];
         if (game && game.assets.video) game.assets.videoList.forEach(v => mediaList.push(v));
-        
+
         if (game && game.assets.manual) {
             mediaList.push(game.assets.manual);
         }
@@ -61,7 +61,7 @@ FocusScope {
         if (game) {
             game.assets.screenshotList.forEach(v => mediaList.push(v));
             game.assets.backgroundList.forEach(v => mediaList.push(v));
-            
+
             //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
             if ((game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
             if (game.assets.boxBack !== "") mediaList.push(game.assets.boxBack);
@@ -80,11 +80,11 @@ FocusScope {
             if (game.assets.tile !== "") mediaList.push(game.assets.tile);
             if (game.assets.steam !== "") mediaList.push(game.assets.steam);
             if (game.assets.banner !== "") mediaList.push(game.assets.banner);
-            
+
             //if (game.assets.music != "") mediaList.push(game.assets.music);//RFU
-            
+
             if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
-            
+
         }
 
         return mediaList;
@@ -135,7 +135,7 @@ FocusScope {
 
     GridSpacer {
         id: fakebox
-        
+
         width: vpx(100); height: vpx(100)
     }
 
@@ -304,16 +304,16 @@ FocusScope {
     // Platform title
     Text {
         id: gametitle
-        
+
         text: game.title
-        
+
         anchors {
             top:    logo.top;
             left:   logo.left;//    leftMargin: globalMargin
             right:  parent.right;
             bottom: logo.bottom
         }
-        
+
         color: theme.text
         font.family: titleFont.name
         font.pixelSize: vpx(80)
@@ -353,17 +353,17 @@ FocusScope {
         }
     }
 
-    
+
 
     // Details screen
     Item {
         id: detailsScreen
-        
+
         anchors.fill: parent
         visible: opacity !== 0
         opacity: (content.currentIndex !== 0) ? 0 : detailsOpacity
         Behavior on opacity { NumberAnimation { duration: 200 } }
-        
+
         Rectangle {
             anchors.fill: parent
             color: theme.main
@@ -412,22 +412,22 @@ FocusScope {
         }
         height: vpx(75)
 
-        // Platform logo
-        Image {
-            id: logobg
+//        // Platform logo
+//        Image {
+//            id: logobg
 
-            anchors.fill: platformlogo
-            source: "../assets/images/gradient.png"
-            asynchronous: true
-            visible: false
-        }
+//            anchors.fill: platformlogo
+//            source: "../assets/images/gradient.png"
+//            asynchronous: true
+//            visible: false
+//        }
 
         Image {
             id: platformlogo
 
             anchors {
-                top: parent.top; topMargin: vpx(20)
-                bottom: parent.bottom; bottomMargin: vpx(20)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
                 left: parent.left; leftMargin: globalMargin
             }
             fillMode: Image.PreserveAspectFit
@@ -441,38 +441,39 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(game.collections.get(0).shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-            sourceSize: Qt.size(width, height)
+            sourceSize: vpx(250)
             smooth: true
-            visible: false
+//            visible: false
             asynchronous: true
         }
 
-        OpacityMask {
-            anchors.fill: logobg
-            source: logobg
-            maskSource: platformlogo
-            
-            // Mouse/touch functionality
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: settings.MouseHover === "Yes"
-                onClicked: previousScreen();
-            }
+//        OpacityMask {
+//            anchors.fill: logobg
+//            source: logobg
+//            maskSource: platformlogo
+//        }
+
+        // Mouse/touch functionality
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: settings.MouseHover === "Yes"
+            onClicked: previousScreen();
         }
+
 
         // Platform title
         Text {
             id: softwareplatformtitle
-            
+
             text: game.collections.get(0).name
-            
+
             anchors {
                 top:    parent.top;
                 left:   parent.left;    leftMargin: globalMargin
                 right:  parent.right
                 bottom: parent.bottom
             }
-            
+
             color: theme.text
             font.family: titleFont.name
             font.pixelSize: vpx(30)
@@ -549,7 +550,7 @@ FocusScope {
                     menu.currentIndex = ObjectModel.index;
                 }
         }
-        
+
         Button {
             id: button4
 
@@ -620,7 +621,7 @@ FocusScope {
                     }
                 }
             }
-            
+
         }
 
         // More by publisher
@@ -654,7 +655,7 @@ FocusScope {
             search: genreCollection
             onListHighlighted: { sfxNav.play(); content.currentIndex = list2.ObjectModel.index; }
         }
-        
+
     }
 
     ListView {
@@ -670,7 +671,7 @@ FocusScope {
         focus: true
         spacing: vpx(30)
         header: Item { height: vpx(450) }
-        
+
         snapMode: ListView.SnapToItem
         highlightMoveDuration: 100
         displayMarginEnd: 150
@@ -689,7 +690,7 @@ FocusScope {
 
     MediaView {
         id: mediaScreen
-        
+
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 100 } }
         visible: opacity != 0
@@ -734,7 +735,7 @@ FocusScope {
             button: "accept"
         }
     }
-    
+
     onFocusChanged: {
         if (focus) {
             currentHelpbarModel = gameviewHelpModel;

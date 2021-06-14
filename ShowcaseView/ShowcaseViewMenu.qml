@@ -1,5 +1,5 @@
 // gameOS theme
-// Copyright (C) 2018-2020 Seth Powell 
+// Copyright (C) 2018-2020 Seth Powell
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.15
+import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
 import QtGraphicalEffects 1.12
-import QtMultimedia 5.15
+import QtMultimedia 5.12
 import QtQml.Models 2.12
 import "../Global"
 import "../GridView"
@@ -66,7 +66,7 @@ FocusScope {
             collection.itemWidth = (width / 4.0);
             collection.itemHeight = collection.itemWidth * settings.WideRatio;
             break;
-            
+
         }
 
         collection.height = collection.itemHeight + vpx(40) + globalMargin
@@ -117,7 +117,7 @@ FocusScope {
     }
 
     Component.onDestruction: storeIndices();
-    
+
     anchors.fill: parent
 
     Item {
@@ -192,7 +192,7 @@ FocusScope {
 
         Text {
             text: "Try adding some favorite games"
-            
+
             horizontalAlignment: Text.AlignHCenter
             anchors { bottom: parent.bottom; bottomMargin: vpx(75) }
             width: parent.width
@@ -336,7 +336,7 @@ FocusScope {
             keyNavigationWraps: true
             currentIndex: (storedHomePrimaryIndex == 0) ? storedHomeSecondaryIndex : 0
             Component.onCompleted: positionViewAtIndex(currentIndex, ListView.Visible)
-            
+
             model: !ftue ? featuredCollection.games : 0
             delegate: featuredDelegate
 
@@ -360,7 +360,7 @@ FocusScope {
                     }
 
                     Rectangle {
-                        
+
                         anchors.fill: parent
                         color: "black"
                         opacity: featuredlist.focus ? 0 : 0.5
@@ -404,7 +404,7 @@ FocusScope {
                     }
                 }
             }
-            
+
             Row {
                 id: blips
 
@@ -437,7 +437,7 @@ FocusScope {
                 }
             }
         }
-        
+
         // Collections list
         ListView {
             id: platformlist
@@ -459,7 +459,7 @@ FocusScope {
             snapMode: ListView.SnapOneItem
             highlightMoveDuration: 100
             keyNavigationWraps: true
-            
+
             property int savedIndex: currentCollectionIndex
             onFocusChanged: {
                 if (focus)
@@ -478,9 +478,9 @@ FocusScope {
                 width: (root.width - globalMargin * 2) / 7.0
                 height: width * settings.WideRatio
                 //                color: selected ? theme.accent : theme.secondary
-                color: selected ? theme.accent : "transparent"
+                color:/* selected ? theme.accent :*/ "transparent"
 
-                scale: selected ? 1.25 : 1
+                scale: selected ? 1.15 : 1
                 Behavior on scale { NumberAnimation { duration: 100 } }
                 //                border.width: vpx(1)
                 //                border.color: "#19FFFFFF"
@@ -507,7 +507,7 @@ FocusScope {
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    opacity: selected ? 1 : 0.2
+                    opacity: selected ? 1 : 0.3
                     scale: selected ? 1.1 : 1
                     Behavior on scale { NumberAnimation { duration: 100 } }
                 }
@@ -559,7 +559,7 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
-                
+
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
@@ -575,7 +575,7 @@ FocusScope {
                             mainList.currentIndex = platformlist.ObjectModel.index;
                             platformlist.currentIndex = index;
                         }
-                        
+
                     }
                 }
             }
@@ -733,7 +733,7 @@ FocusScope {
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
-        
+
     }
 
     ListView {
@@ -749,7 +749,7 @@ FocusScope {
         snapMode: ListView.SnapOneItem
         keyNavigationWraps: true
         currentIndex: storedHomePrimaryIndex
-        
+
         cacheBuffer: 1000
         footer: Item { height: helpMargin }
 
