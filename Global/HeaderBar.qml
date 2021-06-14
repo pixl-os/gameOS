@@ -1,5 +1,5 @@
 // gameOS theme
-// Copyright (C) 2018-2020 Seth Powell 
+// Copyright (C) 2018-2020 Seth Powell
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,22 +36,22 @@ FocusScope {
 
         anchors.fill: parent
 
-        // Platform logo
-        Image {
-            id: logobg
+        //        // Platform logo
+        //        Image {
+        //            id: logobg
 
-            anchors.fill: platformlogo
-            source: "../assets/images/gradient.png"
-            asynchronous: true
-            visible: false
-        }
+        //            anchors.fill: platformlogo
+        //            source: "../assets/images/gradient.png"
+        //            asynchronous: true
+        //            visible: false
+        //        }
 
         Image {
             id: platformlogo
 
             anchors {
-                top: parent.top; topMargin: vpx(20)
-                bottom: parent.bottom; bottomMargin: vpx(20)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
                 left: parent.left; leftMargin: globalMargin
             }
             fillMode: Image.PreserveAspectFit
@@ -65,37 +65,37 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-            sourceSize: Qt.size(parent.width, parent.height)
+            sourceSize: vpx(250)
             smooth: true
-            visible: false
+            //            visible: false
             asynchronous: true
         }
 
-        OpacityMask {
-            anchors.fill: logobg
-            source: logobg
-            maskSource: platformlogo
-            // Mouse/touch functionality
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: previousScreen();
-            }
-        }
+        //        OpacityMask {
+        //            anchors.fill: logobg
+        //            source: logobg
+        //            maskSource: platformlogo
+        //            // Mouse/touch functionality
+        //            MouseArea {
+        //                anchors.fill: parent
+        //                hoverEnabled: true
+        //                onClicked: previousScreen();
+        //            }
+        //        }
 
         // Platform title
         Text {
             id: softwareplatformtitle
-            
+
             text: currentCollection.name
-            
+
             anchors {
                 top:    parent.top;
                 left:   parent.left;    leftMargin: globalMargin
                 right:  parent.right
                 bottom: parent.bottom
             }
-            
+
             color: theme.text
             font.family: titleFont.name
             font.pixelSize: vpx(30)
@@ -119,7 +119,7 @@ FocusScope {
             // Search bar
             Item {
                 id: searchbar
-                
+
                 property bool selected: ListView.isCurrentItem && root.focus
                 onSelectedChanged: if (!selected && searchActive) toggleSearch();
 
@@ -129,7 +129,7 @@ FocusScope {
                 Behavior on width {
                     PropertyAnimation { duration: 200; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 }
                 }
-                
+
                 Rectangle {
                     width: parent.width
                     height: parent.height
@@ -155,7 +155,7 @@ FocusScope {
 
                 TextInput {
                     id: searchInput
-                    
+
                     anchors {
                         left: searchicon.right; leftMargin: vpx(10)
                         top: parent.top; bottom: parent.bottom
@@ -221,7 +221,7 @@ FocusScope {
 
                 Text {
                     id: directiontitle
-                    
+
                     text: (orderBy === Qt.AscendingOrder) ? "Ascending" : "Descending"
 
                     color: theme.text
@@ -258,7 +258,7 @@ FocusScope {
 
                 Text {
                     id: ordertitle
-                    
+
                     text: "By " + sortByFilter[sortByIndex]
 
                     color: theme.text
@@ -276,7 +276,7 @@ FocusScope {
                     }
                 }
             }
-            
+
             // Filters menu
             Item {
                 id: filterbutton
@@ -292,11 +292,11 @@ FocusScope {
                     color: theme.accent
                     visible: filterbutton.selected
                 }
-                
+
                 // Filter title
                 Text {
                     id: filtertitle
-                    
+
                     text: (showFavs) ? "Favorites" : "All games"
 
                     color: theme.text
@@ -329,9 +329,6 @@ FocusScope {
                 right: parent.right; rightMargin: globalMargin
                 left: parent.left; top: parent.top; topMargin: vpx(15)
             }
-            
         }
-        
     }
-
 }
