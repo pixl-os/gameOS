@@ -176,7 +176,7 @@ FocusScope {
         onTriggered: {
             screenshot.opacity = 0;
             if (blurBG)
-                bgBlur.opacity = 0;
+                blurBG.opacity = 0;
         }
     }
 
@@ -432,7 +432,7 @@ FocusScope {
             }
             fillMode: Image.PreserveAspectFit
             source: {
-                if(settings.SystemLogoStyle === "White")
+                if(settings.SystemLogoStyle === "Color")
                 {
                     return "../assets/images/logospng/" + Utils.processPlatformName(game.collections.get(0).shortName) + ".png";
                 }
@@ -441,7 +441,7 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(game.collections.get(0).shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-            sourceSize: vpx(250)
+//            sourceSize: vpx(25)
             smooth: true
 //            visible: false
             asynchronous: true

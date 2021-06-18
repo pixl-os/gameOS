@@ -168,7 +168,7 @@ FocusScope {
             autoPlay: true
 
             OpacityAnimator {
-                target: videocomponent;
+                target: videocomponent
                 from: 0;
                 to: 1;
                 //                duration: 1000;
@@ -478,14 +478,14 @@ FocusScope {
                 width: (root.width - globalMargin * 2) / 7.0
                 height: width * settings.WideRatio
                 //                color: selected ? theme.accent : theme.secondary
-                color:/* selected ? theme.accent :*/ "transparent"
+                color: "transparent"
 
-                scale: selected ? 1.15 : 1
+                scale: selected ? 1.1 : 1
                 Behavior on scale { NumberAnimation { duration: 100 } }
                 //                border.width: vpx(1)
                 //                border.color: "#19FFFFFF"
 
-                anchors.verticalCenter: parent.verticalCenter
+//                anchors.verticalCenter: parent.verticalCenter
 
                 Image {
                     id: collectionlogo

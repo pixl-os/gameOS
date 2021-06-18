@@ -65,7 +65,7 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-            sourceSize: vpx(250)
+//            sourceSize: vpx(250)
             smooth: true
             //            visible: false
             asynchronous: true
