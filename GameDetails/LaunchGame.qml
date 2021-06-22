@@ -141,6 +141,21 @@ FocusScope {
             button: "cancel"
         }
     }
+
+	Component.onCompleted: {
+		//to update retroarchievements after a game session
+		if (game.retroAchievementsCount !== 0) updateRetroAchievements.restart();
+	}
+    // Timer to update retroachievements
+    Timer {
+    id: updateRetroAchievements
+
+        interval: 50
+        onTriggered: {
+				console.log("LaunchGame - game.updateRetroAchievements()");
+				game.updateRetroAchievements();
+            }
+    }
     
     onFocusChanged: { if (focus) currentHelpbarModel = launchGameHelpModel; }
 
