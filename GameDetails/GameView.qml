@@ -35,7 +35,8 @@ FocusScope {
     property bool iamsteam: game ? (collectionShortName == "steam") : false
     property bool canPlayVideo: settings.VideoPreview === "Yes"
     property real detailsOpacity: (settings.DetailsDefault === "Yes") ? 1 : 0
-    property bool blurBG: settings.GameBlurBackground === "Yes"
+	property real retroachievementsOpacity: 0
+	property bool blurBG: settings.GameBlurBackground === "Yes"
     property string publisherName: {
         if (game !== null && game.publisher !== null) {
             var str = game.publisher;
@@ -107,10 +108,29 @@ FocusScope {
         if (detailsOpacity === 1) {
             toggleVideo(true);
             detailsOpacity = 0;
+	        retroachievementsOpacity = 0;
         }
         else {
             detailsOpacity = 1;
+	        retroachievementsOpacity = 0;
             toggleVideo(false);
+        }
+    }
+
+    // Show/hide the achievements
+    function showAchievements() {
+        if (retroachievementsOpacity === 1) {
+            toggleVideo(true);
+            detailsOpacity = 1;
+            retroachievementsOpacity = 0;
+	        achievements.selected = false;
+	        content.focus = true;
+        }
+        else {
+	        detailsOpacity = 0;
+	        retroachievementsOpacity = 1;
+            toggleVideo(false);
+	        achievements.selected = true;
         }
     }
 
@@ -129,7 +149,11 @@ FocusScope {
         currentHelpbarModel = gameviewHelpModel;
     }
 
-    onGameChanged: reset();
+    onGameChanged: {
+		reset();
+		console.log("GameView - onGameChanged");
+		if (game.retroAchievementsCount === 0) initRetroAchievements.restart();
+	}	
 
     anchors.fill: parent
 
@@ -147,12 +171,35 @@ FocusScope {
             // Turn off video
             screenshot.opacity = 1;
             stopvideo.restart();
-        } else {
+        } 
+		else {
             stopvideo.stop();
             // Turn on video
             if (canPlayVideo)
                 videoDelay.restart();
         }
+    }
+
+    // Timer to init retroachievements
+    Timer {
+    id: initRetroAchievements
+
+        interval: 50
+        onTriggered: {
+				console.log("game.initRetroAchievements()");
+				game.initRetroAchievements();
+				console.log("if(game.retroAchievementsCount != 0)");
+				if(game.retroAchievementsCount != 0)
+				{
+					button5.visible = true;
+					//to force update of GameAchievements model for gridView
+					achievements.model = game.retroAchievementsCount;
+				}
+				else
+				{
+					button5.visible = false;
+				}					
+            }
     }
 
     // Timer to show the video
@@ -280,7 +327,7 @@ FocusScope {
         source: game ? Utils.logo(game) : ""
         fillMode: Image.PreserveAspectFit
         asynchronous: true
-        opacity: (content.currentIndex !== 0 || detailsScreen.opacity !== 0) ? 0 : 1
+        opacity: (content.currentIndex !== 0 || detailsScreen.opacity !== 0 || retroachievementsScreen.opacity !== 0) ? 0 : 1
         Behavior on opacity { NumberAnimation { duration: 200 } }
         z: (content.currentIndex == 0) ? 10 : -10
         visible: settings.GameLogo === "Show"
@@ -296,7 +343,7 @@ FocusScope {
         samples: 12
         color: "#000000"
         source: logo
-        opacity: (content.currentIndex !== 0 || detailsScreen.opacity !== 0) ? 0 : 0.4
+        opacity: (content.currentIndex !== 0 || detailsScreen.opacity !== 0 || retroachievementsScreen.opacity !== 0) ? 0 : 0.4
         Behavior on opacity { NumberAnimation { duration: 200 } }
         visible: settings.GameLogo === "Show"
     }
@@ -353,7 +400,43 @@ FocusScope {
         }
     }
 
+    // Retroachievements screen
+    Item {
+    id: retroachievementsScreen
+        
+        anchors.fill: parent
+        visible: opacity !== 0
+        opacity: (content.currentIndex !== 0) ? 0 : retroachievementsOpacity
+        Behavior on opacity { NumberAnimation { duration: 200 } }
+        
+        Rectangle {
+            anchors.fill: parent
+            color: theme.main
+            opacity: 0.7
+        }
 
+        Item {
+        id: retroachievements 
+
+            anchors { 
+                top: parent.top; topMargin: vpx(100)
+                left: parent.left; leftMargin: vpx(70)
+                right: parent.right; rightMargin: vpx(70)
+            }
+            height: vpx(484) - header.height
+
+            GameAchievements {
+            id: achievements
+
+                anchors {
+                    left: parent.left; leftMargin: vpx(30)
+                    top: parent.top; bottom: parent.bottom; right: parent.right
+                }
+            }
+			
+        }
+    }
+    
 
     // Details screen
     Item {
@@ -563,6 +646,24 @@ FocusScope {
                 if (selected)
                     previousScreen();
                 else {
+                    sfxNav.play(); 
+                    menu.currentIndex = ObjectModel.index;
+                }
+        }
+        Button { 
+            id: button5
+
+            icon: "../assets/images/icon_cup.png"
+            height: parent.height
+            selected: ListView.isCurrentItem && menu.focus
+            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
+			visible: (game.retroAchievementsCount != 0) ? true : false
+			enabled : visible
+            onActivated: 
+                if (selected) {
+                    sfxToggle.play();
+                    showAchievements();
+                } else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
