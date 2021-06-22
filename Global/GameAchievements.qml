@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import "qrc:/qmlutils" as PegasusUtils
 
 Item {
@@ -23,20 +23,11 @@ id: infocontainer
 
     property var gameData: currentGame
 	property alias model: achievementsgrid.model
-	property alias index: achievementsgrid.model
+	property alias index: achievementsgrid.currentIndex
 	property var icon_size: 92
 	property var margin: 4
 	property bool selected
 	
-	//focus: true
-	Keys.onPressed: {
-		console.log("move keys");
-		/*if (event.key == Qt.Key_Left) {
-            console.log("move left");
-            event.accepted = true;
-        }*/
-    }
-
 	function updateDetails(index)
 	{
 		retroachievementstitle.text = gameData.GetRaTitleAt(index);
@@ -213,18 +204,19 @@ id: infocontainer
 
 	Component {
 		id: highlight
-		Rectangle {
-			width: achievementsgrid.cellWidth; height: achievementsgrid.cellHeight
-			color: theme.accent; radius: margin
-			x: achievementsgrid.currentItem.x
-			y: achievementsgrid.currentItem.y
-		}
+			Rectangle {
+				id: rect
+				width: achievementsgrid.cellWidth; height: achievementsgrid.cellHeight
+				color: theme.accent; radius: margin
+				x: achievementsgrid.currentItem.x
+				y: achievementsgrid.currentItem.y
+				Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
+                                Behavior on y { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
+			}
 	}
 
 	GridView {
 		id: achievementsgrid
-		//anchors.fill: parent
-		
 			anchors {
 				left: parent.left; 
 				right: parent.right;
@@ -242,17 +234,6 @@ id: infocontainer
 		
 		highlight: highlight
 		highlightFollowsCurrentItem: false
-		
-		//keyNavigationEnabled: true
-		//keyNavigationWraps: true
-
-/* 		Keys.onPressed: {
-					console.log("GridView - Keys.onPressed");
-					// Accept
-					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-						event.accepted = true;
-					}
-		} */
 
 		Keys.onLeftPressed: { 
 								console.log("GridView - Keys.onLeftPressed");
@@ -263,6 +244,7 @@ id: infocontainer
 								console.log("GridView - Keys.onRightPressed");
 								moveCurrentIndexRight();
 								updateDetails(currentIndex);
+							
 		}
 		Keys.onUpPressed: { 
 								console.log("GridView - Keys.onUpPressed");
@@ -271,8 +253,19 @@ id: infocontainer
 		}
 		Keys.onDownPressed:{ 
 								console.log("GridView - Keys.onDownPressed");
+								var indexBeforeMove = currentIndex;
 								moveCurrentIndexDown();
-								updateDetails(currentIndex);
+								if (currentIndex !== indexBeforeMove)
+								{
+									updateDetails(currentIndex);
+								}
+								else
+								{	
+									selected = false;
+									currentIndex = -1; //to deactivate selection
+									content.focus = true; // to select menu
+									menu.currentIndex = 4; // to select button of menu for achievements
+								}
 		}
 
 		model: gameData.retroAchievementsCount
@@ -280,7 +273,6 @@ id: infocontainer
 			Image {
 					Layout.fillWidth: true
 					Layout.fillHeight: true
-					///anchors.fill: parent
 					fillMode: Image.PreserveAspectFit
 					source: {
 						console.log("GameAchievements - game.isRaUnlockedAt(index) : ",game.GetRaBadgeAt(index), game.isRaUnlockedAt(index));
@@ -292,7 +284,7 @@ id: infocontainer
 					width:icon_size; height:icon_size
 					smooth: true
 					visible: true
-					asynchronous: true  
+					asynchronous: true
 			}
 		}
     }

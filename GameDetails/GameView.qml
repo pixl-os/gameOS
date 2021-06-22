@@ -114,13 +114,14 @@ FocusScope {
             detailsOpacity = 1;
 	        retroachievementsOpacity = 0;
             toggleVideo(false);
+	        achievements.selected = false;
+	        content.focus = true;
         }
     }
 
     // Show/hide the achievements
     function showAchievements() {
         if (retroachievementsOpacity === 1) {
-            toggleVideo(true);
             detailsOpacity = 1;
             retroachievementsOpacity = 0;
 	        achievements.selected = false;
@@ -130,7 +131,8 @@ FocusScope {
 	        detailsOpacity = 0;
 	        retroachievementsOpacity = 1;
             toggleVideo(false);
-	        achievements.selected = true;
+		    achievements.index = -1;
+		    achievements.updateDetails(0);
         }
     }
 
@@ -166,18 +168,17 @@ FocusScope {
     // Video
     // Show/hide the video
     function toggleVideo(toggle) {
-        if (!toggle)
-        {
-            // Turn off video
-            screenshot.opacity = 1;
-            stopvideo.restart();
-        } 
-		else {
-            stopvideo.stop();
-            // Turn on video
-            if (canPlayVideo)
-                videoDelay.restart();
-        }
+      if (!toggle)
+      {
+        // Turn off video
+        screenshot.opacity = 1;
+        stopvideo.restart();
+      } else {
+        stopvideo.stop();
+        // Turn on video
+        if (canPlayVideo)
+            videoDelay.restart();
+      }
     }
 
     // Timer to init retroachievements
@@ -785,7 +786,24 @@ FocusScope {
             }
         }
         keyNavigationWraps: true
-        Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
+        Keys.onUpPressed: { 
+							sfxNav.play(); 
+ 							if(currentIndex !== 0)	
+							{
+								decrementCurrentIndex();
+							}
+							else //focus on retroachievements gridView if display
+							{
+								if(retroachievementsOpacity === 1) 
+								{
+								   	menu.currentIndex = -1;
+									achievements.index = 0;
+									achievements.selected = true;
+									achievements.updateDetails(0);
+								}
+								else  decrementCurrentIndex();
+							}
+						  }
         Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
     }
 
@@ -842,7 +860,8 @@ FocusScope {
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
             menu.currentIndex = 0;
-        } else {
+        } 
+	else {
             screenshot.opacity = 1;
             toggleVideo(false);
         }
