@@ -40,7 +40,7 @@ id: infocontainer
     id: retroachievementslogo
 
         anchors { 
-            top: window.top;
+            top: parent.top;
             right: parent.right;
 			
         }
@@ -113,7 +113,10 @@ id: infocontainer
             height: parent.height
             anchors { left: pointstitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: if (gameData.retroAchievementsCount !== 0) return gameData.GetRaPointsAt(0);
+            text: {
+					if (gameData.retroAchievementsCount !== 0) return gameData.GetRaPointsAt(0);
+					else return "";
+			}
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
@@ -152,7 +155,10 @@ id: infocontainer
             height: parent.height
             anchors { left: authortitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: if (gameData.retroAchievementsCount !== 0) return gameData.GetRaAuthorAt(0);
+            text: {
+					if (gameData.retroAchievementsCount !== 0) return gameData.GetRaAuthorAt(0);
+					else return "";
+			}	
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
@@ -194,7 +200,10 @@ id: infocontainer
                 bottom: parent.bottom
             }
             verticalAlignment: Text.AlignVCenter
-            text: if (gameData.retroAchievementsCount !== 0) return gameData.GetRaDescriptionAt(0);
+            text: {
+					if (gameData.retroAchievementsCount !== 0) return gameData.GetRaDescriptionAt(0);
+					else return "";
+			}
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             elide: Text.ElideRight

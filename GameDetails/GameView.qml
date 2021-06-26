@@ -687,8 +687,20 @@ FocusScope {
             orientation: ListView.Horizontal
             spacing: vpx(10)
             keyNavigationWraps: true
-            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
-            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            Keys.onLeftPressed: { 
+									console.log("Menu - Keys.onLeftPressed");
+									sfxNav.play(); 
+									do{	
+										decrementCurrentIndex();
+									}while(!currentItem.enabled);								
+								}
+            Keys.onRightPressed:{ 
+									console.log("Menu - Keys.onLeftPressed");
+									sfxNav.play(); 
+									do{	
+										incrementCurrentIndex();
+									}while(!currentItem.enabled);
+								}
         }
 
         HorizontalCollection {
