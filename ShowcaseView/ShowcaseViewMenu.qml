@@ -161,7 +161,7 @@ FocusScope {
             id: videocomponent
 
             anchors.fill: parent
-            source: "qrc:/themes/gameOS/assets/video/ftue.mp4"
+            source: "../assets/video/ftue.mp4"
             fillMode: VideoOutput.PreserveAspectCrop
             muted: true
             loops: MediaPlayer.Infinite
