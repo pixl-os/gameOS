@@ -32,7 +32,7 @@ FocusScope {
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
     property string collectionName: game ? game.collections.get(0).name : ""
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
-    property bool iamsteam: game ? (collectionShortName == "steam") : false
+    property bool iamsteam: game ? (collectionShortName === "steam") : false
     property bool canPlayVideo: settings.VideoPreview === "Yes"
     property real detailsOpacity: (settings.DetailsDefault === "Yes") ? 1 : 0
 	property real retroachievementsOpacity: 0
@@ -82,7 +82,7 @@ FocusScope {
             if (game.assets.steam !== "") mediaList.push(game.assets.steam);
             if (game.assets.banner !== "") mediaList.push(game.assets.banner);
 
-            //if (game.assets.music != "") mediaList.push(game.assets.music);//RFU
+            //if (game.assets.music !== "") mediaList.push(game.assets.music);//RFU
 
             if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
 
@@ -189,8 +189,8 @@ FocusScope {
         onTriggered: {
 				console.log("game.initRetroAchievements()");
 				game.initRetroAchievements();
-				console.log("if(game.retroAchievementsCount != 0)");
-				if(game.retroAchievementsCount != 0)
+				console.log("if(game.retroAchievementsCount !== 0)");
+				if(game.retroAchievementsCount !== 0)
 				{
 					button5.visible = true;
 					//to force update of GameAchievements model for gridView
