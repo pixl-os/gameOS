@@ -171,7 +171,7 @@ FocusScope {
                 target: videocomponent
                 from: 0;
                 to: 1;
-                //                duration: 1000;
+                duration: 1000;
                 running: true;
             }
 
