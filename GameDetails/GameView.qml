@@ -103,6 +103,25 @@ FocusScope {
         toggleVideo(true);
     }
 
+	function resetRetroAchievements(){
+		game.initRetroAchievements();
+		if(game.retroAchievementsCount !== 0)
+		{
+			console.log("button5.visible = true;");
+			button5.visible = true;
+			//to force update of GameAchievements model for gridView
+			achievements.model = game.retroAchievementsCount;
+		}
+		else
+		{
+			console.log("button5.visible = false;");
+			button5.visible = false;
+			//hide retroachievements if displayed
+			if(retroachievementsOpacity === 1) showDetails();
+		}		
+	}
+
+
     // Show/hide the details overlay
     function showDetails() {
         if (detailsOpacity === 1) {
@@ -152,9 +171,9 @@ FocusScope {
     }
 
     onGameChanged: {
-		reset();
-		console.log("GameView - onGameChanged");
-		if (game.retroAchievementsCount === 0) initRetroAchievements.restart();
+				console.log("GameView - onGameChanged");
+				reset();
+				initRetroAchievements.restart();
 	}	
 
     anchors.fill: parent
@@ -185,22 +204,10 @@ FocusScope {
     Timer {
     id: initRetroAchievements
 
-        interval: 50
+        interval: 500
         onTriggered: {
-				console.log("game.initRetroAchievements()");
-				game.initRetroAchievements();
-				console.log("if(game.retroAchievementsCount !== 0)");
-				if(game.retroAchievementsCount !== 0)
-				{
-					button5.visible = true;
-					//to force update of GameAchievements model for gridView
-					achievements.model = game.retroAchievementsCount;
-				}
-				else
-				{
-					button5.visible = false;
-				}					
-            }
+			resetRetroAchievements();					
+        }
     }
 
     // Timer to show the video
@@ -658,7 +665,7 @@ FocusScope {
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-			visible: (game.retroAchievementsCount != 0) ? true : false
+			visible: (game.retroAchievementsCount !== 0) ? true : false
 			enabled : visible
             onActivated: 
                 if (selected) {
@@ -806,7 +813,7 @@ FocusScope {
 							}
 							else //focus on retroachievements gridView if display
 							{
-								if(retroachievementsOpacity === 1) 
+								if((retroachievementsOpacity === 1) && (game.retroAchievementsCount !== 0)) 
 								{
 								   	menu.currentIndex = -1;
 									achievements.index = 0;
@@ -824,10 +831,10 @@ FocusScope {
 
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 100 } }
-        visible: opacity != 0
+        visible: opacity !== 0
 
         mediaModel: mediaArray();
-        mediaIndex: media.currentIndex != -1 ? media.currentIndex : 0
+        mediaIndex: media.currentIndex !== -1 ? media.currentIndex : 0
         onClose: closeMedia();
     }
 

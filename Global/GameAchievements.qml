@@ -30,10 +30,22 @@ id: infocontainer
 	
 	function updateDetails(index)
 	{
-		retroachievementstitle.text = gameData.GetRaTitleAt(index);
-		pointstext.text = gameData.GetRaPointsAt(index);
-		authortext.text = gameData.GetRaAuthorAt(index);
-		descriptiontext.text = gameData.GetRaDescriptionAt(index);
+		console.log("GameAchievements - updateDetails(index)");
+		if(game.retroAchievementsCount !== 0)
+		{	
+			retroachievementstitle.text = gameData.GetRaTitleAt(index);
+			pointstext.text = gameData.GetRaPointsAt(index);
+			authortext.text = gameData.GetRaAuthorAt(index);
+			descriptiontext.text = gameData.GetRaDescriptionAt(index);
+		}
+		else
+		{
+			retroachievementstitle.text = "";
+			pointstext.text = "";
+			authortext.text = "";
+			descriptiontext.text = "";
+
+		}
 	}
 
     Image {
@@ -284,11 +296,15 @@ id: infocontainer
 					Layout.fillHeight: true
 					fillMode: Image.PreserveAspectFit
 					source: {
-						console.log("GameAchievements - game.isRaUnlockedAt(index) : ",game.GetRaBadgeAt(index), game.isRaUnlockedAt(index));
-						if(game.isRaUnlockedAt(index))
-							return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + ".png";
-						else
-							return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + "_lock.png";
+						if(game.retroAchievementsCount !== 0)
+						{
+							console.log("GameAchievements - game.isRaUnlockedAt(index) : ",game.GetRaBadgeAt(index), game.isRaUnlockedAt(index));
+							if(game.isRaUnlockedAt(index))
+								return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + ".png";
+							else
+								return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + "_lock.png";
+						}
+						else "";
 					}
 					width:icon_size; height:icon_size
 					smooth: true
