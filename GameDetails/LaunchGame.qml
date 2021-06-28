@@ -150,7 +150,7 @@ FocusScope {
     Timer {
     id: updateRetroAchievements
 
-        interval: 50
+        interval: 500
         onTriggered: {
 				console.log("LaunchGame - game.updateRetroAchievements()");
 				game.updateRetroAchievements();
