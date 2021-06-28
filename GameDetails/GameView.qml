@@ -661,7 +661,7 @@ FocusScope {
         Button { 
             id: button5
 
-            icon: "../assets/images/icon_cup.png"
+            icon: "../assets/images/icon_cup.svg"
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
