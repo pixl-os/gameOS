@@ -27,7 +27,47 @@ id: infocontainer
 	property var icon_size: 92
 	property var margin: 4
 	property bool selected
-	
+
+	function showDirection()
+	{
+		if (gameData.retroAchievementsCount !==0)
+		{
+			var nbRowsDisplayed = Math.floor(achievementsgrid.height / achievementsgrid.cellHeight);
+			var nbColumnsDisplayed = Math.floor(achievementsgrid.width / achievementsgrid.cellWidth);
+			console.log("nbRowsDisplayed:",nbRowsDisplayed);
+			console.log("nbColumnsDisplayed:",nbColumnsDisplayed);
+			console.log("gameData.retroAchievementsCount:",gameData.retroAchievementsCount);
+			if (gameData.retroAchievementsCount > (nbRowsDisplayed * nbColumnsDisplayed))
+			   {
+					if ((achievementsgrid.currentIndex < (gameData.retroAchievementsCount - nbColumnsDisplayed)) && (arrow_up.visible === false))
+					{
+						arrow_down.visible = true;
+					}
+					else 
+					{
+						arrow_down.visible = false;
+						if ((achievementsgrid.currentIndex > (nbColumnsDisplayed -1)) && (arrow_down.visible === false))
+						{
+							arrow_up.visible = true;
+						}
+						else 
+						{	
+							arrow_up.visible = false;
+							arrow_down.visible = true;
+						}
+							
+					}
+			   }
+			else arrow_down.visible = false;
+		}
+		else 
+		{
+			arrow_up.visible = false;
+			arrow_down.visible = false;
+		}			
+	}
+
+
 	function updateDetails(index)
 	{
 		console.log("GameAchievements - updateDetails(index)");
@@ -37,6 +77,7 @@ id: infocontainer
 			pointstext.text = gameData.GetRaPointsAt(index);
 			authortext.text = gameData.GetRaAuthorAt(index);
 			descriptiontext.text = gameData.GetRaDescriptionAt(index);
+			showDirection();
 		}
 		else
 		{
@@ -265,7 +306,6 @@ id: infocontainer
 								console.log("GridView - Keys.onRightPressed");
 								moveCurrentIndexRight();
 								updateDetails(currentIndex);
-							
 		}
 		Keys.onUpPressed: { 
 								console.log("GridView - Keys.onUpPressed");
@@ -290,27 +330,95 @@ id: infocontainer
 		}
 
 		model: gameData.retroAchievementsCount
-		delegate: Column {
-			Image {
-					Layout.fillWidth: true
-					Layout.fillHeight: true
-					fillMode: Image.PreserveAspectFit
-					source: {
-						if(game.retroAchievementsCount !== 0)
-						{
-							console.log("GameAchievements - game.isRaUnlockedAt(index) : ",game.GetRaBadgeAt(index), game.isRaUnlockedAt(index));
-							if(game.isRaUnlockedAt(index))
-								return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + ".png";
-							else
-								return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + "_lock.png";
-						}
-						else "";
+		delegate: Component {
+			Item{
+				Column {
+					Image {
+							Layout.fillWidth: true
+							Layout.fillHeight: true
+							fillMode: Image.PreserveAspectFit
+							source: {
+								if(game.retroAchievementsCount !== 0)
+								{
+									console.log("GameAchievements - game.isRaUnlockedAt(index) : ",game.GetRaBadgeAt(index), game.isRaUnlockedAt(index));
+									if(game.isRaUnlockedAt(index))
+										return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + ".png";
+									else
+										return "https://s3-eu-west-1.amazonaws.com/i.retroachievements.org/Badge/" + game.GetRaBadgeAt(index) + "_lock.png";
+								}
+								else "";
+							}
+							width:icon_size; height:icon_size
+							smooth: true
+							visible: true
+							asynchronous: true
 					}
-					width:icon_size; height:icon_size
-					smooth: true
-					visible: true
-					asynchronous: true
+				}
+				// Mouse/touch functionality
+				//TO DO: doesn't work for the moment :-(
+				/*MouseArea {
+				anchors.fill: parent
+				hoverEnabled: settings.MouseHover === "Yes"
+				onClicked: console.log("onClicked");
+				}*/
 			}
 		}
     }
+
+    Rectangle {
+        id: arrow_up
+
+        anchors {
+            horizontalCenter: achievementsgrid.horizontalCenter
+            verticalCenter: achievementsgrid.top
+        }
+		visible: false
+        height: vpx(32)
+		width: vpx(32)
+        color: "transparent"
+        z: 5
+        
+  	    Image {
+        id: buttonicon_up
+
+            source: "../assets/images/icon_up.png"
+            width: parent.width
+            height: parent.height
+            fillMode: Image.PreserveAspectFit
+            asynchronous: true
+			anchors {
+				horizontalCenter: parent.horizontalCenter
+				verticalCenter: parent.verticalCenter
+			}
+        }
+    }
+	
+    Rectangle {
+        id: arrow_down
+
+        anchors {
+            horizontalCenter: achievementsgrid.horizontalCenter
+            verticalCenter: achievementsgrid.bottom
+        }
+		visible: false
+        height: vpx(32)
+		width: vpx(32)
+        color: "transparent"
+        z: 5
+  	    Image {
+        id: buttonicon_down
+
+            source: "../assets/images/icon_down.png"
+            width: parent.width
+            height: parent.height
+            fillMode: Image.PreserveAspectFit
+            asynchronous: true
+			anchors {
+				horizontalCenter: parent.horizontalCenter
+				verticalCenter: parent.verticalCenter
+			}
+        }
+    }
+
+	
 }
