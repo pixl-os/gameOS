@@ -178,7 +178,7 @@ FocusScope {
 
 	Connections {
         target: game
-		onRetroAchievementsInitialized: {
+		function onRetroAchievementsInitialized() {
 			console.log("GameView - retroAchievements is now initialized !");
 			setRetroAchievements();	
 		}

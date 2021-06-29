@@ -142,15 +142,13 @@ FocusScope {
         }
     }
 
-	Component.onCompleted: {
-		//to update retroarchievements after a game session
-		//the update is done in a separate thread to avoid conflicts and blocking in user interface
-		if (game.retroAchievementsCount !== 0) game.updateRetroAchievements();
-	}
+
     
 	Connections {
         target: game
-        onRetroAchievementsChanged: console.log("LaunchGame - retroAchievements has changed!");
+		function onRetroAchievementsChanged() {
+			 console.log("LaunchGame - retroAchievements has changed! we could left the screen...");
+		}
     }
 	
     onFocusChanged: { if (focus) currentHelpbarModel = launchGameHelpModel; }
