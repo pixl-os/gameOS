@@ -79,7 +79,7 @@ FocusScope {
         WebEngineView {
             id: webview
             anchors.fill: parent
-            url: "../pdfjs/web/viewer.html" + "?file=" + encodeURIComponent(isManual ? mediaModel[mediaIndex]: "") + "#zoom=page-fit"
+            url: "file:///recalbox/scripts/pdfjs/web/viewer.html" + "?file=" + encodeURIComponent(isManual ? mediaModel[mediaIndex]: "") + "#zoom=page-fit"
             Component.onCompleted: {
                 //console.log("Url pdf: ", webview.url);
                 //console.log("WebEngineView.onCompleted");
