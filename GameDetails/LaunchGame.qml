@@ -144,19 +144,15 @@ FocusScope {
 
 	Component.onCompleted: {
 		//to update retroarchievements after a game session
-		if (game.retroAchievementsCount !== 0) updateRetroAchievements.restart();
+		//the update is done in a separate thread to avoid conflicts and blocking in user interface
+		if (game.retroAchievementsCount !== 0) game.updateRetroAchievements();
 	}
-    // Timer to update retroachievements
-    Timer {
-    id: updateRetroAchievements
-
-        interval: 500
-        onTriggered: {
-				console.log("LaunchGame - game.updateRetroAchievements()");
-				game.updateRetroAchievements();
-            }
-    }
     
+	Connections {
+        target: game
+        onRetroAchievementsChanged: console.log("LaunchGame - retroAchievements has changed!");
+    }
+	
     onFocusChanged: { if (focus) currentHelpbarModel = launchGameHelpModel; }
 
     // Input handling
