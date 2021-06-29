@@ -148,6 +148,7 @@ FocusScope {
         target: game
 		function onRetroAchievementsChanged() {
 			 console.log("LaunchGame - retroAchievements has changed! we could left the screen...");
+			 previousScreen();
 		}
     }
 	
@@ -159,10 +160,10 @@ FocusScope {
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            previousScreen();
-        } else {
-            previousScreen();
-        }
+	}
+
+	if (game.retroAchievementsCount !== 0) game.updateRetroAchievements();
+        else previousScreen();
     }
 
     // Mouse/touch functionality
