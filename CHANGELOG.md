@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2021-06-29
+- remove pdfjs component from this theme because now in /recalbox/scripts/pdfjs
+
 ## [game-retroachievements-fix] - 2021-06-29
 - tentative to add launchGame delay as GameView (500ms) for testing
 - improve management of arrows up and down
