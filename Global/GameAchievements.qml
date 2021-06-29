@@ -39,26 +39,37 @@ id: infocontainer
 			console.log("gameData.retroAchievementsCount:",gameData.retroAchievementsCount);
 			if (gameData.retroAchievementsCount > (nbRowsDisplayed * nbColumnsDisplayed))
 			   {
-					if ((achievementsgrid.currentIndex < (gameData.retroAchievementsCount - nbColumnsDisplayed)) && (arrow_up.visible === false))
-					{
-						arrow_down.visible = true;
-					}
-					else 
+					var nbColumnsForLastLine = gameData.retroAchievementsCount % nbColumnsDisplayed;
+					//console.log("nbColumnsForLastLine",nbColumnsForLastLine);
+					if (nbColumnsForLastLine === 0) nbColumnsForLastLine = nbColumnsDisplayed;
+					
+					//to remove arrow down when we arrive on last line only
+					if ((achievementsgrid.currentIndex >= (gameData.retroAchievementsCount - nbColumnsForLastLine)) && (arrow_down.visible === true))
 					{
 						arrow_down.visible = false;
-						if ((achievementsgrid.currentIndex > (nbColumnsDisplayed -1)) && (arrow_down.visible === false))
-						{
-							arrow_up.visible = true;
-						}
-						else 
-						{	
-							arrow_up.visible = false;
-							arrow_down.visible = true;
-						}
-							
+					}
+					//to add arrow down
+					else if (((achievementsgrid.currentIndex < (gameData.retroAchievementsCount - ((nbColumnsDisplayed * (nbRowsDisplayed-1)) + nbColumnsForLastLine)))) && (arrow_down.visible === false))
+					{
+						arrow_down.visible = true;
+					}					
+
+					//to remove arrow up when we arrive on first line only (first line has all columns)
+					if ((achievementsgrid.currentIndex < nbColumnsDisplayed) && (arrow_up.visible === true))
+					{
+						arrow_up.visible = false;
+					}
+					//to add arrow up
+					else if ((achievementsgrid.currentIndex >= (nbColumnsDisplayed * nbRowsDisplayed)) && (arrow_up.visible === false))
+					{
+						arrow_up.visible = true;
 					}
 			   }
-			else arrow_down.visible = false;
+			else 
+			{
+				arrow_down.visible = false;
+				arrow_up.visible = false;
+			}
 		}
 		else 
 		{

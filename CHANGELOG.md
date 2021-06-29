@@ -1,6 +1,31 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [game-retroachievements-fix] - 2021-06-29
+- tentative to add launchGame delay as GameView (500ms) for testing
+- improve management of arrows up and down
+- finally replace timer using signal as better trigger (using new manner from Pegasus also)
+
+## [pdfjs-integration-as-scripts-in-os] - 2021-06-29
+- to use pdf reader from os itself and reusable by other themes
+- add file:// to load viewer.html
+
+## [game-retroachievements-management] - 2021-06-28
+- add item to manage GameAchievements in gameview
+- add update of achievements just after playing
+- add retroachievements management in GameView
+- add icon .png for achievements button
+- do selection from menu to list of badge
+- add stability in qml loading for retroachievements
+- few fixes on equality conditions
+- create dedicated function for init & reset GUI
+- update to have .svg for achievements button
+- add up/down icons in achievements gridview
+
+## [logo-optimisation] - 2021-06-27
+- multi fix log
+- replace all logopng for optimised logopng
+
 ## [logo-settings] - 2021-06-09
 - bump all qt5 module on lastest version
 - add logo sets systems on : white, black, color, steel, carbon

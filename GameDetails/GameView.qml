@@ -103,20 +103,17 @@ FocusScope {
         toggleVideo(true);
     }
 
-	function resetRetroAchievements(){
-		game.initRetroAchievements();
+	function setRetroAchievements(){
 		if(game.retroAchievementsCount !== 0)
 		{
-			console.log("button5.visible = true;");
 			button5.visible = true;
 			//to force update of GameAchievements model for gridView
 			achievements.model = game.retroAchievementsCount;
 		}
 		else
 		{
-			console.log("button5.visible = false;");
 			button5.visible = false;
-			//hide retroachievements if displayed
+			//hide retroachievements if displayed from a previous game
 			if(retroachievementsOpacity === 1) showDetails();
 		}		
 	}
@@ -172,9 +169,20 @@ FocusScope {
 
     onGameChanged: {
 				console.log("GameView - onGameChanged");
+				//reset default value for a new game loading
 				reset();
-				initRetroAchievements.restart();
+				//launch initialization of retroachievements
+				//the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+				game.initRetroAchievements();
 	}	
+
+	Connections {
+        target: game
+		onRetroAchievementsInitialized: {
+			console.log("GameView - retroAchievements is now initialized !");
+			setRetroAchievements();	
+		}
+    }
 
     anchors.fill: parent
 
@@ -198,16 +206,6 @@ FocusScope {
         if (canPlayVideo)
             videoDelay.restart();
       }
-    }
-
-    // Timer to init retroachievements
-    Timer {
-    id: initRetroAchievements
-
-        interval: 500
-        onTriggered: {
-			resetRetroAchievements();					
-        }
     }
 
     // Timer to show the video
