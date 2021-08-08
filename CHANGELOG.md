@@ -1,5 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
+## [recalbox-integration] - 2021-06-30
+- 11-bug-system-logo-style-at-first-start-up
 
 ## [recalbox-integration] - 2021-06-30
 - remove pdfjs component from this theme because now in /recalbox/scripts/pdfjs

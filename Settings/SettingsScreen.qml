@@ -69,7 +69,7 @@ FocusScope {
         }
 	ListElement {
 		settingName: "System Logo Style"
-		setting: "White,Black,Color,Steel,Carbon"
+        setting: "Color,Steel,Carbon,White,Black"
         }
     }
 
