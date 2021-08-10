@@ -21,74 +21,31 @@ import QtQuick 2.12
 import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
+
 Item {
     id: root
-    
+
     readonly property var games: gamesFiltered;
     function currentGame(index) { return api.allGames.get(gamesRecommended.mapToSource(index)) }
     property int max: gamesRecommended.count;
-    
-    property var randomletter: "";
-    property var randomvalue: "";
-    property var randomhashletter: "";
 
     //TO INIT VALUES
     onGamesChanged: {
-        randomletter: "";
-        randomvalue: "";
-        randomhashletter: "";
+        Utils.randomletters = "";
+        Utils.randomrates = "";
+        Utils.randomhashletters = "";
     }
 
-    //LOCAL UTILS FUNCTION
-    function random(min, max)
-    {
-        do {
-            var value = (Math.random() * (max - min)) + min;
-            value = Utils.toNumberString(Utils.toRoundNumber(value,0.05));
-        } while (randomvalue.includes(value));
-        randomvalue = randomvalue + value;
-        //console.log("randomvalue : ",value);
-        return value;
-    }
 
-    function generateRandomLetter() {
-        do{
-            const alphabet = "012345678abcdefghijklmnopqrstuvwxyz"
-            var value = alphabet[Math.floor(Math.random() * alphabet.length)];
-        }while (randomletter.includes(value))
-        randomletter = randomletter + value;
-        //console.log("randomletter : ",value);
-        return value;
-    }
-
-    function generateRandomFirstHashLetter() {
-        do{
-            const alphabet = "0123456789ABCDEF"
-            var value = alphabet[Math.floor(Math.random() * alphabet.length)];
-        }while (randomhashletter.includes(value))
-        randomhashletter = randomhashletter + value;
-        //console.log("randomhashletter : ",value);
-        return value;
-    }
-
-    // REGEX FUNCTION
-    function regExpForRatingFiltering() {
-        return "(" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + "|" + random(0.6,1.0) + ")";
-    }
-
-    function regExpForHashFiltering() {
-        //4 values today
-        return "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter();
-    }
 
     //FILTERING
     SortFilterProxyModel {
         id: gamesRecommended
         sourceModel: api.allGames
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-        filters:[RegExpFilter { roleName: "rating"; pattern: regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
+        filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
             //RFU (not necessary finally): RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },
-            RegExpFilter { roleName: "hash"; pattern: regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
+            RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
             ExpressionFilter {
                 expression: {
                     //to randomized and keep on 5% only of games -> best diversifications
@@ -106,7 +63,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "Recommended Games", // in: " + randomletter +"/ hash: "  + randomhashletter + "/ rating: " + randomvalue,
+            name:       "Recommended Games",
             shortName:  "recommended",
             games:      gamesFiltered
         }

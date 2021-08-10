@@ -20,6 +20,55 @@
 // Updated by Bozo the Geek for recalbox integration 30/04/2021
 //
 
+//Global variables
+var randomletters = "";
+var randomrates = "";
+var randomhashletters = "";
+
+//UTILS FUNCTIONS for filtering (for 'recommended' gamelist)
+function generateRandomRate(min, max)
+{
+    var value;
+    do {
+        value = (Math.random() * (max - min)) + min;
+        value = Utils.toNumberString(Utils.toRoundNumber(value,0.05));
+    } while (Utils.randomrates.includes(value));
+    Utils.randomrates = Utils.randomrates + value;
+    //console.log("randomvalue : ",value);
+    return value;
+}
+function generateRandomLetter() {
+    const alphabet = "012345678abcdefghijklmnopqrstuvwxyz";
+    var value;
+    do{
+        value = alphabet[Math.floor(Math.random() * alphabet.length)];
+    }while (Utils.randomletters.includes(value));
+    Utils.randomletters = Utils.randomletters + value;
+    //console.log("randomletters : ",value);
+    return value;
+}
+function generateRandomFirstHashLetter() {
+    const alphabet = "0123456789ABCDEF";
+    var value;
+    do{
+        value = alphabet[Math.floor(Math.random() * alphabet.length)];
+    }while (Utils.randomhashletters.includes(value));
+    Utils.randomhashletters = Utils.randomhashletters + value;
+    //console.log("randomhashletters : ",value);
+    return value;
+}
+
+
+// REGEX FUNCTION for filtering (for 'recommended' gamelist)
+function regExpForRatingFiltering() {
+    return "(" + generateRandomRate(0.6,1.0) + "|" + generateRandomRate(0.6,1.0) + "|" + generateRandomRate(0.6,1.0) + "|" + generateRandomRate(0.6,1.0) + ")";
+}
+function regExpForHashFiltering() {
+    //4 values today
+    return "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter() + "|" + "^" + generateRandomFirstHashLetter();
+}
+
+
 // For multiplayer games, show the player count as '1-N'
 function formatPlayers(playerCount) {
     if (playerCount === 1)
