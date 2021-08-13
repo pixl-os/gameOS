@@ -16,6 +16,7 @@
 
 import QtQuick 2.12
 import SortFilterProxyModel 0.2
+import "../utils.js" as Utils
 
 Item {
     id: root
