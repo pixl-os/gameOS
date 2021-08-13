@@ -28,7 +28,7 @@ Item {
 
     onGameChanged: {
         videoPreviewLoader.sourceComponent = undefined;
-        if (playVideo) {
+        if (playVideo && selected) {
             videoDelay.restart();
         }
     }
