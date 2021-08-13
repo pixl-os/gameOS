@@ -28,15 +28,166 @@ import "../utils.js" as Utils
 FocusScope {
     id: root
 
+    property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
+    property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
+
     // Pull in our custom lists and define
     ListAllGames    { id: listNone;        max: 0 }
     ListAllGames    { id: listAllGames;    max: settings.ShowcaseColumns }
     ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
-    ListLastPlayed  { id: listLastPlayed;  max: settings.ShowcaseColumns }
-    ListMostPlayed  { id: listMostPlayed;  max: settings.ShowcaseColumns }
-    ListRecommended { id: listRecommended; max: settings.ShowcaseColumns }
-    ListPublisher   { id: listPublisher;   max: settings.ShowcaseColumns; publisher: randoPub }
-    ListGenre       { id: listGenre;       max: settings.ShowcaseColumns; genre: randoGenre }
+
+    //Use loader to load asynchronously the 'custom' lists now.
+    property alias listLastPlayed: listLastPlayedLoader.item
+    Loader {
+        id: listLastPlayedLoader
+        source: Utils.isCollectionTypeRequested("Recently Played") ? "../Lists/ListLastPlayed.qml" : ""
+        asynchronous: true
+        property bool measuring: false
+        onStatusChanged:{
+            /*
+            Available status:
+            Loader.Null - the loader is inactive or no QML source has been set
+            Loader.Ready - the QML source has been loaded
+            Loader.Loading - the QML source is currently being loaded
+            Loader.Error - an error occurred while loading the QML source
+            */
+            if (listLastPlayedLoader.status === Loader.Loading) {
+                if(!listLastPlayedLoader.measuring){
+                    console.time("listLastPlayedLoader")
+                    listLastPlayedLoader.measuring = true;
+                }
+            }
+
+            if (listLastPlayedLoader.status === Loader.Ready) {
+                listLastPlayed.max = settings.ShowcaseColumns;
+                console.timeEnd("listLastPlayedLoader")
+                listLastPlayedLoader.measuring = false
+            }
+        }
+        active: Utils.isCollectionTypeRequested("Recently Played");
+    }
+
+    property alias listMostPlayed: listMostPlayedLoader.item
+    Loader {
+        id: listMostPlayedLoader
+        source: Utils.isCollectionTypeRequested("Most Played") ? "../Lists/ListMostPlayed.qml" : ""
+        asynchronous: true
+        property bool measuring: false
+        onStatusChanged:{
+            /*
+            Available status:
+            Loader.Null - the loader is inactive or no QML source has been set
+            Loader.Ready - the QML source has been loaded
+            Loader.Loading - the QML source is currently being loaded
+            Loader.Error - an error occurred while loading the QML source
+            */
+            if (listMostPlayedLoader.status === Loader.Loading) {
+                if(!listMostPlayedLoader.measuring){
+                    console.time("listMostPlayedLoader")
+                    listMostPlayedLoader.measuring = true;
+                }
+            }
+
+            if (listMostPlayedLoader.status === Loader.Ready) {
+                listMostPlayed.max = settings.ShowcaseColumns;
+                console.timeEnd("listMostPlayedLoader")
+                listMostPlayedLoader.measuring=false
+            }
+        }
+        active: Utils.isCollectionTypeRequested("Most Played");
+    }
+
+    property alias listRecommended: listRecommendedLoader.item
+    Loader {
+        id: listRecommendedLoader
+        source: Utils.isCollectionTypeRequested("Recommended") ? "../Lists/ListRecommended.qml" : ""
+        asynchronous: true
+        property bool measuring: false
+        onStatusChanged:{
+            /*
+            Available status:
+            Loader.Null - the loader is inactive or no QML source has been set
+            Loader.Ready - the QML source has been loaded
+            Loader.Loading - the QML source is currently being loaded
+            Loader.Error - an error occurred while loading the QML source
+            */
+            if (listRecommendedLoader.status === Loader.Loading) {
+                if(!listRecommendedLoader.measuring){
+                    console.time("listRecommendedLoader")
+                    listRecommendedLoader.measuring = true;
+                }
+            }
+
+            if (listRecommendedLoader.status === Loader.Ready) {
+                listRecommended.max = settings.ShowcaseColumns;
+                console.timeEnd("listRecommendedLoader")
+                listRecommendedLoader.measuring=false
+            }
+        }
+        active: Utils.isCollectionTypeRequested("Recommended");
+    }
+
+    property alias listPublisher: listPublisherLoader.item
+    Loader {
+        id: listPublisherLoader
+        source: Utils.isCollectionTypeRequested("Top by Publisher") ? "../Lists/ListPublisher.qml" : ""
+        asynchronous: true
+        property bool measuring: false
+        onStatusChanged:{
+            /*
+            Available status:
+            Loader.Null - the loader is inactive or no QML source has been set
+            Loader.Ready - the QML source has been loaded
+            Loader.Loading - the QML source is currently being loaded
+            Loader.Error - an error occurred while loading the QML source
+            */
+            if (listPublisherLoader.status === Loader.Loading) {
+                if(!listPublisherLoader.measuring){
+                    console.time("listPublisherLoader");
+                    listPublisherLoader.measuring = true;
+                }
+            }
+
+            if (listPublisherLoader.status === Loader.Ready) {
+                listPublisher.publisher = randoPub;
+                listPublisher.max = settings.ShowcaseColumns;
+                console.timeEnd("listPublisherLoader");
+                listPublisherLoader.measuring = false;
+            }
+        }
+        active: Utils.isCollectionTypeRequested("Top by Publisher");
+    }
+
+    property alias listGenre: listGenreLoader.item
+    Loader {
+        id: listGenreLoader
+        source: Utils.isCollectionTypeRequested("Top by Genre") ? "../Lists/ListGenre.qml" : ""
+        asynchronous: true
+        property bool measuring: false
+        onStatusChanged:{
+            /*
+            Available status:
+            Loader.Null - the loader is inactive or no QML source has been set
+            Loader.Ready - the QML source has been loaded
+            Loader.Loading - the QML source is currently being loaded
+            Loader.Error - an error occurred while loading the QML source
+            */
+            if (listGenreLoader.status === Loader.Loading) {
+                if(!listGenreLoader.measuring){
+                    console.time("listGenreLoader");
+                    listGenreLoader.measuring = true;
+                }
+            }
+
+            if (listGenreLoader.status === Loader.Ready) {
+                listGenre.max = settings.ShowcaseColumns;
+                listGenre.genre = randoGenre;
+                console.timeEnd("listGenreLoader");
+                listGenreLoader.measuring = false;
+            }
+        }
+        active: Utils.isCollectionTypeRequested("Top by Genre");
+    }
 
     property var featuredCollection: listFavorites
     property var collection1: getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail)
@@ -104,9 +255,6 @@ FocusScope {
         collection.title = collection.search.collection.name;
         return collection;
     }
-
-    property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
-    property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
 
     property bool ftue: featuredCollection.games.count == 0
 
