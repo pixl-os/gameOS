@@ -30,8 +30,15 @@ Item {
         id: publisherGames
 
         sourceModel: api.allGames
-        filters: RegExpFilter { roleName: "publisher"; pattern: publisher; caseSensitivity: Qt.CaseInsensitive; }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder }
+        filters: [RegExpFilter { roleName: "publisher"; pattern: publisher; caseSensitivity: Qt.CaseInsensitive; },
+		         RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
+				 ExpressionFilter {
+					expression: {
+						return (Math.random() <= 0.33); // to get 1/3 of games total.
+					}
+                 }
+		]
     }
 
     SortFilterProxyModel {
