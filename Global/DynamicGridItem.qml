@@ -57,6 +57,20 @@ Item {
     Behavior on scale { NumberAnimation { duration: 100 } }
     z: selected ? 10 : 1
 
+
+	property bool validated: showcaseViewBehind
+
+	onValidatedChanged:
+	{
+		console.log("DynamicGridItem.onValidatedChanged:", validated);
+		if (selected && validated) 
+		{
+            fadescreenshot.stop();
+            screenshot.opacity = 1;
+            container.opacity = 1;
+		}
+	}
+
     onSelectedChanged: {
         if (selected && playVideo)
             fadescreenshot.restart();

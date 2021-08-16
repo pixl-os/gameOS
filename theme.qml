@@ -87,6 +87,9 @@ FocusScope {
     property int storedCollectionIndex: 0
     property int storedCollectionGameIndex: 0
 
+	//global property
+	property bool showcaseViewBehind: false
+
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
 
@@ -424,9 +427,23 @@ FocusScope {
     Loader  {
         id: showcaseLoader
 
-        focus: (root.state === "showcasescreen")
-        active: opacity !== 0
-        opacity: focus ? 1 : 0
+        focus: {
+				console.log("showcaseLoader.focus");
+				if (root.state === "showcasescreen") 
+				{
+					//change focus of item to avoid bad display of help
+					item.focus = true;
+					return true;
+				}
+				else 
+				{	
+					//change focus of item to avoid bad display of help
+					item.focus = false;
+					return false;
+				}
+		}
+		active: true //opacity !== 0
+		opacity: focus ? 1 : 0
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent

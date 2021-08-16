@@ -25,11 +25,24 @@ Item {
     property bool selected
     property bool boxArt
     property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
+	property bool validated: showcaseViewBehind
+
+	onValidatedChanged:
+	{
+		console.log("onValidatedChanged:", validated);
+		if (selected && validated) 
+		{
+			videoPreviewLoader.sourceComponent = undefined;
+			videoDelay.stop();
+			showcaseViewBehind = false;
+		}
+	}
 
     onGameChanged: {
         videoPreviewLoader.sourceComponent = undefined;
         if (playVideo && selected) {
             videoDelay.restart();
+	    showcaseViewBehind = false;
         }
     }
 
@@ -37,6 +50,7 @@ Item {
         if (!selected) {
             videoPreviewLoader.sourceComponent = undefined;
             videoDelay.stop();
+	    showcaseViewBehind = false;
         }
     }
 

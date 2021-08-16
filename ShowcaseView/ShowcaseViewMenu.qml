@@ -121,7 +121,7 @@ FocusScope {
             if (listRecommendedLoader.status === Loader.Ready) {
                 listRecommended.max = settings.ShowcaseColumns;
                 console.timeEnd("listRecommendedLoader")
-                listRecommendedLoader.measuring=false
+                listRecommendedLoader.measuring = false;
             }
         }
         active: Utils.isCollectionTypeRequested("Recommended");
@@ -465,6 +465,7 @@ FocusScope {
     ObjectModel {
         id: mainModel
 
+		// Favorites list at top with screenshot/fanart/marquee and logos
         ListView {
             id: featuredlist
 
@@ -586,7 +587,7 @@ FocusScope {
             }
         }
 
-        // Collections list
+        // Collections list with systems
         ListView {
             id: platformlist
 
@@ -793,7 +794,11 @@ FocusScope {
 
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: storedHomeSecondaryIndex = currentIndex;
+            onActivateSelected: {
+				console.log("list2.onActivateSelected");
+				storedHomeSecondaryIndex = currentIndex;
+				showcaseViewBehind = true;
+			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
