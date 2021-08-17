@@ -88,7 +88,7 @@ FocusScope {
     property int storedCollectionGameIndex: 0
 
 	//global property
-	property bool showcaseViewBehind: false
+	property bool videoToStop: false
 
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0

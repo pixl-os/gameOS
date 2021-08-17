@@ -97,11 +97,13 @@ FocusScope {
 
             onActivated: {
                 if (selected) {
-                    activateSelected();
+					videoToStop = true;
+					activateSelected();
                     gameDetails(search.currentGame(currentIndex));
                 } else {
                     activate(index);
                     collectionList.currentIndex = index;
+					videoToStop = false;
                 }
             }
         }

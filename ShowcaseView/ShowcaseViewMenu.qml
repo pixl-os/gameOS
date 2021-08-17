@@ -766,7 +766,10 @@ FocusScope {
 
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: storedHomeSecondaryIndex = currentIndex;
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
@@ -795,9 +798,8 @@ FocusScope {
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
             onActivateSelected: {
-				console.log("list2.onActivateSelected");
+				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
-				showcaseViewBehind = true;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -826,7 +828,10 @@ FocusScope {
 
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: storedHomeSecondaryIndex = currentIndex;
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
@@ -854,7 +859,10 @@ FocusScope {
 
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: storedHomeSecondaryIndex = currentIndex;
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
@@ -882,7 +890,10 @@ FocusScope {
 
             savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: storedHomeSecondaryIndex = currentIndex;
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }

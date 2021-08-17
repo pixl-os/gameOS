@@ -58,7 +58,7 @@ Item {
     z: selected ? 10 : 1
 
 
-	property bool validated: showcaseViewBehind
+	property bool validated: videoToStop
 
 	onValidatedChanged:
 	{
