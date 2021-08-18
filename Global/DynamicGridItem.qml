@@ -62,7 +62,7 @@ Item {
 
 	onValidatedChanged:
 	{
-		console.log("DynamicGridItem.onValidatedChanged:", validated);
+		if(detailed_debug) console.log("DynamicGridItem.onValidatedChanged:", validated);
 		if (selected && validated) 
 		{
             fadescreenshot.stop();
@@ -72,6 +72,7 @@ Item {
 	}
 
     onSelectedChanged: {
+		if(detailed_debug) console.log("DynamicGridItem.onSelectedChanged");
         if (selected && playVideo)
             fadescreenshot.restart();
         else {

@@ -28,6 +28,10 @@ import "Settings"
 FocusScope {
     id: root
 
+	//DEBUG property
+	property bool detailed_debug: true
+
+
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
     FontLoader { id: bodyFont; source: "assets/fonts/OpenSans-Semibold.ttf" }

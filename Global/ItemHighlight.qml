@@ -29,7 +29,7 @@ Item {
 	property bool validated: selected && videoToStop
 	onValidatedChanged:
 	{
-		console.log("ItemHighlight.onValidatedChanged:", validated);
+		if(detailed_debug) console.log("ItemHighlight.onValidatedChanged:", validated);
 		if (selected && validated) 
 		{
 			videoPreviewLoader.sourceComponent = undefined;
@@ -39,6 +39,7 @@ Item {
 	}
 
     onGameChanged: {
+		if(detailed_debug) console.log("ItemHighlight.onGameChanged");
         videoPreviewLoader.sourceComponent = undefined;
 		videoToStop = false;
         if (playVideo && selected) {
@@ -47,6 +48,7 @@ Item {
     }
 
     onSelectedChanged: {
+		if(detailed_debug) console.log("ItemHighlight.onSelectedChanged");
         if (!selected) {
             videoPreviewLoader.sourceComponent = undefined;
 			videoToStop = false;
