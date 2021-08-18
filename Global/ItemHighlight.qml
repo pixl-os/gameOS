@@ -54,6 +54,10 @@ Item {
 			videoToStop = false;
             videoDelay.stop();
         }
+        else if (playVideo && selected && !videoDelay.running) {
+            videoDelay.restart();
+        }
+
     }
 
     // Timer to show the video
@@ -86,7 +90,14 @@ Item {
             id: videocomponent
 
             anchors.fill: parent
-            source: game.assets.videoList.length ? game.assets.videoList[0] : ""
+            source: {
+						var video_path;
+						if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
+						else video_path = ""
+						if(detailed_debug) console.log("video_path: ",video_path);
+						return video_path;
+					}
+			
             fillMode: VideoOutput.PreserveAspectCrop
             muted: settings.AllowThumbVideoAudio === "No"
             loops: MediaPlayer.Infinite
