@@ -29,7 +29,7 @@ FocusScope {
     id: root
 
 	//DEBUG property
-	property bool detailed_debug: true
+	property bool detailed_debug: false
 
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
@@ -432,7 +432,6 @@ FocusScope {
         id: showcaseLoader
 
         focus: {
-				console.log("showcaseLoader.focus");
 				if (root.state === "showcasescreen") 
 				{
 					//change focus of item to avoid bad display of help

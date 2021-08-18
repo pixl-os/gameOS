@@ -16,6 +16,7 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 FocusScope {
     id: root
@@ -107,7 +108,7 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 1"
-            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites"
+            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,My Collection 1"
         }
         ListElement {
             settingName: "Collection 1 - Thumbnail"
@@ -219,7 +220,50 @@ FocusScope {
         }
     }
 
-    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage]
+    ListModel {
+        id: myCollectionsSettingsModel
+        ListElement {
+            settingName: "My Collection 1 - collection name"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "My Collection 1 - filter/keyword for search"
+            setting: "to edit"
+        }		
+        // ListElement {
+            // settingName: "My Collection 1 - icon"
+            // setting: "idea: to select from share icons directory"
+        // }
+        ListElement {
+            settingName: "My Collection 1 - Nb Players"
+            setting: "1,1+,2,2+,3,3+,4,4+,5"
+        }
+        ListElement {
+            settingName: "My Collection 1 - Rating"
+            setting: "All,10/10,9+/10,8+/10,7+/10,6+/10,5+/10,4+/10,3+/10,2+/10,1+/10,0/10,no rate"
+        }		
+        ListElement {
+            settingName: "My Collection 1 - Genre"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "My Collection 1 - Publisher"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "My Collection 1 - Thumbnail"
+            setting: "Wide,Tall,Square"
+        }
+    }
+
+    property var myCollections: {
+        return {
+            pageName: "My Collections",
+            listmodel: myCollectionsSettingsModel
+        }
+    }
+
+    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage, myCollections]
 
     property real itemheight: vpx(50)
 
@@ -290,7 +334,7 @@ FocusScope {
 
                 // Page name
                 Text {
-                    id: oageNameText
+                    id: pageNameText
 
                     text: modelData.pageName
                     color: theme.text
@@ -379,12 +423,22 @@ FocusScope {
                 id: settingRow
 
                 property bool selected: ListView.isCurrentItem && settingsList.focus
-                property variant settingList: setting.split(',')
-                property int savedIndex: api.memory.get(settingName + 'Index') || 0
+                property variant settingList: (setting !== "to edit") ? setting.split(',') : ""
+                property int savedIndex: (setting !== "to edit") ? (api.memory.get(settingName + 'Index') || 0) : 0
 
                 function saveSetting() {
-                    api.memory.set(settingName + 'Index', savedIndex);
-                    api.memory.set(settingName, settingList[savedIndex]);
+					console.log("setting:",setting);
+					console.log(settingName," : ", settingtextfield.text);
+					if (setting !== "to edit")
+					{
+						api.memory.set(settingName + 'Index', savedIndex);
+						api.memory.set(settingName, settingList[savedIndex]);
+					}
+					else
+					{
+						//api.memory.set(settingName + 'Index', savedIndex);
+						api.memory.set(settingName, settingtextfield.text);
+					}
                 }
 
                 function nextSetting() {
@@ -421,12 +475,33 @@ FocusScope {
                         left: parent.left; leftMargin: vpx(25)
                     }
                 }
-                // Setting value
+                
+				// Setting list value
                 Text {
                     id: settingtext;
-
-                    text: settingList[savedIndex];
+					visible: (setting !== "to edit")
+	
+                    text: (setting !== "to edit") ? settingList[savedIndex] : ""
                     color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(20)
+                    verticalAlignment: Text.AlignVCenter
+                    opacity: selected ? 1 : 0.2
+
+                    height: parent.height
+					anchors {
+                        right: parent.right; rightMargin: vpx(25)
+                    }
+                }
+
+				// Setting edit box value
+                TextField {
+                    id: settingtextfield;
+					visible: (setting === "to edit")
+					focus: selected					
+					onFocusChanged: saveSetting();
+                    text:  (setting === "to edit") ? api.memory.get(settingName) : ""
+                    color: focus ? "black" : theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
                     verticalAlignment: Text.AlignVCenter
@@ -435,8 +510,10 @@ FocusScope {
                     height: parent.height
                     anchors {
                         right: parent.right; rightMargin: vpx(25)
+						left: settingNameText.right ; leftMargin: vpx(25)
                     }
-                }
+                }				
+
 
                 Rectangle {
                     anchors {
