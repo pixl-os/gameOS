@@ -1,5 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
+
+## [recommended-gamelist-performance-improvements] - 2021-08-18
+- fix binding warning using global variables from Utils
+- add loaders to load "custom" lists asynchronously
+- improve filtering for publisher and genre lists (clean not necessary lines also in recommended List)
+- force to select a game to see video preview
+- add utils.js import for Genre and Publisher lists
+- solution found to keep showcaseview in background with video stop (need to put everywhere to manage to stop video)
+- add "detailed_debug" global property - more logs for dev
+- fix issue with first video of horizontal list using loaders
+- add more logs for video loading for item Highlighted
+
 ## [recalbox-integration] - 2021-06-30
 - 11-bug-system-logo-style-at-first-start-up
 

@@ -57,7 +57,22 @@ Item {
     Behavior on scale { NumberAnimation { duration: 100 } }
     z: selected ? 10 : 1
 
+
+	property bool validated: videoToStop
+
+	onValidatedChanged:
+	{
+		if(detailed_debug) console.log("DynamicGridItem.onValidatedChanged:", validated);
+		if (selected && validated) 
+		{
+            fadescreenshot.stop();
+            screenshot.opacity = 1;
+            container.opacity = 1;
+		}
+	}
+
     onSelectedChanged: {
+		if(detailed_debug) console.log("DynamicGridItem.onSelectedChanged");
         if (selected && playVideo)
             fadescreenshot.restart();
         else {

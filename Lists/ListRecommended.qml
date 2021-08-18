@@ -29,15 +29,6 @@ Item {
     function currentGame(index) { return api.allGames.get(gamesRecommended.mapToSource(index)) }
     property int max: gamesRecommended.count;
 
-    //TO INIT VALUES
-    onGamesChanged: {
-        Utils.randomletters = "";
-        Utils.randomrates = "";
-        Utils.randomhashletters = "";
-    }
-
-
-
     //FILTERING
     SortFilterProxyModel {
         id: gamesRecommended

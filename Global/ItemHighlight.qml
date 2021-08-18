@@ -25,19 +25,39 @@ Item {
     property bool selected
     property bool boxArt
     property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
+	
+	property bool validated: selected && videoToStop
+	onValidatedChanged:
+	{
+		if(detailed_debug) console.log("ItemHighlight.onValidatedChanged:", validated);
+		if (selected && validated) 
+		{
+			videoPreviewLoader.sourceComponent = undefined;
+			videoDelay.stop();
+			videoToStop = false;
+		}
+	}
 
     onGameChanged: {
+		if(detailed_debug) console.log("ItemHighlight.onGameChanged");
         videoPreviewLoader.sourceComponent = undefined;
-        if (playVideo) {
+		videoToStop = false;
+        if (playVideo && selected) {
             videoDelay.restart();
         }
     }
 
     onSelectedChanged: {
+		if(detailed_debug) console.log("ItemHighlight.onSelectedChanged");
         if (!selected) {
             videoPreviewLoader.sourceComponent = undefined;
+			videoToStop = false;
             videoDelay.stop();
         }
+        else if (playVideo && selected && !videoDelay.running) {
+            videoDelay.restart();
+        }
+
     }
 
     // Timer to show the video
@@ -70,7 +90,14 @@ Item {
             id: videocomponent
 
             anchors.fill: parent
-            source: game.assets.videoList.length ? game.assets.videoList[0] : ""
+            source: {
+						var video_path;
+						if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
+						else video_path = ""
+						if(detailed_debug) console.log("video_path: ",video_path);
+						return video_path;
+					}
+			
             fillMode: VideoOutput.PreserveAspectCrop
             muted: settings.AllowThumbVideoAudio === "No"
             loops: MediaPlayer.Infinite
