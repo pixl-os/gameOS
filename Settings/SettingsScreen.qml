@@ -273,9 +273,10 @@ FocusScope {
         anchors {
             top: parent.top
             left: parent.left
-            right: parent.right
+            //right: parent.right
         }
         height: vpx(75)
+		width: headertitle.contentWidth
         color: theme.main
         z: 5
 
@@ -288,7 +289,6 @@ FocusScope {
             anchors {
                 top: parent.top;
                 left: parent.left; leftMargin: globalMargin
-                right: parent.right
                 bottom: parent.bottom
             }
             
@@ -316,9 +316,10 @@ FocusScope {
         focus: true
         anchors {
             top: header.bottom
-            bottom: parent.bottom; bottomMargin: helpMargin
-            left: parent.left; leftMargin: globalMargin
+            //bottom: parent.bottom; bottomMargin: helpMargin
+			left: parent.left; leftMargin: globalMargin
         }
+		height: contentHeight
         width: vpx(300)
         model: settingsArr
         delegate: Component {
@@ -367,7 +368,17 @@ FocusScope {
         }
 
         Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
-        Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
+        Keys.onDownPressed: { 
+			sfxNav.play(); 
+			var previousIndex = currentIndex;
+			incrementCurrentIndex();
+			if (previousIndex == currentIndex)
+			{
+				selected = false;
+				pagelist.focus = false
+				collectionslist.focus = true
+			}
+ 		}
         Keys.onPressed: {
             // Accept
             if (api.keys.isAccept(event) && !event.isAutoRepeat) {
@@ -383,6 +394,152 @@ FocusScope {
         }
 
     }
+
+    property var myCollection1: {
+        return {
+            collectionName: "Collection 1",
+            listmodel: myCollectionsSettingsModel
+        }
+    }
+
+    property var myCollection2: {
+        return {
+            collectionName: "Collection 2",
+            listmodel: myCollectionsSettingsModel
+        }
+    }
+
+    property var myCollection3: {
+        return {
+            collectionName: "Collection 3",
+            listmodel: myCollectionsSettingsModel
+        }
+    }
+
+	property var settingsCol: [myCollection1,myCollection2,myCollection3]
+
+    Rectangle {
+        id: headerCollections
+
+        anchors {
+            top: pagelist.bottom
+            left: parent.left
+            //right: parent.right
+        }
+        height: vpx(75)
+		width: headertitleCollections.contentWidth
+        color: theme.main
+        z: 5
+
+        // Collections title
+        Text {
+            id: headertitleCollections
+            
+            text: "Collections"
+            
+            anchors {
+                top: parent.top;
+                left: parent.left; leftMargin: globalMargin
+                bottom: parent.bottom
+            }
+            
+            color: theme.text
+            font.family: titleFont.name
+            font.pixelSize: vpx(30)
+            font.bold: true
+            horizontalAlignment: Text.AlignHLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+
+            // Mouse/touch functionality
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    //Add collection
+					//TO DO
+                }
+            }
+        }
+    }
+
+
+    ListView {
+        id: collectionslist
+
+        focus: true
+        anchors {
+            top: headerCollections.bottom; bottomMargin: helpMargin
+            //bottom: parent.bottom; bottomMargin: helpMargin
+			left: parent.left; leftMargin: globalMargin
+        }
+		height: contentHeight
+        width: vpx(300)
+        model: settingsCol
+        delegate: Component {
+            id: collectionDelegate
+
+            Item {
+                id: collectionRow
+
+                property bool selected: ListView.isCurrentItem
+
+                width: ListView.view.width
+                height: itemheight
+
+                // Collection name
+                Text {
+                    id: collectionNameText
+
+                    text: modelData.collectionName
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(22)
+                    font.bold: true
+                    verticalAlignment: Text.AlignVCenter
+                    opacity: selected ? 1 : 0.2
+
+                    width: contentWidth
+                    height: parent.height
+                    anchors {
+                        left: parent.left; leftMargin: vpx(25)
+                    }
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: { sfxNav.play(); }
+                    onClicked: {
+                        sfxNav.play();
+                        collectionslist.currentIndex = index;
+                        settingsList.focus = true;
+                    }
+                }
+
+            }
+        }
+
+        Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
+        Keys.onDownPressed: { 
+			sfxNav.play(); incrementCurrentIndex();
+		}
+        Keys.onPressed: {
+            // Accept
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                sfxAccept.play();
+                settingsList.focus = true;
+            }
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                previousScreen();
+            }
+        }
+
+    }
+
 
     Rectangle {
         anchors {
@@ -554,6 +711,21 @@ FocusScope {
                         sfxBack.play()
                         pagelist.focus = true;
                     }
+                    // Create 'new' collection
+                    if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        sfxToggle.play()
+			//select "My Collection"
+			//create new collection
+			//select new collection
+                        pagelist.focus = true;
+                    }
+    		    // Remove 'last' collection
+		    if (api.keys.isDetails(event) && !event.isAutoRepeat) {
+		        event.accepted = true;
+			//confirm deletion
+			//delete last collection
+		    }
                 }
 
                 // Mouse/touch functionality
@@ -586,6 +758,18 @@ FocusScope {
         ListElement {
             name: "Back"
             button: "cancel"
+        }
+        ListElement {
+            name: "Next"
+            button: "accept"
+		}
+        ListElement {
+            name: "Remove 'last' collection"
+            button: "details"
+        }
+        ListElement {
+            name: "Add 'new' collection"
+            button: "filters"
         }
     }
     
