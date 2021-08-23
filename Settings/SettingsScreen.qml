@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// Updated to add collections management by BozoTheGeek: 24/08/2021
+
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
@@ -220,14 +222,17 @@ FocusScope {
         }
     }
 
+    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage]
+    property real itemheight: vpx(50)
+
     ListModel {
         id: myCollectionsSettingsModel
         ListElement {
-            settingName: "My Collection 1 - collection name"
+            settingName: "collection name"
             setting: "to edit"
         }
         ListElement {
-            settingName: "My Collection 1 - filter/keyword for search"
+            settingName: "filter/keyword for search"
             setting: "to edit"
         }		
         // ListElement {
@@ -235,37 +240,93 @@ FocusScope {
             // setting: "idea: to select from share icons directory"
         // }
         ListElement {
-            settingName: "My Collection 1 - Nb Players"
+            settingName: "Nb Players"
             setting: "1,1+,2,2+,3,3+,4,4+,5"
         }
         ListElement {
-            settingName: "My Collection 1 - Rating"
+            settingName: "Rating"
             setting: "All,10/10,9+/10,8+/10,7+/10,6+/10,5+/10,4+/10,3+/10,2+/10,1+/10,0/10,no rate"
         }		
         ListElement {
-            settingName: "My Collection 1 - Genre"
+            settingName: "Genre"
             setting: "to edit"
         }
         ListElement {
-            settingName: "My Collection 1 - Publisher"
+            settingName: "Publisher"
             setting: "to edit"
         }
         ListElement {
-            settingName: "My Collection 1 - Thumbnail"
+            settingName: "Region/Country"
+            setting: "to edit"
+        }		
+        ListElement {
+            settingName: "System"
+            setting: "to edit"
+        }		
+        ListElement {
+            settingName: "Thumbnail"
             setting: "Wide,Tall,Square"
         }
     }
 
-    property var myCollections: {
+     property var myCollections: {
         return {
             pageName: "My Collections",
             listmodel: myCollectionsSettingsModel
         }
     }
 
-    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage, myCollections]
+	property var settingsCol: []
 
-    property real itemheight: vpx(50)
+	Component.onCompleted: {
+		initializeCollections();
+	}
+	
+	function initializeCollections()
+	{
+		var i = 1;
+		var value = "";
+		do{
+
+			value = (api.memory.get("My Collection " + i + " - collection name")) ? api.memory.get("My Collection " + i + " - collection name") : "";
+			if (value != "")
+			{
+				//console.log("My Collection " + i + " - collection name");
+				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+				i = i + 1;
+			}
+		}
+		while(value != "")
+		//Set of model to force binding
+		collectionslist.model = settingsCol;
+	}
+
+	function addCollection()
+	{
+		var i = settingsCol.length + 1;
+		settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+		//Set of model to force binding
+		collectionslist.model = settingsCol;
+	}
+
+	function deleteLastCollection()
+	{
+		var i = settingsCol.length;
+		//remove last element by decreasing size
+		settingsCol.length = i - 1;
+		//Set of model to force binding
+		collectionslist.model = settingsCol;
+	}	
+	
+
+	//Set properties of ListModel from a function
+	function createMyCollectionsSettingsModel(index)
+	{
+		//Add "My Collection X - " to all settingName
+		for (var i = 0; i <= myCollectionsSettingsModel.count-1; i++) {
+			myCollectionsSettingsModel.setProperty(i,"settingPrefix", "My Collection " + (index+1) + " - ");
+        	}	
+	}
 
     Rectangle {
         id: header
@@ -328,7 +389,7 @@ FocusScope {
             Item {
                 id: pageRow
 
-                property bool selected: ListView.isCurrentItem
+                property bool selected: ListView.isCurrentItem && pagelist.focus
 
                 width: ListView.view.width
                 height: itemheight
@@ -360,6 +421,7 @@ FocusScope {
                     onClicked: {
                         sfxNav.play();
                         pagelist.currentIndex = index;
+						settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
                         settingsList.focus = true;
                     }
                 }
@@ -367,17 +429,23 @@ FocusScope {
             }
         }
 
-        Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
+        Keys.onUpPressed: { 
+			sfxNav.play(); decrementCurrentIndex();
+			settingsList.model = settingsArr[pagelist.currentIndex].listmodel;			
+			}
         Keys.onDownPressed: { 
 			sfxNav.play(); 
 			var previousIndex = currentIndex;
 			incrementCurrentIndex();
 			if (previousIndex == currentIndex)
 			{
-				selected = false;
 				pagelist.focus = false
 				collectionslist.focus = true
+				displayMyCollectionsHelp(true);
+				collectionslist.currentIndex = 0;
+				settingsList.model = myCollections.listmodel;
 			}
+			else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
  		}
         Keys.onPressed: {
             // Accept
@@ -395,29 +463,7 @@ FocusScope {
 
     }
 
-    property var myCollection1: {
-        return {
-            collectionName: "Collection 1",
-            listmodel: myCollectionsSettingsModel
-        }
-    }
-
-    property var myCollection2: {
-        return {
-            collectionName: "Collection 2",
-            listmodel: myCollectionsSettingsModel
-        }
-    }
-
-    property var myCollection3: {
-        return {
-            collectionName: "Collection 3",
-            listmodel: myCollectionsSettingsModel
-        }
-    }
-
-	property var settingsCol: [myCollection1,myCollection2,myCollection3]
-
+	
     Rectangle {
         id: headerCollections
 
@@ -435,7 +481,7 @@ FocusScope {
         Text {
             id: headertitleCollections
             
-            text: "Collections"
+            text: "My Collections"
             
             anchors {
                 top: parent.top;
@@ -456,32 +502,48 @@ FocusScope {
                 anchors.fill: parent
                 onClicked: {
                     //Add collection
-					//TO DO
+		    //TO DO
                 }
             }
         }
     }
 
+	function displayMyCollectionsHelp(visible)
+	{
+		if (visible)
+		{
+			//add help for My Collections
+			settingsHelpModel.append({"name":"Delete 'last' collection", "button":"details"});
+			settingsHelpModel.append({"name":"Add 'new' collection", "button":"filters"});
+		}
+		else
+		{
+			//remove the last 2 indexes corresponding to append done before.
+			settingsHelpModel.remove((settingsHelpModel.count)-1);
+			settingsHelpModel.remove((settingsHelpModel.count)-1);
+		}
+	}
 
     ListView {
         id: collectionslist
 
-        focus: true
+		onCurrentIndexChanged: createMyCollectionsSettingsModel(currentIndex)
+        focus: false
+		clip: true	
+		
         anchors {
-            top: headerCollections.bottom; bottomMargin: helpMargin
-            //bottom: parent.bottom; bottomMargin: helpMargin
+            top: headerCollections.bottom
+            bottom: parent.bottom;
 			left: parent.left; leftMargin: globalMargin
         }
-		height: contentHeight
-        width: vpx(300)
-        model: settingsCol
+       width: vpx(300)
         delegate: Component {
             id: collectionDelegate
 
             Item {
                 id: collectionRow
 
-                property bool selected: ListView.isCurrentItem
+                property bool selected: ListView.isCurrentItem && collectionslist.focus
 
                 width: ListView.view.width
                 height: itemheight
@@ -496,7 +558,7 @@ FocusScope {
                     font.pixelSize: vpx(22)
                     font.bold: true
                     verticalAlignment: Text.AlignVCenter
-                    opacity: selected ? 1 : 0.2
+                    opacity: collectionRow.selected ? 1 : 0.2
 
                     width: contentWidth
                     height: parent.height
@@ -513,6 +575,7 @@ FocusScope {
                     onClicked: {
                         sfxNav.play();
                         collectionslist.currentIndex = index;
+						settingsList.model = myCollections.listmodel;
                         settingsList.focus = true;
                     }
                 }
@@ -520,9 +583,26 @@ FocusScope {
             }
         }
 
-        Keys.onUpPressed: { sfxNav.play(); decrementCurrentIndex() }
+        Keys.onUpPressed: { 
+			sfxNav.play(); 
+			var previousIndex = currentIndex;
+			decrementCurrentIndex() 
+			if (previousIndex == currentIndex)
+			{
+				collectionslist.focus = false;
+				displayMyCollectionsHelp(false);
+				pagelist.focus = true;
+				settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+			}
+			else settingsList.model = myCollections.listmodel;
+			//reset index of listview for settingsList
+			settingsList.currentIndex = 0;
+		}
         Keys.onDownPressed: { 
 			sfxNav.play(); incrementCurrentIndex();
+			settingsList.model = myCollections.listmodel;
+			//reset index of listview for settingsList
+			settingsList.currentIndex = 0;			
 		}
         Keys.onPressed: {
             // Accept
@@ -536,6 +616,24 @@ FocusScope {
                 event.accepted = true;
                 previousScreen();
             }
+			
+			// Create a 'new' collection
+			if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                sfxToggle.play()
+				//create new collection
+				addCollection();
+            }
+    		
+			// Remove 'last' collection
+		    if (api.keys.isDetails(event) && !event.isAutoRepeat) {
+		        event.accepted = true;
+				//confirm deletion
+				//TO DO
+				//delete last collection
+				deleteLastCollection();
+		    } 			
+			
         }
 
     }
@@ -554,7 +652,8 @@ FocusScope {
     ListView {
         id: settingsList
 
-        model: settingsArr[pagelist.currentIndex].listmodel
+        model: settingsArr[pagelist.currentIndex].listmodel;
+		
         delegate: settingsDelegate
         
         anchors {
@@ -578,23 +677,33 @@ FocusScope {
 
             Item {
                 id: settingRow
-
+				property string fullSettingName: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingName : settingName
                 property bool selected: ListView.isCurrentItem && settingsList.focus
                 property variant settingList: (setting !== "to edit") ? setting.split(',') : ""
-                property int savedIndex: (setting !== "to edit") ? (api.memory.get(settingName + 'Index') || 0) : 0
+                property int savedIndex: {
+					//console.log("savedIndex refresh for :",fullSettingName + 'Index');
+					//console.log("savedIndex refresh for setting:",setting);
+					if (setting !== "to edit") 
+					{
+						//console.log(fullSettingName + "Index: ",api.memory.get(fullSettingName + 'Index'));
+						return (api.memory.get(fullSettingName + 'Index') || 0);
+					}
+					else return 0;
+				}
 
                 function saveSetting() {
-					console.log("setting:",setting);
-					console.log(settingName," : ", settingtextfield.text);
+					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
-						api.memory.set(settingName + 'Index', savedIndex);
-						api.memory.set(settingName, settingList[savedIndex]);
+						api.memory.set(fullSettingName + 'Index', savedIndex);
+						//console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
+						api.memory.set(fullSettingName, settingList[savedIndex]);
+						//console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
 					}
 					else
 					{
-						//api.memory.set(settingName + 'Index', savedIndex);
-						api.memory.set(settingName, settingtextfield.text);
+						//console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
+						api.memory.set(fullSettingName, settingtextfield.text);
 					}
                 }
 
@@ -619,7 +728,7 @@ FocusScope {
                 Text {
                     id: settingNameText
 
-                    text: settingName + ": "
+                    text: (fullSettingName + ": ")
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -638,7 +747,17 @@ FocusScope {
                     id: settingtext;
 					visible: (setting !== "to edit")
 	
-                    text: (setting !== "to edit") ? settingList[savedIndex] : ""
+                    text:{
+						if (setting !== "to edit")
+						{
+							//tips to refresh index (and to force update of text as not possible when we reuse the same listview as for collection)
+							var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
+							//-----------------------------------------------------------------------
+							//console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
+							return settingList[indexFromSettings];
+						}
+						else return "";
+					}
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -656,8 +775,15 @@ FocusScope {
                     id: settingtextfield;
 					visible: (setting === "to edit")
 					focus: selected					
-					onFocusChanged: saveSetting();
-                    text:  (setting === "to edit") ? api.memory.get(settingName) : ""
+					onFocusChanged: if (setting === "to edit") saveSetting();
+                    text:  {
+						var value = "";
+						if (setting === "to edit") 
+						{
+							value = (api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "";
+						}
+						return value;
+					}
                     color: focus ? "black" : theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -709,23 +835,9 @@ FocusScope {
                     if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                         event.accepted = true;
                         sfxBack.play()
-                        pagelist.focus = true;
+                        if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
+						else pagelist.focus = true;
                     }
-                    // Create 'new' collection
-                    if (api.keys.isFilters(event) && !event.isAutoRepeat) {
-                        event.accepted = true;
-                        sfxToggle.play()
-			//select "My Collection"
-			//create new collection
-			//select new collection
-                        pagelist.focus = true;
-                    }
-    		    // Remove 'last' collection
-		    if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-		        event.accepted = true;
-			//confirm deletion
-			//delete last collection
-		    }
                 }
 
                 // Mouse/touch functionality
@@ -763,15 +875,7 @@ FocusScope {
             name: "Next"
             button: "accept"
 		}
-        ListElement {
-            name: "Remove 'last' collection"
-            button: "details"
-        }
-        ListElement {
-            name: "Add 'new' collection"
-            button: "filters"
-        }
-    }
+	}
     
     onFocusChanged: { if (focus) currentHelpbarModel = settingsHelpModel; }
 
