@@ -19,6 +19,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
+import "../Dialogs"
 
 FocusScope {
     id: root
@@ -339,7 +340,6 @@ FocusScope {
         height: vpx(75)
 		width: headertitle.contentWidth
         color: theme.main
-        z: 5
 
         // Platform title
         Text {
@@ -475,7 +475,6 @@ FocusScope {
         height: vpx(75)
 		width: headertitleCollections.contentWidth
         color: theme.main
-        z: 5
 
         // Collections title
         Text {
@@ -629,9 +628,12 @@ FocusScope {
 		    if (api.keys.isDetails(event) && !event.isAutoRepeat) {
 		        event.accepted = true;
 				//confirm deletion
-				//TO DO
-				//delete last collection
-				deleteLastCollection();
+				var i = settingsCol.length;
+				collectionDeletionDialogBoxLoader.item.title = "Delete " + "'My Collection " + i + "'";
+				collectionDeletionDialogBoxLoader.item.message = "You are deleting this collection...\n\n" 
+																+ "name: " + api.memory.get("My Collection " + i + " - collection name") + "\n"
+																+ "filter/keyword: " +api.memory.get("My Collection " + i + " - filter/keyword for search"); 
+				collectionDeletionDialogBoxLoader.focus = true;
 		    } 			
 			
         }
@@ -879,4 +881,37 @@ FocusScope {
     
     onFocusChanged: { if (focus) currentHelpbarModel = settingsHelpModel; }
 
+    Component {
+        id: collectionDeletionDialogBox
+		GenericOkCancelDialog
+		{
+			focus: true
+			title: "Deletion 'Last' Collection"
+			message: "Are you sure that you want to delete this collection ?"
+			//symbol: "\u21BB"
+ 			//onAccept: 
+				// console.log("Collection deleted");
+			// onCancel: 
+				// console.log("No deletion");
+		}
+	}
+    Loader {
+        id: collectionDeletionDialogBoxLoader
+        anchors.fill: parent
+		sourceComponent: collectionDeletionDialogBox
+		active: true
+    }
+    Connections {
+        target: collectionDeletionDialogBoxLoader.item
+		function onAccept() {
+			console.log("Collection deleted !");			
+			//delete last collection
+			deleteLastCollection();
+			collectionslist.focus = true; 
+		}
+        function onCancel() {
+			console.log("Collection kept !");		
+			collectionslist.focus = true;
+		}
+    }	
 }

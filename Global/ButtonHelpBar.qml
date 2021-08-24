@@ -23,6 +23,7 @@ Item {
     Component {
         id: buttonhelpDelegate
         Row {
+			visible: true
             spacing: 10
             Image {
                 source: "../assets/images/controller/" + processButtonArt(button) + ".png"
