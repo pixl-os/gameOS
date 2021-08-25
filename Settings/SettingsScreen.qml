@@ -280,10 +280,24 @@ FocusScope {
 	property var settingsCol: []
 
 	Component.onCompleted: {
-		initializeCollections();
+		//for 5 collections to display on showcase (main page)
+		//-> possibility to have more in the future for HomePage
+		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
+		initializeShowcaseSettingsModel(5);
+		//generate My collection(s), no limit ;-)
+		initializeMyCollections();
+	}
+
+	function initializeShowcaseSettingsModel(nb_collections)
+	{
+		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
+		for(var i = 1 + 5; i <= nb_collections; ++i) {
+			showcaseSettingsModel.append({"settingName": "Collection " + i,"setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"});
+			showcaseSettingsModel.append({"settingName": "Collection " + i + " - Thumbnail","setting": "Wide,Tall,Square"});
+		}
 	}
 	
-	function initializeCollections()
+	function initializeMyCollections()
 	{
 		var i = 1;
 		var value = "";
@@ -295,6 +309,19 @@ FocusScope {
 				//console.log("My Collection " + i + " - collection name");
 				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
 				i = i + 1;
+				
+				for(var j = 0; j < showcaseSettingsModel.count; ++j) {
+					var f = 1;
+					//console.log("Collection " + f);
+					//console.log(showcaseSettingsModel.get(j).settingName);
+					if (showcaseSettingsModel.get(j).settingName === ("Collection " + f))
+					{
+						//Add this "My Collection n" to the list
+						showcaseSettingsModel.get(j).setting = showcaseSettingsModel.get(j).setting + "," + "My Collection " + i
+						f = f + 1;
+					}
+						
+				}
 			}
 		}
 		while(value != "")
@@ -532,7 +559,7 @@ FocusScope {
 		
         anchors {
             top: headerCollections.bottom
-            bottom: parent.bottom;
+            bottom: parent.bottom; bottomMargin: helpMargin
 			left: parent.left; leftMargin: globalMargin
         }
        width: vpx(300)
@@ -659,7 +686,8 @@ FocusScope {
         delegate: settingsDelegate
         
         anchors {
-            top: header.bottom; bottom: parent.bottom;
+            top: header.bottom; 
+			bottom: parent.bottom; bottomMargin: helpMargin
             left: pagelist.right; leftMargin: globalMargin
             right: parent.right; rightMargin: globalMargin
         }

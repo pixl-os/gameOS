@@ -189,41 +189,44 @@ FocusScope {
         active: Utils.isCollectionTypeRequested("Top by Genre");
     }
 
-	//tentative to display "My Collection 1"
-    property alias listMyCollection: listMyCollectionLoader.item
-    Loader {
-        id: listMyCollectionLoader
-        source: Utils.isCollectionTypeRequested("My Collection 1") ? "../Lists/ListMyCollection.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
-            if (listMyCollectionLoader.status === Loader.Loading) {
-                if(!listMyCollectionLoader.measuring){
-                    console.time("listMyCollectionLoader");
-                    listMyCollectionLoader.measuring = true;
-                }
-            }
+	Repeater{
+		id: repeater
+		model: 1
+//		property alias listMyCollection: listMyCollectionLoader.item;
+		delegate: 
+		Loader {
+			id: listMyCollectionLoader
+			//source: Utils.isCollectionTypeRequested("My Collection 1") ? "../Lists/ListMyCollection.qml" : ""
+			source: "../Lists/ListMyCollection.qml"
+			asynchronous: true
+			property bool measuring: false
+			onStatusChanged:{
+				/*
+				Available status:
+				Loader.Null - the loader is inactive or no QML source has been set
+				Loader.Ready - the QML source has been loaded
+				Loader.Loading - the QML source is currently being loaded
+				Loader.Error - an error occurred while loading the QML source
+				*/
+				if (listMyCollectionLoader.status === Loader.Loading) {
+					if(!listMyCollectionLoader.measuring){
+						console.time("listMyCollectionLoader");
+						listMyCollectionLoader.measuring = true;
+					}
+				}
 
-            if (listMyCollectionLoader.status === Loader.Ready) {
-                //listMyCollection.max = settings.ShowcaseColumns;
-                listMyCollection.collectionName = api.memory.get("My Collection 1 - collection name");
-				listMyCollection.filter = api.memory.get("My Collection 1 - filter/keyword for search");
-                console.timeEnd("listMyCollectionLoader");
-                listMyCollectionLoader.measuring = false;
-            }
-        }
-        active: Utils.isCollectionTypeRequested("My Collection 1");
+				if (listMyCollectionLoader.status === Loader.Ready) {
+					//listMyCollection.max = settings.ShowcaseColumns;
+					listMyCollectionLoader.item.collectionName = api.memory.get("My Collection 1 - collection name");
+					listMyCollectionLoader.item.filter = api.memory.get("My Collection 1 - filter/keyword for search");
+					console.timeEnd("listMyCollectionLoader");
+					listMyCollectionLoader.measuring = false;
+					collection1 = getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail);
+				}
+			}
+			active: true //Utils.isCollectionTypeRequested("My Collection 1");
+		}
     }	
-	
-
-
 
     property var featuredCollection: listFavorites
     property var collection1: getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail)
@@ -284,7 +287,9 @@ FocusScope {
             collection.search = listNone;
             break;
         case "My Collection 1":
-            collection.search = listMyCollection;
+			console.log("My Collection 1");
+            //collection.search = listMyCollection; 
+	    collection.search = repeater.itemAt(0).item;
             break;
 		default:
             collection.search = listAllGames;
