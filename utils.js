@@ -24,18 +24,7 @@
 var randomletters = "";
 var randomrates = "";
 var randomhashletters = "";
-
-//UTILS FUNCTIONS to check if a list is requested (to improve performance)
-function isCollectionTypeRequested(collectionName)
-{
-    if(settings.ShowcaseCollection1.includes(collectionName)) return true;
-    if(settings.ShowcaseCollection2.includes(collectionName)) return true;
-    if(settings.ShowcaseCollection3.includes(collectionName)) return true;
-    if(settings.ShowcaseCollection4.includes(collectionName)) return true;
-    if(settings.ShowcaseCollection5.includes(collectionName)) return true;
-    return false;
-}
-
+var collections = [];
 //UTILS FUNCTIONS for filtering (for 'recommended' gamelist)
 function generateRandomRate(min, max)
 {
