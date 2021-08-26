@@ -111,7 +111,7 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 1"
-            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,My Collection 1"
+            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites"
         }
         ListElement {
             settingName: "Collection 1 - Thumbnail"
@@ -283,35 +283,34 @@ FocusScope {
 		//for 5 collections to display on showcase (main page)
 		//-> possibility to have more in the future for HomePage
 		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
-		initializeShowcaseSettingsModel(5);
+		addShowcaseSettingsModel(0);//set to zero because only keep the 5 existing ones for the moment
 		//generate My collection(s), no limit ;-)
 		initializeMyCollections();
 	}
 
-	function initializeShowcaseSettingsModel(nb_collections)
+	function addShowcaseSettingsModel(nb_collections)
 	{
+		var initialCount = showcaseSettingsModel.count;
 		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
-		for(var i = 1 + 5; i <= nb_collections; ++i) {
-			showcaseSettingsModel.append({"settingName": "Collection " + i,"setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"});
-			showcaseSettingsModel.append({"settingName": "Collection " + i + " - Thumbnail","setting": "Wide,Tall,Square"});
+		for(var i = 1; i <= nb_collections; ++i) {
+			showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),"setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"});
+			showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail","setting": "Wide,Tall,Square"});
 		}
 	}
 	
 	function initializeMyCollections()
 	{
 		var i = 1;
-		var value = "";
+		let value = "";
 		do{
 
 			value = (api.memory.get("My Collection " + i + " - collection name")) ? api.memory.get("My Collection " + i + " - collection name") : "";
-			if (value != "")
+			if (value !== "")
 			{
 				//console.log("My Collection " + i + " - collection name");
 				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
-				i = i + 1;
-				
+				var f = 1;
 				for(var j = 0; j < showcaseSettingsModel.count; ++j) {
-					var f = 1;
 					//console.log("Collection " + f);
 					//console.log(showcaseSettingsModel.get(j).settingName);
 					if (showcaseSettingsModel.get(j).settingName === ("Collection " + f))
@@ -322,6 +321,7 @@ FocusScope {
 					}
 						
 				}
+				i = i + 1;
 			}
 		}
 		while(value != "")
