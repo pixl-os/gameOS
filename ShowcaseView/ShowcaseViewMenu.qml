@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+//
+// Updated by Bozo the Geek for 'collections' features 26/08/2021
+//
+
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
@@ -37,20 +41,13 @@ FocusScope {
     ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
 
     //Use loader to load asynchronously the 'custom' lists now.
-    property alias listLastPlayed: listLastPlayedLoader.item
+/*     property alias listLastPlayed: listLastPlayedLoader.item
     Loader {
         id: listLastPlayedLoader
-        source: Utils.isCollectionTypeRequested("Recently Played") ? "../Lists/ListLastPlayed.qml" : ""
+        source: isCollectionTypeRequested("Recently Played") ? "../Lists/ListLastPlayed.qml" : ""
         asynchronous: true
         property bool measuring: false
         onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
             if (listLastPlayedLoader.status === Loader.Loading) {
                 if(!listLastPlayedLoader.measuring){
                     console.time("listLastPlayedLoader")
@@ -64,23 +61,16 @@ FocusScope {
                 listLastPlayedLoader.measuring = false
             }
         }
-        active: Utils.isCollectionTypeRequested("Recently Played");
+        active: isCollectionTypeRequested("Recently Played");
     }
 
     property alias listMostPlayed: listMostPlayedLoader.item
     Loader {
         id: listMostPlayedLoader
-        source: Utils.isCollectionTypeRequested("Most Played") ? "../Lists/ListMostPlayed.qml" : ""
+        source: isCollectionTypeRequested("Most Played") ? "../Lists/ListMostPlayed.qml" : ""
         asynchronous: true
         property bool measuring: false
         onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
             if (listMostPlayedLoader.status === Loader.Loading) {
                 if(!listMostPlayedLoader.measuring){
                     console.time("listMostPlayedLoader")
@@ -94,23 +84,16 @@ FocusScope {
                 listMostPlayedLoader.measuring=false
             }
         }
-        active: Utils.isCollectionTypeRequested("Most Played");
+        active: isCollectionTypeRequested("Most Played");
     }
 
     property alias listRecommended: listRecommendedLoader.item
     Loader {
         id: listRecommendedLoader
-        source: Utils.isCollectionTypeRequested("Recommended") ? "../Lists/ListRecommended.qml" : ""
+        source: isCollectionTypeRequested("Recommended") ? "../Lists/ListRecommended.qml" : ""
         asynchronous: true
         property bool measuring: false
         onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
             if (listRecommendedLoader.status === Loader.Loading) {
                 if(!listRecommendedLoader.measuring){
                     console.time("listRecommendedLoader")
@@ -124,23 +107,16 @@ FocusScope {
                 listRecommendedLoader.measuring = false;
             }
         }
-        active: Utils.isCollectionTypeRequested("Recommended");
+        active: isCollectionTypeRequested("Recommended");
     }
 
     property alias listPublisher: listPublisherLoader.item
     Loader {
         id: listPublisherLoader
-        source: Utils.isCollectionTypeRequested("Top by Publisher") ? "../Lists/ListPublisher.qml" : ""
+        source: isCollectionTypeRequested("Top by Publisher") ? "../Lists/ListPublisher.qml" : ""
         asynchronous: true
         property bool measuring: false
         onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
             if (listPublisherLoader.status === Loader.Loading) {
                 if(!listPublisherLoader.measuring){
                     console.time("listPublisherLoader");
@@ -155,23 +131,16 @@ FocusScope {
                 listPublisherLoader.measuring = false;
             }
         }
-        active: Utils.isCollectionTypeRequested("Top by Publisher");
+        active: isCollectionTypeRequested("Top by Publisher");
     }
 
     property alias listGenre: listGenreLoader.item
     Loader {
         id: listGenreLoader
-        source: Utils.isCollectionTypeRequested("Top by Genre") ? "../Lists/ListGenre.qml" : ""
+        source: isCollectionTypeRequested("Top by Genre") ? "../Lists/ListGenre.qml" : ""
         asynchronous: true
         property bool measuring: false
         onStatusChanged:{
-            /*
-            Available status:
-            Loader.Null - the loader is inactive or no QML source has been set
-            Loader.Ready - the QML source has been loaded
-            Loader.Loading - the QML source is currently being loaded
-            Loader.Error - an error occurred while loading the QML source
-            */
             if (listGenreLoader.status === Loader.Loading) {
                 if(!listGenreLoader.measuring){
                     console.time("listGenreLoader");
@@ -186,18 +155,23 @@ FocusScope {
                 listGenreLoader.measuring = false;
             }
         }
-        active: Utils.isCollectionTypeRequested("Top by Genre");
-    }
+        active: isCollectionTypeRequested("Top by Genre");
+    } */
 
+	//Repeater to manage loading of lists dynamically and without limits in the future
 	Repeater{
 		id: repeater
-		model: 1
-//		property alias listMyCollection: listMyCollectionLoader.item;
+		model: 5 // 5 is the maximum of list loaded dynamically for the moment 
+		//still to find a solution for "HorizontalCollection" loading dynamically
+		//that's why we can't change the number dynamically for the moment
+		//warning: index start from 0 but Colletions from 1
+	
+		//property alias listMyCollection: listMyCollectionLoader.item;
 		delegate: 
 		Loader {
-			id: listMyCollectionLoader
+			id: listLoader
 			//source: Utils.isCollectionTypeRequested("My Collection 1") ? "../Lists/ListMyCollection.qml" : ""
-			source: "../Lists/ListMyCollection.qml"
+			source: getListSourceFromIndex(index + 1) // get qml file to load from index of "settings.ShowcaseCollectionX"
 			asynchronous: true
 			property bool measuring: false
 			onStatusChanged:{
@@ -208,32 +182,256 @@ FocusScope {
 				Loader.Loading - the QML source is currently being loaded
 				Loader.Error - an error occurred while loading the QML source
 				*/
-				if (listMyCollectionLoader.status === Loader.Loading) {
-					if(!listMyCollectionLoader.measuring){
-						console.time("listMyCollectionLoader");
-						listMyCollectionLoader.measuring = true;
+				if (listLoader.status === Loader.Loading) {
+					if(!listLoader.measuring){
+						console.time("listLoader: " + (index+1));
+						listLoader.measuring = true;
 					}
 				}
 
-				if (listMyCollectionLoader.status === Loader.Ready) {
+				if (listLoader.status === Loader.Ready) {
 					//listMyCollection.max = settings.ShowcaseColumns;
-					listMyCollectionLoader.item.collectionName = api.memory.get("My Collection 1 - collection name");
-					listMyCollectionLoader.item.filter = api.memory.get("My Collection 1 - filter/keyword for search");
-					console.timeEnd("listMyCollectionLoader");
-					listMyCollectionLoader.measuring = false;
-					collection1 = getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail);
+					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
+					console.log("listLoader.listType: ",listType);
+					if(listType.includes("My Collection"))
+					{
+						listLoader.item.collectionName = api.memory.get(listType + " - collection name");
+						listLoader.item.filter = api.memory.get(listType + " - filter/keyword for search");
+					}
+					
+					//To change
+					//collection1 = getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail);
+					if ((index+1) === 1) {
+						collection1  = getCollectionFromIndex((index+1));
+						console.log("collection1.title:",collection1.title);
+						collections[0] = getCollectionFromIndex((index+1));;
+						console.log("collections[0].title:",collections[0].title);
+						
+					}
+					
+					//console.log("collection1:",collection1);
+					//collection = getCollectionFromIndex((index+1));
+					//Utils.collections[index].push(collection);
+					//var collection = getCollectionFromIndex((index+1));
+					//collections[index].push(getCollectionFromIndex(index+1));
+					
+					//console.log("collections["+index+"]:",Utils.collections[index]);
+					
+					console.timeEnd("listLoader: " + (index + 1));
+					listLoader.measuring = false;
 				}
 			}
-			active: true //Utils.isCollectionTypeRequested("My Collection 1");
+			active: getListSourceFromIndex(index + 1) !== "";
 		}
     }	
 
     property var featuredCollection: listFavorites
-    property var collection1: getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail)
-    property var collection2: getCollection(settings.ShowcaseCollection2, settings.ShowcaseCollection2_Thumbnail)
-    property var collection3: getCollection(settings.ShowcaseCollection3, settings.ShowcaseCollection3_Thumbnail)
-    property var collection4: getCollection(settings.ShowcaseCollection4, settings.ShowcaseCollection4_Thumbnail)
-    property var collection5: getCollection(settings.ShowcaseCollection5, settings.ShowcaseCollection5_Thumbnail)
+	
+	property var collections: [];
+    property var collection1 //: getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail)
+    property var collection2 //: getCollection(settings.ShowcaseCollection2, settings.ShowcaseCollection2_Thumbnail)
+    property var collection3 //: getCollection(settings.ShowcaseCollection3, settings.ShowcaseCollection3_Thumbnail)
+    property var collection4 //: getCollection(settings.ShowcaseCollection4, settings.ShowcaseCollection4_Thumbnail)
+    property var collection5 //: getCollection(settings.ShowcaseCollection5, settings.ShowcaseCollection5_Thumbnail)
+
+	//Function to get the list type of a collection from index in main list of collections
+	function getListTypeFromIndex(index)
+	{
+		let listType;
+		//for existing pre-configured lists (keep hardcoded way for the 5 first collections to benefit default value predefined for this theme, for first launching)
+		console.log("index:",index);
+		if(index <= 5)
+		{
+			switch (index) {
+				case 1:
+				  listType = settings.ShowcaseCollection1;
+				  break;
+				case 2:
+				  listType = settings.ShowcaseCollection2;
+				  break;
+				case 3:
+				  listType = settings.ShowcaseCollection3;
+				  break;
+				case 4:
+				  listType = settings.ShowcaseCollection4;
+				  break;
+				case 5:
+				  listType = settings.ShowcaseCollection5;
+				  break;
+			}
+		}
+		// for the potential other ones not "hardcoded" and to be more flexible for a future menu/view "Colletions"
+		else
+		{
+			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "";
+		}
+		console.log("listType: ",listType);
+		//To manage types using index in collections type as "My Coleltions 1", "My Collections 2", etc...
+		if(listType.includes("My Collection"))
+		{
+			listType = "My Collection";
+		}
+		console.log("listType: ",listType);
+		return listType;
+	}
+
+	//Function to get the Thumbnail of a collection from index in main list of collections
+	function getThumbnailFromIndex(index)
+	{
+		let thumbnail;
+		//for existing pre-configured lists (keep hardcoded way for the 5 first collections to benefit default value predefined for this theme, for first launching)
+		console.log("index:",index);
+		if(index <= 5)
+		{
+			switch (index) {
+				case 1:
+				  thumbnail = settings.ShowcaseCollection1_Thumbnail;
+				  break;
+				case 2:
+				  thumbnail = settings.ShowcaseCollection2_Thumbnail;
+				  break;
+				case 3:
+				  thumbnail = settings.ShowcaseCollection3_Thumbnail;
+				  break;
+				case 4:
+				  thumbnail = settings.ShowcaseCollection4_Thumbnail;
+				  break;
+				case 5:
+				  thumbnail = settings.ShowcaseCollection5_Thumbnail;
+				  break;
+			}
+		}
+		// for the potential other ones not "hardcoded" and to be more flexible for a future menu/view "Colletions"
+		else
+		{
+			thumbnail = api.memory.has("Collection " + index + " - Thumbnail") ? api.memory.get("Collection " + index + " - Thumbnail") : "Wide"
+		}
+		console.log("thumbnail: ",thumbnail);
+		return thumbnail;
+	}
+	
+	//Function to check if a list is requested (to improve performance)
+	function getListSourceFromIndex(index) //index from 1 to...
+	{
+		let qmlFileToUse;
+		let listType = getListTypeFromIndex(index);
+
+		switch (listType) {
+			case "AllGames":
+				qmlFileToUse = "../Lists/ListAllGames.qml";
+				break;
+			case "Favorites":
+				qmlFileToUse = "../Lists/ListFavorites.qml";
+				break;
+			case "Recently Played":
+				qmlFileToUse = "../Lists/ListLastPlayed.qml";
+				break;
+			case "Most Played":
+				qmlFileToUse = "../Lists/ListMostPlayed.qml";
+				break;
+			case "Recommended":
+				qmlFileToUse = "../Lists/ListRecommended.qml";
+				break;
+			case "Top by Publisher":
+				qmlFileToUse = "../Lists/ListPublisher.qml";
+				break;
+			case "Top by Genre":
+				qmlFileToUse = "../Lists/ListGenre.qml";
+				break;
+			case "My Collection":
+				qmlFileToUse = "../Lists/ListMyCollection.qml";
+				break;
+			case "None":
+				qmlFileToUse = "";
+				break;
+			default:
+				qmlFileToUse = "";
+				break;
+		}
+		
+		return qmlFileToUse;
+	}
+
+	//Function to confirm qml file loading from type (Deprecated)
+	function isCollectionTypeRequested(collectionName)
+	{
+		if(settings.ShowcaseCollection1.includes(collectionName)) return true;
+		if(settings.ShowcaseCollection2.includes(collectionName)) return true;
+		if(settings.ShowcaseCollection3.includes(collectionName)) return true;
+		if(settings.ShowcaseCollection4.includes(collectionName)) return true;
+		if(settings.ShowcaseCollection5.includes(collectionName)) return true;
+		return false;
+	}
+
+	//Function to get Collection Details from index in the main list of horizontal collection
+    function getCollectionFromIndex(index) //index from 1 to...
+	{
+		var collectionType = getListTypeFromIndex(index);		
+		var collectionThumbnail = getThumbnailFromIndex(index);	
+		
+        var collection = {
+            enabled: true,
+        };
+
+        var width = root.width - globalMargin * 2;
+
+        switch (collectionThumbnail) {
+        case "Square":
+            collection.itemWidth = (width / 6.0);
+            collection.itemHeight = collection.itemWidth;
+            break;
+        case "Tall":
+            collection.itemWidth = (width / 8.0);
+            collection.itemHeight = collection.itemWidth / settings.TallRatio;
+            break;
+        case "Wide":
+        default:
+            collection.itemWidth = (width / 4.0);
+            collection.itemHeight = collection.itemWidth * settings.WideRatio;
+            break;
+
+        }
+
+        collection.height = collection.itemHeight + vpx(40) + globalMargin
+
+        switch (collectionType) {
+/*      case "Favorites":
+            collection.search = listFavorites;
+            break;
+        case "Recently Played":
+            collection.search = listLastPlayed;
+            break;
+        case "Most Played":
+            collection.search = listMostPlayed;
+            break;
+        case "Recommended":
+            collection.search = listRecommended;
+            break;
+        case "Top by Publisher":
+            collection.search = listPublisher;
+            break;
+        case "Top by Genre":
+            collection.search = listGenre;
+            break; */
+        case "None":
+            collection.enabled = false;
+            collection.height = 0;
+            collection.search = listNone;
+            break;
+        // case "My Collection":
+			// console.log("My Collection");
+            ////collection.search = listMyCollection; 
+			// collection.search = repeater.itemAt(index-1).item;
+            // break;
+		default:
+            //collection.search = listAllGames;
+			collection.search = repeater.itemAt(index-1).item;
+            break;
+        }
+
+        collection.title = collection.search.collection.name;
+        return collection;
+    }
 
     function getCollection(collectionName, collectionThumbnail) {
         var collection = {
@@ -312,6 +510,7 @@ FocusScope {
 
     anchors.fill: parent
 
+	//ftueContainer
     Item {
         id: ftueContainer
 
@@ -396,7 +595,8 @@ FocusScope {
             visible: false
         }
     }
-
+	
+	//header
     Item {
         id: header
 
@@ -505,7 +705,7 @@ FocusScope {
         }
     }
 
-    // Using an object model to build the list
+    // Using an object model to build the main list using other lists
     ObjectModel {
         id: mainModel
 
@@ -787,11 +987,12 @@ FocusScope {
 
         }
 
+		//first list
         HorizontalCollection {
             id: list1
             property bool selected: ListView.isCurrentItem
             property var currentList: list1
-            property var collection: collection1
+            property var collection: collection1 //collections[0].object; //Utils.collections[0]; //collections[0] // collection1 //
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -801,7 +1002,10 @@ FocusScope {
             itemWidth: collection.itemWidth
             itemHeight: collection.itemHeight
 
-            title: collection.title
+            title: {
+				console.log("collection.title:",collection.title);
+				return collection.title;
+			}
             search: collection.search
 
             focus: selected
@@ -818,11 +1022,12 @@ FocusScope {
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
 
+		//second list
         HorizontalCollection {
             id: list2
             property bool selected: ListView.isCurrentItem
             property var currentList: list2
-            property var collection: collection2
+            property var collection: collections[1]
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -849,11 +1054,12 @@ FocusScope {
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
 
+		//third list
         HorizontalCollection {
             id: list3
             property bool selected: ListView.isCurrentItem
             property var currentList: list3
-            property var collection: collection3
+            property var collection: collections[2]
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -880,11 +1086,12 @@ FocusScope {
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
 
+		//fourth list
         HorizontalCollection {
             id: list4
             property bool selected: ListView.isCurrentItem
             property var currentList: list4
-            property var collection: collection4
+            property var collection: collections[3]
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -911,11 +1118,12 @@ FocusScope {
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
 
+		//fifth list
         HorizontalCollection {
             id: list5
             property bool selected: ListView.isCurrentItem
             property var currentList: list5
-            property var collection: collection5
+            property var collection: collections[4]
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -944,6 +1152,7 @@ FocusScope {
 
     }
 
+	//mainList
     ListView {
         id: mainList
 
