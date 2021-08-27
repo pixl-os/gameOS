@@ -280,17 +280,17 @@ FocusScope {
 	property var settingsCol: []
 
 	Component.onCompleted: {
-		//for 5 collections to display on showcase (main page)
+		//for 10 collections to display on showcase (main page)
 		//-> possibility to have more in the future for HomePage
 		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
-		addShowcaseSettingsModel(0);//set to zero because only keep the 5 existing ones for the moment
+		addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
 		//generate My collection(s), no limit ;-)
 		initializeMyCollections();
 	}
 
 	function addShowcaseSettingsModel(nb_collections)
 	{
-		var initialCount = showcaseSettingsModel.count;
+		var initialCount = 5;
 		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
 		for(var i = 1; i <= nb_collections; ++i) {
 			showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),"setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"});
@@ -384,6 +384,7 @@ FocusScope {
             font.family: titleFont.name
             font.pixelSize: vpx(30)
             font.bold: true
+			opacity: 1
             horizontalAlignment: Text.AlignHLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -469,6 +470,8 @@ FocusScope {
 				pagelist.focus = false
 				collectionslist.focus = true
 				displayMyCollectionsHelp(true);
+				headertitleCollections.opacity = 1
+				headertitle.opacity = 0.2
 				collectionslist.currentIndex = 0;
 				settingsList.model = myCollections.listmodel;
 			}
@@ -519,6 +522,7 @@ FocusScope {
             font.family: titleFont.name
             font.pixelSize: vpx(30)
             font.bold: true
+			opacity: 0.2
             horizontalAlignment: Text.AlignHLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -527,8 +531,7 @@ FocusScope {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    //Add collection
-		    //TO DO
+					//TO DO // NO ACTION for the moment
                 }
             }
         }
@@ -617,6 +620,8 @@ FocusScope {
 			{
 				collectionslist.focus = false;
 				displayMyCollectionsHelp(false);
+				headertitleCollections.opacity = 0.2
+				headertitle.opacity = 1				
 				pagelist.focus = true;
 				settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
 			}
@@ -932,13 +937,13 @@ FocusScope {
     Connections {
         target: collectionDeletionDialogBoxLoader.item
 		function onAccept() {
-			console.log("Collection deleted !");			
+			//console.log("Collection deleted !");			
 			//delete last collection
 			deleteLastCollection();
 			collectionslist.focus = true; 
 		}
         function onCancel() {
-			console.log("Collection kept !");		
+			//console.log("Collection kept !");		
 			collectionslist.focus = true;
 		}
     }	

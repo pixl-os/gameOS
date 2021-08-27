@@ -24,7 +24,7 @@
 var randomletters = "";
 var randomrates = "";
 var randomhashletters = "";
-var collections = [];
+
 //UTILS FUNCTIONS for filtering (for 'recommended' gamelist)
 function generateRandomRate(min, max)
 {

@@ -40,128 +40,10 @@ FocusScope {
     ListAllGames    { id: listAllGames;    max: settings.ShowcaseColumns }
     ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
 
-    //Use loader to load asynchronously the 'custom' lists now.
-/*     property alias listLastPlayed: listLastPlayedLoader.item
-    Loader {
-        id: listLastPlayedLoader
-        source: isCollectionTypeRequested("Recently Played") ? "../Lists/ListLastPlayed.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            if (listLastPlayedLoader.status === Loader.Loading) {
-                if(!listLastPlayedLoader.measuring){
-                    console.time("listLastPlayedLoader")
-                    listLastPlayedLoader.measuring = true;
-                }
-            }
-
-            if (listLastPlayedLoader.status === Loader.Ready) {
-                listLastPlayed.max = settings.ShowcaseColumns;
-                console.timeEnd("listLastPlayedLoader")
-                listLastPlayedLoader.measuring = false
-            }
-        }
-        active: isCollectionTypeRequested("Recently Played");
-    }
-
-    property alias listMostPlayed: listMostPlayedLoader.item
-    Loader {
-        id: listMostPlayedLoader
-        source: isCollectionTypeRequested("Most Played") ? "../Lists/ListMostPlayed.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            if (listMostPlayedLoader.status === Loader.Loading) {
-                if(!listMostPlayedLoader.measuring){
-                    console.time("listMostPlayedLoader")
-                    listMostPlayedLoader.measuring = true;
-                }
-            }
-
-            if (listMostPlayedLoader.status === Loader.Ready) {
-                listMostPlayed.max = settings.ShowcaseColumns;
-                console.timeEnd("listMostPlayedLoader")
-                listMostPlayedLoader.measuring=false
-            }
-        }
-        active: isCollectionTypeRequested("Most Played");
-    }
-
-    property alias listRecommended: listRecommendedLoader.item
-    Loader {
-        id: listRecommendedLoader
-        source: isCollectionTypeRequested("Recommended") ? "../Lists/ListRecommended.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            if (listRecommendedLoader.status === Loader.Loading) {
-                if(!listRecommendedLoader.measuring){
-                    console.time("listRecommendedLoader")
-                    listRecommendedLoader.measuring = true;
-                }
-            }
-
-            if (listRecommendedLoader.status === Loader.Ready) {
-                listRecommended.max = settings.ShowcaseColumns;
-                console.timeEnd("listRecommendedLoader")
-                listRecommendedLoader.measuring = false;
-            }
-        }
-        active: isCollectionTypeRequested("Recommended");
-    }
-
-    property alias listPublisher: listPublisherLoader.item
-    Loader {
-        id: listPublisherLoader
-        source: isCollectionTypeRequested("Top by Publisher") ? "../Lists/ListPublisher.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            if (listPublisherLoader.status === Loader.Loading) {
-                if(!listPublisherLoader.measuring){
-                    console.time("listPublisherLoader");
-                    listPublisherLoader.measuring = true;
-                }
-            }
-
-            if (listPublisherLoader.status === Loader.Ready) {
-                listPublisher.publisher = randoPub;
-                listPublisher.max = settings.ShowcaseColumns;
-                console.timeEnd("listPublisherLoader");
-                listPublisherLoader.measuring = false;
-            }
-        }
-        active: isCollectionTypeRequested("Top by Publisher");
-    }
-
-    property alias listGenre: listGenreLoader.item
-    Loader {
-        id: listGenreLoader
-        source: isCollectionTypeRequested("Top by Genre") ? "../Lists/ListGenre.qml" : ""
-        asynchronous: true
-        property bool measuring: false
-        onStatusChanged:{
-            if (listGenreLoader.status === Loader.Loading) {
-                if(!listGenreLoader.measuring){
-                    console.time("listGenreLoader");
-                    listGenreLoader.measuring = true;
-                }
-            }
-
-            if (listGenreLoader.status === Loader.Ready) {
-                listGenre.max = settings.ShowcaseColumns;
-                listGenre.genre = randoGenre;
-                console.timeEnd("listGenreLoader");
-                listGenreLoader.measuring = false;
-            }
-        }
-        active: isCollectionTypeRequested("Top by Genre");
-    } */
-
 	//Repeater to manage loading of lists dynamically and without limits in the future
 	Repeater{
 		id: repeater
-		model: 5 // 5 is the maximum of list loaded dynamically for the moment 
+		model: 10 // 5 is the maximum of list loaded dynamically for the moment 
 		//still to find a solution for "HorizontalCollection" loading dynamically
 		//that's why we can't change the number dynamically for the moment
 		//warning: index start from 0 but Colletions from 1
@@ -184,22 +66,27 @@ FocusScope {
 				*/
 				if (listLoader.status === Loader.Loading) {
 					if(!listLoader.measuring){
-						console.time("listLoader: " + (index+1));
+						console.time("listLoader - Collection " + (index + 1));
 						listLoader.measuring = true;
 					}
 				}
 
 				if (listLoader.status === Loader.Ready) {
-					//listMyCollection.max = settings.ShowcaseColumns;
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
-					console.log("listLoader.listType: ",listType);
+					//console.log("listLoader.listType: ",listType);
 					if(listType.includes("My Collection"))
 					{
 						listLoader.item.collectionName = api.memory.get(listType + " - collection name");
 						listLoader.item.filter = api.memory.get(listType + " - filter/keyword for search");
 					}
+					else
+					{
+						if (listType.includes("None")) listLoader.item.max = 0;
+						else listLoader.item.max = settings.ShowcaseColumns;
+					}
+					
 					setCollectionFromIndex((index+1));
-					console.timeEnd("listLoader: " + (index + 1));
+					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
 				}
 			}
@@ -214,13 +101,18 @@ FocusScope {
     property var collection3
     property var collection4
     property var collection5
-
+	property var collection6
+    property var collection7
+    property var collection8
+    property var collection9
+    property var collection10
+	
 	//Function to get the list type of a collection from index in main list of collections
 	function getListTypeFromIndex(index)
 	{
 		let listType;
 		//for existing pre-configured lists (keep hardcoded way for the 5 first collections to benefit default value predefined for this theme, for first launching)
-		console.log("index:",index);
+		//console.log("index:",index);
 		if(index <= 5)
 		{
 			switch (index) {
@@ -244,15 +136,18 @@ FocusScope {
 		// for the potential other ones not "hardcoded" and to be more flexible for a future menu/view "Colletions"
 		else
 		{
-			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "";
+			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "None";
 		}
-		console.log("listType: ",listType);
+		
+		if (listType === "") listType = "None";
+		
+		//console.log("listType: ",listType);
 		//To manage types using index in collections type as "My Coleltions 1", "My Collections 2", etc...
 		if(listType.includes("My Collection"))
 		{
 			listType = "My Collection";
 		}
-		console.log("listType: ",listType);
+		//console.log("listType: ",listType);
 		return listType;
 	}
 
@@ -261,7 +156,7 @@ FocusScope {
 	{
 		let thumbnail;
 		//for existing pre-configured lists (keep hardcoded way for the 5 first collections to benefit default value predefined for this theme, for first launching)
-		console.log("index:",index);
+		//console.log("index:",index);
 		if(index <= 5)
 		{
 			switch (index) {
@@ -287,7 +182,7 @@ FocusScope {
 		{
 			thumbnail = api.memory.has("Collection " + index + " - Thumbnail") ? api.memory.get("Collection " + index + " - Thumbnail") : "Wide"
 		}
-		console.log("thumbnail: ",thumbnail);
+		//console.log("thumbnail: ",thumbnail);
 		return thumbnail;
 	}
 	
@@ -323,7 +218,7 @@ FocusScope {
 				qmlFileToUse = "../Lists/ListMyCollection.qml";
 				break;
 			case "None":
-				qmlFileToUse = "";
+				qmlFileToUse = "../Lists/ListAllGames.qml";
 				break;
 			default:
 				qmlFileToUse = "";
@@ -331,17 +226,6 @@ FocusScope {
 		}
 		
 		return qmlFileToUse;
-	}
-
-	//Function to confirm qml file loading from type (Deprecated)
-	function isCollectionTypeRequested(collectionName)
-	{
-		if(settings.ShowcaseCollection1.includes(collectionName)) return true;
-		if(settings.ShowcaseCollection2.includes(collectionName)) return true;
-		if(settings.ShowcaseCollection3.includes(collectionName)) return true;
-		if(settings.ShowcaseCollection4.includes(collectionName)) return true;
-		if(settings.ShowcaseCollection5.includes(collectionName)) return true;
-		return false;
 	}
 
 	//Function to set Collection Details from index in the main list of horizontal collection
@@ -376,43 +260,19 @@ FocusScope {
         collection.height = collection.itemHeight + vpx(40) + globalMargin
 
         switch (collectionType) {
-/*      case "Favorites":
-            collection.search = listFavorites;
-            break;
-        case "Recently Played":
-            collection.search = listLastPlayed;
-            break;
-        case "Most Played":
-            collection.search = listMostPlayed;
-            break;
-        case "Recommended":
-            collection.search = listRecommended;
-            break;
-        case "Top by Publisher":
-            collection.search = listPublisher;
-            break;
-        case "Top by Genre":
-            collection.search = listGenre;
-            break; */
         case "None":
             collection.enabled = false;
             collection.height = 0;
             collection.search = listNone;
             break;
-        // case "My Collection":
-			// console.log("My Collection");
-            ////collection.search = listMyCollection; 
-			// collection.search = repeater.itemAt(index-1).item;
-            // break;
 		default:
-            //collection.search = listAllGames;
 			collection.search = repeater.itemAt(index-1).item;
             break;
         }
 
         collection.title = collection.search.collection.name;
 		
-		//To change in the future : but for the moment it's blocked to 5 collections on main page
+		//To change in the future : but for the moment it's blocked to 10 collections on main page
 		switch (index) {
 		case 1:
 			collection1  = collection;
@@ -429,73 +289,23 @@ FocusScope {
 		case 5:
 			collection5  = collection;
 		break;
+		case 6:
+			collection6  = collection;
+		break;
+		case 7:
+			collection7  = collection;
+		break;
+		case 8:
+			collection8  = collection;
+		break;
+		case 9:
+			collection9  = collection;
+		break;
+		case 10:
+			collection10  = collection;
+		break;
 		}
-		return collection;
-    }
 
-    function getCollection(collectionName, collectionThumbnail) {
-        var collection = {
-            enabled: true,
-        };
-
-        var width = root.width - globalMargin * 2;
-
-        switch (collectionThumbnail) {
-        case "Square":
-            collection.itemWidth = (width / 6.0);
-            collection.itemHeight = collection.itemWidth;
-            break;
-        case "Tall":
-            collection.itemWidth = (width / 8.0);
-            collection.itemHeight = collection.itemWidth / settings.TallRatio;
-            break;
-        case "Wide":
-        default:
-            collection.itemWidth = (width / 4.0);
-            collection.itemHeight = collection.itemWidth * settings.WideRatio;
-            break;
-
-        }
-
-        collection.height = collection.itemHeight + vpx(40) + globalMargin
-
-        switch (collectionName) {
-        case "Favorites":
-            collection.search = listFavorites;
-            break;
-        case "Recently Played":
-            collection.search = listLastPlayed;
-            break;
-        case "Most Played":
-            collection.search = listMostPlayed;
-            break;
-        case "Recommended":
-            collection.search = listRecommended;
-            break;
-        case "Top by Publisher":
-            collection.search = listPublisher;
-            break;
-        case "Top by Genre":
-            collection.search = listGenre;
-            break;
-        case "None":
-            collection.enabled = false;
-            collection.height = 0;
-
-            collection.search = listNone;
-            break;
-        case "My Collection 1":
-			console.log("My Collection 1");
-            //collection.search = listMyCollection; 
-	    collection.search = repeater.itemAt(0).item;
-            break;
-		default:
-            collection.search = listAllGames;
-            break;
-        }
-
-        collection.title = collection.search.collection.name;
-        return collection;
     }
 
     property bool ftue: featuredCollection.games.count == 0
@@ -1003,7 +813,7 @@ FocusScope {
             itemHeight: collection.itemHeight
 
             title: {
-				console.log("collection.title:",collection.title);
+				//console.log("collection.title:",collection.title);
 				return collection.title;
 			}
             search: collection.search
@@ -1150,6 +960,165 @@ FocusScope {
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
         }
 
+		//sixth list
+        HorizontalCollection {
+            id: list6
+            property bool selected: ListView.isCurrentItem
+            property var currentList: list6
+            property var collection: collection6
+
+            enabled: collection.enabled
+            visible: collection.enabled
+
+            height: collection.height
+
+            itemWidth: collection.itemWidth
+            itemHeight: collection.itemHeight
+
+            title: collection.title
+            search: collection.search
+
+            focus: selected
+            width: root.width - globalMargin * 2
+            x: globalMargin - vpx(8)
+
+            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
+            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+        }
+
+		//seventh list
+        HorizontalCollection {
+            id: list7
+            property bool selected: ListView.isCurrentItem
+            property var currentList: list7
+            property var collection: collection7
+
+            enabled: collection.enabled
+            visible: collection.enabled
+
+            height: collection.height
+
+            itemWidth: collection.itemWidth
+            itemHeight: collection.itemHeight
+
+            title: collection.title
+            search: collection.search
+
+            focus: selected
+            width: root.width - globalMargin * 2
+            x: globalMargin - vpx(8)
+
+            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
+            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+        }
+
+		//eighth list
+        HorizontalCollection {
+            id: list8
+            property bool selected: ListView.isCurrentItem
+            property var currentList: list8
+            property var collection: collection8
+
+            enabled: collection.enabled
+            visible: collection.enabled
+
+            height: collection.height
+
+            itemWidth: collection.itemWidth
+            itemHeight: collection.itemHeight
+
+            title: collection.title
+            search: collection.search
+
+            focus: selected
+            width: root.width - globalMargin * 2
+            x: globalMargin - vpx(8)
+
+            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
+            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+        }
+
+		//nineth list
+        HorizontalCollection {
+            id: list9
+            property bool selected: ListView.isCurrentItem
+            property var currentList: list9
+            property var collection: collection9
+
+            enabled: collection.enabled
+            visible: collection.enabled
+
+            height: collection.height
+
+            itemWidth: collection.itemWidth
+            itemHeight: collection.itemHeight
+
+            title: collection.title
+            search: collection.search
+
+            focus: selected
+            width: root.width - globalMargin * 2
+            x: globalMargin - vpx(8)
+
+            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
+            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+        }
+
+		//tenth list
+        HorizontalCollection {
+            id: list10
+            property bool selected: ListView.isCurrentItem
+            property var currentList: list10
+            property var collection: collection10
+
+            enabled: collection.enabled
+            visible: collection.enabled
+
+            height: collection.height
+
+            itemWidth: collection.itemWidth
+            itemHeight: collection.itemHeight
+
+            title: collection.title
+            search: collection.search
+
+            focus: selected
+            width: root.width - globalMargin * 2
+            x: globalMargin - vpx(8)
+
+            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+            onActivateSelected: {
+				videoToStop = true;
+				storedHomeSecondaryIndex = currentIndex;
+			}
+            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+        }
     }
 
 	//mainList
