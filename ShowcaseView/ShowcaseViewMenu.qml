@@ -198,25 +198,7 @@ FocusScope {
 						listLoader.item.collectionName = api.memory.get(listType + " - collection name");
 						listLoader.item.filter = api.memory.get(listType + " - filter/keyword for search");
 					}
-					
-					//To change
-					//collection1 = getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail);
-					if ((index+1) === 1) {
-						collection1  = getCollectionFromIndex((index+1));
-						console.log("collection1.title:",collection1.title);
-						collections[0] = getCollectionFromIndex((index+1));;
-						console.log("collections[0].title:",collections[0].title);
-						
-					}
-					
-					//console.log("collection1:",collection1);
-					//collection = getCollectionFromIndex((index+1));
-					//Utils.collections[index].push(collection);
-					//var collection = getCollectionFromIndex((index+1));
-					//collections[index].push(getCollectionFromIndex(index+1));
-					
-					//console.log("collections["+index+"]:",Utils.collections[index]);
-					
+					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader: " + (index + 1));
 					listLoader.measuring = false;
 				}
@@ -227,12 +209,11 @@ FocusScope {
 
     property var featuredCollection: listFavorites
 	
-	property var collections: [];
-    property var collection1 //: getCollection(settings.ShowcaseCollection1, settings.ShowcaseCollection1_Thumbnail)
-    property var collection2 //: getCollection(settings.ShowcaseCollection2, settings.ShowcaseCollection2_Thumbnail)
-    property var collection3 //: getCollection(settings.ShowcaseCollection3, settings.ShowcaseCollection3_Thumbnail)
-    property var collection4 //: getCollection(settings.ShowcaseCollection4, settings.ShowcaseCollection4_Thumbnail)
-    property var collection5 //: getCollection(settings.ShowcaseCollection5, settings.ShowcaseCollection5_Thumbnail)
+	property var collection1
+    property var collection2
+    property var collection3
+    property var collection4
+    property var collection5
 
 	//Function to get the list type of a collection from index in main list of collections
 	function getListTypeFromIndex(index)
@@ -363,8 +344,8 @@ FocusScope {
 		return false;
 	}
 
-	//Function to get Collection Details from index in the main list of horizontal collection
-    function getCollectionFromIndex(index) //index from 1 to...
+	//Function to set Collection Details from index in the main list of horizontal collection
+    function setCollectionFromIndex(index) //index from 1 to... 5 for the moment (due to constraint to hardcode :-( )
 	{
 		var collectionType = getListTypeFromIndex(index);		
 		var collectionThumbnail = getThumbnailFromIndex(index);	
@@ -430,7 +411,26 @@ FocusScope {
         }
 
         collection.title = collection.search.collection.name;
-        return collection;
+		
+		//To change in the future : but for the moment it's blocked to 5 collections on main page
+		switch (index) {
+		case 1:
+			collection1  = collection;
+		break;
+		case 2:
+			collection2  = collection;
+		break;
+		case 3:
+			collection3  = collection;
+		break;
+		case 4:
+			collection4  = collection;
+		break;
+		case 5:
+			collection5  = collection;
+		break;
+		}
+		return collection;
     }
 
     function getCollection(collectionName, collectionThumbnail) {
@@ -992,7 +992,7 @@ FocusScope {
             id: list1
             property bool selected: ListView.isCurrentItem
             property var currentList: list1
-            property var collection: collection1 //collections[0].object; //Utils.collections[0]; //collections[0] // collection1 //
+            property var collection: collection1
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -1027,7 +1027,7 @@ FocusScope {
             id: list2
             property bool selected: ListView.isCurrentItem
             property var currentList: list2
-            property var collection: collections[1]
+            property var collection: collection2
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -1059,7 +1059,7 @@ FocusScope {
             id: list3
             property bool selected: ListView.isCurrentItem
             property var currentList: list3
-            property var collection: collections[2]
+            property var collection: collection3
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -1091,7 +1091,7 @@ FocusScope {
             id: list4
             property bool selected: ListView.isCurrentItem
             property var currentList: list4
-            property var collection: collections[3]
+            property var collection: collection4
 
             enabled: collection.enabled
             visible: collection.enabled
@@ -1123,7 +1123,7 @@ FocusScope {
             id: list5
             property bool selected: ListView.isCurrentItem
             property var currentList: list5
-            property var collection: collections[4]
+            property var collection: collection5
 
             enabled: collection.enabled
             visible: collection.enabled
