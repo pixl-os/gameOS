@@ -229,19 +229,29 @@ FocusScope {
     ListModel {
         id: myCollectionsSettingsModel
         ListElement {
-            settingName: "collection name"
+            settingName: "Collection name"
+            setting: "to edit"
+        }
+//for later when menu for all collections will be available		
+/*      ListElement {
+            settingName: "Collection icon"
+            setting: "idea: to select from share icons directory"
+        }*/		
+//for later when menu for all collections will be available		
+/*      ListElement {
+            settingName: "Collection Thumbnail"
+            setting: "Wide,Tall,Square"
+        }*/
+        ListElement {
+            settingName: "Name filter"
             setting: "to edit"
         }
         ListElement {
-            settingName: "filter/keyword for search"
+            settingName: "Region/Country filter"
             setting: "to edit"
         }		
-        // ListElement {
-            // settingName: "My Collection 1 - icon"
-            // setting: "idea: to select from share icons directory"
-        // }
         ListElement {
-            settingName: "Nb Players"
+            settingName: "Nb players"
             setting: "1,1+,2,2+,3,3+,4,4+,5"
         }
         ListElement {
@@ -249,24 +259,28 @@ FocusScope {
             setting: "All,10/10,9+/10,8+/10,7+/10,6+/10,5+/10,4+/10,3+/10,2+/10,1+/10,0/10,no rate"
         }		
         ListElement {
-            settingName: "Genre"
+            settingName: "Genre filter"
             setting: "to edit"
         }
         ListElement {
-            settingName: "Publisher"
+            settingName: "Publisher filter"
             setting: "to edit"
         }
         ListElement {
-            settingName: "Region/Country"
+            settingName: "Developer filter"
             setting: "to edit"
-        }		
+        }
         ListElement {
-            settingName: "System"
+            settingName: "System filter"
             setting: "to edit"
-        }		
+        }
         ListElement {
-            settingName: "Thumbnail"
-            setting: "Wide,Tall,Square"
+            settingName: "File name filter"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Release date filter"
+            setting: "to edit"
         }
     }
 
@@ -304,10 +318,10 @@ FocusScope {
 		let value = "";
 		do{
 
-			value = (api.memory.get("My Collection " + i + " - collection name")) ? api.memory.get("My Collection " + i + " - collection name") : "";
+			value = (api.memory.get("My Collection " + i + " - Collection name")) ? api.memory.get("My Collection " + i + " - Collection name") : "";
 			if (value !== "")
 			{
-				//console.log("My Collection " + i + " - collection name");
+				//console.log("My Collection " + i + " - Collection name");
 				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
 				var f = 1;
 				for(var j = 0; j < showcaseSettingsModel.count; ++j) {
@@ -335,6 +349,8 @@ FocusScope {
 		settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
 		//Set of model to force binding
 		collectionslist.model = settingsCol;
+		collectionslist.currentIndex = collectionslist.count - 1;
+		settingsList.model = myCollections.listmodel;
 	}
 
 	function deleteLastCollection()
@@ -344,6 +360,9 @@ FocusScope {
 		settingsCol.length = i - 1;
 		//Set of model to force binding
 		collectionslist.model = settingsCol;
+		//if 0 or less, no settingslist should be valid
+		if(collectionslist.count <= 0) settingsList.model = null;
+		else collectionslist.currentIndex = collectionslist.count - 1;
 	}	
 	
 
@@ -473,9 +492,14 @@ FocusScope {
 				headertitleCollections.opacity = 1
 				headertitle.opacity = 0.2
 				collectionslist.currentIndex = 0;
-				settingsList.model = myCollections.listmodel;
+				if(collectionslist.count!=0) settingsList.model = myCollections.listmodel;
+				else settingsList.model = null;
+				
 			}
-			else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+			else 
+			{
+				settingsList.model = settingsArr[pagelist.currentIndex].listmodel;	
+			}
  		}
         Keys.onPressed: {
             // Accept
@@ -625,13 +649,18 @@ FocusScope {
 				pagelist.focus = true;
 				settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
 			}
-			else settingsList.model = myCollections.listmodel;
+			else 
+			{
+				if(collectionslist.count!=0) settingsList.model = myCollections.listmodel;
+				else settingsList.model = null;
+			}
 			//reset index of listview for settingsList
 			settingsList.currentIndex = 0;
 		}
         Keys.onDownPressed: { 
 			sfxNav.play(); incrementCurrentIndex();
-			settingsList.model = myCollections.listmodel;
+			if(collectionslist.count!=0) settingsList.model = myCollections.listmodel;
+			else settingsList.model = null;
 			//reset index of listview for settingsList
 			settingsList.currentIndex = 0;			
 		}
@@ -640,7 +669,7 @@ FocusScope {
             if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                 event.accepted = true;
                 sfxAccept.play();
-                settingsList.focus = true;
+				if (settingsList.model !== null) settingsList.focus = true;
             }
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
@@ -659,13 +688,17 @@ FocusScope {
 			// Remove 'last' collection
 		    if (api.keys.isDetails(event) && !event.isAutoRepeat) {
 		        event.accepted = true;
-				//confirm deletion
-				var i = settingsCol.length;
-				collectionDeletionDialogBoxLoader.item.title = "Delete " + "'My Collection " + i + "'";
-				collectionDeletionDialogBoxLoader.item.message = "You are deleting this collection...\n\n" 
-																+ "name: " + api.memory.get("My Collection " + i + " - collection name") + "\n"
-																+ "filter/keyword: " +api.memory.get("My Collection " + i + " - filter/keyword for search"); 
-				collectionDeletionDialogBoxLoader.focus = true;
+				//delete only if any collection has been created
+				if(collectionslist.count >= 1)
+				{
+					//confirm deletion
+					var i = settingsCol.length;
+					collectionDeletionDialogBoxLoader.item.title = "Delete " + "'My Collection " + i + "'";
+					collectionDeletionDialogBoxLoader.item.message = "You are deleting this collection...\n\n" 
+																	+ "Collection name: " + api.memory.get("My Collection " + i + " - Collection name") + "\n"
+																	+ "Name filter: " +api.memory.get("My Collection " + i + " - Name filter"); 
+					collectionDeletionDialogBoxLoader.focus = true;
+				}
 		    } 			
 			
         }

@@ -76,8 +76,16 @@ FocusScope {
 					//console.log("listLoader.listType: ",listType);
 					if(listType.includes("My Collection"))
 					{
-						listLoader.item.collectionName = api.memory.get(listType + " - collection name");
-						listLoader.item.filter = api.memory.get(listType + " - filter/keyword for search");
+						listLoader.item.collectionName = api.memory.get(listType + " - Collection name");
+						listLoader.item.filter = api.memory.get(listType + " - Name filter");
+						listLoader.item.region = api.memory.get(listType + " - Region/Country filter");
+						listLoader.item.nb_players = api.memory.get(listType + " - Nb players");
+						listLoader.item.rating = api.memory.get(listType + " - Rating");
+						listLoader.item.genre = api.memory.get(listType + " - Genre filter");
+						listLoader.item.publisher = api.memory.get(listType + " - Publisher filter");
+						listLoader.item.developer = api.memory.get(listType + " - Developer filter");
+						listLoader.item.system = api.memory.get(listType + " - System filter");
+						listLoader.item.release = api.memory.get(listType + " - Release date filter");
 					}
 					else
 					{

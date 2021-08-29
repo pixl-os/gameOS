@@ -13,23 +13,45 @@ Item {
 
     readonly property var games: gamesFiltered;
     function currentGame(index) { return api.allGames.get(gamesMyCollection.mapToSource(index)) }
-    property int max: gamesMyCollection.count;
+    
+	//number of games
+	property int max: gamesMyCollection.count;
+	
+	//name of the collection
 	property var collectionName: ""
+	
+	//filter on "title"
 	property var filter: ""
-	property var region: "europe"
+	property var region: ""
+	//example of value:
+	//	"europe|USA" to have 2 regions
+	//	"fr" french and france and fr ones ;-)
+	
+	//filter using lists
+	property var nb_players: ""
+	property var rating: ""
+	
+	//additional filters
+	property var genre: ""
+	property var publisher: ""
+	property var developer: ""
+	property var system: ""
+	property var release: ""
 	
     //FILTERING
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel: api.allGames
         filters: [
-             RegExpFilter { roleName: "title"; pattern: filter ; caseSensitivity: Qt.CaseInsensitive; enabled: true}//,
-			//RegExpFilter { roleName: "title"; pattern: ".*" + "(" + ")" + ".*" + "(fr)"; caseSensitivity: Qt.CaseInsensitive;}
+			 RegExpFilter { roleName: "title"; pattern: ".*(" + filter + ").*(" + region +")" ; caseSensitivity: Qt.CaseInsensitive; enabled: true}
+			 //,
+			 //RegExpFilter { roleName: "title"; pattern: region ; caseSensitivity: Qt.CaseInsensitive; enabled: true}
+			 //RegExpFilter { roleName: "title"; pattern: ".*" + "(" + ")" + ".*" + "(fr)"; caseSensitivity: Qt.CaseInsensitive;}
         ]
         //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-        sorters: [
+        /*sorters: [
             RoleSorter { roleName: sortByFilter[sortByIndex]; sortOrder: orderBy }
-        ]        
+        ]*/        
 		//filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
     }
 
@@ -41,7 +63,7 @@ Item {
 
     property var collection: {
         return {
-            name:       collectionName,
+            name:       collectionName + " : " + gamesFiltered.count + " game(s)",
             shortName:  "mycollection",
             games:      gamesFiltered
         }
