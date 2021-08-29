@@ -60,6 +60,10 @@ FocusScope {
             setting: "No,Yes"
         }
         ListElement {
+            settingName: "Help buttons style"
+            setting: "Gamepad,Arcade"
+        }
+        ListElement {
             settingName: "Hide Clock"
             setting: "No,Yes"
         }

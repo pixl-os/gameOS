@@ -51,6 +51,7 @@ FocusScope {
             AllowThumbVideoAudio:          api.memory.has("Play video thumbnail audio") ? api.memory.get("Play video thumbnail audio") : "No",
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
+            HelpButtonsStyle:              api.memory.has("Help buttons style") ? api.memory.get("Help buttons style") : "Gamepad",
             HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
             ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
