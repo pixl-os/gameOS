@@ -26,7 +26,8 @@ Item {
 			visible: true
             spacing: 10
             Image {
-                source: "../assets/images/controller/" + processButtonArt(button) + ".png"
+                source: if (settings.HelpButtonsStyle === "Arcade") { "../assets/images/controller/" + processButtonArt(button) + "-arcade.png";
+                    } else { "../assets/images/controller/" + processButtonArt(button) + ".png"; }
                 width: vpx(30)
                 height: vpx(30)
                 asynchronous: true
