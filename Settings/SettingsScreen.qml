@@ -286,6 +286,10 @@ FocusScope {
             settingName: "Release date filter"
             setting: "to edit"
         }
+        ListElement {
+            settingName: "Exclusion filter"
+            setting: "to edit"
+        }
     }
 
      property var myCollections: {

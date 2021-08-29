@@ -86,6 +86,7 @@ FocusScope {
 						listLoader.item.developer = api.memory.get(listType + " - Developer filter");
 						listLoader.item.system = api.memory.get(listType + " - System filter");
 						listLoader.item.release = api.memory.get(listType + " - Release date filter");
+						listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
 					}
 					else
 					{
