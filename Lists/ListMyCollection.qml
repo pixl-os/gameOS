@@ -5,51 +5,38 @@
 
 import QtQuick 2.12
 import SortFilterProxyModel 0.2
-//import "../utils.js" as Utils
-
 
 Item {
     id: root
 
-    readonly property var games: gamesFiltered;
+    readonly property var games: gamesMyCollection
     function currentGame(index) { 
-/* 		for (var i = 0; i < api.collections.count; i++) {
-			console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
-			if (api.collections.get(i).shortName === system) {
-				console.log("system: ",system);
-				return api.collections.get(i).games.get(gamesMyCollection.mapToSource(index));
-			}
-		}
-		//if not found
-		return api.allGames.get(gamesMyCollection.mapToSource(index)); */
 		return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
 	}	
-	
-	//return api.allGames.get(gamesMyCollection.mapToSource(index)) }
-    
-	//number of games
-	property int max: gamesMyCollection.count;
-	
+
 	//name of the collection
 	property var collectionName: ""
 	
 	//filter on "title"
 	property var filter: ""
+	property var titleToFilter: (filter === "") ? false : true
+	
 	property var region: ""
-	property var titleToFilter: (filter === "" && region === "") ? false : true
+	property var regionToFilter: (region === "") ? false : true
 	//example of region:
 	//	"europe|USA" to have 2 regions
 	//	"fr" french and france and fr ones ;-)
 	
-	property var exclusion: ""
-	//example of exclusion:
-	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
-	
-	property var toExclude: (exclusion === "") ? false : true
-	
-	//filter using lists
+	//filter using lists for nb players
 	property var nb_players: ""
-	property var rating: ""
+	property var nb_playersToFilter: (nb_players === "1+") ? false : true
+	property var minimumNb_players : nb_players.replace("+","")
+	property var maximumNb_players: nb_players.includes("+") ? 5 : minimumNb_players
+	
+	//filter using lists for rating
+	property var rating: "1.0"
+	property var ratingToFilter: (rating === "All") ? false : true
+	property var minimumRating : (rating !== "All") ? parseFloat(rating.replace("+","")) : 1.0
 	
 	//additional filters
 	property var genre: ""
@@ -72,54 +59,52 @@ Item {
 	//example of system:
 	//	"nes|snes"
 	
+	property var filename: ""
+	property var filenameToFilter: (filename === "") ? false : true
+	
 	property var release: ""
 	property var releaseToFilter: (release === "") ? false : true
 	
+	property var exclusion: ""
+	//example of exclusion:
+	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
+	property var toExclude: (exclusion === "") ? false : true
 	
     //FILTERING
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
 			for (var i = 0; i < api.collections.count; i++) {
-				console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
+				//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
 				if (api.collections.get(i).shortName === system) {
-					console.log("system: ",system);
+					//console.log("system: ",system);
 					return api.collections.get(i).games
 				}
 			}
 			//if not found
 			return api.allGames;
 		}
-			
+	
         filters: [
-			 RegExpFilter { roleName: "title"; pattern: ".*(" + filter + ").*(" + region +")" ; caseSensitivity: Qt.CaseInsensitive; enabled: titleToFilter},
-			 RegExpFilter { roleName: "genre"; pattern: ".*(" + genre + ")" ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter},
-			 RegExpFilter { roleName: "publisher"; pattern: ".*(" + publisher + ")" ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter},
-			 RegExpFilter { roleName: "developer"; pattern: ".*(" + developer + ")" ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter},
-			 //RegExpFilter { roleName: "collection"; pattern: ".*(" + system + ")" ; caseSensitivity: Qt.CaseInsensitive; enabled: systemToFilter},
-			 RegExpFilter { roleName: "title"; pattern: ".*(" + exclusion + ")" ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude}
-			 
-			 
-			 //RegExpFilter { roleName: "title"; pattern: ".*" + "(" + ")" + ".*" + "(fr)"; caseSensitivity: Qt.CaseInsensitive;}
-        ]
+			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
+			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
+			RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter},
+			RangeFilter { roleName: "players"; minimumValue: minimumNb_players ; maximumValue: maximumNb_players; enabled: nb_playersToFilter},
+			RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter},
+			RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter},
+			RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter},
+			RegExpFilter { roleName: "release"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
+			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
+			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
+		//sorters are slow that why it is deactivated for the moment
         //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-        /*sorters: [
-            RoleSorter { roleName: sortByFilter[sortByIndex]; sortOrder: orderBy }
-        ]*/        
-		//filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
-    }
-
-    SortFilterProxyModel {
-        id: gamesFiltered
-        sourceModel: gamesMyCollection
-        filters: IndexFilter { maximumIndex: max - 1 }
     }
 
     property var collection: {
         return {
-            name:       collectionName + " : " + gamesFiltered.count + " game(s)",
+            name:       collectionName + " : " + gamesMyCollection.count + " game(s)",
             shortName:  "mycollection",
-            games:      gamesFiltered
+            games:      gamesMyCollection
         }
     }
 }

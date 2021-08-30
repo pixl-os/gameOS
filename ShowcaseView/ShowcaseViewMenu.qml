@@ -76,16 +76,17 @@ FocusScope {
 					//console.log("listLoader.listType: ",listType);
 					if(listType.includes("My Collection"))
 					{
-						listLoader.item.collectionName = api.memory.get(listType + " - Collection name");
-						listLoader.item.filter = api.memory.get(listType + " - Name filter");
-						listLoader.item.region = api.memory.get(listType + " - Region/Country filter");
-						listLoader.item.nb_players = api.memory.get(listType + " - Nb players");
-						listLoader.item.rating = api.memory.get(listType + " - Rating");
-						listLoader.item.genre = api.memory.get(listType + " - Genre filter");
-						listLoader.item.publisher = api.memory.get(listType + " - Publisher filter");
-						listLoader.item.developer = api.memory.get(listType + " - Developer filter");
-						listLoader.item.system = api.memory.get(listType + " - System filter");
-						listLoader.item.release = api.memory.get(listType + " - Release date filter");
+						listLoader.item.collectionName = api.memory.has(listType + " - Collection name") ? api.memory.get(listType + " - Collection name") : "no name :-(";
+						listLoader.item.filter = api.memory.has(listType + " - Name filter") ? api.memory.get(listType + " - Name filter") : "";
+						listLoader.item.region = api.memory.has(listType + " - Region/Country filter") ? api.memory.get(listType + " - Region/Country filter") : "";
+						listLoader.item.nb_players = api.memory.has(listType + " - Nb players") ? api.memory.get(listType + " - Nb players") : "1+";
+						listLoader.item.rating = api.memory.has(listType + " - Rating") ? api.memory.get(listType + " - Rating") : "All";
+						listLoader.item.genre = api.memory.has(listType + " - Genre filter") ? api.memory.get(listType + " - Genre filter") : "";
+						listLoader.item.publisher = api.memory.has(listType + " - Publisher filter") ? api.memory.get(listType + " - Publisher filter") : "";
+						listLoader.item.developer = api.memory.has(listType + " - Developer filter") ? api.memory.get(listType + " - Developer filter") : "";
+						listLoader.item.system = api.memory.has(listType + " - System filter") ? api.memory.get(listType + " - System filter") : "";
+						listLoader.item.filename = api.memory.has(listType + " - File name filter") ? api.memory.get(listType + " - File name filter") : "";
+						listLoader.item.release = api.memory.has(listType + " - Release date filter") ? api.memory.get(listType + " - Release date filter") : "";
 						listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
 					}
 					else
