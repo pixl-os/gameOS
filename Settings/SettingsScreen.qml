@@ -218,6 +218,10 @@ FocusScope {
             settingName: "Show scanlines"
             setting: "Yes,No"
         }
+        ListElement {
+            settingName: "Show file name"
+            setting: "No,Yes"
+        }
     }
 
     property var gamePage: {

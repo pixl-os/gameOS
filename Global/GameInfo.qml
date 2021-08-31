@@ -103,7 +103,7 @@ Item {
             height: parent.height
             anchors { left: divider1.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Players78: "
+            text: "Players: "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -169,7 +169,7 @@ Item {
 
     // Meta data
     Item {
-        id: metarow2
+        id: metarow_2
 
         height: vpx(40)
         anchors {
@@ -180,13 +180,13 @@ Item {
 
         // Release box
         Text {
-            id: releasetitle2
+            id: releasetitle
 
             width: contentWidth
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Release Year: "
+            text: "Release year: "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -194,11 +194,11 @@ Item {
         }
 
         Text {
-            id: releasetext2
+            id: releasetext
 
             width: contentWidth
             height: parent.height
-            anchors { left: releasetitle2.right; leftMargin: vpx(5) }
+            anchors { left: releasetitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: gameData ? gameData.releaseYear : ""
             font.pixelSize: vpx(16)
@@ -207,86 +207,54 @@ Item {
         }
 
         Rectangle {
-            id: divider12
+            id: divider1_2
             width: vpx(2)
             anchors {
-                left: releasetext2.right; leftMargin: (25)
+                left: releasetext.right; leftMargin: (25)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
             opacity: 0.2
+			visible: (settings.ShowFilename == "Yes") ? true : false
         }
 
-        // Players box
+        // File name box
         Text {
-            id: playerstitle2
+            id: filenametitle
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider12.right; leftMargin: vpx(25) }
+            anchors { left: divider1_2.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Players78: "
+            text: "File name: "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
             color: theme.accent
+			visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
         Text {
-            id: playerstext2
+            id: filenametext
 
             width: contentWidth
             height: parent.height
-            anchors { left: playerstitle2.right; leftMargin: vpx(5) }
+            anchors { left: filenametitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: gameData ? gameData.players : ""
+            text: {
+				if (gameData){
+					var path = gameData.files.get(0).path;
+					var word = path.split('/');
+					return word[word.length-1];
+				}
+				else return "";
+			}
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
+			visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
-        Rectangle {
-            id: divider22
-            width: vpx(2)
-            anchors {
-                left: playerstext2.right; leftMargin: (25)
-                top: parent.top; topMargin: vpx(10)
-                bottom: parent.bottom; bottomMargin: vpx(10)
-            }
-            opacity: 0.2
-        }
-
-        // Genre box
-        Text {
-            id: genretitle2
-
-            width: contentWidth
-            height: parent.height
-            anchors { left: divider22.right; leftMargin: vpx(25) }
-            verticalAlignment: Text.AlignVCenter
-            text: "Genre: "
-            font.pixelSize: vpx(16)
-            font.family: subtitleFont.name
-            font.bold: true
-            color: theme.accent
-        }
-
-        Text {
-            id: genretext2
-
-            anchors {
-                left: genretitle2.right; leftMargin: vpx(5)
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
-            verticalAlignment: Text.AlignVCenter
-            text: gameData ? gameData.genre : ""
-            font.pixelSize: vpx(16)
-            font.family: subtitleFont.name
-            elide: Text.ElideRight
-            color: theme.text
-        }
     }
 
     // Description
@@ -297,7 +265,7 @@ Item {
         anchors {
             left: parent.left;
             right: parent.right;
-            top: metarow2.bottom
+            top: metarow_2.bottom
             bottom: parent.bottom;
         }
 
