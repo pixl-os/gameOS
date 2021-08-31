@@ -265,7 +265,11 @@ FocusScope {
         ListElement {
             settingName: "Rating"
             setting: "All,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+"
-        }		
+        }
+        ListElement {
+            settingName: "Favorite"
+            setting: "No,Yes"
+        }
         ListElement {
             settingName: "Genre filter"
             setting: "to edit"
@@ -279,7 +283,7 @@ FocusScope {
             setting: "to edit"
         }
         ListElement {
-            settingName: "System filter"
+            settingName: "System"
             setting: "to edit"
         }
         ListElement {
@@ -287,7 +291,7 @@ FocusScope {
             setting: "to edit"
         }
         ListElement {
-            settingName: "Release date filter"
+            settingName: "Release year filter"
             setting: "to edit"
         }
         ListElement {

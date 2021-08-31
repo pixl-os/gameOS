@@ -17,6 +17,10 @@ Item {
 	//name of the collection
 	property var collectionName: ""
 	
+	//filter on favorite
+	property var favorite: "No"
+	property var favoriteToFind: (favorite === "No") ? false : true
+		
 	//filter on "title"
 	property var filter: ""
 	property var titleToFilter: (filter === "") ? false : true
@@ -74,11 +78,13 @@ Item {
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-			for (var i = 0; i < api.collections.count; i++) {
-				//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
-				if (api.collections.get(i).shortName === system) {
-					//console.log("system: ",system);
-					return api.collections.get(i).games
+			if (system !== ""){
+				for (var i = 0; i < api.collections.count; i++) {
+					//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
+					if (api.collections.get(i).shortName === system) {
+						//console.log("system: ",system);
+						return api.collections.get(i).games
+					}
 				}
 			}
 			//if not found
@@ -86,6 +92,7 @@ Item {
 		}
 	
         filters: [
+			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
 			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
 			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
 			RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter},
@@ -93,7 +100,7 @@ Item {
 			RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter},
 			RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter},
 			RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter},
-			RegExpFilter { roleName: "release"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
+			RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
 			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
 			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
 		//sorters are slow that why it is deactivated for the moment

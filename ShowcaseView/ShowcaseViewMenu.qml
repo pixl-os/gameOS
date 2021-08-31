@@ -84,10 +84,12 @@ FocusScope {
 						listLoader.item.genre = api.memory.has(listType + " - Genre filter") ? api.memory.get(listType + " - Genre filter") : "";
 						listLoader.item.publisher = api.memory.has(listType + " - Publisher filter") ? api.memory.get(listType + " - Publisher filter") : "";
 						listLoader.item.developer = api.memory.has(listType + " - Developer filter") ? api.memory.get(listType + " - Developer filter") : "";
-						listLoader.item.system = api.memory.has(listType + " - System filter") ? api.memory.get(listType + " - System filter") : "";
+						listLoader.item.system = api.memory.has(listType + " - System") ? api.memory.get(listType + " - System") : "";
 						listLoader.item.filename = api.memory.has(listType + " - File name filter") ? api.memory.get(listType + " - File name filter") : "";
-						listLoader.item.release = api.memory.has(listType + " - Release date filter") ? api.memory.get(listType + " - Release date filter") : "";
+						listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
 						listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
+						listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
+						
 					}
 					else
 					{
