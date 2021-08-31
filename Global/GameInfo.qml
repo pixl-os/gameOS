@@ -48,7 +48,7 @@ Item {
     Item {
         id: metarow
 
-        height: vpx(50)
+        height: vpx(40)
         anchors {
             top: gametitle.bottom;
             left: parent.left
@@ -167,6 +167,96 @@ Item {
         }
     }
 
+    // Meta data
+    Item {
+        id: metarow_2
+
+        height: vpx(40)
+        anchors {
+            top: metarow.bottom;
+            left: parent.left
+            right: parent.right
+        }
+
+        // Release box
+        Text {
+            id: releasetitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: parent.left; }
+            verticalAlignment: Text.AlignVCenter
+            text: "Release year: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: releasetext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: releasetitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.releaseYear : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider1_2
+            width: vpx(2)
+            anchors {
+                left: releasetext.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+			visible: (settings.ShowFilename == "Yes") ? true : false
+        }
+
+        // File name box
+        Text {
+            id: filenametitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider1_2.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: "File name: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+			visible: (settings.ShowFilename === "Yes") ? true : false
+        }
+
+        Text {
+            id: filenametext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: filenametitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+				if (gameData){
+					var path = gameData.files.get(0).path;
+					var word = path.split('/');
+					return word[word.length-1];
+				}
+				else return "";
+			}
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+			visible: (settings.ShowFilename === "Yes") ? true : false
+        }
+
+    }
+
     // Description
     PegasusUtils.AutoScroll
     {
@@ -175,7 +265,7 @@ Item {
         anchors {
             left: parent.left;
             right: parent.right;
-            top: metarow.bottom
+            top: metarow_2.bottom
             bottom: parent.bottom;
         }
 
