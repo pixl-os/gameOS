@@ -48,7 +48,7 @@ Item {
     Item {
         id: metarow
 
-        height: vpx(50)
+        height: vpx(40)
         anchors {
             top: gametitle.bottom;
             left: parent.left
@@ -103,7 +103,7 @@ Item {
             height: parent.height
             anchors { left: divider1.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Players: "
+            text: "Players78: "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -167,6 +167,128 @@ Item {
         }
     }
 
+    // Meta data
+    Item {
+        id: metarow2
+
+        height: vpx(40)
+        anchors {
+            top: metarow.bottom;
+            left: parent.left
+            right: parent.right
+        }
+
+        // Release box
+        Text {
+            id: releasetitle2
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: parent.left; }
+            verticalAlignment: Text.AlignVCenter
+            text: "Release Year: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: releasetext2
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: releasetitle2.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.releaseYear : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider12
+            width: vpx(2)
+            anchors {
+                left: releasetext2.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Players box
+        Text {
+            id: playerstitle2
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider12.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: "Players78: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: playerstext2
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: playerstitle2.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.players : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider22
+            width: vpx(2)
+            anchors {
+                left: playerstext2.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Genre box
+        Text {
+            id: genretitle2
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider22.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: "Genre: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: genretext2
+
+            anchors {
+                left: genretitle2.right; leftMargin: vpx(5)
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+            }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.genre : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            elide: Text.ElideRight
+            color: theme.text
+        }
+    }
+
     // Description
     PegasusUtils.AutoScroll
     {
@@ -175,7 +297,7 @@ Item {
         anchors {
             left: parent.left;
             right: parent.right;
-            top: metarow.bottom
+            top: metarow2.bottom
             bottom: parent.bottom;
         }
 
