@@ -260,7 +260,7 @@ FocusScope {
         }		
         ListElement {
             settingName: "Nb players"
-            setting: "1,1+,2,2+,3,3+,4,4+,5"
+            setting: "1+,2,2+,3,3+,4,4+,5,1"
         }
         ListElement {
             settingName: "Rating"
@@ -338,19 +338,10 @@ FocusScope {
 			if (value !== null)
 			{
 				//console.log("My Collection " + i + " - Collection name");
+				//Add the new collection in settings menu
 				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
-				var f = 1;
-				for(var j = 0; j < showcaseSettingsModel.count; ++j) {
-					//console.log("Collection " + f);
-					//console.log(showcaseSettingsModel.get(j).settingName);
-					if (showcaseSettingsModel.get(j).settingName === ("Collection " + f))
-					{
-						//Add this "My Collection n" to the list
-						showcaseSettingsModel.get(j).setting = showcaseSettingsModel.get(j).setting + "," + "My Collection " + i
-						f = f + 1;
-					}
-						
-				}
+				// Add the new collection in selections of Home Page collections
+				addMyCollectionsToHomePageSelections(i);
 				i = i + 1;
 			}
 		}
@@ -359,16 +350,36 @@ FocusScope {
 		collectionslist.model = settingsCol;
 	}
 
-	function addCollection()
+	function addMyCollection()
 	{
 		var i = settingsCol.length + 1;
+		//Add the new collection in settings menu
 		settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+		// Add the new collection in selections of Home Page collections
+		addMyCollectionsToHomePageSelections(i);
 		//save empty parameter for collection name to record in configuration file
 		api.memory.set("My Collection " + i + " - Collection name","");
 		//Set of model to force binding
 		collectionslist.model = settingsCol;
 		collectionslist.currentIndex = collectionslist.count - 1;
 		settingsList.model = myCollections.listmodel;
+	}
+
+	function addMyCollectionsToHomePageSelections(index)
+	{
+		var i = index;
+		var f = 1;
+		for(var j = 0; j < showcaseSettingsModel.count; ++j) {
+			//console.log("Collection " + f);
+			//console.log(showcaseSettingsModel.get(j).settingName);
+			if (showcaseSettingsModel.get(j).settingName === ("Collection " + f))
+			{
+				//Add this "My Collection n" to the list
+				showcaseSettingsModel.get(j).setting = showcaseSettingsModel.get(j).setting + "," + "My Collection " + i
+				f = f + 1;
+			}
+				
+		}
 	}
 
 	function deleteLastCollection()
@@ -702,7 +713,7 @@ FocusScope {
                 event.accepted = true;
                 sfxToggle.play()
 				//create new collection
-				addCollection();
+				addMyCollection();
             }
     		
 			// Remove 'last' collection

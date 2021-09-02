@@ -10,7 +10,8 @@ Item {
     id: root
 
     readonly property var games: gamesMyCollection
-    function currentGame(index) { 
+	property int max: gamesMyCollection.count;
+    function currentGame(index) {
 		return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
 	}	
 

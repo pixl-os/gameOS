@@ -74,9 +74,10 @@ FocusScope {
 				if (listLoader.status === Loader.Ready) {
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
 					//console.log("listLoader.listType: ",listType);
-					if(listType.includes("My Collection"))
+					if(listType.includes("My Collection") &&  (api.memory.get(listType + " - Collection name") !== null) &&
+						(api.memory.get(listType + " - Collection name") !== ""))
 					{
-						listLoader.item.collectionName = api.memory.has(listType + " - Collection name") ? api.memory.get(listType + " - Collection name") : "no name :-(";
+						listLoader.item.collectionName = api.memory.has(listType + " - Collection name") ? api.memory.get(listType + " - Collection name") : "";
 						listLoader.item.filter = api.memory.has(listType + " - Name filter") ? api.memory.get(listType + " - Name filter") : "";
 						listLoader.item.region = api.memory.has(listType + " - Region/Country filter") ? api.memory.get(listType + " - Region/Country filter") : "";
 						listLoader.item.nb_players = api.memory.has(listType + " - Nb players") ? api.memory.get(listType + " - Nb players") : "1+";
@@ -89,11 +90,10 @@ FocusScope {
 						listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
 						listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
 						listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
-						
 					}
 					else
 					{
-						if (listType.includes("None")) listLoader.item.max = 0;
+						if (listType.includes("None")||(listType === "")||(listType === null)) listLoader.item.max = 0;
 						else listLoader.item.max = settings.ShowcaseColumns;
 					}
 					
@@ -102,7 +102,7 @@ FocusScope {
 					listLoader.measuring = false;
 				}
 			}
-			active: getListSourceFromIndex(index + 1) !== "";
+			active: true;
 		}
     }	
 
@@ -149,17 +149,20 @@ FocusScope {
 		else
 		{
 			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "None";
+			//console.log("api.memory.get('Collection ' + index) = ",api.memory.get("Collection " + index));
 		}
+		if ((listType === "")||(typeof(listType) === undefined)) listType = "None";
 		
-		if (listType === "") listType = "None";
-		
+		if (api.memory.has(listType + " - Collection name") && (listType !== "None")){
+			var value = api.memory.get(listType + " - Collection name");
+			listType  = ((value === "") || (value === null)) ? "None" : listType;
+		}
 		//console.log("listType: ",listType);
 		//To manage types using index in collections type as "My Coleltions 1", "My Collections 2", etc...
 		if(listType.includes("My Collection"))
 		{
 			listType = "My Collection";
 		}
-		//console.log("listType: ",listType);
 		return listType;
 	}
 
