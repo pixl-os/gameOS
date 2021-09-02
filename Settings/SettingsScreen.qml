@@ -334,8 +334,8 @@ FocusScope {
 		let value = "";
 		do{
 
-			value = (api.memory.get("My Collection " + i + " - Collection name")) ? api.memory.get("My Collection " + i + " - Collection name") : "";
-			if (value !== "")
+			value = (api.memory.has("My Collection " + i + " - Collection name")) ? api.memory.get("My Collection " + i + " - Collection name") : null;
+			if (value !== null)
 			{
 				//console.log("My Collection " + i + " - Collection name");
 				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
@@ -354,7 +354,7 @@ FocusScope {
 				i = i + 1;
 			}
 		}
-		while(value != "")
+		while(value !== null)
 		//Set of model to force binding
 		collectionslist.model = settingsCol;
 	}
@@ -363,6 +363,8 @@ FocusScope {
 	{
 		var i = settingsCol.length + 1;
 		settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+		//save empty parameter for collection name to record in configuration file
+		api.memory.set("My Collection " + i + " - Collection name","");
 		//Set of model to force binding
 		collectionslist.model = settingsCol;
 		collectionslist.currentIndex = collectionslist.count - 1;
@@ -372,6 +374,8 @@ FocusScope {
 	function deleteLastCollection()
 	{
 		var i = settingsCol.length;
+		//reset to null parameter for collection name to record in configuration file
+		api.memory.set("My Collection " + i + " - Collection name",null);
 		//remove last element by decreasing size
 		settingsCol.length = i - 1;
 		//Set of model to force binding
