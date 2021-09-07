@@ -29,8 +29,55 @@ FocusScope {
     id: root
 
 	//DEBUG property
-	property bool detailed_debug: true
+	property bool detailed_debug: false
+	property bool viewIsLoading: true
+	property var viewLoadingText: "Loading..."
 
+	//Spinner Loader for all views loading... (principally for main menu for the moment)
+    Loader {
+        id: spinnerloader
+		z:10 
+        anchors.centerIn: parent        
+        active: viewIsLoading
+        sourceComponent: spinner
+    }
+
+    Component {
+		id: spinner
+        Rectangle{
+			Image {
+				id: imageSpinner
+				anchors.centerIn: parent
+				source: "assets/images/loading.png"
+				width: vpx(100)
+				height: vpx(100)
+				z: 10
+				asynchronous: true
+				sourceSize { width: vpx(50); height: vpx(50) }
+				RotationAnimator on rotation {
+					loops: Animator.Infinite;
+					from: 0;
+					to: 360;
+					duration: 3000
+				}
+			}
+			Text {
+				id: textSpinner
+				text: viewLoadingText
+				width: contentWidth
+				height: contentHeight
+				font.family: titleFont.name
+				font.pixelSize: vpx(24)
+				color: theme.text
+				property real centerOffset: imageSpinner.height/2
+				visible: settings.ShowLoadingDetails === "No" ? false : true
+				anchors {
+					top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
+					horizontalCenter: imageSpinner.horizontalCenter
+				}
+			}
+		}
+    } 
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
@@ -51,6 +98,7 @@ FocusScope {
             AllowThumbVideoAudio:          api.memory.has("Play video thumbnail audio") ? api.memory.get("Play video thumbnail audio") : "No",
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
+            HelpButtonsStyle:              api.memory.has("Help buttons style") ? api.memory.get("Help buttons style") : "Gamepad",
             HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
             ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
@@ -60,7 +108,8 @@ FocusScope {
             AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
             AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "No",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
-            DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
+			ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
+			DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
             ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
@@ -74,7 +123,8 @@ FocusScope {
             ShowcaseCollection5:           api.memory.has("Collection 5") ? api.memory.get("Collection 5") : "None",
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
-            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66"
+            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
+	    ShowLoadingDetails:                  api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No"
             
         }
     }
@@ -432,7 +482,6 @@ FocusScope {
         id: showcaseLoader
 
         focus: {
-				console.log("showcaseLoader.focus");
 				if (root.state === "showcasescreen") 
 				{
 					//change focus of item to avoid bad display of help
@@ -572,6 +621,7 @@ FocusScope {
             left: parent.left; right: parent.right; rightMargin: globalMargin
             bottom: parent.bottom
         }
+		opacity: viewIsLoading ? 0 : 1
         visible: settings.HideButtonHelp === "No"
     }
 
