@@ -785,7 +785,10 @@ FocusScope {
 					if (setting !== "to edit") 
 					{
 						//console.log(fullSettingName + "Index: ",api.memory.get(fullSettingName + 'Index'));
-						return (api.memory.get(fullSettingName + 'Index') || 0);
+						var value = api.memory.get(fullSettingName + 'Index') || 0;
+						if (value < settingList.length) return value;
+						else return 0;
+					
 					}
 					else return 0;
 				}
