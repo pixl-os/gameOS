@@ -70,7 +70,7 @@ FocusScope {
 				font.pixelSize: vpx(24)
 				color: theme.text
 				property real centerOffset: imageSpinner.height/2
-
+				visible: settings.ShowLoadingDetails === "No" ? false : true
 				anchors {
 					top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
 					horizontalCenter: imageSpinner.horizontalCenter
@@ -123,7 +123,8 @@ FocusScope {
             ShowcaseCollection5:           api.memory.has("Collection 5") ? api.memory.get("Collection 5") : "None",
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
-            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66"
+            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
+	    ShowLoadingDetails:                  api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No"
             
         }
     }
