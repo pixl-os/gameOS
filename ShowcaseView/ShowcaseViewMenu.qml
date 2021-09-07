@@ -473,16 +473,18 @@ FocusScope {
 
             Keys.onDownPressed: mainList.focus = true;
             Keys.onPressed: {
-                // Accept
-                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                    event.accepted = true;
-                    settingsScreen();
-                }
-                // Back
-                if (api.keys.isCancel(event) && !event.isAutoRepeat) {
-                    event.accepted = true;
-                    mainList.focus = true;
-                }
+				if (!viewIsLoading){
+					// Accept
+					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+						event.accepted = true;
+						settingsScreen();
+					}
+					// Back
+					if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+						event.accepted = true;
+						mainList.focus = true;
+					}
+				}
             }
             // Mouse/touch functionality
             MouseArea {
@@ -651,13 +653,15 @@ FocusScope {
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
             Keys.onPressed: {
-                // Accept
-                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                    event.accepted = true;
-                    storedHomeSecondaryIndex = featuredlist.currentIndex;
-                    if (!ftue)
-                        gameDetails(featuredCollection.currentGame(currentIndex));
-                }
+				if (!viewIsLoading){
+	                // Accept
+	                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+	                    event.accepted = true;
+	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
+	                    if (!ftue)
+	                        gameDetails(featuredCollection.currentGame(currentIndex));
+	                }
+				}
             }
         }
 
@@ -807,12 +811,14 @@ FocusScope {
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
             Keys.onPressed: {
-                // Accept
-                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                    event.accepted = true;
-                    currentCollectionIndex = platformlist.currentIndex;
-                    softwareScreen();
-                }
+				if (!viewIsLoading){
+					// Accept
+					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+						event.accepted = true;
+						currentCollectionIndex = platformlist.currentIndex;
+						softwareScreen();
+					}
+				}
             }
 
         }
@@ -1175,11 +1181,13 @@ FocusScope {
 
     // Global input handling for the screen
     Keys.onPressed: {
-        // Settings
-        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            settingsScreen();
-        }
+    	if (!viewIsLoading){
+	        // Settings
+	        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+	            event.accepted = true;
+	            settingsScreen();
+	        }
+		}
     }
 
     // Helpbar buttons
