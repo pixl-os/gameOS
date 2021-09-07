@@ -1,6 +1,35 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [myCollections-feature] - 2021-09-08
+- first version to check feasability and performance
+- draft new menu in settings for collections
+- menu to manage save,edition,delete,adding for collection
+- add dialog box to confirm deletion
+- draft to dynamically repeat loader usage for ListCollection
+- clean js file to remove functions too linked to showcase
+- fix to add automatically My Collections in settings
+- tentative to load all lists using loader
+- finally load all lists in static and limit to 5
+- increase limit to 10, clean and improve few behaviors
+- improve delete/add behaviors and when no collection
+- draft adding exclusions, publisher, dev & system
+- tested version with all criteria except release date
+- add Favorite & ReleaseYear as collection criteria
+- to manage better deletion settings of collection
+- optimisation for performance when collection name is empty or null
+- add spinner during loading of showcaseView (main menu)
+- fix when index saved is wrong - reset to 0 forced
+- add loading details for home page (at start & after game)
+- block OnPressed event if under loading to avoid mistake
+
+## [gameinfo-improvements] - 2021-08-31
+- add Release year and rework of GameDetails content
+- add filename as optional in GameDetails info
+
+## [arcade-helps-buttons] - 2021-08-29
+- add 'arcade' helps buttons in each views and settings
+
 ## [recommended-gamelist-performance-improvements] - 2021-08-18
 - fix binding warning using global variables from Utils
 - add loaders to load "custom" lists asynchronously
