@@ -30,7 +30,54 @@ FocusScope {
 
 	//DEBUG property
 	property bool detailed_debug: false
+	property bool viewIsLoading: true
+	property var viewLoadingText: "Loading..."
 
+	//Spinner Loader for all views loading... (principally for main menu for the moment)
+    Loader {
+        id: spinnerloader
+		z:10 
+        anchors.centerIn: parent        
+        active: viewIsLoading
+        sourceComponent: spinner
+    }
+
+    Component {
+		id: spinner
+        Rectangle{
+			Image {
+				id: imageSpinner
+				anchors.centerIn: parent
+				source: "assets/images/loading.png"
+				width: vpx(100)
+				height: vpx(100)
+				z: 10
+				asynchronous: true
+				sourceSize { width: vpx(50); height: vpx(50) }
+				RotationAnimator on rotation {
+					loops: Animator.Infinite;
+					from: 0;
+					to: 360;
+					duration: 3000
+				}
+			}
+			Text {
+				id: textSpinner
+				text: viewLoadingText
+				width: contentWidth
+				height: contentHeight
+				font.family: titleFont.name
+				font.pixelSize: vpx(24)
+				color: theme.text
+				property real centerOffset: imageSpinner.height/2
+
+				anchors {
+					top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
+					horizontalCenter: imageSpinner.horizontalCenter
+				}
+			}
+		}
+    } 
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
@@ -573,6 +620,7 @@ FocusScope {
             left: parent.left; right: parent.right; rightMargin: globalMargin
             bottom: parent.bottom
         }
+		opacity: viewIsLoading ? 0 : 1
         visible: settings.HideButtonHelp === "No"
     }
 

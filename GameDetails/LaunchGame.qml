@@ -96,7 +96,7 @@ FocusScope {
 
         width: launchText.width + vpx(50)
         height: launchText.height + vpx(50)
-
+		opacity: viewIsLoading ? 0 : 1
         property real centerOffset: logo.paintedHeight/2
         
         anchors {

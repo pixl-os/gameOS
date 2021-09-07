@@ -66,6 +66,7 @@ FocusScope {
 				*/
 				if (listLoader.status === Loader.Loading) {
 					if(!listLoader.measuring){
+						viewLoadingText = "Loading Collection " + (index + 1) + " ...";
 						console.time("listLoader - Collection " + (index + 1));
 						listLoader.measuring = true;
 					}
@@ -74,6 +75,7 @@ FocusScope {
 				if (listLoader.status === Loader.Ready) {
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
 					//console.log("listLoader.listType: ",listType);
+					viewLoadingText = "Loading Collection " + (index + 1) + " - " + listType + " ...";
 					if(listType.includes("My Collection") &&  (api.memory.get(listType + " - Collection name") !== null) &&
 						(api.memory.get(listType + " - Collection name") !== ""))
 					{
@@ -100,6 +102,9 @@ FocusScope {
 					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
+					if (index === 0) {
+						viewIsLoading = false;
+					}
 				}
 			}
 			active: true;
