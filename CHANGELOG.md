@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file (focus on ch
 - fix when index saved is wrong - reset to 0 forced
 - add loading details for home page (at start & after game)
 - block OnPressed event if under loading to avoid mistake
+- correct way to load and display spinner
+- finally keep loading only when come back on it
 
 ## [gameinfo-improvements] - 2021-08-31
 - add Release year and rework of GameDetails content
