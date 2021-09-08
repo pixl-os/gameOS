@@ -41,6 +41,7 @@ FocusScope {
     ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
 
 	//Repeater to manage loading of lists dynamically and without limits in the future
+	property int nbLoaderReady: 0
 	Repeater{
 		id: repeater
 		model: 10 // 5 is the maximum of list loaded dynamically for the moment 
@@ -73,6 +74,7 @@ FocusScope {
 				}
 
 				if (listLoader.status === Loader.Ready) {
+					nbLoaderReady = nbLoaderReady + 1;
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
 					//console.log("listLoader.listType: ",listType);
 					viewLoadingText = "Loading Collection " + (index + 1) + " - " + listType + " ...";
@@ -102,7 +104,7 @@ FocusScope {
 					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
-					if (index === 0) {
+					if (nbLoaderReady >= repeater.count) {
 						viewIsLoading = false;
 					}
 				}

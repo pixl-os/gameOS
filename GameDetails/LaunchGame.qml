@@ -96,7 +96,6 @@ FocusScope {
 
         width: launchText.width + vpx(50)
         height: launchText.height + vpx(50)
-		opacity: viewIsLoading ? 0 : 1
         property real centerOffset: logo.paintedHeight/2
         
         anchors {
@@ -156,15 +155,13 @@ FocusScope {
 
     // Input handling
     Keys.onPressed: {
-	if (!viewIsLoading){
-	        // Back
-	        if (api.keys.isCancel(event) && !event.isAutoRepeat) {
-	            event.accepted = true;
+	    // Back
+	    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+	        event.accepted = true;
 		}
 
 		if (game.retroAchievementsCount !== 0) game.updateRetroAchievements();
-	        else previousScreen();
-	}
+	    else previousScreen();
     }
 
     // Mouse/touch functionality
@@ -172,7 +169,7 @@ FocusScope {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            if (!viewIsLoading) previousScreen();
+            previousScreen();
         }
     }
 }
