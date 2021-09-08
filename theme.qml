@@ -38,7 +38,7 @@ FocusScope {
         id: spinnerloader
 		z:10 
         anchors.centerIn: parent        
-        active: viewIsLoading
+        active: viewIsLoading && (showcaseLoader.opacity === 1)
         sourceComponent: spinner
     }
 
@@ -481,21 +481,8 @@ FocusScope {
     Loader  {
         id: showcaseLoader
 
-        focus: {
-				if (root.state === "showcasescreen") 
-				{
-					//change focus of item to avoid bad display of help
-					item.focus = true;
-					return true;
-				}
-				else 
-				{	
-					//change focus of item to avoid bad display of help
-					item.focus = false;
-					return false;
-				}
-		}
-		active: true //opacity !== 0
+        focus: (root.state === "showcasescreen")
+		active: (viewIsLoading && opacity) || !viewIsLoading ? true : false
 		opacity: focus ? 1 : 0
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
@@ -573,8 +560,8 @@ FocusScope {
 
     Component {
         id: showcaseview
-
-        ShowcaseViewMenu { focus: true }
+	
+	ShowcaseViewMenu { focus: true; visible: !viewIsLoading; }
     }
 
     Component {
