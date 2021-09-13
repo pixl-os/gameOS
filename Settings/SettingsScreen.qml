@@ -226,6 +226,10 @@ FocusScope {
             settingName: "Show file name"
             setting: "No,Yes"
         }
+        ListElement {
+            settingName: "Show play stats"
+            setting: "No,Yes"
+        }
     }
 
     property var gamePage: {
