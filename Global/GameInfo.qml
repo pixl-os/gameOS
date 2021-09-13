@@ -17,6 +17,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import "qrc:/qmlutils" as PegasusUtils
+import "../moment.js" as DateUtils
 
 Item {
     id: infocontainer
@@ -257,6 +258,138 @@ Item {
 
     }
 
+    // Meta data
+    Item {
+        id: metarow_3
+
+        height: vpx(40)
+        anchors {
+            top: metarow_2.bottom;
+            left: parent.left
+            right: parent.right
+        }
+		visible: (settings.ShowPlayStats == "Yes") ? true : false
+        // Play time
+        Text {
+            id: playtimetitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: parent.left; }
+            verticalAlignment: Text.AlignVCenter
+            text: "Play time: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: playtimetext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: playtimetitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? (Math. floor(gameData.playTime/60) + " min") : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider1_3
+            width: vpx(2)
+            anchors {
+                left: playtimetext.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Play Count
+        Text {
+            id: playcounttitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider1_3.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: "Play count: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: playcounttext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: playcounttitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.playCount : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider2_3
+            width: vpx(2)
+            anchors {
+                left: playcounttext.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Last played
+        Text {
+            id: lastplayedtitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider2_3.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: "Last played: "
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: lastplayedtext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: lastplayedtitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+				if (gameData)
+				{	
+					//console.log("gameData.lastPlayed = ",gameData.lastPlayed);					
+					let lastplayed = String(gameData.lastPlayed);
+					if (lastplayed.toLowerCase().includes("invalid"))
+					{
+						return "N/A";
+					}
+					else
+					{
+						return DateUtils.moment(lastplayed).format('YYYY-MM-DD HH:mm:ss');
+					}
+				}
+				else return "N/A";
+			}
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+    }
     // Description
     PegasusUtils.AutoScroll
     {
@@ -265,7 +398,7 @@ Item {
         anchors {
             left: parent.left;
             right: parent.right;
-            top: metarow_2.bottom
+            top: (settings.ShowPlayStats === "Yes") ? metarow_3.bottom : metarow_2.bottom
             bottom: parent.bottom;
         }
 

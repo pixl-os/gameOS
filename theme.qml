@@ -124,7 +124,8 @@ FocusScope {
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
             TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
-	    ShowLoadingDetails:                  api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No"
+			ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
+			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No"
             
         }
     }
