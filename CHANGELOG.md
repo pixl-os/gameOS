@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [play-time-count-lastplayed-display-feature] - 2021-09-13
+- Add play time, play count and last played in game info and also in settings
+
 ## [myCollections-feature] - 2021-09-08
 - first version to check feasability and performance
 - draft new menu in settings for collections
