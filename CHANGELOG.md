@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2021-09-27
+- fix on settings to add play stats conf
+- add Showcase feature to change favorite display automatically
+
 ## [play-time-count-lastplayed-display-feature] - 2021-09-13
 - Add play time, play count and last played in game info and also in settings
 

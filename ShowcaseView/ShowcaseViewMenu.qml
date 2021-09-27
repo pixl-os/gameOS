@@ -650,7 +650,19 @@ FocusScope {
                 }
             }
 
-            // List specific input
+			// Timer to show the video
+			Timer {
+				id: favoriteAutomaticChangeTimer
+				interval: 10000 //every 10s
+				repeat: true
+                running: (settings.ShowcaseChangeFavoriteDisplayAutomatically !== "No") ? true : false
+                triggeredOnStart: false
+				onTriggered: {
+					if (featuredlist.count >= 2) featuredlist.incrementCurrentIndex();
+				}
+			}	
+
+			// List specific input
             Keys.onUpPressed: settingsbutton.focus = true;
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
