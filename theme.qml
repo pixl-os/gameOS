@@ -373,7 +373,7 @@ FocusScope {
     
 
     property real globalMargin: vpx(30)
-    property real helpMargin: buttonbar.height
+    property real helpMargin: helpbuttonbar.height
     property int transitionTime: 100
 
     // State settings
@@ -450,9 +450,15 @@ FocusScope {
 
     function previousScreen() {
         sfxBack.play();
-        if (state === lastState[lastState.length-1])
-            popLastGame();
-
+	
+	    if (state === lastState[lastState.length-1])
+        {    
+			popLastGame();
+		}
+		else if(previousHelpbarModel) {
+			currentHelpbarModel = previousHelpbarModel;
+		}
+		
         state = lastState[lastState.length - 1];
         lastState.pop();
     }
@@ -602,15 +608,15 @@ FocusScope {
     
     // Button help
     property var currentHelpbarModel
+	property var previousHelpbarModel
     ButtonHelpBar {
-        id: buttonbar
-
+        id: helpbuttonbar
         height: vpx(50)
         anchors {
             left: parent.left; right: parent.right; rightMargin: globalMargin
             bottom: parent.bottom
         }
-		opacity: viewIsLoading ? 0 : 1
+		opacity: viewIsLoading && (showcaseLoader.opacity === 1) ? 0 : 1
         visible: settings.HideButtonHelp === "No"
     }
 

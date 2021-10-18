@@ -1219,8 +1219,10 @@ FocusScope {
     }
 
     onFocusChanged: {
-        if (focus)
+       if (focus){
+			previousHelpbarModel = gridviewHelpModel; // the same in case of showcaseview
             currentHelpbarModel = gridviewHelpModel;
+		}
     }
 
 }
