@@ -1209,7 +1209,15 @@ FocusScope {
         id: gridviewHelpModel
 
         ListElement {
-            name: "Settings"
+            name: "Main Menu"
+            button: "mainMenu"
+        }
+        ListElement {
+            name: "Netplay"
+            button: "netplay"
+        }
+        ListElement {
+            name: "Theme Settings"
             button: "filters"
         }
         ListElement {
