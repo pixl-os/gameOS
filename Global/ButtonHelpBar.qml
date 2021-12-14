@@ -26,8 +26,10 @@ Item {
 			visible: true
             spacing: 10
             Image {
-                source: if (settings.HelpButtonsStyle === "Arcade") { "../assets/images/controller/" + processButtonArt(button) + "-arcade.png";
-                    } else { "../assets/images/controller/" + processButtonArt(button) + ".png"; }
+                source: if (settings.HelpButtonsStyle === "Arcade") { 
+					return "../assets/images/controller/" + processButtonArt(button) + "-arcade.png";
+                    } 
+					else { return  "../assets/images/controller/" + processButtonArt(button) + ".png"; }
                 width: vpx(30)
                 height: vpx(30)
                 asynchronous: true
@@ -83,7 +85,13 @@ Item {
         case "pageDown":
             buttonModel = api.keys.pageDown;
             break;
-        default:
+        case "mainMenu":
+            buttonModel = api.keys.menu;
+            break;
+		case "netplay":
+            buttonModel = api.keys.netplay;
+            break;
+		default:
             buttonModel = api.keys.accept;
         }
 
@@ -91,7 +99,8 @@ Item {
         for (i = 0; buttonModel.length; i++) {
             if (buttonModel[i].name().includes("Gamepad")) {
                 var buttonValue = buttonModel[i].key.toString(16)
-                return buttonValue.substring(buttonValue.length-1, buttonValue.length);
+				//console.log("buttonValue : ",buttonValue);
+                return parseInt(buttonValue.substring(buttonValue.length-1, buttonValue.length), 16);
             }
         }
     }
