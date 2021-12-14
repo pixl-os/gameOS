@@ -656,24 +656,48 @@ FocusScope {
                     menu.currentIndex = ObjectModel.index;
                 }
         }
+		
         Button { 
             id: button5
+            icon: (game.retroAchievementsCount !== 0) ? "../assets/images/icon_cup.svg" : "../assets/images/multiplayer.svg"
+			text: (game.retroAchievementsCount !== 0) ? "" : "Netplay"
+            height: parent.height
+			selected: ListView.isCurrentItem && menu.focus
+            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
+			visible: true
+			enabled : visible
+            onActivated:{
+                if (selected) {
+                    sfxToggle.play();
+                    if (game.retroAchievementsCount !== 0) showAchievements();
+					else {} //TO DO
+                } else {
+                    sfxNav.play();
+                    menu.currentIndex = ObjectModel.index;
+                }
+			}
+        }
+		
+        Button { 
+            id: button6
 
-            icon: "../assets/images/icon_cup.svg"
+            icon: "../assets/images/multiplayer.svg"
+			text: (game.retroAchievementsCount !== 0) ? "Netplay" : ""
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
 			visible: (game.retroAchievementsCount !== 0) ? true : false
 			enabled : visible
-            onActivated: 
+            onActivated:{ 
                 if (selected) {
                     sfxToggle.play();
-                    showAchievements();
+                    //TO DO
                 } else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
-        }
+			}
+        }		
     }
 
     // Full list
