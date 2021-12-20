@@ -670,7 +670,13 @@ FocusScope {
                 if (selected) {
                     sfxToggle.play();
                     if (game.retroAchievementsCount !== 0) showAchievements();
-					else {} //TO DO
+                    else {
+                        //to force focus & reload dialog
+                        netplayRoomDialog.focus = false;
+                        netplayRoomDialog.active = false;
+                        netplayRoomDialog.active = true;
+                        netplayRoomDialog.focus = true;
+                    }
                 } else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
@@ -691,8 +697,13 @@ FocusScope {
             onActivated:{ 
                 if (selected) {
                     sfxToggle.play();
-                    //TO DO
-                } else {
+                    //to force focus & reload dialog
+                    netplayRoomDialog.focus = false;
+                    netplayRoomDialog.active = false;
+                    netplayRoomDialog.active = true;
+                    netplayRoomDialog.focus = true;
+                }
+                else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
