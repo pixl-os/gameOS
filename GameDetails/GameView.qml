@@ -29,6 +29,7 @@ FocusScope {
     id: root
 
     property var game: api.allGames.get(0)
+    property bool readyForNeplay: isReadyForNetplay(game)
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
     property string collectionName: game ? game.collections.get(0).name : ""
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
@@ -104,7 +105,10 @@ FocusScope {
     }
 
 	function setRetroAchievements(){
-		if(game.retroAchievementsCount !== 0)
+
+        //TODO: TO CHANGE HERE DEPENDING OF CORES FOR NETPLAY ALSO
+
+        if(game.retroAchievementsCount !== 0)
 		{
 			button5.visible = true;
 			//to force update of GameAchievements model for gridView
@@ -659,13 +663,13 @@ FocusScope {
 		
         Button { 
             id: button5
-            icon: (game.retroAchievementsCount !== 0) ? "../assets/images/icon_cup.svg" : "../assets/images/multiplayer.svg"
-			text: (game.retroAchievementsCount !== 0) ? "" : "Netplay"
+            icon: (game.retroAchievementsCount !== 0) ? "../assets/images/icon_cup.svg" : (readyForNeplay ? "../assets/images/multiplayer.svg": "")
+            text: (game.retroAchievementsCount !== 0) ? "" : (readyForNeplay ? "Netplay" : "")
             height: parent.height
 			selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-			visible: true
-			enabled : visible
+            //visible: ((game.retroAchievementsCount !== 0) || readyForNeplay) ? true : false
+            //enabled : visible
             onActivated:{
                 if (selected) {
                     sfxToggle.play();
@@ -688,11 +692,11 @@ FocusScope {
             id: button6
 
             icon: "../assets/images/multiplayer.svg"
-			text: (game.retroAchievementsCount !== 0) ? "Netplay" : ""
+            text: "Netplay"
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-			visible: (game.retroAchievementsCount !== 0) ? true : false
+            visible: (readyForNeplay && game.retroAchievementsCount !== 0) ?  true : false
 			enabled : visible
             onActivated:{ 
                 if (selected) {
