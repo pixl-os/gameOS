@@ -105,21 +105,27 @@ FocusScope {
     }
 
 	function setRetroAchievements(){
+        if(game.retroAchievementsCount !== 0){
+            //to force update of GameAchievements model for gridView
+            achievements.model = game.retroAchievementsCount;
+            if (readyForNeplay){
+               button5.visible = true;
+               button6.visible = true;
+            }
+            else{
+                button5.visible = true;
+                button6.visible = false;
 
-        //TODO: TO CHANGE HERE DEPENDING OF CORES FOR NETPLAY ALSO
-
-        if(game.retroAchievementsCount !== 0)
-		{
-			button5.visible = true;
-			//to force update of GameAchievements model for gridView
-			achievements.model = game.retroAchievementsCount;
-		}
-		else
-		{
-			button5.visible = false;
-			//hide retroachievements if displayed from a previous game
-			if(retroachievementsOpacity === 1) showDetails();
-		}		
+            }
+        }
+        else
+        {
+            if (readyForNeplay) button5.visible = true;
+            else button5.visible = false;
+            button6.visible = false;
+            //hide retroachievements if displayed from a previous game
+            if(retroachievementsOpacity === 1) showDetails();
+        }
 	}
 
 
@@ -660,59 +666,54 @@ FocusScope {
                     menu.currentIndex = ObjectModel.index;
                 }
         }
-		
-        Button { 
+
+        Button {
             id: button5
-            icon: (game.retroAchievementsCount !== 0) ? "../assets/images/icon_cup.svg" : (readyForNeplay ? "../assets/images/multiplayer.svg": "")
-            text: (game.retroAchievementsCount !== 0) ? "" : (readyForNeplay ? "Netplay" : "")
+            icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
+            text: readyForNeplay ? "Netplay" : ""
             height: parent.height
-			selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            //visible: ((game.retroAchievementsCount !== 0) || readyForNeplay) ? true : false
-            //enabled : visible
+            visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
+            enabled : visible
             onActivated:{
                 if (selected) {
                     sfxToggle.play();
-                    if (game.retroAchievementsCount !== 0) showAchievements();
-                    else {
+                    if(readyForNeplay){
                         //to force focus & reload dialog
                         netplayRoomDialog.focus = false;
                         netplayRoomDialog.active = false;
                         netplayRoomDialog.active = true;
                         netplayRoomDialog.focus = true;
                     }
+                    else if (game.retroAchievementsCount !== 0) showAchievements();
+                }
+                else {
+                    sfxNav.play();
+                    menu.currentIndex = ObjectModel.index;
+                }
+            }
+        }
+
+        Button { 
+            id: button6
+            icon: "../assets/images/icon_cup.svg"
+            text: ""
+            height: parent.height
+			selected: ListView.isCurrentItem && menu.focus
+            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
+            visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
+            enabled : visible
+            onActivated:{
+                if (selected) {
+                    sfxToggle.play();
+                    if (game.retroAchievementsCount !== 0) showAchievements();
                 } else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
 			}
         }
-		
-        Button { 
-            id: button6
-
-            icon: "../assets/images/multiplayer.svg"
-            text: "Netplay"
-            height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
-            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            visible: (readyForNeplay && game.retroAchievementsCount !== 0) ?  true : false
-			enabled : visible
-            onActivated:{ 
-                if (selected) {
-                    sfxToggle.play();
-                    //to force focus & reload dialog
-                    netplayRoomDialog.focus = false;
-                    netplayRoomDialog.active = false;
-                    netplayRoomDialog.active = true;
-                    netplayRoomDialog.focus = true;
-                }
-                else {
-                    sfxNav.play();
-                    menu.currentIndex = ObjectModel.index;
-                }
-			}
-        }		
     }
 
     // Full list
