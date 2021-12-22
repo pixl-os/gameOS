@@ -683,6 +683,7 @@ FocusScope {
                         //to force focus & reload dialog
                         netplayRoomDialog.focus = false;
                         netplayRoomDialog.active = false;
+                        netplayRoomDialog.game = game; //set game
                         netplayRoomDialog.active = true;
                         netplayRoomDialog.focus = true;
                     }
