@@ -29,6 +29,7 @@ FocusScope {
     id: root
 
     property var game: api.allGames.get(0)
+    property bool readyForNeplay: isReadyForNetplay(game)
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
     property string collectionName: game ? game.collections.get(0).name : ""
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
@@ -104,18 +105,27 @@ FocusScope {
     }
 
 	function setRetroAchievements(){
-		if(game.retroAchievementsCount !== 0)
-		{
-			button5.visible = true;
-			//to force update of GameAchievements model for gridView
-			achievements.model = game.retroAchievementsCount;
-		}
-		else
-		{
-			button5.visible = false;
-			//hide retroachievements if displayed from a previous game
-			if(retroachievementsOpacity === 1) showDetails();
-		}		
+        if(game.retroAchievementsCount !== 0){
+            //to force update of GameAchievements model for gridView
+            achievements.model = game.retroAchievementsCount;
+            if (readyForNeplay){
+               button5.visible = true;
+               button6.visible = true;
+            }
+            else{
+                button5.visible = true;
+                button6.visible = false;
+
+            }
+        }
+        else
+        {
+            if (readyForNeplay) button5.visible = true;
+            else button5.visible = false;
+            button6.visible = false;
+            //hide retroachievements if displayed from a previous game
+            if(retroachievementsOpacity === 1) showDetails();
+        }
 	}
 
 
@@ -656,23 +666,54 @@ FocusScope {
                     menu.currentIndex = ObjectModel.index;
                 }
         }
-        Button { 
-            id: button5
 
-            icon: "../assets/images/icon_cup.svg"
+        Button {
+            id: button5
+            icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
+            text: readyForNeplay ? "Netplay" : ""
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-			visible: (game.retroAchievementsCount !== 0) ? true : false
-			enabled : visible
-            onActivated: 
+            visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
+            enabled : visible
+            onActivated:{
                 if (selected) {
                     sfxToggle.play();
-                    showAchievements();
+                    if(readyForNeplay){
+                        //to force focus & reload dialog
+                        netplayRoomDialog.focus = false;
+                        netplayRoomDialog.active = false;
+                        netplayRoomDialog.game = game; //set game
+                        netplayRoomDialog.active = true;
+                        netplayRoomDialog.focus = true;
+                    }
+                    else if (game.retroAchievementsCount !== 0) showAchievements();
+                }
+                else {
+                    sfxNav.play();
+                    menu.currentIndex = ObjectModel.index;
+                }
+            }
+        }
+
+        Button { 
+            id: button6
+            icon: "../assets/images/icon_cup.svg"
+            text: ""
+            height: parent.height
+			selected: ListView.isCurrentItem && menu.focus
+            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
+            visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
+            enabled : visible
+            onActivated:{
+                if (selected) {
+                    sfxToggle.play();
+                    if (game.retroAchievementsCount !== 0) showAchievements();
                 } else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
+			}
         }
     }
 

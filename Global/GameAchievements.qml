@@ -281,8 +281,8 @@ id: infocontainer
 				id: rect
 				width: achievementsgrid.cellWidth; height: achievementsgrid.cellHeight
 				color: theme.accent; radius: margin
-				x: achievementsgrid.currentItem.x
-				y: achievementsgrid.currentItem.y
+                x: (achievementsgrid.currentItem !== null) ? achievementsgrid.currentItem.x : 0
+                y: (achievementsgrid.currentItem !== null) ? achievementsgrid.currentItem.y : 0
 				Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
                                 Behavior on y { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
 			}
@@ -336,7 +336,7 @@ id: infocontainer
 									selected = false;
 									currentIndex = -1; //to deactivate selection
 									content.focus = true; // to select menu
-									menu.currentIndex = 4; // to select button of menu for achievements
+                                    menu.currentIndex = menu.count-1; // to select button of menu for achievements
 								}
 		}
 
