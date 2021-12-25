@@ -1213,16 +1213,27 @@ FocusScope {
             button: "mainMenu"
         }
         ListElement {
-            name: "Netplay"
-            button: "netplay"
-        }
-        ListElement {
             name: "Theme Settings"
             button: "filters"
         }
         ListElement {
             name: "Select"
             button: "accept"
+        }
+    }
+
+    //timer to update Helpbar buttons if change after loading of the ShowcaseViewMenu
+    property var counter: 0
+    Timer {
+        id: helpBarTimer
+        interval: 1000 // Run the timer every seconds
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+            //to have a solution to add netplay dynamicly
+            if(api.internal.recalbox.getBoolParameter("global.netplay") && (gridviewHelpModel.count < 4)) gridviewHelpModel.append({name:"Netplay",button:"netplay"});
+            else if(!api.internal.recalbox.getBoolParameter("global.netplay") && gridviewHelpModel.count >= 4) gridviewHelpModel.remove(3);
         }
     }
 
