@@ -24,6 +24,7 @@ import "../Global"
 import "../GridView"
 import "../Lists"
 import "../utils.js" as Utils
+import "../Search"
 
 FocusScope {
     id: root
@@ -127,7 +128,6 @@ FocusScope {
             if(retroachievementsOpacity === 1) showDetails();
         }
 	}
-
 
     // Show/hide the details overlay
     function showDetails() {
@@ -453,7 +453,6 @@ FocusScope {
         }
     }
     
-
     // Details screen
     Item {
         id: detailsScreen
@@ -591,7 +590,6 @@ FocusScope {
         }
         z: 10
     }
-
 
     // Game menu
     ObjectModel {
@@ -893,6 +891,30 @@ FocusScope {
             sfxAccept.play();
             game.favorite = !game.favorite;
         }
+
+        // Next game
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            sfxToggle.play();
+            if (currentGameIndex < game.collections.get(0).games.count-1)
+                currentGameIndex++;
+            else
+                currentGameIndex = 0;
+            gameDetails(game.collections.get(0).games.get(currentGameIndex));
+            lastState[lastState.length-1] = "showcasescreen";
+        }
+
+        // Previous game
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            sfxToggle.play();
+            if (currentGameIndex > 0)
+                currentGameIndex--;
+            else
+                currentGameIndex = game.collections.get(0).games.count-1;
+            gameDetails(game.collections.get(0).games.get(currentGameIndex));
+            lastState[lastState.length-1] = "showcasescreen";
+        }
     }
 
     // Helpbar buttons
@@ -925,4 +947,35 @@ FocusScope {
         }
     }
 
+    //Search to provide the currentGameIndex when gameView is launched from favorite and other collections..
+    SearchGameByModel {
+        id: searchGameIndex;
+        onMaxChanged:{
+            //console.log("onMaxChanged - activated :",searchGameIndex.activated);
+            //console.log("onMaxChanged - max :",searchGameIndex.max);
+            //console.log("onMaxChanged - game_crc :",game_crc);
+            //console.log("onMaxChanged - game_name :",game_name);
+            //console.log("onMaxChanged - crc :",searchGameIndex.crc);
+            //console.log("onMaxChanged - crcToFind :",searchGameIndex.crcToFind);
+            //console.log("onMaxChanged - filenameRegEx :",searchGameIndex.filenameRegEx);
+            //console.log("onMaxChanged - filenameToFilter :",searchGameIndex.filenameToFilter);
+            //console.log("onMaxChanged - system :",searchGameIndex.system);
+            //console.log("onMaxChanged - sytemToFind :",searchGameIndex.systemToFilter);
+            //console.log("onMaxChanged - result.games.get(0).path", searchGameIndex.result.games.get(0).path);
+            //console.log("onMaxChanged - result.games.get(0).files.get(0).path", searchGameIndex.result.games.get(0).files.get(0).path);
+            if(searchGameIndex.max === 1){
+                currentGameIndex = searchGameIndex.sourceGameIndexFound(0);
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        //set currentGameIndex
+        searchGameIndex.sourceModel = game.collections.get(0).games;
+        searchGameIndex.filenameToFind = true; //force to search exact file name and not a filter using regex
+        searchGameIndex.filename = game.path;
+        console.log("Component.onCompleted - filename :",searchGameIndex.filename);
+        //activate search at the end
+        searchGameIndex.activated = true;
+    }
 }

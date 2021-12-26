@@ -99,7 +99,7 @@ FocusScope {
                 if (selected) {
 					videoToStop = true;
 					activateSelected();
-                    gameDetails(search.currentGame(currentIndex));
+                    gameDetails(search.currentGame(collectionList.currentIndex));
                 } else {
                     activate(index);
                     collectionList.currentIndex = index;

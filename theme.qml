@@ -593,6 +593,21 @@ FocusScope {
         }
     }
 
+    //timer to test a demo mode
+    property var counter: 0
+    Timer {
+        id: netplayTimer
+        interval: 5000 // Run the timer 5000 ms for testing
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+			//gameview.currentGame = 
+                
+        }
+    }
+
+
     Component {
         id: launchgameview
 
