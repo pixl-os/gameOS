@@ -424,23 +424,23 @@ FocusScope {
 
     function gameDetails(game) {
         sfxAccept.play();
-		if (game !== null) console.log("gameDetails - game.title:", game.title);
-		else console.log("gameDetails - game.title:", "null");
+        //if (game !== null) console.log("gameDetails - game.title:", game.title);
+        //else console.log("gameDetails - game.title:", "null");
 		
         // As long as there is a state history, save the last game
         if (lastState.length != 0){
-			console.log("gameDetails - currentGame.title:", currentGame.title);
+            //console.log("gameDetails - currentGame.title:", currentGame.title);
             lastGame.push(currentGame);
 		}
 
         // Push the new game
         if (game !== null){
             currentGame = game;
-			console.log("gameDetails - new currentGame.title:", currentGame.title);
+            //console.log("gameDetails - new currentGame.title:", currentGame.title);
 		}
         
         // Save the state before pushing the new one
-		console.log("Previous State:", state);
+        //console.log("Previous State:", state);
         lastState.push(state);
         root.state = "gameviewscreen";
     }
@@ -646,7 +646,10 @@ FocusScope {
                 console.log("api.collections.get(demoCollectionIndex).shortName:",api.collections.get(demoCollectionIndex).shortName);
             }while(api.collections.get(demoCollectionIndex).shortName === "imageviewer")
             //selection game in collection
-            var demoGameIndex = getRandomInt(api.collections.get(demoCollectionIndex).games.count-1);
+            var demoGameIndex = 0;
+            do{
+                demoGameIndex = getRandomInt(api.collections.get(demoCollectionIndex).games.count-1);
+            }while(api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length === 0)
 			demoLaunched = true;
             gameDetails(api.collections.get(demoCollectionIndex).games.get(demoGameIndex));
             lastState[lastState.length-1] = "showcasescreen";
