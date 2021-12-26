@@ -126,8 +126,9 @@ FocusScope {
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
             TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
 			ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
-			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No"
-            
+			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
+			DemoTriggeringDelay:		   api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
+			DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No"		
         }
     }
 
@@ -423,15 +424,23 @@ FocusScope {
 
     function gameDetails(game) {
         sfxAccept.play();
+		if (game !== null) console.log("gameDetails - game.title:", game.title);
+		else console.log("gameDetails - game.title:", "null");
+		
         // As long as there is a state history, save the last game
-        if (lastState.length != 0)
+        if (lastState.length != 0){
+			console.log("gameDetails - currentGame.title:", currentGame.title);
             lastGame.push(currentGame);
+		}
 
         // Push the new game
-        if (game !== null)
+        if (game !== null){
             currentGame = game;
-
+			console.log("gameDetails - new currentGame.title:", currentGame.title);
+		}
+        
         // Save the state before pushing the new one
+		console.log("Previous State:", state);
         lastState.push(state);
         root.state = "gameviewscreen";
     }
@@ -537,7 +546,6 @@ FocusScope {
         anchors.fill: parent
         sourceComponent: gameview
         asynchronous: true
-        //game: currentGame
     }
 
     Loader  {
@@ -593,20 +601,57 @@ FocusScope {
         }
     }
 
-    //timer to test a demo mode
-    property var counter: 0
+    //property, timers & functions to manage a demo mode in gameOS theme ;-)
+	property var demoLaunched: false
+	
+	function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    Keys.onReleased:{//use to detect any move in theme
+        //console.log("Global Keys.onReleased");
+        if(settings.DemoTriggeringDelay !== "Deactivated"){
+            //if any key is used, we restart demoTrigger timer.
+            demoTrigger.running = false;
+            demoTrigger.running = true;
+        }
+        else demoTrigger.running = false;
+        //and stop demo in all cases
+        demoTimer.running = false;
+		demoLaunched = false;
+    }
+
     Timer {
-        id: netplayTimer
-        interval: 5000 // Run the timer 5000 ms for testing
-        repeat: true
-        running: true
-        triggeredOnStart: true
+        id: demoTrigger
+        interval: settings.DemoTriggeringDelay !== "Deactivated" ? parseInt(settings.DemoTriggeringDelay,10) * 60000 : 0 //start demo after 3 min
+        repeat: false
+        running: settings.DemoTriggeringDelay !== "Deactivated" ? true : false
+        triggeredOnStart: false
         onTriggered: {
-			//gameview.currentGame = 
-                
+            demoTimer.running = true;
         }
     }
 
+    Timer {
+        id: demoTimer
+        interval: 60000 // Run the timer every 60s
+        repeat: true
+        running: false
+        triggeredOnStart: true
+        onTriggered: {
+            //selection any collection
+            var demoCollectionIndex = 0;
+            do{
+                demoCollectionIndex = getRandomInt(api.collections.count-1);
+                console.log("api.collections.get(demoCollectionIndex).shortName:",api.collections.get(demoCollectionIndex).shortName);
+            }while(api.collections.get(demoCollectionIndex).shortName === "imageviewer")
+            //selection game in collection
+            var demoGameIndex = getRandomInt(api.collections.get(demoCollectionIndex).games.count-1);
+			demoLaunched = true;
+            gameDetails(api.collections.get(demoCollectionIndex).games.get(demoGameIndex));
+            lastState[lastState.length-1] = "showcasescreen";
+        }
+    }
 
     Component {
         id: launchgameview

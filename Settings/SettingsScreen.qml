@@ -234,6 +234,14 @@ FocusScope {
             settingName: "Show play stats"
             setting: "No,Yes"
         }
+        ListElement {
+            settingName: "Demo triggering delay (in minutes)"
+            setting: "Deactivated,1,2,3,4,5,10,20,30"
+        }
+        ListElement {
+            settingName: "Demo show full details"
+            setting: "No,Yes"
+        }		
     }
 
     property var gamePage: {

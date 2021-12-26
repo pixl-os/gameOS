@@ -36,7 +36,7 @@ FocusScope {
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
     property bool iamsteam: game ? (collectionShortName === "steam") : false
     property bool canPlayVideo: settings.VideoPreview === "Yes"
-    property real detailsOpacity: (settings.DetailsDefault === "Yes") ? 1 : 0
+    property real detailsOpacity: ((settings.DetailsDefault === "Yes") && (demoLaunched !== true)) || ((settings.DemoShowFullDetails === "Yes") && (demoLaunched === true)) ? 1 : 0
 	property real retroachievementsOpacity: 0
 	property bool blurBG: settings.GameBlurBackground === "Yes"
     property string publisherName: {
