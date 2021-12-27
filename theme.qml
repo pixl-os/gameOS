@@ -647,12 +647,17 @@ FocusScope {
             }while(api.collections.get(demoCollectionIndex).shortName === "imageviewer")
             //selection game in collection
             var demoGameIndex = 0;
+            var loopCount = 0; //loopCount is here to unlock when system is not or no well scrapped
             do{
                 demoGameIndex = getRandomInt(api.collections.get(demoCollectionIndex).games.count-1);
-            }while(api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length === 0)
-			demoLaunched = true;
-            gameDetails(api.collections.get(demoCollectionIndex).games.get(demoGameIndex));
-            lastState[lastState.length-1] = "showcasescreen";
+                loopCount++;
+            }while((api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length === 0) && (loopCount <= 10))
+
+            if(api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length !== 0){
+                demoLaunched = true;
+                gameDetails(api.collections.get(demoCollectionIndex).games.get(demoGameIndex));
+                lastState[lastState.length-1] = "showcasescreen";
+            }
         }
     }
 
