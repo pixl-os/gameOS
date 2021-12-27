@@ -30,7 +30,7 @@ FocusScope {
         gameDetails(list.currentGame(gamegrid.currentIndex));
     }
 
-    property var sortedGames;
+    property var sortedGames: null;
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
