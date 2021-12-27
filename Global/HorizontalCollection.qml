@@ -83,7 +83,7 @@ FocusScope {
         currentIndex: focus ? savedIndex : -1
         Component.onCompleted: positionViewAtIndex(savedIndex, ListView.Visible)
 
-        model: search.games ? search.games : api.allGames
+        model: typeof(search) !== "undefined" ? search.games : api.allGames
         delegate: DynamicGridItem {
             selected: ListView.isCurrentItem && collectionList.focus
             width: itemWidth
@@ -99,7 +99,7 @@ FocusScope {
                 if (selected) {
 					videoToStop = true;
 					activateSelected();
-                    gameDetails(search.currentGame(currentIndex));
+                    gameDetails(search.currentGame(collectionList.currentIndex));
                 } else {
                     activate(index);
                     collectionList.currentIndex = index;
