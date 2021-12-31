@@ -1,6 +1,23 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2021-12-31
+- improve display of helpbar buttons in all case
+- add helpbar button for netplay
+- improve button for gamepad start and select
+- add button and mechanism to hide or replace RA button
+- add calling of Netplay Dialog box from main of pegasus
+- adapt management of retroachievements with netplay button
+- improve GameAchievements view
+- netplay: add code to set game
+- fix to have netplay button in helpbar only when it's activated
+- gaemView: to use L1/R1 to change game in a system
+- HorizontalCollection: little fix on undefined value tested
+- demo mode: add demo mode using gameview
+- demo mode: add check if video exists before to launch demo gameView
+- demo mode: fix to avoid infinity loop on system not well scrapped
+- initialize sortedGame to fix L2/R2 letter scrolling in gridviewmenu (system view)
+
 ## [recalbox-integration] - 2021-09-27
 - fix settings for 'play stats' conf
 - add new feature to change automatically favorite displayed in header of showcaseview
