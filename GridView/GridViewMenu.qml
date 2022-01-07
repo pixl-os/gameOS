@@ -390,7 +390,7 @@ FocusScope {
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxToggle.play();
-            cycleSort();
+			headercontainer.focus = true;
             return;
         }
 
@@ -454,7 +454,7 @@ FocusScope {
             button: "details"
         }
         ListElement {
-            name: "Filters"
+            name: "Filters/Search"
             button: "filters"
         }
         ListElement {
