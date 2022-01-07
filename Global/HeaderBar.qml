@@ -23,7 +23,7 @@ import "../utils.js" as Utils
 FocusScope {
     id: root
 
-    property bool searchActive
+    property bool searchActive: false
 
     onFocusChanged: buttonbar.currentIndex = 0;
 
@@ -121,7 +121,17 @@ FocusScope {
                 id: searchbar
 
                 property bool selected: ListView.isCurrentItem && root.focus
-                onSelectedChanged: if (!selected && searchActive) toggleSearch();
+                onSelectedChanged:{
+					//console.log("onSelectedChanged");
+					//console.log("searchbar.selected :",searchbar.selected); 
+					//console.log("searchActive : ",searchActive);
+					//console.log("searchInput.focus : ",searchInput.focus);
+					if (!searchbar.selected && searchActive) toggleSearch();
+					if(searchbar.selected) {
+						searchbar.focus = true;
+						searchInput.cursorVisible = false;
+					}
+				}
 
                 width: (searchActive || searchTerm != "") ? vpx(250) : height
                 height: vpx(40)
@@ -191,14 +201,29 @@ FocusScope {
 
                 Keys.onPressed: {
                     // Accept
+					//console.log("searchbar.Keys.onPressed");
+					//console.log("searchActive : ",searchActive);
+					//console.log("searchbar.selected :",searchbar.selected); 
+					//console.log("searchInput.focus : ",searchInput.focus);
+					//console.log("cursorVisible : ",	searchInput.cursorVisible);				
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
                         if (!searchActive) {
                             toggleSearch();
-                            searchInput.selectAll();
-                        } else {
+			    searchInput.focus = true;
+			    searchInput.selectAll();		    
+                        } 
+			else {
                             searchInput.selectAll();
                         }
+                    }
+                    // Cancel
+                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        if (searchActive) {
+                            toggleSearch();
+                        }
+			searchInput.focus = false;
                     }
                 }
             }
