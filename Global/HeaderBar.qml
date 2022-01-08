@@ -99,7 +99,7 @@ FocusScope {
 					//console.log("searchbar.selected :",searchbar.selected); 
 					//console.log("searchInput.searchActive : ",searchInput.searchActive);
 					//console.log("searchInput.focus : ",searchInput.focus);
-					if (!searchbar.selected && searchInput.searchActive) toggleSearch();
+                    if (!searchbar.selected && searchInput.searchActive) searchInput.searchActive = !searchInput.searchActive;
 					if(searchbar.selected) {
 						searchbar.focus = true;
 						searchInput.cursorVisible = false;
@@ -165,85 +165,12 @@ FocusScope {
                     onClicked: {
                         if (!searchInput.searchActive)
                         {
-                            toggleSearch();
+                            searchInput.searchActive != searchInput.searchActive;
                         }
                     }
                 }
 
-
-				property var counter: 0
-				property var previousVirtualKeyboardVisibility: false
-				
-				function sleepFor(sleepDuration){
-					var now = new Date().getTime();
-					while(new Date().getTime() < now + sleepDuration){ /* Do nothing */ };
-				}
-
-				function virtualKeyboardOnReleased(ev){
-					ev.accepted = true;
-					return ev.accepted;					
-                }
-				
-				Keys.onReleased:{
-					event.accepted = virtualKeyboardOnReleased(event);
-				}
- 
-				function virtualKeyboardOnPressed(ev,input,editionActive){
-                    console.log("searchbar.Keys.onPressed : ", counter++);
-					//console.log("previousVirtualKeyboardVisibility : ",previousVirtualKeyboardVisibility);
-					//console.log("ev.key : ", ev.key);
-					//console.log("editionActive : ",editionActive);
-					//console.log("input.focus : ",input.focus);
-					//console.log("cursorVisible : ",	input.cursorVisible);
-					//console.log("inputPanelLoader.active : ",inputPanelLoader.active);
-					//console.log("Qt.inputMethod.visible : ",Qt.inputMethod.visible);						                  
-					// Accept
-					if (api.keys.isAccept(ev) && !ev.isAutoRepeat) {
-                        //console.log("isAccept");
-						ev.accepted = true;
-                        if (!editionActive) {
-							editionActive = !editionActive;
-							input.focus = true;
-							previousVirtualKeyboardVisibility = true;
-							input.selectAll();
-                        } 
-						else if ((ev.key !== Qt.Key_Return) && (ev.key !== Qt.Key_Enter)){
-								if(inputPanelLoader.active){	
-									keyEmitter.keyPressed(appWindow, Qt.Key_Return);
-									//sleepFor(25);
-									keyEmitter.keyRelease(appWindow, Qt.Key_Return);
-									//sleepFor(25);
-								}
-						}
-						else if(editionActive && !Qt.inputMethod.visible && (previousVirtualKeyboardVisibility === false)){
-							//console.log("editionActive && !Qt.inputMethod.visible");
-							input.focus = false;
-							input.focus = true;
-							input.selectAll();
-						}
-						previousVirtualKeyboardVisibility = Qt.inputMethod.visible;
-					}
-					
-                    // Cancel
-                    if (api.keys.isCancel(ev) && !ev.isAutoRepeat) {
-						//console.log("isCancel");
-                        ev.accepted = true;
-						if(editionActive && Qt.inputMethod.visible){
-							if ((ev.key !== Qt.Key_Return) && (ev.key !== Qt.Key_Enter)){							
-								keyEmitter.keyRelease(appWindow, Qt.Key_Return);
-							}
-						}
-						else if (editionActive && !Qt.inputMethod.visible) {
-                            editionActive = !editionActive;
-							input.focus = true;
-							input.cursorVisible = false;
-                        }
-						else if (Qt.inputMethod.visible){
-							input.focus = false;
-						}
-                    }
-					return ev.accepted, input.focus, editionActive ;
-                }
+                Keys.onReleased:{ event.accepted = virtualKeyboardOnReleased(event);}
 
 				Keys.onPressed: {event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);}
 
