@@ -898,6 +898,7 @@ FocusScope {
 					visible: (setting === "to edit")
 					focus: selected					
 					onFocusChanged: if (setting === "to edit") saveSetting();
+                    readOnly: (setting === "to edit") ? false : true
                     text:  {
 						var value = "";
 						if (setting === "to edit") 
