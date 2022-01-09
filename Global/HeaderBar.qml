@@ -93,7 +93,7 @@ FocusScope {
             Item {
                 id: searchbar
 
-                property bool selected: ListView.isCurrentItem && root.focus
+                property bool selected: (buttonbar.currentIndex === 0) && root.focus
                 onSelectedChanged:{
 					//console.log("onSelectedChanged");
 					//console.log("searchbar.selected :",searchbar.selected); 
@@ -172,7 +172,17 @@ FocusScope {
 
                 Keys.onReleased:{ event.accepted = virtualKeyboardOnReleased(event);}
 
-				Keys.onPressed: {event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);}
+                Keys.onPressed: {
+                    event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);
+                    //console.log("-----After update-----");
+                    //console.log("event.accepted : ", event.accepted);
+                    //console.log("searchInput.focus : ", searchInput.focus);
+                    //console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    //console.log("searchbar.selected : ",searchbar.selected);
+                    //console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
+                    //console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
+                    //console.log("root.focus : ", root.focus);
+                }
 
             }
 
