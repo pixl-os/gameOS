@@ -351,6 +351,8 @@ FocusScope {
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
             isRightTriggerPressed = false;
+			//to reset demo
+			resetDemo();
             return;
         }
 

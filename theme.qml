@@ -608,8 +608,12 @@ FocusScope {
       return Math.floor(Math.random() * max);
     }
 
-    Keys.onReleased:{//use to detect any move in theme
-        //console.log("Global Keys.onReleased");
+
+    //in this section, we use timers/function/events to detect any move in theme but could be catch by other view.
+    //Optionally: add resetDemo() if you have Keys.onReleased if other view outside theme.qml.
+    //We advice also to do it where the event is accepted near line: "event.accepted = true;"
+    function resetDemo(){
+        //console.log("resetDemo() launched !");
         if(settings.DemoTriggeringDelay !== "Deactivated"){
             //if any key is used, we restart demoTrigger timer.
             demoTrigger.running = false;
@@ -618,12 +622,18 @@ FocusScope {
         else demoTrigger.running = false;
         //and stop demo in all cases
         demoTimer.running = false;
-		demoLaunched = false;
+        demoLaunched = false;
     }
 
+    //we use Keys.OnReleased because this event is rarelly used in children views.
+    Keys.onReleased:{
+        resetDemo();
+    }
+
+    //this timer is use to trigger the demo
     Timer {
         id: demoTrigger
-        interval: settings.DemoTriggeringDelay !== "Deactivated" ? parseInt(settings.DemoTriggeringDelay,10) * 60000 : 0 //start demo after 3 min
+        interval: settings.DemoTriggeringDelay !== "Deactivated" ? parseInt(settings.DemoTriggeringDelay,10) * 60000 : 60000 //no set to 0 to avoid launch of demo during settings udpate
         repeat: false
         running: settings.DemoTriggeringDelay !== "Deactivated" ? true : false
         triggeredOnStart: false
@@ -632,6 +642,7 @@ FocusScope {
         }
     }
 
+    //this timer is used during demo to change video every each minutes
     Timer {
         id: demoTimer
         interval: 60000 // Run the timer every 60s
@@ -643,7 +654,7 @@ FocusScope {
             var demoCollectionIndex = 0;
             do{
                 demoCollectionIndex = getRandomInt(api.collections.count-1);
-                console.log("api.collections.get(demoCollectionIndex).shortName:",api.collections.get(demoCollectionIndex).shortName);
+                //console.log("api.collections.get(demoCollectionIndex).shortName:",api.collections.get(demoCollectionIndex).shortName);
             }while(api.collections.get(demoCollectionIndex).shortName === "imageviewer")
             //selection game in collection
             var demoGameIndex = 0;

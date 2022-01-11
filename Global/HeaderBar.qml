@@ -170,7 +170,11 @@ FocusScope {
                     }
                 }
 
-                Keys.onReleased:{ event.accepted = virtualKeyboardOnReleased(event);}
+                Keys.onReleased:{ 
+					event.accepted = virtualKeyboardOnReleased(event);
+					//to reset demo if needed
+					if (event.accepted) resetDemo();
+				}
 
                 Keys.onPressed: {
                     event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);
