@@ -991,6 +991,7 @@ FocusScope {
 						if (setting === "to edit" && settingtextfield.readOnly === false ) {
 							settingtextfield.readOnly = true;
 							settingList.focus = true;
+                            active = false; //to force to reset to false in this case
 						}
 						//else we come back to parent menu
 						else if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
