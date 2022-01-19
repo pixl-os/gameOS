@@ -393,7 +393,7 @@ FocusScope {
     // Gradient
     LinearGradient {
         id: bggradient
-
+        visible: (demoLaunched !== true)
         width: parent.width
         height: parent.height/2
         start: Qt.point(0, 0)
@@ -600,7 +600,7 @@ FocusScope {
 
             text: "Play game"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -747,9 +747,10 @@ FocusScope {
 								}
         }
 
+        //media list
         HorizontalCollection {
             id: media
-
+            visible: (demoLaunched !== true)
             width: root.width - vpx(70) - globalMargin
             height: ((root.width - globalMargin * 2) / 6.0) + vpx(60)
             title: "Media"
@@ -785,7 +786,7 @@ FocusScope {
         // More by publisher
         HorizontalCollection {
             id: list1
-
+            visible: (demoLaunched !== true)
             property bool selected: ListView.isCurrentItem
             focus: selected
             width: root.width - vpx(70) - globalMargin
@@ -801,7 +802,7 @@ FocusScope {
         // More in genre
         HorizontalCollection {
             id: list2
-
+            visible: (demoLaunched !== true)
             property bool selected: ListView.isCurrentItem
             focus: selected
             width: root.width - vpx(70) - globalMargin

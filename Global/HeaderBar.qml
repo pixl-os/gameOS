@@ -19,32 +19,19 @@ import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.10
 import QtQml.Models 2.12
 import "../utils.js" as Utils
+import QtQuick.VirtualKeyboard 2.15
 
 FocusScope {
     id: root
 
-    property bool searchActive
-
     onFocusChanged: buttonbar.currentIndex = 0;
 
-    function toggleSearch() {
-        searchActive = !searchActive;
-    }
 
     Item {
         id: container
 
         anchors.fill: parent
 
-        //        // Platform logo
-        //        Image {
-        //            id: logobg
-
-        //            anchors.fill: platformlogo
-        //            source: "../assets/images/gradient.png"
-        //            asynchronous: true
-        //            visible: false
-        //        }
 
         Image {
             id: platformlogo
@@ -65,23 +52,9 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-//            sourceSize: vpx(250)
             smooth: true
-            //            visible: false
             asynchronous: true
         }
-
-        //        OpacityMask {
-        //            anchors.fill: logobg
-        //            source: logobg
-        //            maskSource: platformlogo
-        //            // Mouse/touch functionality
-        //            MouseArea {
-        //                anchors.fill: parent
-        //                hoverEnabled: true
-        //                onClicked: previousScreen();
-        //            }
-        //        }
 
         // Platform title
         Text {
@@ -120,10 +93,20 @@ FocusScope {
             Item {
                 id: searchbar
 
-                property bool selected: ListView.isCurrentItem && root.focus
-                onSelectedChanged: if (!selected && searchActive) toggleSearch();
+                property bool selected: (buttonbar.currentIndex === 0) && root.focus
+                onSelectedChanged:{
+					//console.log("onSelectedChanged");
+					//console.log("searchbar.selected :",searchbar.selected); 
+					//console.log("searchInput.searchActive : ",searchInput.searchActive);
+					//console.log("searchInput.focus : ",searchInput.focus);
+                    if (!searchbar.selected && searchInput.searchActive) searchInput.searchActive = !searchInput.searchActive;
+					if(searchbar.selected) {
+						searchbar.focus = true;
+						searchInput.cursorVisible = false;
+					}
+				}
 
-                width: (searchActive || searchTerm != "") ? vpx(250) : height
+                width: (searchInput.searchActive || searchTerm != "") ? vpx(250) : height
                 height: vpx(40)
 
                 Behavior on width {
@@ -133,10 +116,9 @@ FocusScope {
                 Rectangle {
                     width: parent.width
                     height: parent.height
-                    color: searchbar.selected && !searchActive ? theme.accent : "white"
+                    color: searchbar.selected && !searchInput.searchActive ? theme.accent : "white"
                     radius: height/2
-                    opacity: searchbar.selected && !searchActive ? 1 : searchActive ? 0.4 : 0.2
-
+                    opacity: searchbar.selected && !searchInput.searchActive ? 1 : searchInput.searchActive ? 0.4 : 0.2
                 }
 
                 Image {
@@ -149,13 +131,13 @@ FocusScope {
                         top: parent.top; topMargin: vpx(10)
                     }
                     source: "../assets/images/searchicon.svg"
-                    opacity: searchbar.selected && !searchActive ? 1 : searchActive ? 0.8 : 0.5
+                    opacity: searchbar.selected && !searchInput.searchActive ? 1 : searchInput.searchActive ? 0.8 : 0.5
                     asynchronous: true
                 }
 
                 TextInput {
                     id: searchInput
-
+					property bool searchActive: false
                     anchors {
                         left: searchicon.right; leftMargin: vpx(10)
                         top: parent.top; bottom: parent.bottom
@@ -163,7 +145,7 @@ FocusScope {
                     }
                     verticalAlignment: Text.AlignVCenter
                     color: theme.text
-                    focus: searchbar.selected && searchActive
+                    focus: searchbar.selected && searchInput.searchActive
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
                     clip: true
@@ -176,31 +158,36 @@ FocusScope {
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
-                    enabled: !searchActive
+                    enabled: !searchInput.searchActive
                     hoverEnabled: true
                     onEntered: {}
                     onExited: {}
                     onClicked: {
-                        if (!searchActive)
+                        if (!searchInput.searchActive)
                         {
-                            toggleSearch();
-                            searchInput.selectAll();
+                            searchInput.searchActive != searchInput.searchActive;
                         }
                     }
                 }
 
+                Keys.onReleased:{ 
+					event.accepted = virtualKeyboardOnReleased(event);
+					//to reset demo if needed
+					if (event.accepted) resetDemo();
+				}
+
                 Keys.onPressed: {
-                    // Accept
-                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                        event.accepted = true;
-                        if (!searchActive) {
-                            toggleSearch();
-                            searchInput.selectAll();
-                        } else {
-                            searchInput.selectAll();
-                        }
-                    }
+                    event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);
+                    //console.log("-----After update-----");
+                    //console.log("event.accepted : ", event.accepted);
+                    //console.log("searchInput.focus : ", searchInput.focus);
+                    //console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    //console.log("searchbar.selected : ",searchbar.selected);
+                    //console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
+                    //console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
+                    //console.log("root.focus : ", root.focus);
                 }
+
             }
 
             // Ascending/descending

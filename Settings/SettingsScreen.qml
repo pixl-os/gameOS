@@ -898,6 +898,7 @@ FocusScope {
 					visible: (setting === "to edit")
 					focus: selected					
 					onFocusChanged: if (setting === "to edit") saveSetting();
+                    readOnly: true //set to readonly by default // to unlock if we press A and if setting = "to edit"
                     text:  {
 						var value = "";
 						if (setting === "to edit") 
@@ -906,7 +907,7 @@ FocusScope {
 						}
 						return value;
 					}
-                    color: focus ? "black" : theme.text
+                    color: "black"
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
                     verticalAlignment: Text.AlignVCenter
@@ -945,21 +946,66 @@ FocusScope {
                     saveSetting();
                 }
 
+				Keys.onReleased:{
+					if (setting === "to edit" && settingtextfield.readOnly === true ) {
+						event.accepted = virtualKeyboardOnReleased(event);
+						//to reset demo if needed
+						if (event.accepted) resetDemo();
+					}
+				}
+
+				property bool active : false //set to false by default
+				onFocusChanged:{
+						// console.log("-----onFocusChanged-----");
+						// console.log("settingtextfield.focus : ", settingtextfield.focus);
+						// console.log("settingtextfield.readOnly : ", settingtextfield.readOnly);
+						// console.log("active : ",active);
+						// console.log("selected : ",selected);
+					    if(settingtextfield.focus) active = false; //set to false to ahve the selection
+				}
                 Keys.onPressed: {
-                    // Accept
+					// console.log("-----Before update-----");
+					// console.log("event.accepted : ", event.accepted);
+					// console.log("settingtextfield.focus : ", settingtextfield.focus);
+					// console.log("settingtextfield.readOnly : ", settingtextfield.readOnly);
+					// console.log("active : ",active);
+					// console.log("selected : ",selected);
+						
+					// Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                        event.accepted = true;
-                        sfxToggle.play()
-                        nextSetting();
-                        saveSetting();
+						event.accepted = true;
+						sfxToggle.play();
+						nextSetting();
+						saveSetting();
+						//to activate edition (and potantially virtual keyboard)
+						if (setting === "to edit" && settingtextfield.readOnly === true ) {
+							settingtextfield.readOnly = false;
+							settingtextfield.focus = true;
+						}
                     }
                     // Back
-                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                    else if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                         event.accepted = true;
-                        sfxBack.play()
-                        if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
+                        sfxBack.play();
+						//to deactivate edition (and potantially virtual keyboard)
+						if (setting === "to edit" && settingtextfield.readOnly === false ) {
+							settingtextfield.readOnly = true;
+							settingList.focus = true;
+                            active = false; //to force to reset to false in this case
+						}
+						//else we come back to parent menu
+						else if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
 						else pagelist.focus = true;
                     }
+					if (setting === "to edit" && settingtextfield.readOnly === false ) {
+						event.accepted, settingtextfield.focus, active = virtualKeyboardOnPressed(event,settingtextfield,active);
+					}
+					// console.log("-----After update-----");
+					// console.log("event.accepted : ", event.accepted);
+					// console.log("settingtextfield.focus : ", settingtextfield.focus);
+					// console.log("settingtextfield.readOnly : ", settingtextfield.readOnly);
+					// console.log("active : ",active);
+					// console.log("selected : ",selected);
                 }
 
                 // Mouse/touch functionality
