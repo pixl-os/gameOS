@@ -26,8 +26,12 @@ FocusScope {
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
-        storedCollectionGameIndex = gamegrid.currentIndex
-        gameDetails(list.currentGame(gamegrid.currentIndex));
+        //console.log("list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
+        //check added when search is empty and we try to launch a game in all cases
+        if(list.currentGame(gamegrid.currentIndex) !== null){
+            storedCollectionGameIndex = gamegrid.currentIndex
+            gameDetails(list.currentGame(gamegrid.currentIndex));
+        }
     }
 
     property var sortedGames: null;
