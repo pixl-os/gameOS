@@ -954,7 +954,7 @@ FocusScope {
 					}
 				}
 
-				property var active : false; //set to false by default
+				property bool active : false //set to false by default
 				onFocusChanged:{
 						// console.log("-----onFocusChanged-----");
 						// console.log("settingtextfield.focus : ", settingtextfield.focus);
