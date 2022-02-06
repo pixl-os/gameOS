@@ -1040,7 +1040,7 @@ FocusScope {
             button: "cancel"
         }
         ListElement {
-            name: "Next"
+            name: "Next/Change/Edit"
             button: "accept"
 		}
 	}
