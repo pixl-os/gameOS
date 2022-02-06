@@ -499,7 +499,7 @@ FocusScope {
         id: showcaseLoader
 
         focus: (root.state === "showcasescreen")
-		active: (viewIsLoading && opacity) || !viewIsLoading ? true : false
+		active: true //force loading in all cases
 		opacity: focus ? 1 : 0
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
