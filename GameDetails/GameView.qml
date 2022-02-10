@@ -530,7 +530,7 @@ FocusScope {
             }
             fillMode: Image.PreserveAspectFit
             source: {
-                if(settings.SystemLogoStyle === "Color")
+                if(settings.SystemLogoStyle === "White")
                 {
                     return "../assets/images/logospng/" + Utils.processPlatformName(game.collections.get(0).shortName) + ".png";
                 }
