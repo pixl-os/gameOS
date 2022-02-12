@@ -1,6 +1,23 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2022-12-02
+- demo mode: remove fading/lists and highlight in demo mode
+- best fix for search access in system grid view
+- select search directly from y/triangle button directly and not only filter
+- setup of virtualkeyboard for search in theme
+- leaning and migration of function in Pegasus's main.qml
+- change selected way and add logs in comments
+- set textfield in read-only for list of values parameter
+- introduce demo resetting at OnRelease + fix on settings
+- add virtual keyboard support in settings of theme
+- fix in settings for desactivated edition for virtual keyboard
+- fix in settings to use good variable type
+- fix gridviewmenu to avoid to launch game from empty list and to gameview
+- add Change & Edit word in help for settings
+- fix showcaseLoader to load in all cases at start and after game ending
+- fix for white/color logo in gameview
+
 ## [recalbox-integration] - 2021-12-31
 - improve display of helpbar buttons in all case
 - add helpbar button for netplay
