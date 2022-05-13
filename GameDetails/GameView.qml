@@ -258,19 +258,38 @@ FocusScope {
     Component {
         id: videoPreviewWrapper
 
-        Video {
-            id: videocomponent
-
-            property bool videoExists: game ? game.assets.videos.length : false
-            source: videoExists ? game.assets.videos[0] : ""
+        Rectangle{
             anchors.fill: parent
-            fillMode: VideoOutput.PreserveAspectCrop
-            muted: settings.AllowVideoPreviewAudio === "No"
-            loops: MediaPlayer.Infinite
-            autoPlay: true
-            //onPlaying: videocomponent.seek(5000)
-        }
+            Video {
+                id: videocomponent
 
+                property bool videoExists: game ? game.assets.videos.length : false
+                source: {
+                        if(videoExists){
+                            console.log("video path:",game.assets.videos[0]);
+                            return game.assets.videos[0];
+                        }
+                        else return "";
+                }
+                anchors.fill: parent
+                //fillMode: VideoOutput.PreserveAspectCrop
+                fillMode: Video.PreserveAspectFit
+
+                muted: settings.AllowVideoPreviewAudio === "No"
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+                //onPlaying: videocomponent.seek(5000)
+            }
+            Image {
+                id: overlaycomponent
+                //game.collections.get(0).shortName
+                property bool videoExists: game ? game.assets.videos.length : false
+                source: videoExists ? ("file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png") : ""
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                //fillMode: VideoOutput.PreserveAspectFit
+            }
+        }
     }
 
     // Video
