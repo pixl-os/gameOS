@@ -199,8 +199,24 @@ FocusScope {
             setting: "Screenshot,Fanart"
         }
         ListElement {
+            settingName: "Game Background overlay"
+            setting: "No,Yes"
+        }
+        ListElement {
             settingName: "Game Logo"
             setting: "Show,Text only,Hide"
+        }
+        ListElement {
+            settingName: "Game Logo position"
+            setting: "Left,Right"
+        }
+        ListElement {
+            settingName: "System Logo"
+            setting: "Show,Hide"
+        }
+        ListElement {
+            settingName: "System Logo position"
+            setting: "Left,Right"
         }
         ListElement {
             settingName: "Default to full details"
@@ -209,6 +225,14 @@ FocusScope {
         ListElement {
             settingName: "Video preview"
             setting: "Yes,No"
+        }
+        ListElement {
+            settingName: "Video preview overlay"
+            setting: "Yes,No"
+        }
+        ListElement {
+            settingName: "Overlays source"
+            setting: "Default,Share"
         }
         ListElement {
             settingName: "Video preview audio"
@@ -241,7 +265,7 @@ FocusScope {
         ListElement {
             settingName: "Demo show full details"
             setting: "No,Yes"
-        }		
+        }
     }
 
     property var gamePage: {

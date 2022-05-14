@@ -258,19 +258,45 @@ FocusScope {
     Component {
         id: videoPreviewWrapper
 
-        Video {
-            id: videocomponent
-
-            property bool videoExists: game ? game.assets.videos.length : false
-            source: videoExists ? game.assets.videos[0] : ""
+        Rectangle{
             anchors.fill: parent
-            fillMode: VideoOutput.PreserveAspectCrop
-            muted: settings.AllowVideoPreviewAudio === "No"
-            loops: MediaPlayer.Infinite
-            autoPlay: true
-            //onPlaying: videocomponent.seek(5000)
-        }
+            Video {
+                id: videocomponent
+                property bool videoExists: game ? game.assets.videos.length : false
+                source: {
+                        if(videoExists){
+                            console.log("video path:",game.assets.videos[0]);
+                            return game.assets.videos[0];
+                        }
+                        else return "";
+                }
+                anchors.fill: parent
+                fillMode: settings.AllowVideoPreviewOverlay === "Yes" ? VideoOutput.PreserveAspectFit : VideoOutput.PreserveAspectCrop
+                muted: settings.AllowVideoPreviewAudio === "No"
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+            }
+            Image {
+                id: overlaycomponent
+                property bool videoExists: game ? game.assets.videos.length : false
 
+                source:{
+                    if(videoExists){
+                        if(settings.OverlaysSource === "Default"){
+                            return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+                        }
+                        else{
+                            return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+                        }
+                    }
+                    else return "";
+                }
+
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                visible: settings.AllowVideoPreviewOverlay === "Yes" ? true : false
+            }
+        }
     }
 
     // Video
@@ -304,7 +330,7 @@ FocusScope {
         property var randoFanart: game ? game.assets.backgroundList[randoFanartNumber] : ""
         property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
         source: actualBackground || ""
-        fillMode: Image.PreserveAspectCrop
+        fillMode: settings.AllowGameBackgroundOverlay === "Yes" ? Image.PreserveAspectFit : Image.PreserveAspectCrop
         smooth: true
         Behavior on opacity { NumberAnimation { duration: 500 } }
         visible: !blurBG
@@ -330,13 +356,35 @@ FocusScope {
         visible: !iamsteam && (settings.ShowScanlines === "Yes")
     }
 
+    // Background overlay
+    Image {
+        id: overlayBackground
+        source:{
+            if(settings.OverlaysSource === "Default"){
+                return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+            }
+            else{
+                return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+            }
+        }
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        visible: settings.AllowGameBackgroundOverlay === "Yes" ? true : false
+    }
+
     // Clear logo
     Image {
         id: logo
-
         anchors {
             top: parent.top; //topMargin: vpx(70)
-            left: parent.left; leftMargin: vpx(70)
+            left:{
+                if (settings.GameLogoPosition === "Left") return parent.left;
+            }
+            leftMargin: (settings.GameLogoPosition === "Left") ? vpx(70) : 0
+            right:{
+                if (settings.GameLogoPosition === "Right") return parent.right;
+            }
+            rightMargin: (settings.GameLogoPosition === "Right") ? vpx(70) : 0
         }
         width: vpx(500)
         height: vpx(450) + header.height
@@ -372,16 +420,28 @@ FocusScope {
 
         anchors {
             top:    logo.top;
-            left:   logo.left;//    leftMargin: globalMargin
+            left:   logo.left;
             right:  parent.right;
             bottom: logo.bottom
         }
 
+        anchors {
+            top: logo.top
+            left:{
+                if (settings.GameLogoPosition === "Left") return logo.left;
+                else return parent.left;
+            }
+            right:{
+                if (settings.GameLogoPosition === "Right") return logo.right;
+                else return parent.right;
+            }
+            bottom: logo.bottom
+        }
         color: theme.text
         font.family: titleFont.name
         font.pixelSize: vpx(80)
         font.bold: true
-        horizontalAlignment: Text.AlignHLeft
+        horizontalAlignment: (settings.GameLogoPosition === "Left") ? Text.AlignHLeft : Text.AlignHRight
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
         wrapMode: Text.WordWrap
@@ -526,7 +586,14 @@ FocusScope {
             anchors {
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
-                left: parent.left; leftMargin: globalMargin
+                left:{
+                    if (settings.SystemLogoPosition === "Left") return parent.left;
+                }
+                leftMargin: (settings.SystemLogoPosition === "Left") ? globalMargin : 0
+                right:{
+                    if (settings.SystemLogoPosition === "Right") return parent.right;
+                }
+                rightMargin: (settings.SystemLogoPosition === "Right") ? globalMargin : 0
             }
             fillMode: Image.PreserveAspectFit
             source: {
@@ -541,7 +608,7 @@ FocusScope {
             }
 //            sourceSize: vpx(25)
             smooth: true
-//            visible: false
+            visible: settings.SystemLogo === "Show" ? true : false
             asynchronous: true
         }
 
