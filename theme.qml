@@ -112,6 +112,7 @@ FocusScope {
             AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
             AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "No",
             AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "No",
+            OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
 			ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
 			DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",

@@ -279,7 +279,19 @@ FocusScope {
             Image {
                 id: overlaycomponent
                 property bool videoExists: game ? game.assets.videos.length : false
-                source: videoExists ? ("file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png") : ""
+
+                source:{
+                    if(videoExists){
+                        if(settings.OverlaysSource === "Default"){
+                            return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+                        }
+                        else{
+                            return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+                        }
+                    }
+                    else return "";
+                }
+
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
                 visible: settings.AllowVideoPreviewOverlay === "Yes" ? true : false
@@ -347,7 +359,14 @@ FocusScope {
     // Background overlay
     Image {
         id: overlayBackground
-        source: "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png"
+        source:{
+            if(settings.OverlaysSource === "Default"){
+                return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+            }
+            else{
+                return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+            }
+        }
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         visible: settings.AllowGameBackgroundOverlay === "Yes" ? true : false

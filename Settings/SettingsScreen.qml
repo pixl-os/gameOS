@@ -231,6 +231,10 @@ FocusScope {
             setting: "Yes,No"
         }
         ListElement {
+            settingName: "Overlays source"
+            setting: "Default,Share"
+        }
+        ListElement {
             settingName: "Video preview audio"
             setting: "No,Yes"
         }
