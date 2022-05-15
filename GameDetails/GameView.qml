@@ -50,6 +50,7 @@ FocusScope {
     }
 
     //parameter for Overlay
+    property bool overlay_exists: false
     property int aspect_ratio_index: 0
     property int custom_viewport_x: 0
     property int custom_viewport_y: 0
@@ -67,36 +68,40 @@ FocusScope {
 
     //function to prepare resize of video and screenshot depending Overlays configuration
     function getOverlaysParameters(){
-        aspect_ratio_index = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"aspect_ratio_index\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-        console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
-        if(aspect_ratio_index === 23){
-            //get the following parameter in this case
-            //custom_viewport_x = "251"
-            //custom_viewport_y = "10"
-            //custom_viewport_width = "1415"
-            //custom_viewport_height = "1060"
-            custom_viewport_x = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_x\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-            //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x); //to remove " by nothing
-            custom_viewport_y = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_y\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-            //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y); //to remove " by nothing
-            custom_viewport_width = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_width\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-            //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width); //to remove " by nothing
-            custom_viewport_height = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_height\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-            //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height); //to remove " by nothing
-            //check if overlay 1080p or 720p
-            if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
-                //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
-                custom_viewport_x = custom_viewport_x * (1280/1920);
-                custom_viewport_y = custom_viewport_y * (720/1080);
-                custom_viewport_width = custom_viewport_width * (1280/1920);
-                custom_viewport_height = custom_viewport_height * (720/1080);
-            }
+        overlay_exists = api.internal.system.run("test -f " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png && echo \"true\"");
+        console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
+        if(overlay_exists === true){
+            aspect_ratio_index = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"aspect_ratio_index\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+            if(aspect_ratio_index === 23){
+                //get the following parameter in this case
+                //custom_viewport_x = "251"
+                //custom_viewport_y = "10"
+                //custom_viewport_width = "1415"
+                //custom_viewport_height = "1060"
+                custom_viewport_x = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_x\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+                //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
+                custom_viewport_y = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_y\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+                //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
+                custom_viewport_width = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_width\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+                //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
+                custom_viewport_height = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_height\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+                //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
+                //check if overlay 1080p or 720p
+                if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
+                    //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
+                    custom_viewport_x = custom_viewport_x * (1280/1920);
+                    custom_viewport_y = custom_viewport_y * (720/1080);
+                    custom_viewport_width = custom_viewport_width * (1280/1920);
+                    custom_viewport_height = custom_viewport_height * (720/1080);
+                }
 
+            }
         }
-        console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x); //to remove " by nothing
-        console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y); //to remove " by nothing
-        console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width); //to remove " by nothing
-        console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height); //to remove " by nothing
+        console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
+        console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
+        console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
+        console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
 
     }
 
@@ -328,16 +333,16 @@ FocusScope {
                         else return "";
                 }
 
-                height: settings.AllowVideoPreviewOverlay === "Yes" ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
-                width: settings.AllowVideoPreviewOverlay === "Yes" ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+                height: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+                width: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
                 anchors.top: {
                     if(custom_viewport_y !== 0) return  parent.top;
                 }
                 anchors.left: {
                     if(custom_viewport_x !== 0) return  parent.left;
                 }
-                anchors.leftMargin: settings.AllowVideoPreviewOverlay === "Yes" ? custom_viewport_x : 0
-                anchors.topMargin: settings.AllowVideoPreviewOverlay === "Yes" ? custom_viewport_y : 0
+                anchors.leftMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
+                anchors.topMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
                 anchors.horizontalCenter:{
                     if(custom_viewport_x === 0) return  parent.horizontalCenter;
                 }
@@ -345,7 +350,7 @@ FocusScope {
                     if(custom_viewport_y === 0) return parent.verticalCenter;
                 }
 
-                fillMode: settings.AllowVideoPreviewOverlay === "Yes" ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
+                fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
                 muted: settings.AllowVideoPreviewAudio === "No"
                 loops: MediaPlayer.Infinite
                 autoPlay: true
@@ -380,16 +385,16 @@ FocusScope {
     Image {
         id: screenshot
 
-        height: settings.AllowGameBackgroundOverlay === "Yes" ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
-        width: settings.AllowGameBackgroundOverlay === "Yes" ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+        height: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+        width: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
         anchors.top: {
             if(custom_viewport_y !== 0) return  parent.top;
         }
         anchors.left: {
             if(custom_viewport_x !== 0) return  parent.left;
         }
-        anchors.leftMargin: settings.AllowGameBackgroundOverlay === "Yes" ? custom_viewport_x : 0
-        anchors.topMargin: settings.AllowGameBackgroundOverlay === "Yes" ? custom_viewport_y : 0
+        anchors.leftMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
+        anchors.topMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
         anchors.horizontalCenter:{
             if(custom_viewport_x === 0) return  parent.horizontalCenter;
         }
@@ -416,7 +421,7 @@ FocusScope {
         property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
         source: actualBackground || ""
 
-        fillMode: settings.AllowGameBackgroundOverlay === "Yes" ? Image.Stretch : Image.PreserveAspectCrop
+        fillMode: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? Image.Stretch : Image.PreserveAspectCrop
         smooth: true
         Behavior on opacity { NumberAnimation { duration: 500 } }
         visible: !blurBG
