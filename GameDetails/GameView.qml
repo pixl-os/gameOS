@@ -260,6 +260,7 @@ FocusScope {
 
         Rectangle{
             anchors.fill: parent
+            color: "black"
             Video {
                 id: videocomponent
                 property bool videoExists: game ? game.assets.videos.length : false
@@ -270,8 +271,14 @@ FocusScope {
                         }
                         else return "";
                 }
-                anchors.fill: parent
-                fillMode: settings.AllowVideoPreviewOverlay === "Yes" ? VideoOutput.PreserveAspectFit : VideoOutput.PreserveAspectCrop
+
+                //anchors.fill: parent
+                height: parent.height
+                width: (height/3)*4
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+                fillMode: settings.AllowVideoPreviewOverlay === "Yes" ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
                 muted: settings.AllowVideoPreviewAudio === "No"
                 loops: MediaPlayer.Infinite
                 autoPlay: true
@@ -311,7 +318,12 @@ FocusScope {
     Image {
         id: screenshot
 
-        anchors.fill: parent
+        //anchors.fill: parent
+        height: parent.height
+        width: (height/3)*4
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
         asynchronous: true
         property int randoScreenshotNumber: {
             if (game && settings.GameRandomBackground === "Yes")
@@ -330,7 +342,8 @@ FocusScope {
         property var randoFanart: game ? game.assets.backgroundList[randoFanartNumber] : ""
         property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
         source: actualBackground || ""
-        fillMode: settings.AllowGameBackgroundOverlay === "Yes" ? Image.PreserveAspectFit : Image.PreserveAspectCrop
+
+        fillMode: settings.AllowGameBackgroundOverlay === "Yes" ? Image.Stretch : Image.PreserveAspectCrop
         smooth: true
         Behavior on opacity { NumberAnimation { duration: 500 } }
         visible: !blurBG
