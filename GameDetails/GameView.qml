@@ -49,6 +49,57 @@ FocusScope {
         }
     }
 
+    //parameter for Overlay
+    property int aspect_ratio_index: 0
+    property int custom_viewport_x: 0
+    property int custom_viewport_y: 0
+    property int custom_viewport_width: 0
+    property int custom_viewport_height: 0
+
+    property string overlaySource:{
+       if(settings.OverlaysSource === "Default"){
+           return "/recalbox/share_init/overlays";
+       }
+       else{
+           return "/recalbox/share/overlays";
+       }
+    }
+
+    //function to prepare resize of video and screenshot depending Overlays configuration
+    function getOverlaysParameters(){
+        aspect_ratio_index = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"aspect_ratio_index\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+        console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+        if(aspect_ratio_index === 23){
+            //get the following parameter in this case
+            //custom_viewport_x = "251"
+            //custom_viewport_y = "10"
+            //custom_viewport_width = "1415"
+            //custom_viewport_height = "1060"
+            custom_viewport_x = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_x\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x); //to remove " by nothing
+            custom_viewport_y = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_y\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y); //to remove " by nothing
+            custom_viewport_width = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_width\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width); //to remove " by nothing
+            custom_viewport_height = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_height\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height); //to remove " by nothing
+            //check if overlay 1080p or 720p
+            if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
+                //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
+                custom_viewport_x = custom_viewport_x * (1280/1920);
+                custom_viewport_y = custom_viewport_y * (720/1080);
+                custom_viewport_width = custom_viewport_width * (1280/1920);
+                custom_viewport_height = custom_viewport_height * (720/1080);
+            }
+
+        }
+        console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x); //to remove " by nothing
+        console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y); //to remove " by nothing
+        console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width); //to remove " by nothing
+        console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height); //to remove " by nothing
+
+    }
+
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
     ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10 }
 
@@ -177,6 +228,9 @@ FocusScope {
         currentHelpbarModel = gameviewHelpModel;
     }
 
+
+
+
     onGameChanged: {
 				console.log("GameView - onGameChanged");
 				//reset default value for a new game loading
@@ -184,6 +238,8 @@ FocusScope {
 				//launch initialization of retroachievements
 				//the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
 				game.initRetroAchievements();
+                //init overlays parameters
+                root.getOverlaysParameters();
 	}	
 
 	Connections {
@@ -272,11 +328,22 @@ FocusScope {
                         else return "";
                 }
 
-                //anchors.fill: parent
-                height: parent.height
-                width: (height/3)*4
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                height: settings.AllowVideoPreviewOverlay === "Yes" ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+                width: settings.AllowVideoPreviewOverlay === "Yes" ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+                anchors.top: {
+                    if(custom_viewport_y !== 0) return  parent.top;
+                }
+                anchors.left: {
+                    if(custom_viewport_x !== 0) return  parent.left;
+                }
+                anchors.leftMargin: settings.AllowVideoPreviewOverlay === "Yes" ? custom_viewport_x : 0
+                anchors.topMargin: settings.AllowVideoPreviewOverlay === "Yes" ? custom_viewport_y : 0
+                anchors.horizontalCenter:{
+                    if(custom_viewport_x === 0) return  parent.horizontalCenter;
+                }
+                anchors.verticalCenter:{
+                    if(custom_viewport_y === 0) return parent.verticalCenter;
+                }
 
                 fillMode: settings.AllowVideoPreviewOverlay === "Yes" ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
                 muted: settings.AllowVideoPreviewAudio === "No"
@@ -289,12 +356,7 @@ FocusScope {
 
                 source:{
                     if(videoExists){
-                        if(settings.OverlaysSource === "Default"){
-                            return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
-                        }
-                        else{
-                            return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
-                        }
+                            return "file://" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
                     }
                     else return "";
                 }
@@ -318,11 +380,22 @@ FocusScope {
     Image {
         id: screenshot
 
-        //anchors.fill: parent
-        height: parent.height
-        width: (height/3)*4
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        height: settings.AllowGameBackgroundOverlay === "Yes" ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+        width: settings.AllowGameBackgroundOverlay === "Yes" ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+        anchors.top: {
+            if(custom_viewport_y !== 0) return  parent.top;
+        }
+        anchors.left: {
+            if(custom_viewport_x !== 0) return  parent.left;
+        }
+        anchors.leftMargin: settings.AllowGameBackgroundOverlay === "Yes" ? custom_viewport_x : 0
+        anchors.topMargin: settings.AllowGameBackgroundOverlay === "Yes" ? custom_viewport_y : 0
+        anchors.horizontalCenter:{
+            if(custom_viewport_x === 0) return  parent.horizontalCenter;
+        }
+        anchors.verticalCenter:{
+            if(custom_viewport_y === 0) return parent.verticalCenter;
+        }
 
         asynchronous: true
         property int randoScreenshotNumber: {
@@ -373,12 +446,7 @@ FocusScope {
     Image {
         id: overlayBackground
         source:{
-            if(settings.OverlaysSource === "Default"){
-                return "file:///recalbox/share_init/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
-            }
-            else{
-                return "file:///recalbox/share/overlays/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
-            }
+            return "file://" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
         }
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
@@ -1058,5 +1126,7 @@ FocusScope {
         console.log("Component.onCompleted - filename :",searchGameIndex.filename);
         //activate search at the end
         searchGameIndex.activated = true;
+        //init overlays parameters
+        root.getOverlaysParameters();
     }
 }
