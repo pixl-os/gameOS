@@ -56,6 +56,9 @@ FocusScope {
     property int custom_viewport_y: 0
     property int custom_viewport_width: 0
     property int custom_viewport_height: 0
+    property string overlay_cfg_filename_fullpath: ""
+    property string overlay_png_filename_fullpath: ""
+    property string input_overlay_cfg_filename_fullpath: ""
 
     property string overlaySource:{
        if(settings.OverlaysSource === "Default"){
@@ -68,25 +71,54 @@ FocusScope {
 
     //function to prepare resize of video and screenshot depending Overlays configuration
     function getOverlaysParameters(){
-        overlay_exists = api.internal.system.run("test -f " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png && echo \"true\"");
+        //to find game name
+        var path = game.files.get(0).path;
+        var word = path.split('/');
+        var game_filename = word[word.length-1];
+        console.log("getOverlaysParameters() - game_filename : ", game_filename);
+        //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
+
+        overlay_cfg_filename_fullpath = "";
+        //check if custom overlays exists
+        overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+        if(overlay_exists !== true){
+            //check if system overlays exists
+            overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
+            if(overlay_exists === true) overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg";
+        }
+        else{
+            overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
+        }
+        console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
         console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
         if(overlay_exists === true){
-            aspect_ratio_index = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"aspect_ratio_index\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
+            aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
             console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+            input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '\"/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
+            console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
+            //get path of input_overlay cfg
+            var cfgpath = input_overlay_cfg_filename_fullpath;
+            var cfgword = cfgpath.split('/');
+            var cfg_filename = cfgword[cfgword.length-1];
+            console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
+            //use path of input_overlay cfg and png filename
+            var overlay0_overlay = api.internal.system.run("cat \"" + input_overlay_cfg_filename_fullpath + "\" | grep -E \"overlay0_overlay\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
+            console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
+            overlay_png_filename_fullpath = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
+            console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
                 //custom_viewport_x = "251"
                 //custom_viewport_y = "10"
                 //custom_viewport_width = "1415"
                 //custom_viewport_height = "1060"
-                custom_viewport_x = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_x\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-                //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
-                custom_viewport_y = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_y\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-                //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
-                custom_viewport_width = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_width\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-                //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
-                custom_viewport_height = parseInt(api.internal.system.run("cat " + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg | grep -E \"custom_viewport_height\" | awk '{print $3}'").replace(/\"/g, "")); //to remove " by nothing
-                //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
+
+                custom_viewport_x = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_x\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
+                custom_viewport_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
+                custom_viewport_width = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_width\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
+                custom_viewport_height = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_height\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 //check if overlay 1080p or 720p
                 if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
                     //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
@@ -95,14 +127,12 @@ FocusScope {
                     custom_viewport_width = custom_viewport_width * (1280/1920);
                     custom_viewport_height = custom_viewport_height * (720/1080);
                 }
-
             }
         }
         console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
         console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
         console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
         console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
-
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
@@ -361,7 +391,7 @@ FocusScope {
 
                 source:{
                     if(videoExists){
-                            return "file://" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+                            return "file://" + overlay_png_filename_fullpath;
                     }
                     else return "";
                 }
@@ -451,7 +481,7 @@ FocusScope {
     Image {
         id: overlayBackground
         source:{
-            return "file://" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".png";
+            return "file://" + overlay_png_filename_fullpath;
         }
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
