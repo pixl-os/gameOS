@@ -75,11 +75,15 @@ FocusScope {
         var path = game.files.get(0).path;
         var word = path.split('/');
         var game_filename = word[word.length-1];
-        console.log("getOverlaysParameters() - game_filename : ", game_filename);
+        //console.log("getOverlaysParameters() - game_filename : ", game_filename);
         //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
 
+        //reset overlay to avoid to reuse it for one that doesn't exist
+        overlay_png_filename_fullpath = "";
         overlay_cfg_filename_fullpath = "";
+        input_overlay_cfg_filename_fullpath = "";
+
         //check if custom overlays exists
         overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
         if(overlay_exists !== true){
@@ -90,23 +94,23 @@ FocusScope {
         else{
             overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
         }
-        console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
-        console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
+        //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
+        //console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
         if(overlay_exists === true){
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
-            console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+            //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
             input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '\"/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-            console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
+            //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
             //get path of input_overlay cfg
             var cfgpath = input_overlay_cfg_filename_fullpath;
             var cfgword = cfgpath.split('/');
             var cfg_filename = cfgword[cfgword.length-1];
-            console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
+            //console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
             //use path of input_overlay cfg and png filename
             var overlay0_overlay = api.internal.system.run("cat \"" + input_overlay_cfg_filename_fullpath + "\" | grep -E \"overlay0_overlay\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-            console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
+            //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
             overlay_png_filename_fullpath = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
-            console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
 
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
@@ -129,10 +133,10 @@ FocusScope {
                 }
             }
         }
-        console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
-        console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
-        console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
-        console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
+        //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
+        //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
+        //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
+        //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
@@ -267,7 +271,7 @@ FocusScope {
 
 
     onGameChanged: {
-				console.log("GameView - onGameChanged");
+                //console.log("GameView - onGameChanged");
 				//reset default value for a new game loading
 				reset();
 				//launch initialization of retroachievements
@@ -280,7 +284,7 @@ FocusScope {
 	Connections {
         target: game
 		function onRetroAchievementsInitialized() {
-			console.log("GameView - retroAchievements is now initialized !");
+            //console.log("GameView - retroAchievements is now initialized !");
 			setRetroAchievements();	
 		}
     }
@@ -357,7 +361,7 @@ FocusScope {
                 property bool videoExists: game ? game.assets.videos.length : false
                 source: {
                         if(videoExists){
-                            console.log("video path:",game.assets.videos[0]);
+                            //console.log("video path:",game.assets.videos[0]);
                             return game.assets.videos[0];
                         }
                         else return "";
@@ -385,12 +389,24 @@ FocusScope {
                 loops: MediaPlayer.Infinite
                 autoPlay: true
             }
+
+            // Scanlines
+            Image {
+                id: scanlines
+
+                anchors.fill: parent
+                source: "../assets/images/scanlines_v3.png"
+                asynchronous: true
+                opacity: 0.2
+                visible: !iamsteam && (settings.ShowScanlines === "Yes")
+            }
+
             Image {
                 id: overlaycomponent
                 property bool videoExists: game ? game.assets.videos.length : false
 
                 source:{
-                    if(videoExists){
+                    if(videoExists && (overlay_exists === true)){
                             return "file://" + overlay_png_filename_fullpath;
                     }
                     else return "";
@@ -398,7 +414,7 @@ FocusScope {
 
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
-                visible: settings.AllowVideoPreviewOverlay === "Yes" ? true : false
+                visible: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? true : false
             }
         }
     }
@@ -411,81 +427,88 @@ FocusScope {
         anchors { fill: parent }
     }
 
-    // Background
-    Image {
-        id: screenshot
-
-        height: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
-        width: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
-        anchors.top: {
-            if(custom_viewport_y !== 0) return  parent.top;
-        }
-        anchors.left: {
-            if(custom_viewport_x !== 0) return  parent.left;
-        }
-        anchors.leftMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
-        anchors.topMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
-        anchors.horizontalCenter:{
-            if(custom_viewport_x === 0) return  parent.horizontalCenter;
-        }
-        anchors.verticalCenter:{
-            if(custom_viewport_y === 0) return parent.verticalCenter;
-        }
-
-        asynchronous: true
-        property int randoScreenshotNumber: {
-            if (game && settings.GameRandomBackground === "Yes")
-                return Math.floor(Math.random() * game.assets.screenshotList.length);
-            else
-                return 0;
-        }
-        property int randoFanartNumber: {
-            if (game && settings.GameRandomBackground === "Yes")
-                return Math.floor(Math.random() * game.assets.backgroundList.length);
-            else
-                return 0;
-        }
-
-        property var randoScreenshot: game ? game.assets.screenshotList[randoScreenshotNumber] : ""
-        property var randoFanart: game ? game.assets.backgroundList[randoFanartNumber] : ""
-        property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
-        source: actualBackground || ""
-
-        fillMode: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? Image.Stretch : Image.PreserveAspectCrop
-        smooth: true
-        Behavior on opacity { NumberAnimation { duration: 500 } }
-        visible: !blurBG
-    }
-
-    FastBlur {
-        anchors.fill: screenshot
-        source: screenshot
-        radius: 64
+    Rectangle{
+        id:background
+        anchors.fill: parent
         opacity: screenshot.opacity
-        Behavior on opacity { NumberAnimation { duration: 500 } }
-        visible: blurBG
-    }
 
-    // Scanlines
-    Image {
-        id: scanlines
+        // Background (screenshot and/or fanart)
+        Image {
+            id: screenshot
 
-        anchors.fill: parent
-        source: "../assets/images/scanlines_v3.png"
-        asynchronous: true
-        opacity: 0.2
-        visible: !iamsteam && (settings.ShowScanlines === "Yes")
-    }
+            height: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+            width: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+            anchors.top: {
+                if(custom_viewport_y !== 0) return  parent.top;
+            }
+            anchors.left: {
+                if(custom_viewport_x !== 0) return  parent.left;
+            }
+            anchors.leftMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
+            anchors.topMargin: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
+            anchors.horizontalCenter:{
+                if(custom_viewport_x === 0) return  parent.horizontalCenter;
+            }
+            anchors.verticalCenter:{
+                if(custom_viewport_y === 0) return parent.verticalCenter;
+            }
 
-    // Background overlay
-    Image {
-        id: overlayBackground
-        source:{
-            return "file://" + overlay_png_filename_fullpath;
+            asynchronous: true
+            property int randoScreenshotNumber: {
+                if (game && settings.GameRandomBackground === "Yes")
+                    return Math.floor(Math.random() * game.assets.screenshotList.length);
+                else
+                    return 0;
+            }
+            property int randoFanartNumber: {
+                if (game && settings.GameRandomBackground === "Yes")
+                    return Math.floor(Math.random() * game.assets.backgroundList.length);
+                else
+                    return 0;
+            }
+
+            property var randoScreenshot: game ? game.assets.screenshotList[randoScreenshotNumber] : ""
+            property var randoFanart: game ? game.assets.backgroundList[randoFanartNumber] : ""
+            property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
+            source: actualBackground || ""
+
+            fillMode: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? Image.Stretch : Image.PreserveAspectCrop
+            smooth: true
+            Behavior on opacity { NumberAnimation { duration: 500 } }
+            visible: !blurBG
         }
-        anchors.fill: parent
-        fillMode: Image.PreserveAspectCrop
-        visible: settings.AllowGameBackgroundOverlay === "Yes" ? true : false
+        // Scanlines (for screenshot/fanart only)
+        Image {
+            id: scanlines
+
+            anchors.fill: parent
+            source: "../assets/images/scanlines_v3.png"
+            asynchronous: true
+            opacity: 0.2
+            visible: (!iamsteam && (settings.ShowScanlines === "Yes")) ? true : false
+        }
+
+        // Background overlay (for screenshot/fanart only)
+        Image {
+            id: overlayBackground
+            source:{
+                if(overlay_exists === true) return "file://" + overlay_png_filename_fullpath;
+                else return "";
+            }
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            visible: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? true : false
+        }
+
+        FastBlur {
+            anchors.fill: screenshot
+            source: screenshot
+            radius: 64
+            opacity: screenshot.opacity
+            Behavior on opacity { NumberAnimation { duration: 500 } }
+            visible: blurBG
+        }
+
     }
 
     // Clear logo
@@ -915,14 +938,14 @@ FocusScope {
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
-									console.log("Menu - Keys.onLeftPressed");
+                                    //console.log("Menu - Keys.onLeftPressed");
 									sfxNav.play(); 
 									do{	
 										decrementCurrentIndex();
 									}while(!currentItem.enabled);								
 								}
             Keys.onRightPressed:{ 
-									console.log("Menu - Keys.onLeftPressed");
+                                    //console.log("Menu - Keys.onLeftPressed");
 									sfxNav.play(); 
 									do{	
 										incrementCurrentIndex();
@@ -1158,7 +1181,7 @@ FocusScope {
         searchGameIndex.sourceModel = game.collections.get(0).games;
         searchGameIndex.filenameToFind = true; //force to search exact file name and not a filter using regex
         searchGameIndex.filename = game.path;
-        console.log("Component.onCompleted - filename :",searchGameIndex.filename);
+        //console.log("Component.onCompleted - filename :",searchGameIndex.filename);
         //activate search at the end
         searchGameIndex.activated = true;
         //init overlays parameters
