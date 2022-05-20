@@ -99,7 +99,7 @@ FocusScope {
         if(overlay_exists === true){
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
             //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
-            input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '\"/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
+            input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
             //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
             //get path of input_overlay cfg
             var cfgpath = input_overlay_cfg_filename_fullpath;
