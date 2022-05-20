@@ -928,7 +928,7 @@ FocusScope {
         // Game menu
         ListView {
             id: menu
-
+            visible: (demoLaunched !== true)
             property bool selected: parent.focus
             focus: selected
             width: parent.width
