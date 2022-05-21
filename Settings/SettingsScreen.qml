@@ -212,7 +212,7 @@ FocusScope {
         }
         ListElement {
             settingName: "System Logo"
-            setting: "Show,Hide"
+            setting: "Show,Hide,Show if no overlay"
         }
         ListElement {
             settingName: "System Logo position"

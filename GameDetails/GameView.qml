@@ -747,7 +747,7 @@ FocusScope {
             }
 //            sourceSize: vpx(25)
             smooth: true
-            visible: settings.SystemLogo === "Show" ? true : false
+            visible: ((settings.SystemLogo === "Show") || ((settings.SystemLogo === "Show if no overlay") && (overlay_exists !== true))) ? true : false
             asynchronous: true
         }
 
