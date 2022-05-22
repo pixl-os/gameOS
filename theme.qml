@@ -87,7 +87,7 @@ FocusScope {
     property var settings: {
         return {
             PlatformView:                  api.memory.has("Game View") ? api.memory.get("Game View") : "Grid",
-            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Dynamic Wide",
+            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
             GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "3",
             GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
             AllowGameBackgroundOverlay:    api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No",
