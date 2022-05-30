@@ -24,11 +24,12 @@ Image {
     // This is a workaround that's necessary in order to accurately get the aspect ratio for the boxart
     // It grabs the first game and bases all the aspect ratios off that
     property var fakesource: {
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < 40; i++)
         {
             var gamesource = currentCollection.games.get(i);
             if (Utils.boxArt(gamesource) !== "")
             {
+                console.log("Utils.boxArt(gamesource) : ", Utils.boxArt(gamesource))
                 return Utils.boxArt(gamesource);
             }
         }

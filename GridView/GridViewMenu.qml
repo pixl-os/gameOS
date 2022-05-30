@@ -64,10 +64,6 @@ FocusScope {
     }
 
     function navigateToNextLetter(modifier) {
-        if (isRightTriggerPressed || isLeftTriggerPressed) {
-            return false;
-        }
-
         if (sortByFilter[sortByIndex].toLowerCase() !== "title") {
             return false;
         }
@@ -351,21 +347,37 @@ FocusScope {
     }
 
     Keys.onReleased: {
-        // Scroll Down
-        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+        // Scroll Down - use R1 now
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            isRightTriggerPressed = false;
-			//to reset demo
-			resetDemo();
+            //to reset demo
+            resetDemo();
             return;
         }
 
-        // Scroll Up
+        // Scroll Up - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            return;
+        }
+
+        // Next collection - R2 now
+        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
+            isRightTriggerPressed = false;
+            return;
+        }
+
+        // Previous collection - L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
             isLeftTriggerPressed = false;
             return;
         }
+
+
     }
 
     Keys.onPressed: {
@@ -400,23 +412,27 @@ FocusScope {
             return;
         }
 
-        // Scroll Down
-        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            isRightTriggerPressed = navigateToNextLetter(+1) ? true : isRightTriggerPressed;
-            return;
-        }
-
-        // Scroll Up
-        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            isLeftTriggerPressed = navigateToNextLetter(-1) ? true : isLeftTriggerPressed;
-            return;
-        }
-
-        // Next collection
+        // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            navigateToNextLetter(+1);
+            return;
+        }
+
+        // Scroll Up - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            navigateToNextLetter(-1);
+            return;
+        }
+
+        // Next collection - R2 now
+        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            if (isRightTriggerPressed) {
+                return;
+            }
+            else isRightTriggerPressed = true;
             if (currentCollectionIndex < api.collections.count-1)
                 currentCollectionIndex++;
             else
@@ -430,9 +446,14 @@ FocusScope {
             return;
         }
 
-        // Previous collection
-        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+        // Previous collection - use L2 now
+        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            if (isLeftTriggerPressed) {
+                return;
+            }
+            else isLeftTriggerPressed = true;
+
             if (currentCollectionIndex > 0)
                 currentCollectionIndex--;
             else
