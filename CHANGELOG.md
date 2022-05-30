@@ -1,6 +1,29 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2022-05-30
+- new overlays management feature:
+	- new overlays/logos options for video/screenshot in gameview
+	- manage overlays source from share_init(default) or share
+	- fix to stretch video/screenshot in 4/3 by default
+	- manage autoresize and custom overlays positionning
+	- manage systems without overlay and to keep stretching
+	- manage custom overlays for arcade/no-intro
+	- fix for skylines dedicated & overlays reset to avoid bugs
+	- fix to hide it during demo, just keep help at bottom/right
+	- fix path of "input_overlay"
+	- additional parameter to let show logo if no overlay for any system
+	
+- logos:
+	- add 5 logos for system TRIFORCE
+	- fix to update 5 logos for system ODYSSEY2
+	- add 5 logos for system XBOX & CHIHIRO
+	
+- platform gridview display improvements:
+	- change to use L1/R1 for letter nav & L2/R2 for system nav
+	- fix to replace depreacted default value
+	- fix on gridspacer to add more checked boxarts to calcualte right width ratio
+
 ## [recalbox-integration] - 2022-12-02
 - demo mode: remove fading/lists and highlight in demo mode
 - best fix for search access in system grid view
