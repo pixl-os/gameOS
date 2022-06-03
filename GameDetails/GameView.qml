@@ -536,6 +536,19 @@ FocusScope {
         visible: settings.GameLogo === "Show"
     }
 
+    Image{
+        id: alphaLogo
+        anchors.top: parent.top
+        anchors.right: parent.right
+        width: parent.width/4
+        height: parent.height/4
+
+        //to alert when system is in beta
+        source: "../assets/images/beta.png";
+        //for the moment, just check if first core for this system still low
+        visible: game.collections.get(0).getCoreCompatibilityAt(0) === "low" ? true : false
+    }
+
     DropShadow {
         id: logoshadow
 

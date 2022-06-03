@@ -751,6 +751,19 @@ FocusScope {
                     opacity: selected ? 1 : 0.3
                     scale: selected ? 1.1 : 1
                     Behavior on scale { NumberAnimation { duration: 100 } }
+
+                    Image{
+                        id: alphaLogo
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        width: parent.width/2
+                        height: parent.height/2
+
+                        //to alert when system is in beta
+                        source: "../assets/images/beta.png";
+                        //for the moment, just check if first core for this system still low
+                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
+                    }
                 }
 
                 Text {
