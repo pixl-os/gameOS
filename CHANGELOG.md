@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - 2022-06-03
+-new feature to display logo as "beta" system when first emulator is low.
+
 ## [recalbox-integration] - 2022-05-30
 - new overlays management feature:
 	- new overlays/logos options for video/screenshot in gameview

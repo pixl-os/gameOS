@@ -54,6 +54,19 @@ FocusScope {
             }
             smooth: true
             asynchronous: true
+
+            Image{
+                id: alphaLogo
+                anchors.top: parent.top
+                anchors.right: parent.right
+                width: parent.width/2
+                height: parent.height/2
+
+                //to alert when system is in beta
+                source: "../assets/images/beta.png";
+                //for the moment, just check if first core for this system still low
+                visible: currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false
+            }
         }
 
         // Platform title
