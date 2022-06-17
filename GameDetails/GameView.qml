@@ -35,7 +35,12 @@ FocusScope {
     property string collectionName: game ? game.collections.get(0).name : ""
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
     property bool iamsteam: game ? (collectionShortName === "steam") : false
-    property bool canPlayVideo: settings.VideoPreview === "Yes"
+    property bool canPlayVideo: ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
+    onCanPlayVideoChanged:{
+        //to force to stop video playing when we lost focus
+       if(canPlayVideo === false) toggleVideo(false);
+    }
+
     property real detailsOpacity: ((settings.DetailsDefault === "Yes") && (demoLaunched !== true)) || ((settings.DemoShowFullDetails === "Yes") && (demoLaunched === true)) ? 1 : 0
 	property real retroachievementsOpacity: 0
 	property bool blurBG: settings.GameBlurBackground === "Yes"
