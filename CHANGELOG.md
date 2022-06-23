@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [recalbox-integration] - Next
+- New logos for: NAOMI 2, PORTS & Screenshots (5 by systems)
+
 ## [recalbox-integration] - 2022-06-03
 -new feature to display logo as "beta" system when first emulator is low.
 
