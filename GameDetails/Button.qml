@@ -22,6 +22,8 @@ FocusScope {
     property bool selected
     property alias text: buttonlabel.text
     property alias icon: buttonicon.source
+    property alias iconRotation: iconRotation
+
     property alias buttonWidth: container.width
     property real buttonMargin: vpx(25)
     width: container.width
@@ -58,6 +60,15 @@ FocusScope {
             anchors { left: parent.left; leftMargin: iconMargin }
             //anchors.horizontalCenter: (buttonlabel.text === "") ? parent.horizontalCenter : parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            RotationAnimator on rotation {
+                id: iconRotation
+                loops: Animator.Infinite;
+                from: 0;
+                to: 360;
+                duration: 3000
+                running: false
+            }
         }
         
         Text {
