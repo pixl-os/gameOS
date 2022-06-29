@@ -832,15 +832,11 @@ FocusScope {
             height: parent.height
             selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            icon: global.gameLaunched === game ? "../assets/images/loading.png" : icon
-            iconRotation.running: global.gameLaunched === game ? true : false
+            icon: api.gamefile === game.files.get(0)  ? "../assets/images/loading.png" : icon
+            iconRotation.running: api.gamefile === game.files.get(0) ? true : false
             onActivated:
                 if (selected) {
                     sfxAccept.play();
-                    if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){
-                        //save as game launched
-                        global.gameLaunched = game;
-                    }
                     launchGame(game);
                 } else {
                     sfxNav.play();
