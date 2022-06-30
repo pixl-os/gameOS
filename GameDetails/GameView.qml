@@ -832,8 +832,99 @@ FocusScope {
             height: parent.height
             selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            icon: api.launchedgame ? (api.launchedgame.path === game.path  ? "../assets/images/loading.png" : "../assets/images/icon_play.svg") : "../assets/images/icon_play.svg"
-            iconRotation.running: api.launchedgame ? (api.launchedgame.path === game.path ? true : false) : false
+            property var launchedGame: api.launchedgame
+            property var selectedGame : game
+            property bool canLoadSpinner: (appWindow.activeFocusItem !== null) ? true : false
+
+            //Done to avoid spinner running during gaming ;-)
+            onCanLoadSpinnerChanged:{
+                if (launchedGame) {
+                    if (api.launchedgame.path === game.path){
+                        //if can't Load Spinner
+                        if(!canLoadSpinner){
+                            //stop  animation (existing or not)
+                            iconRotation.stop();
+                        }
+                        else {
+                            //restart or start animation
+                            icon = "../assets/images/loading.png";
+                            //start animation without end
+                            iconRotation.loops = Animation.Infinite;
+                            iconRotation.start();
+                        }
+                    }
+                }
+            }
+
+            onSelectedGameChanged: {
+                //console.log("onSelectedGameChanged");
+                if (launchedGame) {
+                    if (api.launchedgame.path === game.path){
+                        icon = "../assets/images/loading.png";
+                        //start animation without end
+                        iconRotation.loops = Animation.Infinite;
+                        iconRotation.start();
+                    }
+                    else{
+                        //if animation is running
+                        if(iconRotation.running === true){
+                            //stop existing animation
+                            iconRotation.stop();
+                            //limit to one cycle
+                            iconRotation.loops = 1;
+                            //restart animation
+                            iconRotation.start();
+                        }
+                        else icon = "../assets/images/icon_play.svg";
+                    }
+                }
+                else icon = "../assets/images/icon_play.svg";
+            }
+            iconRotation.onStarted: {
+                    //console.log("iconRotation.onStarted");
+                    icon = "../assets/images/loading.png";
+            }
+
+            iconRotation.onFinished:{
+                    //console.log("iconRotation.onFinished");
+                    //if finish and during the last cycle
+                    if (iconRotation.loops === 1) icon = "../assets/images/icon_play.svg";
+            }
+
+            onLaunchedGameChanged: {
+                //if game is launched
+                if(launchedGame){
+                    //if launched game is the selected game of gameview
+                    if((launchedGame.path === selectedGame.path) && (!iconRotation.running)){
+                        //start animation without end
+                        iconRotation.loops = Animation.Infinite;
+                        iconRotation.start();
+                    }
+                    else{
+                        //if animation is running
+                        if(iconRotation.running === true){
+                            //stop existing animation
+                            iconRotation.stop();
+                            //limit to one cycle
+                            iconRotation.loops = 1;
+                            //restart animation
+                            iconRotation.start();
+                        }
+                    }
+                }
+                else{
+                    //if animation is running
+                    if(iconRotation.running === true){
+                        //stop existing animation
+                        iconRotation.stop();
+                        //limit to one cycle
+                        iconRotation.loops = 1;
+                        //restart animation
+                        iconRotation.start();
+                    }
+                }
+            }
+
             onActivated:
                 if (selected) {
                     sfxAccept.play();
