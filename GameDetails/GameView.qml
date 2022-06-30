@@ -832,8 +832,8 @@ FocusScope {
             height: parent.height
             selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            icon: api.gamefile === game.files.get(0)  ? "../assets/images/loading.png" : icon
-            iconRotation.running: api.gamefile === game.files.get(0) ? true : false
+            icon: api.launchedgame ? (api.launchedgame.path === game.path  ? "../assets/images/loading.png" : "../assets/images/icon_play.svg") : "../assets/images/icon_play.svg"
+            iconRotation.running: api.launchedgame ? (api.launchedgame.path === game.path ? true : false) : false
             onActivated:
                 if (selected) {
                     sfxAccept.play();
