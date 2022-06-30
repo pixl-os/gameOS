@@ -1199,24 +1199,8 @@ FocusScope {
         onClose: closeMedia();
     }
 
-    //to know if Guide button still released
-    property bool bGuidePressed: false
-    // Input releasing
-    Keys.onReleased: {
-        // Guide
-        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            bGuidePressed = false;
-        }
-    }
-
     // Input handling
     Keys.onPressed: {
-        // Guide
-        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            bGuidePressed = true;
-        }
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -1233,7 +1217,7 @@ FocusScope {
         }
 
         // Next game
-        if (api.keys.isNextPage(event) && !event.isAutoRepeat && !bGuidePressed) {
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat && !global.guideButtonPressed) {
             event.accepted = true;
             sfxToggle.play();
             if (currentGameIndex < game.collections.get(0).games.count-1)
@@ -1245,7 +1229,7 @@ FocusScope {
         }
 
         // Previous game
-        if (api.keys.isPrevPage(event) && !event.isAutoRepeat && !bGuidePressed) {
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat && !global.guideButtonPressed) {
             event.accepted = true;
             sfxToggle.play();
             if (currentGameIndex > 0)
