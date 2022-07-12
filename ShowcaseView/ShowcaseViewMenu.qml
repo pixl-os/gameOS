@@ -567,9 +567,9 @@ FocusScope {
 
             property bool selected : ListView.isCurrentItem
             //focus: selected
-            width: parent.width
+            width: appWindow.width
 
-            height: designs.FavoritesBannerPosition !== "No" ? vpx(appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100)) : 0
+            height: designs.FavoritesBannerPosition !== "No" ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
             visible: designs.FavoritesBannerPosition !== "No" ? true : false
             enabled: visible
 
@@ -717,10 +717,9 @@ FocusScope {
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             //focus: selected
-            width: root.width
-            //height: vpx(100) + globalMargin * 2
+            width: appWindow.width
 
-            height: designs.SystemsListPosition !== "No" ? vpx(appWindow.height * (parseFloat(designs.SystemsListRatio)/100)) : 0
+            height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
             visible: designs.SystemsListPosition !== "No" ? true : false
             enabled: visible
 
@@ -752,11 +751,11 @@ FocusScope {
             model: api.collections//Utils.reorderCollection(api.collections);
             delegate: Rectangle {
                 property bool selected: ListView.isCurrentItem && platformlist.focus
-                width: platformlist.width / parseFloat(designs.NbSystemIcons)  //(platformlist.width - globalMargin * 2) / parseFloat(designs.NbSystemIcons)
-                height: platformlist.height * 0.8 * (parseFloat(designs.SystemsIconRatio)/100) //vpx(platformlist.height / 1.2)  //width * settings.WideRatio
-                //                color: selected ? theme.accent : theme.secondary
+                width: platformlist.width / parseFloat(designs.NbSystemLogos)
+                height: width * settings.WideRatio * (parseFloat(designs.SystemLogoRatio)/100)
+                // color: selected ? theme.accent : theme.secondary
                 color: "transparent"
-
+                property string shortName: modelData.shortName
                 //scale: selected ? 0.9 : 0.8
                 //Behavior on scale { NumberAnimation { duration: 100 } }
                 //                border.width: vpx(1)
@@ -768,35 +767,46 @@ FocusScope {
                     id: collectionlogo
 
                     anchors.fill: parent
-                    anchors.centerIn: parent
+                    anchors.centerIn: parent //.Center
                     anchors.margins: vpx(15)
                     source: {
-                        if(settings.SystemLogoStyle === "White")
-                        {
-                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                        if (designs.SystemLogoSource === "Custom"){
+                            //for test purpose, need to do new parameters using prefix and sufix in path
+                            return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
                         }
-                        else
-                        {
-                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                        else if(designs.SystemLogoSource !== "No"){
+                            if(settings.SystemLogoStyle === "White")
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                            }
+                            else
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                            }
                         }
                     }
                     sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    opacity: selected ? 1 : 0.3
+                    opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
                     scale: selected ? 0.9 : 0.8
                     Behavior on scale { NumberAnimation { duration: 100 } }
 
                     Image{
-                        id: alphaLogo
+                        id: betaLogo
                         anchors.top: parent.top
                         anchors.right: parent.right
                         width: parent.width/2
                         height: parent.height/2
 
                         //to alert when system is in beta
-                        source: "../assets/images/beta.png";
+                        source: "../assets/images/beta-round.png";
+                        sourceSize: Qt.size(betaLogo.width, betaLogo.height)
+                        fillMode: Image.PreserveAspectFit
+                        asynchronous: true
+                        smooth: true
+                        scale: selected ? 0.9 : 0.8
                         //for the moment, just check if first core for this system still low
                         visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
                     }
@@ -825,7 +835,7 @@ FocusScope {
 
                     width: parent.width
 
-                    opacity: 0.2
+                    opacity: designs.NbSystemLogos === "1" ?  0.0 : 0.2
                     visible: settings.AlwaysShowTitles === "Yes" || selected
                 }
 
@@ -841,7 +851,7 @@ FocusScope {
                     font.family: subtitleFont.name
                     font.bold: true
                     style: Text.Outline; styleColor: theme.main
-                    visible: collectionlogo.status == Image.Error
+                    visible: collectionlogo.status === Image.Error && (designs.NbSystemLogos === "1" ? selected : true)
                     anchors.centerIn: parent
                     elide: Text.ElideRight
                     wrapMode: Text.WordWrap
@@ -868,6 +878,28 @@ FocusScope {
 
                     }
                 }
+            }
+
+            Image {
+                id: systemBackground
+                visible: designs.SystemsListBackground !== "No" ? true : false
+                anchors.centerIn: parent
+                anchors.margins: 0
+                z: -1
+                source: {
+                    //for test purpose, need to do new parameters using prefix and sufix in path
+                    if(designs.SystemsListBackground === "Custom"){
+                        return "../assets/custom/" + Utils.processPlatformName(platformlist.currentItem.shortName) + "/background.jpg";
+                    }
+                    else if(designs.SystemsListBackground !== "No") {
+                        return ""; //TO DO to have internal data
+                    }
+                    else return ""; // N/A
+                }
+                fillMode: Image.PreserveAspectFit // PreserveAspectCrop
+                asynchronous: true
+                smooth: true
+                opacity: 1
             }
 
             // List specific input
