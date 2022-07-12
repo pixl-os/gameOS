@@ -83,6 +83,18 @@ FocusScope {
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
     FontLoader { id: bodyFont; source: "assets/fonts/OpenSans-Semibold.ttf" }
 
+    // Load designer settings
+    property var designs: {
+        return {
+            InitialPosition:               api.memory.has("Initial Focus screen position") ? api.memory.get("Initial Focus screen position") : "0",
+            FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
+            FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
+            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "1",
+            SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
+            NbSystemIcons:                 api.memory.has("Number of Systems icon visible") ? api.memory.get("Number of Systems icon visible") : "7"
+        }
+    }
+
     // Load settings
     property var settings: {
         return {

@@ -539,9 +539,34 @@ FocusScope {
         }
     }
 
+
     // Using an object model to build the main list using other lists
     ObjectModel {
         id: mainModel
+
+        function findObjectAndMove(object,newPosition){
+            for(var i = 0; i < mainModel.count; i++){
+                if(mainModel.get(i) === object){ //need to move it
+                   mainModel.move(i, newPosition , 1);
+                   //tentative to set focus - doesn't work for the moment :-(
+                   if(newPosition === parseInt(designs.InitialPosition)){
+                       //mainModel.get(newPosition).selected = true
+                       //mainModel.get(newPosition).focus = true
+                       mainList.itemAt(newPosition).selected = true
+                       mainList.itemAt(newPosition).focus = true
+
+                   }
+                   return; //to exit function
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            //set position of Favorites Banner (id: featuredlist)
+            if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
+            //set position of Systems List (id: platformlist)
+            if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
+        }
 
 		// Favorites list at top with screenshot/fanart/marquee and logos
         ListView {
@@ -550,7 +575,11 @@ FocusScope {
             property bool selected: ListView.isCurrentItem
             focus: selected
             width: parent.width
-            height: vpx(360)
+
+            height: designs.FavoritesBannerPosition !== "No" ? vpx(appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100)) : 0
+            visible: designs.FavoritesBannerPosition !== "No" ? true : false
+            enabled: visible
+
             spacing: vpx(0)
             orientation: ListView.Horizontal
             clip: true
@@ -562,7 +591,9 @@ FocusScope {
             snapMode: ListView.SnapOneItem
             keyNavigationWraps: true
             currentIndex: (storedHomePrimaryIndex == 0) ? storedHomeSecondaryIndex : 0
-            Component.onCompleted: positionViewAtIndex(currentIndex, ListView.Visible)
+            Component.onCompleted: {
+                positionViewAtIndex(currentIndex, ListView.Visible)
+            }
 
             model: !ftue ? featuredCollection.games : 0
             delegate: featuredDelegate
@@ -663,7 +694,6 @@ FocusScope {
 			}	
 
 			// List specific input
-            Keys.onUpPressed: settingsbutton.focus = true;
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
             Keys.onPressed: {
@@ -674,7 +704,15 @@ FocusScope {
 	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
 	                    if (!ftue)
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
-	                }
+                    }
+                    else if((event.key === Qt.Key_Up) && !event.isAutoRepeat)
+                    {
+                        if(designs.FavoritesBannerPosition === "0"){
+                            event.accepted = true;
+                            settingsbutton.focus = true;
+                        }
+
+                    }
 				}
             }
         }
@@ -687,7 +725,12 @@ FocusScope {
             property int myIndex: ObjectModel.index
             focus: selected
             width: root.width
-            height: vpx(100) + globalMargin * 2
+            //height: vpx(100) + globalMargin * 2
+
+            height: designs.SystemsListPosition !== "No" ? vpx(appWindow.height * (parseFloat(designs.SystemsListRatio)/100)) : 0
+            visible: designs.SystemsListPosition !== "No" ? true : false
+            enabled: visible
+
             anchors {
                 left: parent.left; leftMargin: globalMargin
                 right: parent.right; rightMargin: globalMargin
@@ -716,17 +759,17 @@ FocusScope {
             model: api.collections//Utils.reorderCollection(api.collections);
             delegate: Rectangle {
                 property bool selected: ListView.isCurrentItem && platformlist.focus
-                width: (root.width - globalMargin * 2) / 7.0
-                height: width * settings.WideRatio
+                width: platformlist.width / parseFloat(designs.NbSystemIcons)  //(platformlist.width - globalMargin * 2) / parseFloat(designs.NbSystemIcons)
+                height: platformlist.height * 0.8 //vpx(platformlist.height / 1.2)  //width * settings.WideRatio
                 //                color: selected ? theme.accent : theme.secondary
                 color: "transparent"
 
-                scale: selected ? 1.1 : 1
-                Behavior on scale { NumberAnimation { duration: 100 } }
+                //scale: selected ? 0.9 : 0.8
+                //Behavior on scale { NumberAnimation { duration: 100 } }
                 //                border.width: vpx(1)
                 //                border.color: "#19FFFFFF"
 
-//                anchors.verticalCenter: parent.verticalCenter
+                //anchors.verticalCenter: parent.verticalCenter
 
                 Image {
                     id: collectionlogo
@@ -749,7 +792,7 @@ FocusScope {
                     asynchronous: true
                     smooth: true
                     opacity: selected ? 1 : 0.3
-                    scale: selected ? 1.1 : 1
+                    scale: selected ? 0.9 : 0.8
                     Behavior on scale { NumberAnimation { duration: 100 } }
 
                     Image{
@@ -785,7 +828,7 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
 
-                    anchors.top: parent.bottom
+                    anchors.top: collectionlogo.bottom
 
                     width: parent.width
 
@@ -845,12 +888,20 @@ FocusScope {
 						currentCollectionIndex = platformlist.currentIndex;
 						softwareScreen();
 					}
+                    else if((event.key === Qt.Key_Up) && !event.isAutoRepeat)
+                    {
+                        if(designs.SystemsListPosition === "0") {
+                            event.accepted = true;
+                            settingsbutton.focus = true;
+                        }
+
+                    }
 				}
             }
 
         }
 
-		//first list
+        //first list
         HorizontalCollection {
             id: list1
             property bool selected: ListView.isCurrentItem

@@ -25,6 +25,83 @@ FocusScope {
     id: root
 
     ListModel {
+        id: designsModel
+        ListElement {
+            settingName: "Initial Focus screen position"
+            setting: "0,1,2,3"
+        }
+        ListElement {
+            settingName: "Favorites Banner screen position"
+            setting: "0,1,2,3,No"
+        }
+        ListElement {
+            settingName: "Favorites Banner screen ratio"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+        }
+        ListElement {
+            settingName: "Systems list screen position"
+            setting: "0,1,2,3,No"
+        }
+        ListElement {
+            settingName: "Systems list screen ratio"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+        }
+        ListElement {
+            settingName: "Number of Systems icon visible"
+            setting: "7,8,9,10,1,2,3,4,5,6"
+        }
+
+        ListElement {
+            settingName: "Systems list direction"
+            setting: "Horizontal,Vertical-left,Vertical-right"
+        }
+        ListElement {
+            settingName: "Systems list style"
+            setting: "Standard,Wheel"
+        }
+        ListElement {
+            settingName: "Systems group display"
+            setting: "No,Yes"
+        }
+        ListElement {
+            settingName: "Systems display in group"
+            setting: "When Selected, Always"
+        }
+        ListElement {
+            settingName: "Collections display"
+            setting: "In home page, In a dedicated system, Both"
+        }
+        ListElement {
+            settingName: "System picture display"
+            setting: "Top,Middle,Bottom,No"
+        }
+        ListElement {
+            settingName: "System picture size"
+            setting: "100%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
+        }
+
+        ListElement {
+            settingName: "System picture source"
+            setting: "From theme" //think about other source ?!
+        }
+        ListElement {
+            settingName: "System details display"
+            setting: "Top,Middle,Bottom,No"
+        }
+        ListElement {
+            settingName: "System details source"
+            setting: "Screenscraper only,pixL only, pixL + Screenscraper" //think about other source ?!
+        }
+    }
+
+    property var designerPage: {
+        return {
+            pageName: "Designer (for dev only)",
+            listmodel: designsModel
+        }
+    }
+
+    ListModel {
         id: settingsModel
 
         /*ListElement {
@@ -371,7 +448,7 @@ FocusScope {
         }
     }
 
-    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage]
+    property var settingsArr: [designerPage, generalPage, showcasePage, gridPage, gamePage, advancedPage]
     property real itemheight: vpx(50)
 
     ListModel {
