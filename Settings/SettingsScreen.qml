@@ -27,8 +27,8 @@ FocusScope {
     ListModel {
         id: designsModel
         ListElement {
-            settingName: "Initial Focus screen position"
-            setting: "0,1,2,3"
+            settingName: "Initial Focus on"
+            setting: "Favorites Banner,Systems list"
         }
         ListElement {
             settingName: "Favorites Banner screen position"

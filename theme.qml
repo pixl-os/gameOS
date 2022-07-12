@@ -86,7 +86,7 @@ FocusScope {
     // Load designer settings
     property var designs: {
         return {
-            InitialPosition:               api.memory.has("Initial Focus screen position") ? api.memory.get("Initial Focus screen position") : "0",
+            InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Favorites Banner",
             FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
             FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
             SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "1",

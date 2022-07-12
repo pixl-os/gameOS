@@ -547,16 +547,9 @@ FocusScope {
         function findObjectAndMove(object,newPosition){
             for(var i = 0; i < mainModel.count; i++){
                 if(mainModel.get(i) === object){ //need to move it
+                   //console.log("findObjectAndMove : ","move ",i," to ",newPosition);
                    mainModel.move(i, newPosition , 1);
-                   //tentative to set focus - doesn't work for the moment :-(
-                   if(newPosition === parseInt(designs.InitialPosition)){
-                       //mainModel.get(newPosition).selected = true
-                       //mainModel.get(newPosition).focus = true
-                       mainList.itemAt(newPosition).selected = true
-                       mainList.itemAt(newPosition).focus = true
-
-                   }
-                   return; //to exit function
+                   return; //to exit immediately from function
                 }
             }
         }
@@ -572,8 +565,8 @@ FocusScope {
         ListView {
             id: featuredlist
 
-            property bool selected: ListView.isCurrentItem
-            focus: selected
+            property bool selected : ListView.isCurrentItem
+            //focus: selected
             width: parent.width
 
             height: designs.FavoritesBannerPosition !== "No" ? vpx(appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100)) : 0
@@ -721,9 +714,9 @@ FocusScope {
         ListView {
             id: platformlist
 
-            property bool selected: ListView.isCurrentItem
+            property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
-            focus: selected
+            //focus: selected
             width: root.width
             //height: vpx(100) + globalMargin * 2
 
@@ -1242,6 +1235,13 @@ FocusScope {
 
         cacheBuffer: 1000
         footer: Item { height: helpMargin }
+
+        Component.onCompleted:{
+            //to manage focus
+            //console.log("onCompleted : ","focus to :",designs.InitialPosition);
+            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 0;
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 1;
+        }
 
         Keys.onUpPressed: {
             sfxNav.play();
