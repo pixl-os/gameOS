@@ -753,7 +753,7 @@ FocusScope {
             delegate: Rectangle {
                 property bool selected: ListView.isCurrentItem && platformlist.focus
                 width: platformlist.width / parseFloat(designs.NbSystemIcons)  //(platformlist.width - globalMargin * 2) / parseFloat(designs.NbSystemIcons)
-                height: platformlist.height * 0.8 //vpx(platformlist.height / 1.2)  //width * settings.WideRatio
+                height: platformlist.height * 0.8 * (parseFloat(designs.SystemsIconRatio)/100) //vpx(platformlist.height / 1.2)  //width * settings.WideRatio
                 //                color: selected ? theme.accent : theme.secondary
                 color: "transparent"
 
@@ -762,7 +762,7 @@ FocusScope {
                 //                border.width: vpx(1)
                 //                border.color: "#19FFFFFF"
 
-                //anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
 
                 Image {
                     id: collectionlogo

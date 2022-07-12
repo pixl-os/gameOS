@@ -50,7 +50,13 @@ FocusScope {
             settingName: "Number of Systems icon visible"
             setting: "7,8,9,10,1,2,3,4,5,6"
         }
+        ListElement {
+            settingName: "Systems icon ratio"
+            setting: "100%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
+        }
+        ListElement {
 
+        //after this line, parameters not yet took into account, just ideas ;-)
         ListElement {
             settingName: "Systems list direction"
             setting: "Horizontal,Vertical-left,Vertical-right"
