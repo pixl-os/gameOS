@@ -22,7 +22,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
 import QtGraphicalEffects 1.12
-import QtMultimedia 5.12
+import QtMultimedia 5.15
 import QtQml.Models 2.12
 import "../Global"
 import "../GridView"
@@ -750,7 +750,7 @@ FocusScope {
 
             model: api.collections//Utils.reorderCollection(api.collections);
             delegate: Rectangle {
-                property bool selected: ListView.isCurrentItem && platformlist.focus
+                property bool selected: ListView.isCurrentItem && platformlist.focus && root.activeFocus
                 width: platformlist.width / parseFloat(designs.NbSystemLogos)
                 height: width * settings.WideRatio * (parseFloat(designs.SystemLogoRatio)/100)
                 // color: selected ? theme.accent : theme.secondary
@@ -762,6 +762,30 @@ FocusScope {
                 //                border.color: "#19FFFFFF"
 
                 anchors.verticalCenter: parent.verticalCenter
+                onSelectedChanged: {
+                    //console.log("selected : ",selected)
+                    if(selected && (designs.SystemMusicSource !== "No")){
+                        playMusic.play();
+                    }
+                    else{
+                        playMusic.stop();
+                    }
+                }
+
+                Audio {
+                    id: playMusic
+                    loops: Audio.Infinite
+                    source: {
+                        if (designs.SystemMusicSource === "Custom") {
+                            //for test purpose, need to do new parameters using prefix and sufix in path
+                            return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/music.ogg";
+                        }
+                        else if(designs.SystemMusicSource !== "No") {
+                            return ""; //to do
+                        }
+                        else return "";
+                    }
+                }
 
                 Image {
                     id: collectionlogo
