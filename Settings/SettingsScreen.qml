@@ -477,7 +477,7 @@ FocusScope {
         }
     }
 
-    property var settingsArr: [designerPage, generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
+    property var settingsArr: api.internal.recalbox.getBoolParameter("theme.designer") ? [designerPage, generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
     property real itemheight: vpx(50)
 
     ListModel {
