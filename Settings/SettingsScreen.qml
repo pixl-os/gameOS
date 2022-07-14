@@ -461,7 +461,23 @@ FocusScope {
         }
     }
 
-    property var settingsArr: [designerPage, generalPage, showcasePage, gridPage, gamePage, advancedPage]
+    ListModel {
+        id: regionalSettingsModel
+
+        ListElement {
+            settingName: "Prefered region"
+            setting: "eu,jp,us"
+        }
+    }
+
+    property var regionalPage: {
+        return {
+            pageName: "Regional Settings",
+            listmodel: regionalSettingsModel
+        }
+    }
+
+    property var settingsArr: [designerPage, generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
     property real itemheight: vpx(50)
 
     ListModel {

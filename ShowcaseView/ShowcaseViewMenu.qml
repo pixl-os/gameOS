@@ -788,6 +788,30 @@ FocusScope {
                 }
 
                 Image {
+                    id: checkImage
+                    source: ""
+                    asynchronous: false
+                    visible: false
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status == Image.Ready) {
+                            collectionlogo.source = checkImage.source
+                        }
+                        else{
+                            //for test purpose, need to do new parameters using prefix and sufix in path
+                            collectionlogo.source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
+                        }
+                    }
+                }
+
+                Image {
                     id: collectionlogo
 
                     anchors.fill: parent
@@ -795,8 +819,10 @@ FocusScope {
                     anchors.margins: vpx(15)
                     source: {
                         if (designs.SystemLogoSource === "Custom"){
+                            //check path using contrycode
                             //for test purpose, need to do new parameters using prefix and sufix in path
-                            return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
+                            checkImage.source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/" + settings.PreferedRegion + "/logo_right.svg";
+                            return "";
                         }
                         else if(designs.SystemLogoSource !== "No"){
                             if(settings.SystemLogoStyle === "White")

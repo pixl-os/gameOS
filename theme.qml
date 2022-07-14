@@ -93,8 +93,8 @@ FocusScope {
             SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
             NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "7",
             SystemsListBackground:         api.memory.has("Systems list background") ? api.memory.get("Systems list background") : "No",
-            SystemLogoRatio:              api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "100%",
-            SystemLogoSource:             api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
+            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "100%",
+            SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
             SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No"
         }
     }
@@ -150,7 +150,8 @@ FocusScope {
 			ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
 			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
 			DemoTriggeringDelay:		   api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
-			DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No"		
+            DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
+            PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
         }
     }
 
