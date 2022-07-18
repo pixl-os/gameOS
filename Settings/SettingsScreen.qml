@@ -44,7 +44,7 @@ FocusScope {
         }
         ListElement {
             settingName: "Systems list screen ratio"
-            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%"
         }
         ListElement {
             settingName: "Systems list background"
@@ -60,7 +60,7 @@ FocusScope {
         }
         ListElement {
             settingName: "System logo ratio"
-            setting: "100%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
+            setting: "100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
         }
         ListElement {
             settingName: "System music source"
