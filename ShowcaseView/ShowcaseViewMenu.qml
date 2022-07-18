@@ -405,12 +405,13 @@ FocusScope {
 
             width: vpx(350)
             anchors { left: parent.left; leftMargin: globalMargin }
-            source: "../assets/images/gameOS-logo.png"
+            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/gameOS-logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)
             fillMode: Image.PreserveAspectFit
             smooth: true
             asynchronous: true
             anchors.centerIn: parent
+            visible: designs.ThemeLogoSource !== "No"
         }
 
         Text {
@@ -439,14 +440,14 @@ FocusScope {
             id: logo
 
             width: vpx(150)
-            anchors { left: parent.left; leftMargin: globalMargin }
-            source: "../assets/images/gameOS-logo.png"
+            anchors { left: parent.left; leftMargin: vpx(20); top: parent.top; topMargin: vpx(20); }
+            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/gameOS-logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)
             fillMode: Image.PreserveAspectFit
             smooth: true
             asynchronous: true
-            anchors.verticalCenter: parent.verticalCenter
-            visible: !ftueContainer.visible
+            //anchors.verticalCenter: parent.verticalCenter
+            visible: !ftueContainer.visible && (designs.ThemeLogoSource !== "No")
         }
 
         Rectangle {

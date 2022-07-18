@@ -66,6 +66,10 @@ FocusScope {
             settingName: "System music source"
             setting: "No,Custom"
         }
+        ListElement {
+            settingName: "Theme logo source"
+            setting: "Default,Custom,No"
+        }
 
         //after this line, parameters not yet took into account, just ideas ;-)
         ListElement {
