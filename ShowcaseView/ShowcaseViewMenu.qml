@@ -405,7 +405,7 @@ FocusScope {
 
             width: vpx(350)
             anchors { left: parent.left; leftMargin: globalMargin }
-            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/gameOS-logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
+            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)
             fillMode: Image.PreserveAspectFit
             smooth: true
@@ -441,7 +441,7 @@ FocusScope {
 
             width: vpx(150)
             anchors { left: parent.left; leftMargin: vpx(20); top: parent.top; topMargin: vpx(20); }
-            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/gameOS-logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
+            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)
             fillMode: Image.PreserveAspectFit
             smooth: true
