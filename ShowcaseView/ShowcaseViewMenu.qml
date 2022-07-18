@@ -330,7 +330,7 @@ FocusScope {
 
     }
 
-    property bool ftue: featuredCollection.games.count == 0
+    property bool ftue: featuredCollection.games.count === 0
 
     function storeIndices(secondary) {
         storedHomePrimaryIndex = mainList.currentIndex;
@@ -417,15 +417,16 @@ FocusScope {
         Text {
             text: "Try adding some favorite games"
 
-            horizontalAlignment: Text.AlignHCenter
-            anchors { bottom: parent.bottom; bottomMargin: vpx(75) }
-            width: parent.width
+            anchors { bottom: parent.bottom; bottomMargin: vpx(15)
+                      right: parent.right; rightMargin: vpx (15)
+                }
+            width: contentWidth
             height: contentHeight
             color: theme.text
             font.family: subtitleFont.name
-            font.pixelSize: vpx(16)
-            opacity: 0.5
-            visible: false
+            font.pixelSize: vpx(12)
+            opacity: 0.2
+            visible: true
         }
     }
 	
