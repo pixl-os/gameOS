@@ -1314,6 +1314,7 @@ FocusScope {
             if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
             if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
             if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
+            mainList.currentIndex = storedHomePrimaryIndex;
         }
 
         Keys.onUpPressed: {
