@@ -104,7 +104,8 @@ FocusScope {
             SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
             SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
             SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
-            ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default"
+            ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
+            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
         }
     }
 

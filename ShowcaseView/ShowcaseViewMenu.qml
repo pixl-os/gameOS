@@ -352,7 +352,7 @@ FocusScope {
         Image {
             id: logo
 
-            width: vpx(150)
+            width: vpx(parseInt(designs.ThemeLogoWidth))
             anchors { left: parent.left; leftMargin: vpx(20); top: parent.top; topMargin: vpx(20); }
             source: (designs.ThemeLogoSource === "Default") ? "../assets/images/logo_white.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)

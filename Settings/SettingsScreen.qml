@@ -102,6 +102,10 @@ FocusScope {
             settingName: "Theme logo source"
             setting: "Default,Custom,No"
         }
+        ListElement {
+            settingName: "Theme logo width"
+            setting: "100,125,150,175,200,50,75"
+        }
 
         //after this line, parameters not yet took into account, just ideas ;-)
         ListElement {
