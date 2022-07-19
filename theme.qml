@@ -87,15 +87,22 @@ FocusScope {
     property var designs: {
         return {
             InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Favorites Banner",
+            VideoBannerPosition:           api.memory.has("Video Banner screen position") ? api.memory.get("Video Banner screen position") : "0",
+            VideoBannerRatio:              api.memory.has("Video Banner screen ratio") ? api.memory.get("Video Banner screen ratio") : "50%",
+            VideoBannerSource:             api.memory.has("Video Banner source") ? api.memory.get("Video Banner source") : "Default",
+            VideoBannerPathExpression:     api.memory.has("Video Banner path expression") ? api.memory.get("Video Banner path expression") : "",
             FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
-            FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
+            FavoritesBannerRatio:          api.memory.has("Video Banner source") ? api.memory.get("Video Banner source") : "Default",
             SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "1",
             SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
             NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "7",
-            SystemsListBackground:         api.memory.has("Systems list background") ? api.memory.get("Systems list background") : "No",
+            SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
+            SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
             SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "100%",
             SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
+            SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
             SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
+            SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
             ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default"
         }
     }

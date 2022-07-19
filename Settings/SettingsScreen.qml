@@ -28,7 +28,23 @@ FocusScope {
         id: designsModel
         ListElement {
             settingName: "Initial Focus on"
-            setting: "Favorites Banner,Systems list"
+            setting: "Video Banner,Favorites Banner,Systems list"
+        }
+        ListElement {
+            settingName: "Video Banner screen position"
+            setting: "0,1,2,3,No"
+        }
+        ListElement {
+            settingName: "Video Banner screen ratio"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+        }
+        ListElement {
+            settingName: "Video Banner source"
+            setting: "Default,Custom,Random,BySystem"
+        }
+        ListElement {
+            settingName: "Video Banner path expression"
+            setting: "to edit"
         }
         ListElement {
             settingName: "Favorites Banner screen position"
@@ -40,31 +56,43 @@ FocusScope {
         }
         ListElement {
             settingName: "Systems list screen position"
-            setting: "0,1,2,3,No"
+            setting: "1,2,3,No,0"
         }
         ListElement {
             settingName: "Systems list screen ratio"
-            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%"
+            setting: "20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%"
         }
         ListElement {
-            settingName: "Systems list background"
-            setting: "No,Yes,Custom"
+            settingName: "Systems list background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Systems list background path expression"
+            setting: "to edit"
         }
         ListElement {
             settingName: "Number of System logos visible"
             setting: "7,8,9,10,1,2,3,4,5,6"
         }
         ListElement {
-            settingName: "System logo source"
-            setting: "Default,Custom,No"
-        }
-        ListElement {
             settingName: "System logo ratio"
             setting: "100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
         }
         ListElement {
+            settingName: "System logo source"
+            setting: "Default,Custom,No"
+        }
+        ListElement {
+            settingName: "System logo path expression"
+            setting: "to edit"
+        }
+        ListElement {
             settingName: "System music source"
             setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System music path expression"
+            setting: "to edit"
         }
         ListElement {
             settingName: "Theme logo source"
