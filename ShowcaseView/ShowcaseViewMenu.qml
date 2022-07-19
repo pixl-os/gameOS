@@ -341,94 +341,6 @@ FocusScope {
     Component.onDestruction: storeIndices();
 
     anchors.fill: parent
-
-	//ftueContainer
-    Item {
-        id: ftueContainer
-
-        width: parent.width
-        height: vpx(360)
-        visible: ftue
-        opacity: {
-            switch (mainList.currentIndex) {
-            case 0:
-                return 1;
-            case 1:
-                return 0.3;
-            case 2:
-                return 0.1;
-            case -1:
-                return 0.3;
-            default:
-                return 0
-            }
-        }
-        Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
-
-        //        Image {
-        //            anchors.fill: parent
-        //            source: "../assets/images/ftueBG01.jpeg"
-        //            sourceSize { width: root.width; height: root.height}
-        //            fillMode: Image.PreserveAspectCrop
-        //            smooth: true
-        //            asynchronous: true
-        //        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: "black"
-            opacity: 0.5
-        }
-
-        Video {
-            id: videocomponent
-
-            anchors.fill: parent
-            source: "../assets/video/ftue.mp4"
-            fillMode: VideoOutput.PreserveAspectCrop
-            muted: true
-            loops: MediaPlayer.Infinite
-            autoPlay: true
-
-            OpacityAnimator {
-                target: videocomponent
-                from: 0;
-                to: 1;
-                duration: 1000;
-                running: true;
-            }
-
-        }
-
-        Image {
-            id: ftueLogo
-
-            width: vpx(350)
-            anchors { left: parent.left; leftMargin: globalMargin }
-            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/logo.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
-            sourceSize: Qt.size(parent.width, parent.height)
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            asynchronous: true
-            anchors.centerIn: parent
-            visible: designs.ThemeLogoSource !== "No"
-        }
-
-        Text {
-            text: "Try adding some favorite games"
-
-            anchors { bottom: parent.bottom; bottomMargin: vpx(15)
-                      right: parent.right; rightMargin: vpx (15)
-                }
-            width: contentWidth
-            height: contentHeight
-            color: theme.text
-            font.family: subtitleFont.name
-            font.pixelSize: vpx(12)
-            opacity: 0.2
-            visible: true
-        }
-    }
 	
 	//header
     Item {
@@ -475,7 +387,12 @@ FocusScope {
                     mainList.currentIndex = 0;
             }
 
-            Keys.onDownPressed: mainList.focus = true;
+            Keys.onDownPressed: {
+                mainList.focus = true;
+                while (!mainList.currentItem.enabled) {
+                    mainList.incrementCurrentIndex();
+                }
+            }
             Keys.onPressed: {
 				if (!viewIsLoading){
 					// Accept
@@ -486,7 +403,10 @@ FocusScope {
 					// Back
 					if (api.keys.isCancel(event) && !event.isAutoRepeat) {
 						event.accepted = true;
-						mainList.focus = true;
+                        mainList.focus = true;
+                        while (!mainList.currentItem.enabled) {
+                            mainList.incrementCurrentIndex();
+                        }
 					}
 				}
             }
@@ -563,6 +483,99 @@ FocusScope {
             if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
         }
 
+        //ftueContainer
+        ListView{
+            id: ftueContainer
+            property bool selected : ListView.isCurrentItem
+
+            visible: (ftue || (designs.FavoritesBannerPosition !== designs.VideoBannerPosition)) && (designs.VideoBannerPosition !== "No")  //if no favorites or not same position between video/favorites
+            enabled: visible
+            width: appWindow.width
+            height: visible ? (appWindow.height * (parseFloat(designs.VideoBannerRatio)/100)) : 0
+            opacity: focus ? 1 : 0.7
+            //DEPREACETED, remove opacity rules
+            /*opacity: {
+                switch (mainList.currentIndex) {
+                case 0:
+                    return 1;
+                case 1:
+                    return 0.3;
+                case 2:
+                    return 0.1;
+                case -1:
+                    return 0.3;
+                default:
+                    return 0
+                }
+            }*/
+
+            Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
+
+            //        Image {
+            //            anchors.fill: parent
+            //            source: "../assets/images/ftueBG01.jpeg"
+            //            sourceSize { width: root.width; height: root.height}
+            //            fillMode: Image.PreserveAspectCrop
+            //            smooth: true
+            //            asynchronous: true
+            //        }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+                opacity: 0.5
+            }
+
+            Video {
+                id: videocomponent
+
+                anchors.fill: parent
+                source: "../assets/video/ftue.mp4"
+                fillMode: VideoOutput.PreserveAspectCrop
+                muted: true
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+
+                OpacityAnimator {
+                    target: videocomponent
+                    from: 0;
+                    to: 1;
+                    duration: 1000;
+                    running: true;
+                }
+
+            }
+
+            Image {
+                id: ftueLogo
+
+                width: vpx(350)
+                anchors { left: parent.left; leftMargin: globalMargin }
+                source: (designs.VideoBannerLogoSource === "Default") ? "../assets/images/logo.png" : "" // no possibility to have video with other log for the moment
+                sourceSize: Qt.size(parent.width, parent.height)
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                asynchronous: true
+                anchors.centerIn: parent
+                visible: designs.VideoBannerLogoSource !== "No"
+            }
+
+            Text {
+                text: "Try adding some favorite games"
+
+                anchors { bottom: parent.bottom; bottomMargin: vpx(15)
+                          right: parent.right; rightMargin: vpx (15)
+                    }
+                width: contentWidth
+                height: contentHeight
+                color: theme.text
+                font.family: subtitleFont.name
+                font.pixelSize: vpx(16)
+                opacity: 0.5
+                visible: ftueContainer.focus && (designs.FavoritesBannerPosition === designs.VideoBannerPosition) //if same position, need to inform about favorites mechanism
+            }
+        }
+
 		// Favorites list at top with screenshot/fanart/marquee and logos
         ListView {
             id: featuredlist
@@ -571,8 +584,8 @@ FocusScope {
             //focus: selected
             width: appWindow.width
 
-            height: designs.FavoritesBannerPosition !== "No" ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
-            visible: designs.FavoritesBannerPosition !== "No" ? true : false
+            height: visible ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
+            visible: (designs.FavoritesBannerPosition === "No")  ? false : (designs.FavoritesBannerPosition === designs.VideoBannerPosition) && ftue ? false : true
             enabled: visible
 
             spacing: vpx(0)
@@ -699,14 +712,6 @@ FocusScope {
 	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
 	                    if (!ftue)
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
-                    }
-                    else if((event.key === Qt.Key_Up) && !event.isAutoRepeat)
-                    {
-                        if(designs.FavoritesBannerPosition === "0"){
-                            event.accepted = true;
-                            settingsbutton.focus = true;
-                        }
-
                     }
 				}
             }
@@ -957,14 +962,6 @@ FocusScope {
 						currentCollectionIndex = platformlist.currentIndex;
 						softwareScreen();
 					}
-                    else if((event.key === Qt.Key_Up) && !event.isAutoRepeat)
-                    {
-                        if(designs.SystemsListPosition === "0") {
-                            event.accepted = true;
-                            settingsbutton.focus = true;
-                        }
-
-                    }
 				}
             }
 
@@ -1314,14 +1311,18 @@ FocusScope {
 
         Component.onCompleted:{
             //to manage focus
-            //console.log("onCompleted : ","focus to :",designs.InitialPosition);
-            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 0;
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 1;
+            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
+            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
         }
 
         Keys.onUpPressed: {
             sfxNav.play();
             do {
+                if(currentIndex === 0){
+                    settingsbutton.focus = true;
+                    break;
+                }
                 decrementCurrentIndex();
             } while (!currentItem.enabled);
         }

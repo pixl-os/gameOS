@@ -43,6 +43,10 @@ FocusScope {
             setting: "Default,Custom,Random,BySystem"
         }
         ListElement {
+            settingName: "Video Banner logo source"
+            setting: "Default,No"
+        }
+        ListElement {
             settingName: "Video Banner path expression"
             setting: "to edit"
         }
