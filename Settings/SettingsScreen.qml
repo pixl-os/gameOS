@@ -148,7 +148,7 @@ FocusScope {
 
     property var designerPage: {
         return {
-            pageName: "Designer (for dev only)",
+            pageName: "Home page design",
             listmodel: designsModel
         }
     }
@@ -516,8 +516,10 @@ FocusScope {
         }
     }
 
-    property var settingsArr: api.internal.recalbox.getBoolParameter("theme.designer") ? [designerPage, generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
+    property var designerArr: [designerPage]
+    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
     property real itemheight: vpx(50)
+    property var settingsCol: []
 
     ListModel {
         id: myCollectionsSettingsModel
@@ -601,20 +603,22 @@ FocusScope {
         }
     }
 
-     property var myCollections: {
+    property var myCollections: {
         return {
             pageName: qsTr("My Collections") + api.tr,
             listmodel: myCollectionsSettingsModel
         }
     }
 
-	property var settingsCol: []
-
 	Component.onCompleted: {
+
+        if(api.internal.recalbox.getBoolParameter("theme.designer")) settingsList.model = designerArr[pagelist.currentIndex].listmodel;
+        else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+
 		//for 10 collections to display on showcase (main page)
 		//-> possibility to have more in the future for HomePage
 		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
-		addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
+        addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
 		//generate My collection(s), no limit ;-)
 		initializeMyCollections();
 	}
@@ -718,10 +722,150 @@ FocusScope {
 	}
 
     Rectangle {
+        id: headerdev
+        visible : api.internal.recalbox.getBoolParameter("theme.designer")
+        anchors {
+            top: parent.top
+            left: parent.left
+            //right: parent.right
+        }
+        height: api.internal.recalbox.getBoolParameter("theme.designer") ? vpx(75) : 0
+        width: designertitle.contentWidth
+        color: theme.main
+
+        // Designer title
+        Text {
+            id: designertitle
+
+            text: "Designer (Dev only)"
+
+            anchors {
+                top: parent.top;
+                left: parent.left; leftMargin: globalMargin
+                bottom: parent.bottom
+            }
+
+            color: theme.text
+            font.family: titleFont.name
+            font.pixelSize: vpx(30)
+            font.bold: true
+            opacity: 1
+            horizontalAlignment: Text.AlignHLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+
+            // Mouse/touch functionality
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    previousScreen();
+                }
+            }
+        }
+    }
+
+    ListView {
+        id: pagelistdev
+        visible : api.internal.recalbox.getBoolParameter("theme.designer")
+        focus: api.internal.recalbox.getBoolParameter("theme.designer") ? true : false
+        anchors {
+            top: headerdev.bottom
+            //bottom: parent.bottom; bottomMargin: helpMargin
+            left: parent.left; leftMargin: globalMargin
+        }
+        height: api.internal.recalbox.getBoolParameter("theme.designer") ? contentHeight : 0
+        width: vpx(300)
+        model: designerArr
+        delegate: Component {
+            id: pageDevDelegate
+
+            Item {
+                id: pageRow
+
+                property bool selected: ListView.isCurrentItem && pagelistdev.focus
+
+                width: ListView.view.width
+                height: itemheight
+
+                // Page name
+                Text {
+                    id: pageNameText
+
+                    text: modelData.pageName
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(22)
+                    font.bold: true
+                    verticalAlignment: Text.AlignVCenter
+                    opacity: selected ? 1 : 0.2
+
+                    width: contentWidth
+                    height: parent.height
+                    anchors {
+                        left: parent.left; leftMargin: vpx(25)
+                    }
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: { sfxNav.play(); }
+                    onClicked: {
+                        sfxNav.play();
+                        pagelistdev.currentIndex = index;
+                        settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+                        settingsList.focus = true;
+                    }
+                }
+
+            }
+        }
+
+        Keys.onUpPressed: {
+            sfxNav.play(); decrementCurrentIndex();
+            settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+        Keys.onDownPressed: {
+            sfxNav.play();
+            var previousIndex = currentIndex;
+            incrementCurrentIndex();
+            if (previousIndex == currentIndex)
+            {
+                pagelistdev.focus = false
+                pagelist.focus = true
+                //displayMyCollectionsHelp(true);
+                headertitle.opacity = 1
+                designertitle.opacity = 0.2
+                pagelist.currentIndex = 0;
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            }
+            else
+            {
+                settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+        }
+        Keys.onPressed: {
+            // Accept
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                sfxAccept.play();
+                settingsList.focus = true;
+            }
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                previousScreen();
+            }
+        }
+
+    }
+
+    Rectangle {
         id: header
 
         anchors {
-            top: parent.top
+            top: pagelistdev.bottom
             left: parent.left
             //right: parent.right
         }
@@ -729,7 +873,7 @@ FocusScope {
 		width: headertitle.contentWidth
         color: theme.main
 
-        // Platform title
+        // Settings title
         Text {
             id: headertitle
             
@@ -745,7 +889,7 @@ FocusScope {
             font.family: titleFont.name
             font.pixelSize: vpx(30)
             font.bold: true
-			opacity: 1
+            opacity: api.internal.recalbox.getBoolParameter("theme.designer") ? 0.2 : 1.0
             horizontalAlignment: Text.AlignHLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -762,8 +906,7 @@ FocusScope {
 
     ListView {
         id: pagelist
-
-        focus: true
+        focus: api.internal.recalbox.getBoolParameter("theme.designer") ? false : true
         anchors {
             top: header.bottom
             //bottom: parent.bottom; bottomMargin: helpMargin
@@ -819,9 +962,24 @@ FocusScope {
         }
 
         Keys.onUpPressed: { 
-			sfxNav.play(); decrementCurrentIndex();
-			settingsList.model = settingsArr[pagelist.currentIndex].listmodel;			
-			}
+            sfxNav.play();
+            var previousIndex = currentIndex;
+            decrementCurrentIndex();
+            if ((previousIndex === currentIndex) && api.internal.recalbox.getBoolParameter("theme.designer"))
+            {
+                pagelist.focus = false
+                headertitle.opacity = 0.2
+                designertitle.opacity = 1
+                pagelistdev.focus = true;
+                settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+            else
+            {
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            }
+            //reset index of listview for settingsList
+            settingsList.currentIndex = 0;
+            }
         Keys.onDownPressed: { 
 			sfxNav.play(); 
 			var previousIndex = currentIndex;
@@ -1078,7 +1236,7 @@ FocusScope {
         delegate: settingsDelegate
         
         anchors {
-            top: header.bottom; 
+            top: api.internal.recalbox.getBoolParameter("theme.designer") ? headerdev.bottom : header.bottom
 			bottom: parent.bottom; bottomMargin: helpMargin
             left: pagelist.right; leftMargin: globalMargin
             right: parent.right; rightMargin: globalMargin
@@ -1312,7 +1470,8 @@ FocusScope {
 						}
 						//else we come back to parent menu
 						else if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
-						else pagelist.focus = true;
+                        else if (settingsList.model === settingsArr[pagelist.currentIndex].listmodel) pagelist.focus = true;
+                        else pagelistdev.focus = true;
                     }
 					if (setting === "to edit" && settingtextfield.readOnly === false ) {
 						event.accepted, settingtextfield.focus, active = virtualKeyboardOnPressed(event,settingtextfield,active);
