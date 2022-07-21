@@ -341,7 +341,24 @@ FocusScope {
     Component.onDestruction: storeIndices();
 
     anchors.fill: parent
-	
+
+    //ScreenScraper regions
+    ListModel {
+        id: regionSSModel
+        ListElement { region: "eu" }
+        ListElement { region: "us" }
+        ListElement { region: "wor"}
+        ListElement { region: "jp"}
+    }
+
+    function getInitialRegionIndex(){
+        for(var i = 0; i < regionSSModel.count; i++){
+            if(settings.PreferedRegion === regionSSModel.get(i).region){
+                return i;
+            }
+        }
+        return 0; //eu by default
+    }
 	//header
     Item {
         id: header
@@ -465,6 +482,8 @@ FocusScope {
     // Using an object model to build the main list using other lists
     ObjectModel {
         id: mainModel
+
+        property var regionSSIndex : getInitialRegionIndex();
 
         function findObjectAndMove(object,newPosition){
             for(var i = 0; i < mainModel.count; i++){
