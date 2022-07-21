@@ -28,7 +28,7 @@ FocusScope {
         id: designsModel
         ListElement {
             settingName: "Initial Focus on"
-            setting: "Video Banner,Favorites Banner,Systems list"
+            setting: "Video Banner,Favorites Banner,Systems list,System Details"
         }
         ListElement {
             settingName: "Video Banner screen position"
@@ -99,6 +99,26 @@ FocusScope {
             setting: "to edit"
         }
         ListElement {
+            settingName: "System Details screen position"
+            setting: "No,0,1,2,3"
+        }
+        ListElement {
+            settingName: "System Details screen ratio"
+            setting: "30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%"
+        }
+        ListElement {
+            settingName: "System Details source"
+            setting: "ScreenScraper,pixL,pixL+ScreenScraper" //think about other source ?!
+        }
+        ListElement {
+            settingName: "System Details background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details background path expression"
+            setting: "to edit"
+        }
+        ListElement {
             settingName: "Theme logo source"
             setting: "Default,Custom,No"
         }
@@ -123,27 +143,6 @@ FocusScope {
         ListElement {
             settingName: "Collections display"
             setting: "In home page, In a dedicated system, Both"
-        }
-        ListElement {
-            settingName: "System picture display"
-            setting: "Top,Middle,Bottom,No"
-        }
-        ListElement {
-            settingName: "System picture size"
-            setting: "100%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
-        }
-
-        ListElement {
-            settingName: "System picture source"
-            setting: "From theme" //think about other source ?!
-        }
-        ListElement {
-            settingName: "System details display"
-            setting: "Top,Middle,Bottom,No"
-        }
-        ListElement {
-            settingName: "System details source"
-            setting: "Screenscraper only,pixL only, pixL + Screenscraper" //think about other source ?!
         }
     }
 

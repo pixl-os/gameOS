@@ -481,6 +481,8 @@ FocusScope {
             if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
             //set position of Systems List (id: platformlist)
             if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
+            //set position of System Details (id: detailedlist)
+            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));
         }
 
         //ftueContainer
@@ -964,6 +966,266 @@ FocusScope {
 					}
 				}
             }
+        }
+
+        // Details/Description list by system
+        ListView {
+            id: detailedlist
+            width: appWindow.width
+            height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
+            visible: designs.SystemDetailsPosition !== "No" ? true : false
+            enabled: false //not selectable
+
+            anchors {
+                left: parent.left; leftMargin: globalMargin
+                right: parent.right; rightMargin: globalMargin
+            }
+
+            spacing: vpx(12)
+            orientation: ListView.Horizontal
+            preferredHighlightBegin: vpx(0)
+            preferredHighlightEnd: parent.width - vpx(60)
+            highlightRangeMode: ListView.ApplyRange
+            snapMode: ListView.SnapOneItem
+            highlightMoveDuration: 100
+            keyNavigationWraps: true
+            currentIndex: platformlist.currentIndex
+            Component.onCompleted: {}
+            model: api.collections//Utils.reorderCollection(api.collections);
+
+            delegate: Rectangle {
+                //property bool selected: ListView.isCurrentItem && detailedlist.focus && root.activeFocus
+                width: detailedlist.width
+                height: detailedlist.height
+                color: "transparent"
+                property string shortName: modelData.shortName
+                anchors.verticalCenter: parent.verticalCenter
+
+                Image {
+                    id: detailsBackground
+                    visible: designs.SystemDetailsBackground !== "No" ? true : false
+                    anchors.centerIn: parent
+                    anchors.margins: 0
+                    width: appWindow.width
+                    height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
+                    property var regionIndexUsed: regionSSIndex
+                    source: {
+                        //for test purpose, need to do new parameters using prefix and sufix in path
+                        if(designs.SystemDetailsBackground === "Custom"){
+                            if(designs.SystemDetailsSource === "ScreenScraper"){
+                                if(modelData.screenScraperId !=="0"){
+                                    return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="
+                                }
+                                else return "";
+                            }
+                            else {
+                                return "../assets/custom/details_background.jpg";
+                            }
+                        }
+                        else if(designs.SystemsListBackground !== "No") {
+                            return ""; //TO DO to have internal data
+                        }
+                        else return ""; // N/A
+                    }
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                                //change source in case of error
+                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                            }
+                            else{
+                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                    //change source in case of error
+                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Image {
+                    id: detailsHardware3DCasePicture
+                    //anchors.fill: parent
+                    //anchors.centerIn: parent //.Center
+                    anchors.left : parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(15)
+                    height: parent.height
+                    width: parent.width / 4
+                    property var regionIndexUsed: regionSSIndex
+                    source: {
+                        if(designs.SystemDetailsSource === "ScreenScraper"){
+                            if(modelData.screenScraperId !=="0"){
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=480";
+                            }
+                            else return "";
+                        }
+                        else //to do for other cases
+                        {
+                            return "";
+                        }
+                    }
+                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
+                    //scale: selected ? 0.9 : 0.8
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                                //change source in case of error
+                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                            }
+                            else{
+                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                    //change source in case of error
+                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Image {
+                    id: detailsHardwarePicture
+
+                    //anchors.fill: parent
+                    //anchors.centerIn: parent //.Center
+                    anchors.left : detailsHardware3DCasePicture.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(15)
+                    height: parent.height
+                    width: parent.width / 4
+                    property var regionIndexUsed: regionSSIndex
+                    source: {
+                        if(designs.SystemDetailsSource === "ScreenScraper"){
+                            if(modelData.screenScraperId !=="0"){
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=480";
+                            }
+                            else return "";
+                        }
+                        else //to do for other cases
+                        {
+                            return "";
+                        }
+                    }
+                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
+                    //scale: selected ? 0.9 : 0.8
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                                //change source in case of error
+                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                            }
+                            else{
+                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                    //change source in case of error
+                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Text {
+                    id: detailsDescription
+
+                    //for test purpose
+                    text: modelData.Name
+
+                    //anchors { fill: parent; margins: vpx(10) }
+
+                    anchors.right : parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(15)
+                    height: parent.height
+                    width: parent.width / 4
+
+                    color: theme.text
+                    font.pixelSize: vpx(18)
+                    font.family: subtitleFont.name
+                    font.bold: true
+                    style: Text.Outline; styleColor: theme.main
+
+                    elide: Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    lineHeight: 0.8
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    visible: true
+                }
+
+            }
+
+
+            // List specific input
+            //Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
+            //Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            //Keys.onPressed: {
+            //}
 
         }
 
@@ -1314,6 +1576,7 @@ FocusScope {
             if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
             if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
             if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = designs.SystemDetailsPosition;
             mainList.currentIndex = storedHomePrimaryIndex;
         }
 
