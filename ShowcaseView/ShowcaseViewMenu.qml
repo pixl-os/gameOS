@@ -477,6 +477,8 @@ FocusScope {
         }
 
         Component.onCompleted: {
+            //set position of Video Banner (id: ftueContainer)
+            if(designs.VideoBannerPosition !== "No") findObjectAndMove(ftueContainer,parseInt(designs.VideoBannerPosition));
             //set position of Favorites Banner (id: featuredlist)
             if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
             //set position of Systems List (id: platformlist)
@@ -491,7 +493,7 @@ FocusScope {
             property bool selected : ListView.isCurrentItem
 
             visible: (ftue || (designs.FavoritesBannerPosition !== designs.VideoBannerPosition)) && (designs.VideoBannerPosition !== "No")  //if no favorites or not same position between video/favorites
-            enabled: visible
+            enabled: visible // we let selectable to saw it if needed
             width: appWindow.width
             height: visible ? (appWindow.height * (parseFloat(designs.VideoBannerRatio)/100)) : 0
             opacity: focus ? 1 : 0.7
@@ -940,7 +942,7 @@ FocusScope {
                 source: {
                     //for test purpose, need to do new parameters using prefix and sufix in path
                     if(designs.SystemsListBackground === "Custom"){
-                        return "../assets/custom/" + Utils.processPlatformName(platformlist.currentItem.shortName) + "/background.jpg";
+                        return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/background.jpg";
                     }
                     else if(designs.SystemsListBackground !== "No") {
                         return ""; //TO DO to have internal data
@@ -1573,9 +1575,9 @@ FocusScope {
 
         Component.onCompleted:{
             //to manage focus
-            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
-            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = designs.VideoBannerPosition;
+            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = designs.FavoritesBannerPosition;
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = designs.SystemsListPosition;
             if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = designs.SystemDetailsPosition;
             mainList.currentIndex = storedHomePrimaryIndex;
         }
