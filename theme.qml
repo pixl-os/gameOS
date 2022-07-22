@@ -106,10 +106,14 @@ FocusScope {
             SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
             SystemDetailsPosition:       api.memory.has("System Details screen position") ? api.memory.get("System Details screen position") : "No",
             SystemDetailsRatio:          api.memory.has("System Details screen ratio") ? api.memory.get("System Details screen ratio") : "30%",
-            //not used finally for the moment
-            //SystemDetailsSource:              api.memory.has("System Details source") ? api.memory.get("System Details source") : "ScreenScraper",
             SystemDetailsBackground:         api.memory.has("System Details background source") ? api.memory.get("System Details background source") : "No",
             SystemDetailsBackgroundPathExpression:         api.memory.has("System Details background path expression") ? api.memory.get("System Details background path expression") : "",
+            SystemDetailsVideo:         api.memory.has("System Details video source") ? api.memory.get("System Details video source") : "No",
+            SystemDetailsVideoPathExpression:         api.memory.has("System Details video path expression") ? api.memory.get("System Details video path expression") : "",
+            SystemDetailsHardware:         api.memory.has("System Details hardware source") ? api.memory.get("System Details hardware source") : "No",
+            SystemDetailsHardwarePathExpression:         api.memory.has("System Details hardware path expression") ? api.memory.get("System Details hardware path expression") : "",
+            SystemDetailsController:         api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
+            SystemDetailsControllerPathExpression:         api.memory.has("System Details controller path expression") ? api.memory.get("System Details controller path expression") : "",
             ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
             ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
         }

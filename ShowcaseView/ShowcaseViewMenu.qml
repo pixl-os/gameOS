@@ -497,6 +497,30 @@ FocusScope {
             }
         }
 
+        function processPathExpression(pathExpression,systemSelected){
+            pathExpression = pathExpression.replace("{region}",settings.PreferedRegion);
+            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+            return pathExpression
+        }
+
+        function processPathExpressionNoRegion(pathExpression,systemSelected){
+            //to put region part as empty
+            pathExpression = pathExpression.replace("{region}","");
+            //to replace // by / if region is a directory
+            pathExpression = pathExpression.replace("//","/");
+            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+            return pathExpression
+        }
+
+
+        function processPathExpressionScreenScraper(pathExpression,systemSelected,regionIndexUsed){
+            pathExpression = pathExpression.replace("{screenscraper_region}",regionSSModel.get(regionIndexUsed).region);
+            pathExpression = pathExpression.replace("{screenscraper_id}",systemSelected.screenScraperId);
+            return pathExpression
+        }
+
+
+
         Component.onCompleted: {
             //set position of Video Banner (id: ftueContainer)
             if(designs.VideoBannerPosition !== "No") findObjectAndMove(ftueContainer,parseInt(designs.VideoBannerPosition));
@@ -555,7 +579,15 @@ FocusScope {
                 id: videocomponent
 
                 anchors.fill: parent
-                source: "../assets/video/ftue.mp4"
+                source: {
+                    if(designs.VideoBannerSource === "Default"){
+                        return "../assets/video/ftue.mp4"
+                    }
+                    else{
+                        //unique url or path, no variable data for the moment
+                        return designs.VideoBannerPathExpression;
+                    }
+                }
                 fillMode: VideoOutput.PreserveAspectCrop
                 muted: true
                 loops: MediaPlayer.Infinite
@@ -809,8 +841,10 @@ FocusScope {
                     loops: Audio.Infinite
                     source: {
                         if (designs.SystemMusicSource === "Custom") {
+                            var result = mainModel.processPathExpression(designs.SystemMusicPathExpression,modelData)
+                            return result;
                             //for test purpose, need to do new parameters using prefix and sufix in path
-                            return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/music.ogg";
+                            //return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/music.ogg";
                         }
                         else if(designs.SystemMusicSource !== "No") {
                             return ""; //to do
@@ -827,9 +861,12 @@ FocusScope {
                     anchors.margins: vpx(15)
                     source: {
                         if (designs.SystemLogoSource === "Custom"){
-                            //check path using contrycode
+                            // for {region} & {shortname} tags
+                            var result = mainModel.processPathExpression(designs.SystemLogoPathExpression,modelData)
+                            return result;
+
                             //for test purpose, need to do new parameters using prefix and sufix in path
-                            return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/" + settings.PreferedRegion + "/logo_right.svg";
+                            //return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/" + settings.PreferedRegion + "/logo_right.svg";
                         }
                         else if(designs.SystemLogoSource !== "No"){
                             if(settings.SystemLogoStyle === "White")
@@ -864,7 +901,10 @@ FocusScope {
                         else if (status === Image.Error){
                             //for test purpose, need to do new parameters using prefix and sufix in path
                             //change source in case of error
-                            source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
+                            //source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
+                            var result = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
+                            return result;
+
                         }
                     }
                     Image{
@@ -963,7 +1003,9 @@ FocusScope {
                 source: {
                     //for test purpose, need to do new parameters using prefix and sufix in path
                     if(designs.SystemsListBackground === "Custom"){
-                        return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/background.jpg";
+                        // for {region} & {shortname} tags
+                        var result = mainModel.processPathExpression(designs.SystemsListBackgroundPathExpression,modelData)
+                        return result;
                     }
                     else if(designs.SystemsListBackground !== "No") {
                         return ""; //TO DO to have internal data
@@ -1017,14 +1059,10 @@ FocusScope {
             model: api.collections//Utils.reorderCollection(api.collections);
 
             delegate: Rectangle {
-                //property bool selected: ListView.isCurrentItem && detailedlist.focus && root.activeFocus
                 width: detailedlist.width
                 height: detailedlist.height
                 color: "transparent"
                 property string shortName: modelData.shortName
-                //anchors.verticalCenter: parent.verticalCenter
-
-                //RFU
 
                 Image {
                     id: detailsBackground
@@ -1033,22 +1071,19 @@ FocusScope {
                     anchors.margins: 0
                     width: appWindow.width
                     height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
-                    //property var regionIndexUsed: mainModel.regionSSIndex
+                    property var regionIndexUsed: mainModel.regionSSIndex
                     source: {
                         //for test purpose, need to do new parameters using prefix and sufix in path
                         if(designs.SystemDetailsBackground === "Custom"){
-                            if(designs.SystemDetailsSource === "ScreenScraper"){
-                                if(modelData.screenScraperId !=="0"){
-                                    return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=steam-grid&region=&num=&version=&maxwidth=1920&maxheight=" + height.toString()
-                                }
-                                else return "";
-                            }
-                            else {
-                                return "../assets/custom/details_background.jpg";
-                            }
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsBackgroundPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
                         }
                         else if(designs.SystemsListBackground !== "No") {
-                            return ""; //TO DO to have internal data
+                            return ""; //RFU
                         }
                         else return ""; // N/A
                     }
@@ -1056,7 +1091,7 @@ FocusScope {
                     asynchronous: true
                     smooth: true
                     opacity: 1
-                    /*onStatusChanged: {
+                    onStatusChanged: {
                         //Image.Null - no image has been set
                         //Image.Ready - the image has been loaded
                         //Image.Loading - the image is currently being loaded
@@ -1076,20 +1111,23 @@ FocusScope {
                                 regionIndexUsed = 0;
                             }
                             if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsBackgroundPathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
 
                         }
-                    }*/
+                    }
                 }
 
                 //RFU
-/*                Image {
+                /*Image {
                     id: detailsHardware3DCasePicture
-                    //anchors.fill: parent
-                    //anchors.centerIn: parent //.Center
                     anchors.left : parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.margins: vpx(15)
@@ -1141,8 +1179,8 @@ FocusScope {
                             }
                         }
                     }
-                }
-*/
+                }*/
+
                 Image {
                     id: detailsHardwarePicture
 
@@ -1155,16 +1193,18 @@ FocusScope {
                     width: parent.width / 3
                     property var regionIndexUsed: mainModel.regionSSIndex
                     source: {
-                        if(designs.SystemDetailsSource === "ScreenScraper"){
-                            if(modelData.screenScraperId !=="0"){
-                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
-                            }
-                            else return "";
+                        if(designs.SystemDetailsHardware === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
                         }
-                        else //to do for other cases
-                        {
-                            return "";
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
                         }
+                        else return ""; // N/A
                     }
                     //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
@@ -1194,9 +1234,16 @@ FocusScope {
                                 regionIndexUsed = 0;
                             }
                             if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = pmainModel.rocessPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
 
                         }
@@ -1241,7 +1288,24 @@ FocusScope {
                     anchors.margins: vpx(5)
                     height: vpx(parent.height - 5*2)
                     width: parent.width / 3
-                    source: "https://www.screenscraper.fr/medias/" + modelData.screenScraperId + "/wheels/video.mp4"
+
+                    property var regionIndexUsed: mainModel.regionSSIndex
+
+                    source:{
+                        if(designs.SystemDetailsVideo === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsVideoPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                        }
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
+                        }
+                        else return ""; // N/A
+                    }
+                    // "https://www.screenscraper.fr/medias/" + modelData.screenScraperId + "/wheels/video.mp4"
                     fillMode: VideoOutput.PreserveAspectFit
                     muted: true
                     loops: MediaPlayer.Infinite
@@ -1267,17 +1331,22 @@ FocusScope {
                     height: vpx(parent.height - 5*2)
                     width: parent.width / 3
                     property var regionIndexUsed: mainModel.regionSSIndex
+
                     source: {
-                        if(designs.SystemDetailsSource === "ScreenScraper"){
-                            if(modelData.screenScraperId !=="0"){
-                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
-                            }
-                            else return "";
+                        if(designs.SystemDetailsController === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsControllerPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                            //return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
+
                         }
-                        else //to do for other cases
-                        {
-                            return "";
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
                         }
+                        else return ""; // N/A
                     }
                     //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
@@ -1307,9 +1376,15 @@ FocusScope {
                                 regionIndexUsed = 0;
                             }
                             if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsControllerPathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
 
                         }

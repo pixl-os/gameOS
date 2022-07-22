@@ -106,17 +106,36 @@ FocusScope {
             settingName: "System Details screen ratio"
             setting: "30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%"
         }
-        //not used for the moment
-        /* ListElement {
-            settingName: "System Details source"
-            setting: "ScreenScraper,pixL,pixL+ScreenScraper" //think about other source ?!
-        }*/
         ListElement {
             settingName: "System Details background source"
             setting: "No,Custom"
         }
         ListElement {
             settingName: "System Details background path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details video source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details video path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details hardware source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details hardware path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details controller source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details controller path expression"
             setting: "to edit"
         }
         ListElement {
