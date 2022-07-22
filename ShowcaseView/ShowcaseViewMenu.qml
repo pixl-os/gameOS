@@ -345,10 +345,12 @@ FocusScope {
     //ScreenScraper regions
     ListModel {
         id: regionSSModel
-        ListElement { region: "eu" }
         ListElement { region: "us" }
         ListElement { region: "wor"}
+        ListElement { region: "eu" }
+        ListElement { region: "wor"}
         ListElement { region: "jp"}
+        ListElement { region: "wor"}
     }
 
     function getInitialRegionIndex(){
@@ -1020,7 +1022,9 @@ FocusScope {
                 height: detailedlist.height
                 color: "transparent"
                 property string shortName: modelData.shortName
-                anchors.verticalCenter: parent.verticalCenter
+                //anchors.verticalCenter: parent.verticalCenter
+
+                //RFU
 
                 Image {
                     id: detailsBackground
@@ -1029,13 +1033,13 @@ FocusScope {
                     anchors.margins: 0
                     width: appWindow.width
                     height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
-                    property var regionIndexUsed: regionSSIndex
+                    //property var regionIndexUsed: mainModel.regionSSIndex
                     source: {
                         //for test purpose, need to do new parameters using prefix and sufix in path
                         if(designs.SystemDetailsBackground === "Custom"){
                             if(designs.SystemDetailsSource === "ScreenScraper"){
                                 if(modelData.screenScraperId !=="0"){
-                                    return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="
+                                    return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=steam-grid&region=&num=&version=&maxwidth=1920&maxheight=" + height.toString()
                                 }
                                 else return "";
                             }
@@ -1048,11 +1052,11 @@ FocusScope {
                         }
                         else return ""; // N/A
                     }
-                    fillMode: Image.PreserveAspectCrop
+                    fillMode: Image.Stretch
                     asynchronous: true
                     smooth: true
                     opacity: 1
-                    onStatusChanged: {
+                    /*onStatusChanged: {
                         //Image.Null - no image has been set
                         //Image.Ready - the image has been loaded
                         //Image.Loading - the image is currently being loaded
@@ -1071,21 +1075,18 @@ FocusScope {
                             else{
                                 regionIndexUsed = 0;
                             }
-                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
-                            else{
-                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                    //change source in case of error
-                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
-                                }
-                            }
+
                         }
-                    }
+                    }*/
                 }
 
-                Image {
+                //RFU
+/*                Image {
                     id: detailsHardware3DCasePicture
                     //anchors.fill: parent
                     //anchors.centerIn: parent //.Center
@@ -1094,11 +1095,11 @@ FocusScope {
                     anchors.margins: vpx(15)
                     height: parent.height
                     width: parent.width / 4
-                    property var regionIndexUsed: regionSSIndex
+                    property var regionIndexUsed: mainModel.regionSSIndex
                     source: {
                         if(designs.SystemDetailsSource === "ScreenScraper"){
                             if(modelData.screenScraperId !=="0"){
-                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=480";
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
                             }
                             else return "";
                         }
@@ -1133,35 +1134,30 @@ FocusScope {
                             else{
                                 regionIndexUsed = 0;
                             }
-                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
-                            }
-                            else{
-                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                    //change source in case of error
-                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
-                                }
+                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
                         }
                     }
                 }
-
+*/
                 Image {
                     id: detailsHardwarePicture
 
                     //anchors.fill: parent
                     //anchors.centerIn: parent //.Center
-                    anchors.left : detailsHardware3DCasePicture.right
+                    anchors.left : parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: vpx(15)
-                    height: parent.height
-                    width: parent.width / 4
-                    property var regionIndexUsed: regionSSIndex
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+                    property var regionIndexUsed: mainModel.regionSSIndex
                     source: {
                         if(designs.SystemDetailsSource === "ScreenScraper"){
                             if(modelData.screenScraperId !=="0"){
-                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=480";
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
                             }
                             else return "";
                         }
@@ -1197,33 +1193,30 @@ FocusScope {
                             else{
                                 regionIndexUsed = 0;
                             }
-                            if(source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=1920&maxheight="){
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
-                                source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
+                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
                             }
-                            else{
-                                if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
-                                    //change source in case of error
-                                    source === "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=1920&maxheight="
-                                }
-                            }
+
                         }
                     }
                 }
 
-                Text {
+                //RFU
+/*                Text {
                     id: detailsDescription
 
                     //for test purpose
-                    text: modelData.Name
+                    text: modelData.name
 
                     //anchors { fill: parent; margins: vpx(10) }
 
-                    anchors.right : parent.right
+                    anchors.left : detailsHardwarePicture.right
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.margins: vpx(15)
                     height: parent.height
-                    width: parent.width / 4
+                    width: parent.width / 3
 
                     color: theme.text
                     font.pixelSize: vpx(18)
@@ -1237,6 +1230,90 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     visible: true
+                }
+*/
+
+                Video{
+                    id: detailsVideo
+
+                    anchors.left : detailsHardwarePicture.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+                    source: "https://www.screenscraper.fr/medias/" + modelData.screenScraperId + "/wheels/video.mp4"
+                    fillMode: VideoOutput.PreserveAspectFit
+                    muted: true
+                    loops: MediaPlayer.Infinite
+                    autoPlay: true
+
+                    OpacityAnimator {
+                        target: detailsVideo
+                        from: 0;
+                        to: 1;
+                        duration: 1000;
+                        running: true;
+                    }
+                }
+
+                Image {
+                    id: detailsControllerPicture
+
+                    //anchors.fill: parent
+                    //anchors.centerIn: parent //.Center
+                    anchors.left : detailsVideo.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+                    property var regionIndexUsed: mainModel.regionSSIndex
+                    source: {
+                        if(designs.SystemDetailsSource === "ScreenScraper"){
+                            if(modelData.screenScraperId !=="0"){
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
+                            }
+                            else return "";
+                        }
+                        else //to do for other cases
+                        {
+                            return "";
+                        }
+                    }
+                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
+                    //scale: selected ? 0.9 : 0.8
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                //change source in case of error
+                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                            }
+
+                        }
+                    }
                 }
 
             }
@@ -1594,10 +1671,11 @@ FocusScope {
 
         Component.onCompleted:{
             //to manage focus
-            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = designs.VideoBannerPosition;
-            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = designs.FavoritesBannerPosition;
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = designs.SystemsListPosition;
-            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = designs.SystemDetailsPosition;
+            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
+            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 3;
+            //if you add new component, please put existing index/order before to change position at this place
             mainList.currentIndex = storedHomePrimaryIndex;
         }
 
