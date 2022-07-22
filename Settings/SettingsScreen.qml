@@ -40,7 +40,7 @@ FocusScope {
         }
         ListElement {
             settingName: "Video Banner source"
-            setting: "Default,Custom,Random,BySystem"
+            setting: "Default,Custom" //Other idea for later ",Random,BySystem"
         }
         ListElement {
             settingName: "Video Banner logo source"
@@ -106,10 +106,11 @@ FocusScope {
             settingName: "System Details screen ratio"
             setting: "30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%"
         }
-        ListElement {
+        //not used for the moment
+        /* ListElement {
             settingName: "System Details source"
             setting: "ScreenScraper,pixL,pixL+ScreenScraper" //think about other source ?!
-        }
+        }*/
         ListElement {
             settingName: "System Details background source"
             setting: "No,Custom"
@@ -128,6 +129,7 @@ FocusScope {
         }
 
         //after this line, parameters not yet took into account, just ideas ;-)
+        /*
         ListElement {
             settingName: "Systems list direction"
             setting: "Horizontal,Vertical-left,Vertical-right"
@@ -143,7 +145,8 @@ FocusScope {
         ListElement {
             settingName: "Collections display"
             setting: "In home page, In a dedicated system, Both"
-        }
+        }*/
+
     }
 
     property var designerPage: {
