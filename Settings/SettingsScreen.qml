@@ -60,7 +60,7 @@ FocusScope {
         }
         ListElement {
             settingName: "Systems list screen position"
-            setting: "1,2,3,No,0"
+            setting: "2,3,No,0,1"
         }
         ListElement {
             settingName: "Systems list screen ratio"
@@ -80,7 +80,7 @@ FocusScope {
         }
         ListElement {
             settingName: "System logo ratio"
-            setting: "100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%"
+            setting: "60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%"
         }
         ListElement {
             settingName: "System logo source"

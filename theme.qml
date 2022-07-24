@@ -99,7 +99,7 @@ FocusScope {
             NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "7",
             SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
             SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
-            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "100%",
+            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "60%",
             SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
             SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
             SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
