@@ -48,12 +48,9 @@ FocusScope {
 		//still to find a solution for "HorizontalCollection" loading dynamically
 		//that's why we can't change the number dynamically for the moment
 		//warning: index start from 0 but Colletions from 1
-	
-		//property alias listMyCollection: listMyCollectionLoader.item;
 		delegate: 
 		Loader {
 			id: listLoader
-			//source: Utils.isCollectionTypeRequested("My Collection 1") ? "../Lists/ListMyCollection.qml" : ""
 			source: getListSourceFromIndex(index + 1) // get qml file to load from index of "settings.ShowcaseCollectionX"
 			asynchronous: true
 			property bool measuring: false
@@ -361,7 +358,8 @@ FocusScope {
         }
         return 0; //eu by default
     }
-	//header
+
+    //header
     Item {
         id: header
 
@@ -538,7 +536,7 @@ FocusScope {
             property bool selected : ListView.isCurrentItem
 
             visible: (ftue || (designs.FavoritesBannerPosition !== designs.VideoBannerPosition)) && (designs.VideoBannerPosition !== "No")  //if no favorites or not same position between video/favorites
-            enabled: visible // we let selectable to saw it if needed
+            enabled: (designs.FavoritesBannerPosition === designs.VideoBannerPosition) && visible // we let selectable only if visible and video/favorites are linked by the same position on the screen.
             width: appWindow.width
             height: visible ? (appWindow.height * (parseFloat(designs.VideoBannerRatio)/100)) : 0
             opacity: focus ? 1 : 0.7
@@ -780,7 +778,6 @@ FocusScope {
 
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
-            //focus: selected
             width: appWindow.width
 
             height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
@@ -788,8 +785,8 @@ FocusScope {
             enabled: visible
 
             anchors {
-                left: parent.left; leftMargin: globalMargin
-                right: parent.right; rightMargin: globalMargin
+                left: parent.left;
+                right: parent.right;
             }
             spacing: vpx(12)
             orientation: ListView.Horizontal
@@ -813,26 +810,41 @@ FocusScope {
             Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
 
             model: api.collections//Utils.reorderCollection(api.collections);
+
             delegate: Rectangle {
-                property bool selected: ListView.isCurrentItem && platformlist.focus && root.activeFocus
+                id:rectangleLogo
+                property bool selected: ListView.isCurrentItem
                 width: platformlist.width / parseFloat(designs.NbSystemLogos)
-                height: width * settings.WideRatio * (parseFloat(designs.SystemLogoRatio)/100)
-                // color: selected ? theme.accent : theme.secondary
+                height: platformlist.height
                 color: "transparent"
                 property string shortName: modelData.shortName
-                //scale: selected ? 0.9 : 0.8
-                //Behavior on scale { NumberAnimation { duration: 100 } }
-                //                border.width: vpx(1)
-                //                border.color: "#19FFFFFF"
+                Image {
+                    id: systemBackground
+                    visible: (designs.SystemsListBackground !== "No") ? true : false
+                    height: rectangleLogo.height
+                    width: rectangleLogo.width
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    z:-1
+                    source:{
+                        if(designs.SystemsListBackground === "Custom"){
+                            // for {region} & {shortname} tags
+                            return mainModel.processPathExpression(designs.SystemsListBackgroundPathExpression, modelData)
+                        }
+                        else return "";
+                    }
+                }
 
-                anchors.verticalCenter: parent.verticalCenter
+
                 onSelectedChanged: {
                     //console.log("selected : ",selected)
-                    if(selected && (designs.SystemMusicSource !== "No")){
-                        playMusic.play();
+                    if(selected && root.activeFocus && (designs.SystemMusicSource !== "No")){
+                        if (modelData.shortName !=="imageviewer") playMusic.play();
                     }
                     else{
-                        playMusic.stop();
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
                     }
                 }
 
@@ -841,10 +853,10 @@ FocusScope {
                     loops: Audio.Infinite
                     source: {
                         if (designs.SystemMusicSource === "Custom") {
-                            var result = mainModel.processPathExpression(designs.SystemMusicPathExpression,modelData)
-                            return result;
-                            //for test purpose, need to do new parameters using prefix and sufix in path
-                            //return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/music.ogg";
+                            if (modelData.shortName !=="imageviewer"){
+                                return mainModel.processPathExpression(designs.SystemMusicPathExpression,modelData)
+                            }
+                            else return "";
                         }
                         else if(designs.SystemMusicSource !== "No") {
                             return ""; //to do
@@ -855,10 +867,10 @@ FocusScope {
 
                 Image {
                     id: collectionlogo
-
-                    anchors.fill: parent
-                    anchors.centerIn: parent //.Center
-                    anchors.margins: vpx(15)
+                    height: parent.height * (parseFloat(designs.SystemLogoRatio)/100)
+                    width: parent.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     source: {
                         if (designs.SystemLogoSource === "Custom"){
                             // for {region} & {shortname} tags
@@ -878,8 +890,7 @@ FocusScope {
                                 return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                             }
                         }
-                    }
-                    sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    }                      
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
@@ -902,21 +913,18 @@ FocusScope {
                             //for test purpose, need to do new parameters using prefix and sufix in path
                             //change source in case of error
                             //source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
-                            var result = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
-                            return result;
-
+                            source = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
                         }
                     }
                     Image{
                         id: betaLogo
-                        anchors.top: parent.top
+                        anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
                         width: parent.width/2
                         height: parent.height/2
 
                         //to alert when system is in beta
                         source: "../assets/images/beta-round.png";
-                        sourceSize: Qt.size(betaLogo.width, betaLogo.height)
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
                         smooth: true
@@ -992,30 +1000,6 @@ FocusScope {
 
                     }
                 }
-            }
-
-            Image {
-                id: systemBackground
-                visible: designs.SystemsListBackground !== "No" ? true : false
-                anchors.centerIn: parent
-                anchors.margins: 0
-                z: -1
-                source: {
-                    //for test purpose, need to do new parameters using prefix and sufix in path
-                    if(designs.SystemsListBackground === "Custom"){
-                        // for {region} & {shortname} tags
-                        var result = mainModel.processPathExpression(designs.SystemsListBackgroundPathExpression,modelData)
-                        return result;
-                    }
-                    else if(designs.SystemsListBackground !== "No") {
-                        return ""; //TO DO to have internal data
-                    }
-                    else return ""; // N/A
-                }
-                fillMode: Image.PreserveAspectFit // PreserveAspectCrop
-                asynchronous: true
-                smooth: true
-                opacity: 1
             }
 
             // List specific input
@@ -1184,8 +1168,6 @@ FocusScope {
                 Image {
                     id: detailsHardwarePicture
 
-                    //anchors.fill: parent
-                    //anchors.centerIn: parent //.Center
                     anchors.left : parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.margins: vpx(5)
@@ -1206,14 +1188,9 @@ FocusScope {
                         }
                         else return ""; // N/A
                     }
-                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
-                    //scale: selected ? 0.9 : 0.8
-                    //Behavior on scale { NumberAnimation { duration: 100 } }
-                    //Behavior on scale { NumberAnimation { duration: 100 } }
                     onStatusChanged: {
                         //Image.Null - no image has been set
                         //Image.Ready - the image has been loaded
@@ -1240,7 +1217,6 @@ FocusScope {
                                 //process path/url for screenscraper parameters if needed
                                 source = pmainModel.rocessPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
                                 //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
-
                                 //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
                                 //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
@@ -1305,7 +1281,6 @@ FocusScope {
                         }
                         else return ""; // N/A
                     }
-                    // "https://www.screenscraper.fr/medias/" + modelData.screenScraperId + "/wheels/video.mp4"
                     fillMode: VideoOutput.PreserveAspectFit
                     muted: true
                     loops: MediaPlayer.Infinite
@@ -1322,9 +1297,6 @@ FocusScope {
 
                 Image {
                     id: detailsControllerPicture
-
-                    //anchors.fill: parent
-                    //anchors.centerIn: parent //.Center
                     anchors.left : detailsVideo.right
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.margins: vpx(5)
@@ -1348,14 +1320,9 @@ FocusScope {
                         }
                         else return ""; // N/A
                     }
-                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
-                    //scale: selected ? 0.9 : 0.8
-                    //Behavior on scale { NumberAnimation { duration: 100 } }
-                    //Behavior on scale { NumberAnimation { duration: 100 } }
                     onStatusChanged: {
                         //Image.Null - no image has been set
                         //Image.Ready - the image has been loaded
@@ -1390,16 +1357,7 @@ FocusScope {
                         }
                     }
                 }
-
             }
-
-
-            // List specific input
-            //Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
-            //Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
-            //Keys.onPressed: {
-            //}
-
         }
 
         //first list
