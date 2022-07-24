@@ -86,7 +86,7 @@ FocusScope {
     // Load designer settings
     property var designs: {
         return {
-            InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Favorites Banner",
+            InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Systems list",
             VideoBannerPosition:           api.memory.has("Video Banner screen position") ? api.memory.get("Video Banner screen position") : "0",
             VideoBannerRatio:              api.memory.has("Video Banner screen ratio") ? api.memory.get("Video Banner screen ratio") : "50%",
             VideoBannerSource:             api.memory.has("Video Banner source") ? api.memory.get("Video Banner source") : "Default",
@@ -94,7 +94,7 @@ FocusScope {
             VideoBannerPathExpression:     api.memory.has("Video Banner path expression") ? api.memory.get("Video Banner path expression") : "",
             FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
             FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
-            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "1",
+            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "2",
             SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
             NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "7",
             SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",

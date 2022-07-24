@@ -28,7 +28,7 @@ FocusScope {
         id: designsModel
         ListElement {
             settingName: "Initial Focus on"
-            setting: "Video Banner,Favorites Banner,Systems list,System Details"
+            setting: "Systems list,Video Banner,Favorites Banner,System Details"
         }
         ListElement {
             settingName: "Video Banner screen position"
