@@ -805,6 +805,9 @@ FocusScope {
                     savedIndex = currentIndex;
                     currentIndex = -1;
                 }
+                if(!focus){
+                    playMusic.stop();
+                }
             }
 
             Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
@@ -840,8 +843,29 @@ FocusScope {
 
                 onSelectedChanged: {
                     //console.log("selected : ",selected)
-                    if(selected && root.activeFocus && (designs.SystemMusicSource !== "No")){
-                        if (modelData.shortName !=="imageviewer") playMusic.play();
+                    if(selected && (designs.SystemMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
+                    }
+                    else{
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                }
+
+                onActiveFocusChanged: {
+                    console.log("Focus changed to " + focus)
+                    console.log("Active Focus changed to " + activeFocus)
+                    if(selected && (designs.SystemMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
                     }
                     else{
                         if (modelData.shortName !=="imageviewer") playMusic.stop();
