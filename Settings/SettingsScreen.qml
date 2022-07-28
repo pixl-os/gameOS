@@ -34,6 +34,8 @@ FocusScope {
         ListElement {
             settingName: "Allow video thumbnails"
             setting: "Yes,No"
+            settingNameDisplay: qsTr("Allow video thumbnails")
+            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Play video thumbnail audio"
@@ -820,9 +822,15 @@ FocusScope {
 
             Item {
                 id: settingRow
-				property string fullSettingName: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingName : settingName
-                property bool selected: ListView.isCurrentItem && settingsList.focus
+                //simple parameter without translation
+                property string fullSettingName: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingName : settingName
                 property variant settingList: (setting !== "to edit") ? setting.split(',') : ""
+                //new parameter to display with translation
+                property string fullSettingNameDisplay: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingNameDisplay : settingNameDisplay
+                property variant settingListDisplay: (settingDisplay !== "to edit") ? settingDisplay.split(',') : ""
+
+                property bool selected: ListView.isCurrentItem && settingsList.focus
+
                 property int savedIndex: {
 					//console.log("savedIndex refresh for :",fullSettingName + 'Index');
 					//console.log("savedIndex refresh for setting:",setting);
@@ -874,7 +882,7 @@ FocusScope {
                 Text {
                     id: settingNameText
 
-                    text: (fullSettingName + ": ")
+                    text: (fullSettingNameDisplay + ": ")
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -900,7 +908,7 @@ FocusScope {
 							var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
 							//-----------------------------------------------------------------------
 							//console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
-							return settingList[indexFromSettings];
+                            return settingListDisplay[indexFromSettings];
 						}
 						else return "";
 					}
