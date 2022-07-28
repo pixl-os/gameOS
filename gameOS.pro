@@ -14,7 +14,41 @@ TRANSLATIONS += \
     theme_en-GB.ts theme_en.ts theme_fr.ts
 
 lupdate_only {
-SOURCES += $$DISTFILES
+SOURCES += \
+Dialogs/GenericOkCancelDialog.qml \
+Dialogs/Shade.qml \
+GameDetails/Button.qml \
+GameDetails/GameView.qml \
+GameDetails/LaunchGame.qml \
+GameDetails/MediaItem.qml \
+GameDetails/MediaView.qml \
+Global/BoxArtGridItem.qml \
+Global/ButtonHelpBar.qml \
+Global/DynamicGridItem.qml \
+Global/GameAchievements.qml \
+Global/GameInfo.qml \
+Global/HeaderBar.qml \
+Global/HorizontalCollection.qml \
+Global/ItemBorder.qml \
+Global/ItemHighlight.qml \
+GridView/GridSpacer.qml \
+GridView/GridViewMenu.qml \
+Lists/ListAllGames.qml \
+Lists/ListCollectionGames.qml \
+Lists/ListFavorites.qml \
+Lists/ListGenre.qml \
+Lists/ListLastPlayed.qml \
+Lists/ListMostPlayed.qml \
+Lists/ListMyCollection.qml \
+Lists/ListPublisher.qml \
+Lists/ListRecommended.qml \
+Lists/ListTopGames.qml \
+Search/Search.qml \
+Search/SearchGameByModel.qml \
+Settings/SettingsScreen.qml \
+ShowcaseView/ShowcaseViewMenu.qml \
+VerticalList/SoftwareListMenu.qml \
+theme.qml \
 }
 
 CONFIG += lrelease
@@ -32,39 +66,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Dialogs/GenericOkCancelDialog.qml \
-    Dialogs/Shade.qml \
-    GameDetails/Button.qml \
-    GameDetails/GameView.qml \
-    GameDetails/LaunchGame.qml \
-    GameDetails/MediaItem.qml \
-    GameDetails/MediaView.qml \
-    Global/BoxArtGridItem.qml \
-    Global/ButtonHelpBar.qml \
-    Global/DynamicGridItem.qml \
-    Global/GameAchievements.qml \
-    Global/GameInfo.qml \
-    Global/HeaderBar.qml \
-    Global/HorizontalCollection.qml \
-    Global/ItemBorder.qml \
-    Global/ItemHighlight.qml \
-    GridView/GridSpacer.qml \
-    GridView/GridViewMenu.qml \
-    Lists/ListAllGames.qml \
-    Lists/ListCollectionGames.qml \
-    Lists/ListFavorites.qml \
-    Lists/ListGenre.qml \
-    Lists/ListLastPlayed.qml \
-    Lists/ListMostPlayed.qml \
-    Lists/ListMyCollection.qml \
-    Lists/ListPublisher.qml \
-    Lists/ListRecommended.qml \
-    Lists/ListTopGames.qml \
-    Search/Search.qml \
-    Search/SearchGameByModel.qml \
-    Settings/SettingsScreen.qml \
-    ShowcaseView/ShowcaseViewMenu.qml \
-    VerticalList/SoftwareListMenu.qml \
     assets/fonts/OpenSans-Bold.ttf \
     assets/fonts/OpenSans-Semibold.ttf \
     assets/fonts/SourceSansPro-Bold.ttf \
@@ -748,7 +749,6 @@ DISTFILES += \
     assets/video/ftue.mp4 \
     moment.js \
     theme.cfg \
-    theme.qml \
     theme_en-GB.ts \
     theme_fr.ts \
     utils.js
