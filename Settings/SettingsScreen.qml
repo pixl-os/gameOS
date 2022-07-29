@@ -501,7 +501,7 @@ FocusScope {
 			{
 				//console.log("My Collection " + i + " - Collection name");
 				//Add the new collection in settings menu
-				settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+                settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"collectionNameDisplay": qsTr("My Collection") + api.tr + " " + i,"listmodel": "myCollectionsSettingsModel"};
 				// Add the new collection in selections of Home Page collections
 				addMyCollectionsToHomePageSelections(i);
 				i = i + 1;
@@ -516,7 +516,7 @@ FocusScope {
 	{
 		var i = settingsCol.length + 1;
 		//Add the new collection in settings menu
-		settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"listmodel": "myCollectionsSettingsModel"};
+        settingsCol[settingsCol.length] = {"collectionName": "My Collection " + i,"collectionNameDisplay": qsTr("My Collection") + api.tr + " " + i,"listmodel": "myCollectionsSettingsModel"};
 		// Add the new collection in selections of Home Page collections
 		addMyCollectionsToHomePageSelections(i);
 		//save empty parameter for collection name to record in configuration file
@@ -564,7 +564,9 @@ FocusScope {
 	{
 		//Add "My Collection X - " to all settingName
 		for (var i = 0; i <= myCollectionsSettingsModel.count-1; i++) {
-			myCollectionsSettingsModel.setProperty(i,"settingPrefix", "My Collection " + (index+1) + " - ");
+            myCollectionsSettingsModel.setProperty(i,"settingPrefix", "My Collection" + " " + (index+1) + " - ");
+            //add display one also now
+            myCollectionsSettingsModel.setProperty(i,"settingPrefixDisplay", qsTr("My Collection") + api.tr + " " + (index+1) + " - ");
         	}	
 	}
 
@@ -798,7 +800,7 @@ FocusScope {
                 Text {
                     id: collectionNameText
 
-                    text: modelData.collectionName
+                    text: modelData.collectionNameDisplay
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(22)
@@ -952,7 +954,7 @@ FocusScope {
                 property string fullSettingName: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingName : settingName
                 property variant settingList: (setting !== "to edit") ? setting.split(',') : ""
                 //new parameter to display with translation
-                property string fullSettingNameDisplay: (typeof(settingNameDisplay) !== "undefined") ? ((typeof(settingPrefix) !== "undefined") ? settingPrefix + settingNameDisplay : settingNameDisplay) : ""
+                property string fullSettingNameDisplay: (typeof(settingNameDisplay) !== "undefined") ? ((typeof(settingPrefixDisplay) !== "undefined") ? settingPrefixDisplay + settingNameDisplay : settingNameDisplay) : ""
                 property variant settingListDisplay: (setting !== "to edit") ? ((typeof(settingDisplay) !== "undefined") ? settingDisplay.split(',') : "") : ""
 
                 property bool selected: ListView.isCurrentItem && settingsList.focus
