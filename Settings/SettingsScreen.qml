@@ -797,7 +797,17 @@ FocusScope {
         id: settingsList
 
         model: settingsArr[pagelist.currentIndex].listmodel;
-		
+        property string localeName: api.internal.settings.locales.currentName
+        onLocaleNameChanged:{
+            //console.log("onLocaleChanged");
+            if(typeof(settingsArr[pagelist.currentIndex].listmodel) !== "undefined"){
+                //reset model to force refresh
+                settingsList.model = null;
+                //reassign model to forece refresh
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            }
+        }
+
         delegate: settingsDelegate
         
         anchors {
