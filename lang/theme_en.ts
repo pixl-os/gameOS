@@ -2,6 +2,107 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>GameAchievements</name>
+    <message>
+        <source>Points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameInfo</name>
+    <message>
+        <source>Rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Release year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GameView</name>
+    <message>
+        <source>Play game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unfavorite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add favorite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More games by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More games of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle favorite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Launch</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GenericOkCancelDialog</name>
     <message>
         <source>Ok</source>
@@ -9,6 +110,66 @@
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HeaderBar</name>
+    <message>
+        <source>Ascending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Descending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LaunchGame</name>
+    <message>
+        <source>Press any button to return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Launching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MediaItem</name>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MediaView</name>
+    <message>
+        <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -68,10 +229,6 @@
     </message>
     <message>
         <source>Color Layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -400,6 +557,59 @@
     </message>
     <message>
         <source>Are you sure that you want to delete this collection ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next/Change/Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ShowcaseViewMenu</name>
+    <message>
+        <source>Main Menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SoftwareListMenu</name>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View details</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>theme</name>
+    <message>
+        <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

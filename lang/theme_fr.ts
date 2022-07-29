@@ -2,6 +2,107 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR" sourcelanguage="en_GB">
 <context>
+    <name>GameAchievements</name>
+    <message>
+        <source>Points</source>
+        <translation>Points</translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation>Auteur</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+</context>
+<context>
+    <name>GameInfo</name>
+    <message>
+        <source>Rating</source>
+        <translation>Classement</translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation>Joueurs</translation>
+    </message>
+    <message>
+        <source>Genre</source>
+        <translation>Genre</translation>
+    </message>
+    <message>
+        <source>Release year</source>
+        <translation>Année de sortie</translation>
+    </message>
+    <message>
+        <source>File name</source>
+        <translation>Nom de fichier</translation>
+    </message>
+    <message>
+        <source>Play time</source>
+        <translation>Temps de jeu</translation>
+    </message>
+    <message>
+        <source>Play count</source>
+        <translation>Nombre de partie</translation>
+    </message>
+    <message>
+        <source>Last played</source>
+        <translation>Dernière fois joué</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation>Pas applicable</translation>
+    </message>
+    <message>
+        <source>No description available</source>
+        <translation>Description indisponible</translation>
+    </message>
+</context>
+<context>
+    <name>GameView</name>
+    <message>
+        <source>Play game</source>
+        <translation>Jouer</translation>
+    </message>
+    <message>
+        <source>Unfavorite</source>
+        <translation>Enlever favoris</translation>
+    </message>
+    <message>
+        <source>Add favorite</source>
+        <translation>Ajout favoris</translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation>Netplay</translation>
+    </message>
+    <message>
+        <source>Media</source>
+        <translation>Média</translation>
+    </message>
+    <message>
+        <source>More games by</source>
+        <translation>Plus de jeux par</translation>
+    </message>
+    <message>
+        <source>More games of</source>
+        <translation>Plus de jeux de</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+    <message>
+        <source>Toggle favorite</source>
+        <translation>Basculer Favoris</translation>
+    </message>
+    <message>
+        <source>Launch</source>
+        <translation>Lancer</translation>
+    </message>
+</context>
+<context>
     <name>GenericOkCancelDialog</name>
     <message>
         <source>Ok</source>
@@ -10,6 +111,66 @@
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>HeaderBar</name>
+    <message>
+        <source>Ascending</source>
+        <translation>Ascendant</translation>
+    </message>
+    <message>
+        <source>Descending</source>
+        <translation>Descendant</translation>
+    </message>
+    <message>
+        <source>By</source>
+        <translation>Par</translation>
+    </message>
+    <message>
+        <source>Favorites</source>
+        <translation>Favoris</translation>
+    </message>
+    <message>
+        <source>All games</source>
+        <translation>Tous les jeux</translation>
+    </message>
+</context>
+<context>
+    <name>LaunchGame</name>
+    <message>
+        <source>Press any button to return</source>
+        <translation>Appuyer un bouton pour revenir</translation>
+    </message>
+    <message>
+        <source>Launching</source>
+        <translation>Lancement</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+</context>
+<context>
+    <name>MediaItem</name>
+    <message>
+        <source>Video</source>
+        <translation>Vidéo</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Notice</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Image</translation>
+    </message>
+</context>
+<context>
+    <name>MediaView</name>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
     </message>
 </context>
 <context>
@@ -71,8 +232,8 @@
         <translation>Couleur mise en avant</translation>
     </message>
     <message>
-        <source>Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown</source>
-        <translation type="unfinished"></translation>
+        <source>Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown</source>
+        <translation>Original,Vert Foncé,Vert Clair,Turquoise,Rouge Foncé,Rouge Clair,Rose Foncé,Rose Clair,Bleu Foncé,Bleu Clair,Orange,Jaune,Magenta,Violet,Gris Foncé,Gris Claire,Acier,Pierre,Marron Foncé,Marront Clair</translation>
     </message>
     <message>
         <source>Color Background</source>
@@ -80,7 +241,7 @@
     </message>
     <message>
         <source>Original,Black,Gray,Blue,Green,Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Original,Noir,Gris,Bleu,Vert,Rouge</translation>
     </message>
     <message>
         <source>System Logo Style</source>
@@ -88,19 +249,19 @@
     </message>
     <message>
         <source>Color,Steel,Carbon,White,Black</source>
-        <translation type="unfinished"></translation>
+        <translation>Coloré,Acier,Carbon,Blanc,Noir</translation>
     </message>
     <message>
         <source>Wide - Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Wide - Ratio</translation>
     </message>
     <message>
         <source>Tall - Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Tall - Ratio</translation>
     </message>
     <message>
         <source>Show loading details</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les détails de chargement</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -108,79 +269,79 @@
     </message>
     <message>
         <source>Number of games showcased</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de jeux présentés par collection</translation>
     </message>
     <message>
         <source>Change favorite display automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Change automatiquement le favoris affiché dans le bandeau</translation>
     </message>
     <message>
         <source>Collection 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 1</translation>
     </message>
     <message>
         <source>Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites</source>
-        <translation type="unfinished"></translation>
+        <translation>Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris</translation>
     </message>
     <message>
         <source>Collection 1 - Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 1 - Vignette</translation>
     </message>
     <message>
         <source>Wide,Tall,Square</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontal,Vertical,Carré</translation>
     </message>
     <message>
         <source>Collection 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 2</translation>
     </message>
     <message>
         <source>Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played</source>
-        <translation type="unfinished"></translation>
+        <translation>Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment</translation>
     </message>
     <message>
         <source>Collection 2 - Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 2 - Vignettes</translation>
     </message>
     <message>
         <source>Tall,Square,Wide</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertical,Carré,Horizontal</translation>
     </message>
     <message>
         <source>Collection 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 3</translation>
     </message>
     <message>
         <source>Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended</source>
-        <translation type="unfinished"></translation>
+        <translation>Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés</translation>
     </message>
     <message>
         <source>Collection 3 - Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 3 - Vignette</translation>
     </message>
     <message>
         <source>Collection 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 4</translation>
     </message>
     <message>
         <source>Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur</translation>
     </message>
     <message>
         <source>Collection 4 - Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 4 - Vignette</translation>
     </message>
     <message>
         <source>Collection 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 5</translation>
     </message>
     <message>
         <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
-        <translation type="unfinished"></translation>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
     </message>
     <message>
         <source>Collection 5 - Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection 5 - Vignette</translation>
     </message>
     <message>
         <source>Home page</source>
@@ -188,11 +349,11 @@
     </message>
     <message>
         <source>Grid Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Vignette de grille</translation>
     </message>
     <message>
         <source>Wide,Tall,Square,Box Art</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontal,Vertical,Carré,Box Art</translation>
     </message>
     <message>
         <source>Number of columns</source>
@@ -204,27 +365,27 @@
     </message>
     <message>
         <source>Game Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrière plan du jeu</translation>
     </message>
     <message>
         <source>Screenshot,Fanart</source>
-        <translation type="unfinished"></translation>
+        <translation>Screenshot,Fanart</translation>
     </message>
     <message>
         <source>Game Background overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezel d&apos;arrière plan du jeu</translation>
     </message>
     <message>
         <source>Game Logo</source>
-        <translation type="unfinished"></translation>
+        <translation>Logo du jeu</translation>
     </message>
     <message>
         <source>Show,Text only,Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher,Texte Seulement,Cacher</translation>
     </message>
     <message>
         <source>Game Logo position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position du logo du jeu</translation>
     </message>
     <message>
         <source>Left,Right</source>
@@ -236,67 +397,67 @@
     </message>
     <message>
         <source>Show,Hide,Show if no overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher,Cacher,Afficher si pas d&apos;overlay</translation>
     </message>
     <message>
         <source>System Logo position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position du logo du système</translation>
     </message>
     <message>
         <source>Default to full details</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher tout les détails par défaut</translation>
     </message>
     <message>
         <source>Video preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Aperçu vidéo</translation>
     </message>
     <message>
         <source>Video preview overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezel de l&apos;aperçu vidéo</translation>
     </message>
     <message>
         <source>Overlays source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source des bezels</translation>
     </message>
     <message>
         <source>Default,Share</source>
-        <translation type="unfinished"></translation>
+        <translation>Par défaut,A partir du share</translation>
     </message>
     <message>
         <source>Video preview audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Son de l&apos;aperçu vidéo</translation>
     </message>
     <message>
         <source>Randomize Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fond d&apos;écran aléatoire</translation>
     </message>
     <message>
         <source>Blur Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fond d&apos;écran flou</translation>
     </message>
     <message>
         <source>Show scanlines</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher scanlines</translation>
     </message>
     <message>
         <source>Show file name</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher nom du fichier</translation>
     </message>
     <message>
         <source>Show play stats</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les statistiques de jeu</translation>
     </message>
     <message>
         <source>Demo triggering delay (in minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Delai de démarrage du mode démo (en minutes)</translation>
     </message>
     <message>
         <source>Deactivated,1,2,3,4,5,10,20,30</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactivé,1,2,3,4,5,10,20,30</translation>
     </message>
     <message>
         <source>Demo show full details</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode demo avec tout les détails</translation>
     </message>
     <message>
         <source>Game details</source>
@@ -312,51 +473,51 @@
     </message>
     <message>
         <source>Region/Country filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de région/pays</translation>
     </message>
     <message>
         <source>Nb players</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de joueurs</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Classement</translation>
     </message>
     <message>
         <source>All,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+</translation>
     </message>
     <message>
         <source>Favorite</source>
-        <translation type="unfinished"></translation>
+        <translation>Favoris</translation>
     </message>
     <message>
         <source>Genre filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par Genre</translation>
     </message>
     <message>
         <source>Publisher filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par Fournisseur</translation>
     </message>
     <message>
         <source>Developer filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par Développeur</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par système</translation>
     </message>
     <message>
         <source>File name filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par nom de fihcier</translation>
     </message>
     <message>
         <source>Release year filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre par année de sortie</translation>
     </message>
     <message>
         <source>Exclusion filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre pour exclure</translation>
     </message>
     <message>
         <source>My Collections</source>
@@ -376,15 +537,15 @@
     </message>
     <message>
         <source>Delete &apos;last&apos; collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprime la &apos;Dernière&apos; collection</translation>
     </message>
     <message>
         <source>Add &apos;new&apos; collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoute une &apos;nouvelle&apos; collection</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>My Collection</source>
@@ -392,15 +553,64 @@
     </message>
     <message>
         <source>You are deleting this collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous allez supprimer cette collection</translation>
     </message>
     <message>
         <source>Deletion &apos;Last&apos; Collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Suppression de la &apos;Dernière&apos; Collection</translation>
     </message>
     <message>
         <source>Are you sure that you want to delete this collection ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Etes vous sur de vouloir supprimer cette collection ?</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+    <message>
+        <source>Next/Change/Edit</source>
+        <translation>Continue/Change/Edite</translation>
+    </message>
+</context>
+<context>
+    <name>ShowcaseViewMenu</name>
+    <message>
+        <source>Main Menu</source>
+        <translation>Menu principal</translation>
+    </message>
+    <message>
+        <source>Theme Settings</source>
+        <translation>Configurations du thème</translation>
+    </message>
+    <message>
+        <source>Select</source>
+        <translation>Selectionner</translation>
+    </message>
+</context>
+<context>
+    <name>SoftwareListMenu</name>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+    <message>
+        <source>Order</source>
+        <translation>Ordre</translation>
+    </message>
+    <message>
+        <source>Filter</source>
+        <translation>Filtre</translation>
+    </message>
+    <message>
+        <source>View details</source>
+        <translation>Voir détails</translation>
+    </message>
+</context>
+<context>
+    <name>theme</name>
+    <message>
+        <source>Loading</source>
+        <translation>Chargement</translation>
     </message>
 </context>
 </TS>
