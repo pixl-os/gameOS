@@ -826,8 +826,8 @@ FocusScope {
                 property string fullSettingName: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingName : settingName
                 property variant settingList: (setting !== "to edit") ? setting.split(',') : ""
                 //new parameter to display with translation
-                property string fullSettingNameDisplay: (typeof(settingPrefix) !== "undefined") ? settingPrefix + settingNameDisplay : settingNameDisplay
-                property variant settingListDisplay: (settingDisplay !== "to edit") ? settingDisplay.split(',') : ""
+                property string fullSettingNameDisplay: (typeof(settingNameDisplay) !== "undefined") ? ((typeof(settingPrefix) !== "undefined") ? settingPrefix + settingNameDisplay : settingNameDisplay) : ""
+                property variant settingListDisplay: (setting !== "to edit") ? ((typeof(settingDisplay) !== "undefined") ? settingDisplay.split(',') : "") : ""
 
                 property bool selected: ListView.isCurrentItem && settingsList.focus
 
@@ -882,7 +882,7 @@ FocusScope {
                 Text {
                     id: settingNameText
 
-                    text: (fullSettingNameDisplay + ": ")
+                    text: (fullSettingNameDisplay !== "") ? (fullSettingNameDisplay + ": ") : (fullSettingName + ": ")
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(20)
@@ -908,7 +908,12 @@ FocusScope {
 							var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
 							//-----------------------------------------------------------------------
 							//console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
-                            return settingListDisplay[indexFromSettings];
+                            if(settingListDisplay !== ""){
+                                return settingListDisplay[indexFromSettings];
+                            }
+                            else{
+                                return settingList[indexFromSettings];
+                            }
 						}
 						else return "";
 					}
