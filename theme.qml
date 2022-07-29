@@ -31,7 +31,7 @@ FocusScope {
 	//DEBUG property
 	property bool detailed_debug: false
 	property bool viewIsLoading: true
-	property var viewLoadingText: "Loading..."
+    property var viewLoadingText: qsTr("Loading") + "..." + api.tr
 
 	//Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {

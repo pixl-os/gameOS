@@ -163,7 +163,7 @@ id: infocontainer
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Points: "
+            text: qsTr("Points") + api.tr + ": "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -205,7 +205,7 @@ id: infocontainer
             height: parent.height
             anchors { left: divider1.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Author: "
+            text: qsTr("Author") + api.tr + ": "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -247,7 +247,7 @@ id: infocontainer
             height: parent.height
             anchors { left: divider2.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Description: "
+            text: qsTr("Description") + api.tr + ": "
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true

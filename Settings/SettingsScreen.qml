@@ -90,9 +90,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Color Layout"
-            setting: "Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
+            setting: "Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
             settingNameDisplay: qsTr("Color Layout")
-            settingDisplay: qsTr("Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown")
+            settingDisplay: qsTr("Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown")
         }
         ListElement {
             settingName: "Color Background"
@@ -1201,11 +1201,11 @@ FocusScope {
         id: settingsHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
         ListElement {
-            name: "Next/Change/Edit"
+            name: qsTr("Next/Change/Edit")
             button: "accept"
 		}
 	}

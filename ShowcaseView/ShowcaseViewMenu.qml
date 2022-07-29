@@ -1222,15 +1222,15 @@ FocusScope {
         id: gridviewHelpModel
 
         ListElement {
-            name: "Main Menu"
+            name: qsTr("Main Menu")
             button: "mainMenu"
         }
         ListElement {
-            name: "Theme Settings"
+            name: qsTr("Theme Settings")
             button: "filters"
         }
         ListElement {
-            name: "Select"
+            name: qsTr("Select")
             button: "accept"
         }
     }

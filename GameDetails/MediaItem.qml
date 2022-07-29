@@ -55,7 +55,7 @@ Item {
             Text {
                 id: bubbletitle
 
-                text: isVideo ? "Video" : (isManual ? "Manual" : "Picture")
+                text: isVideo ? qsTr("Video") + api.tr : (isManual ? qsTr("Manual") + api.tr : qsTr("Picture") + api.tr)
                 color: theme.text
                 font {
                     family: subtitleFont.name

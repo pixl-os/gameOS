@@ -817,7 +817,7 @@ FocusScope {
         Button {
             id: button1
 
-            text: "Play game"
+            text: qsTr("Play game") + api.tr
             height: parent.height
             selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
@@ -851,7 +851,7 @@ FocusScope {
         Button {
             id: button3
 
-            property string buttonText: game && game.favorite ? "Unfavorite" : "Add favorite"
+            property string buttonText: game && game.favorite ? qsTr("Unfavorite") + api.tr : qsTr("Add favorite") + api.tr
             //text: buttonText
             icon: favIcon
             height: parent.height
@@ -887,7 +887,7 @@ FocusScope {
         Button {
             id: button5
             icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
-            text: readyForNeplay ? "Netplay" : ""
+            text: readyForNeplay ? qsTr("Netplay") + api.tr : ""
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
@@ -972,7 +972,7 @@ FocusScope {
             visible: (demoLaunched !== true)
             width: root.width - vpx(70) - globalMargin
             height: ((root.width - globalMargin * 2) / 6.0) + vpx(60)
-            title: "Media"
+            title: qsTr("Media") + api.tr
             model: game ? mediaArray() : []
             delegate: MediaItem {
                 id: mediadelegate
@@ -1013,7 +1013,7 @@ FocusScope {
             itemWidth: (root.width - globalMargin * 2) / 4.0
             itemHeight: itemWidth * settings.WideRatio
 
-            title: game ? "More games by " + game.publisher : ""
+            title: game ? qsTr("More games by") + api.tr + " " + game.publisher : ""
             search: publisherCollection
             onListHighlighted: { sfxNav.play(); content.currentIndex = list1.ObjectModel.index; }
         }
@@ -1029,7 +1029,7 @@ FocusScope {
             itemWidth: (root.width - globalMargin * 2) / 8.0
             itemHeight: itemWidth / settings.TallRatio
 
-            title: game ? "More " + game.genreList[0].toLowerCase() + " games" : ""
+            title: game ? qsTr("More games of") + " " + game.genreList[0].toLowerCase() + api.tr  : ""
             search: genreCollection
             onListHighlighted: { sfxNav.play(); content.currentIndex = list2.ObjectModel.index; }
         }
@@ -1142,15 +1142,15 @@ FocusScope {
         id: gameviewHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
         ListElement {
-            name: "Toggle favorite"
+            name: qsTr("Toggle favorite")
             button: "filters"
         }
         ListElement {
-            name: "Launch"
+            name: qsTr("Launch")
             button: "accept"
         }
     }

@@ -64,7 +64,7 @@ Item {
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Rating: "
+            text: qsTr("Rating")+ ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -104,7 +104,7 @@ Item {
             height: parent.height
             anchors { left: divider1.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Players: "
+            text: qsTr("Players") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -143,7 +143,7 @@ Item {
             height: parent.height
             anchors { left: divider2.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Genre: "
+            text: qsTr("Genre") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -187,7 +187,7 @@ Item {
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Release year: "
+            text: qsTr("Release year") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -227,7 +227,7 @@ Item {
             height: parent.height
             anchors { left: divider1_2.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "File name: "
+            text: qsTr("File name") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -277,7 +277,7 @@ Item {
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Play time: "
+            text: qsTr("Play time") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -316,7 +316,7 @@ Item {
             height: parent.height
             anchors { left: divider1_3.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Play count: "
+            text: qsTr("Play count") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -355,7 +355,7 @@ Item {
             height: parent.height
             anchors { left: divider2_3.right; leftMargin: vpx(25) }
             verticalAlignment: Text.AlignVCenter
-            text: "Last played: "
+            text: qsTr("Last played") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -376,14 +376,14 @@ Item {
 					let lastplayed = String(gameData.lastPlayed);
 					if (lastplayed.toLowerCase().includes("invalid"))
 					{
-						return "N/A";
+                        return qsTr("N/A") + api.tr;
 					}
 					else
 					{
 						return DateUtils.moment(lastplayed).format('YYYY-MM-DD HH:mm:ss');
 					}
 				}
-				else return "N/A";
+                else return  qsTr("N/A") + api.tr;
 			}
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
@@ -404,7 +404,7 @@ Item {
 
         Text {
             width: parent.width
-            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : "No description available"
+            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : qsTr("No description available") + api.tr
             font.pixelSize: vpx(16)
             font.family: bodyFont.name
             color: theme.text
