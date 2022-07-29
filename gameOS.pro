@@ -11,7 +11,7 @@ SOURCES +=
 RESOURCES +=
 
 TRANSLATIONS += \
-    theme_en-GB.ts theme_en.ts theme_fr.ts
+    lang/theme_en-GB.ts lang/theme_en.ts lang/theme_fr.ts
 
 lupdate_only {
 SOURCES += \
@@ -48,7 +48,7 @@ Search/SearchGameByModel.qml \
 Settings/SettingsScreen.qml \
 ShowcaseView/ShowcaseViewMenu.qml \
 VerticalList/SoftwareListMenu.qml \
-theme.qml \
+theme.qml
 }
 
 CONFIG += lrelease
@@ -749,6 +749,4 @@ DISTFILES += \
     assets/video/ftue.mp4 \
     moment.js \
     theme.cfg \
-    theme_en-GB.ts \
-    theme_fr.ts \
     utils.js
