@@ -5,22 +5,22 @@
     <name>GenericOkCancelDialog</name>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
     <name>SettingsScreen</name>
     <message>
         <source>Allow video thumbnails</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser les vignettes vidéo</translation>
     </message>
     <message>
         <source>Yes,No</source>
-        <translation type="unfinished"></translation>
+        <translation>Oui,Non</translation>
     </message>
 </context>
 </TS>
