@@ -40,52 +40,77 @@ FocusScope {
         ListElement {
             settingName: "Play video thumbnail audio"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Play video thumbnail audio")
+            settingDisplay: qsTr("No,Yes")
+
         }
         ListElement {
             settingName: "Hide logo when thumbnail video plays"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Hide logo when thumbnail video plays")
+            settingDisplay: qsTr("No,Yes")
+
         }
         ListElement {
             settingName: "Animate highlight"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Animate highlight")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Enable mouse hover"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Enable mouse hover")
+            settingDisplay: qsTr("No,Yes")
+
         }
         ListElement {
             settingName: "Always show titles"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Always show titles")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Hide button help"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Hide button help")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Help buttons style"
             setting: "Gamepad,Arcade"
+            settingNameDisplay: qsTr("Help buttons style")
+            settingDisplay: qsTr("Gamepad,Arcade")
         }
         ListElement {
             settingName: "Hide Clock"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Hide Clock")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Color Layout"
             setting: "Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
+            settingNameDisplay: qsTr("Color Layout")
+            settingDisplay: qsTr("Original, Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown")
         }
         ListElement {
             settingName: "Color Background"
             setting: "Original,Black,Gray,Blue,Green,Red"
+            settingNameDisplay: qsTr("Color Background")
+            settingDisplay: qsTr("Original,Black,Gray,Blue,Green,Red")
         }
 	ListElement {
-		settingName: "System Logo Style"
+        settingName: "System Logo Style"
         setting: "Color,Steel,Carbon,White,Black"
+        settingNameDisplay: qsTr("System Logo Style")
+        settingDisplay: qsTr("Color,Steel,Carbon,White,Black")
         }
     }
 
     property var generalPage: {
         return {
-            pageName: "General",
+            pageName: qsTr("General") + api.tr,
             listmodel: settingsModel
         }
     }
@@ -95,20 +120,25 @@ FocusScope {
         ListElement {
             settingName: "Wide - Ratio"
             setting: "0.64,0.65,0.66,0.67,0.68,0.69,0.70,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.80,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.90,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.45,0.46,0.47,0.48,0.49,0.50,0.51,0.52,0.53,0.54,0.55,0.56,0.57,0.58,0.59,0.60,0.61,0.62,0.63"
+            settingNameDisplay: qsTr("Wide - Ratio")
+
         }
         ListElement {
             settingName: "Tall - Ratio"
             setting: "0.66,0.67,0.68,0.69,0.7,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.80,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.90,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.45,0.46,0.47,0.48,0.49,0.50,0.51,0.52,0.53,0.54,0.55,0.56,0.57,0.58,0.59,0.60,0.61,0.62,0.63,0.64,0.65"
+            settingNameDisplay: qsTr("Tall - Ratio")
         }
         ListElement {
             settingName: "Show loading details"
             setting: "No,Yes"
-        }	
+            settingNameDisplay: qsTr("Show loading details")
+            settingDisplay: qsTr("No,Yes")
+        }
     }
 
     property var advancedPage: {
         return {
-            pageName: "Advanced",
+            pageName: qsTr("Advanced") + api.tr,
             listmodel: advancedSettingsModel
         }
     }
@@ -118,57 +148,81 @@ FocusScope {
         ListElement {
             settingName: "Number of games showcased"
             setting: "15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,1,2,3,4,5,6,7,8,9,10,11,12,13,14"
+            settingNameDisplay: qsTr("Number of games showcased")
+
         }
         ListElement {
             settingName: "Change favorite display automatically"
             setting: "Yes,No"
-        }		
+            settingNameDisplay: qsTr("Change favorite display automatically")
+            settingDisplay: qsTr("Yes,No")
+        }
         ListElement {
             settingName: "Collection 1"
             setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites"
+            settingNameDisplay: qsTr("Collection 1")
+            settingDisplay: qsTr("Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites")
         }
         ListElement {
             settingName: "Collection 1 - Thumbnail"
             setting: "Wide,Tall,Square"
+            settingNameDisplay: qsTr("Collection 1 - Thumbnail")
+            settingDisplay: qsTr("Wide,Tall,Square")
         }
         ListElement {
             settingName: "Collection 2"
             setting: "Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played"
+            settingNameDisplay: qsTr("Collection 2")
+            settingDisplay: qsTr("Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played")
         }
         ListElement {
             settingName: "Collection 2 - Thumbnail"
             setting: "Tall,Square,Wide"
+            settingNameDisplay: qsTr("Collection 2 - Thumbnail")
+            settingDisplay: qsTr("Tall,Square,Wide")
         }
         ListElement {
             settingName: "Collection 3"
             setting: "Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended"
+            settingNameDisplay: qsTr("Collection 3")
+            settingDisplay: qsTr("Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended")
         }
         ListElement {
             settingName: "Collection 3 - Thumbnail"
             setting: "Wide,Tall,Square"
+            settingNameDisplay: qsTr("Collection 3 - Thumbnail")
+            settingDisplay: qsTr("Wide,Tall,Square")
         }
         ListElement {
             settingName: "Collection 4"
             setting: "Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher"
+            settingNameDisplay: qsTr("Collection 4")
+            settingDisplay: qsTr("Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher")
         }
         ListElement {
             settingName: "Collection 4 - Thumbnail"
             setting: "Tall,Square,Wide"
+            settingNameDisplay: qsTr("Collection 4 - Thumbnail")
+            settingDisplay: qsTr("Tall,Square,Wide")
         }
         ListElement {
             settingName: "Collection 5"
             setting: "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"
+            settingNameDisplay: qsTr("Collection 5")
+            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre")
         }
         ListElement {
             settingName: "Collection 5 - Thumbnail"
             setting: "Wide,Tall,Square"
+            settingNameDisplay: qsTr("Collection 5 - Thumbnail")
+            settingDisplay: qsTr("Wide,Tall,Square")
         }
 
     }
 
     property var showcasePage: {
         return {
-            pageName: "Home page",
+            pageName: qsTr("Home page") + api.tr,
             listmodel: showcaseSettingsModel
         }
     }
@@ -179,16 +233,20 @@ FocusScope {
         ListElement {
             settingName: "Grid Thumbnail"
             setting: "Wide,Tall,Square,Box Art"
+            settingNameDisplay: qsTr("Grid Thumbnail")
+            settingDisplay: qsTr("Wide,Tall,Square,Box Art")
+
         }
         ListElement {
             settingName: "Number of columns"
             setting: "3,4,5,6,7,8"
+            settingNameDisplay: qsTr("Number of columns")
         }
     }
 
     property var gridPage: {
         return {
-            pageName: "Platform page",
+            pageName: qsTr("Platform page") + api.tr,
             listmodel: gridSettingsModel
         }
     }
@@ -199,80 +257,116 @@ FocusScope {
         ListElement {
             settingName: "Game Background"
             setting: "Screenshot,Fanart"
+            settingNameDisplay: qsTr("Game Background")
+            settingDisplay: qsTr("Screenshot,Fanart")
         }
         ListElement {
             settingName: "Game Background overlay"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Game Background overlay")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Game Logo"
             setting: "Show,Text only,Hide"
+            settingNameDisplay: qsTr("Game Logo")
+            settingDisplay: qsTr("Show,Text only,Hide")
         }
         ListElement {
             settingName: "Game Logo position"
             setting: "Left,Right"
+            settingNameDisplay: qsTr("Game Logo position")
+            settingDisplay: qsTr("Left,Right")
         }
         ListElement {
             settingName: "System Logo"
             setting: "Show,Hide,Show if no overlay"
+            settingNameDisplay: qsTr("System Logo")
+            settingDisplay: qsTr("Show,Hide,Show if no overlay")
         }
         ListElement {
             settingName: "System Logo position"
             setting: "Left,Right"
+            settingNameDisplay: qsTr("System Logo position")
+            settingDisplay: qsTr("Left,Right")
         }
         ListElement {
             settingName: "Default to full details"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Default to full details")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Video preview"
             setting: "Yes,No"
+            settingNameDisplay: qsTr("Video preview")
+            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Video preview overlay"
             setting: "Yes,No"
+            settingNameDisplay: qsTr("Video preview overlay")
+            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Overlays source"
             setting: "Default,Share"
+            settingNameDisplay: qsTr("Overlays source")
+            settingDisplay: qsTr("Default,Share")
         }
         ListElement {
             settingName: "Video preview audio"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Video preview audio")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Randomize Background"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Randomize Background")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Blur Background"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Blur Background")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Show scanlines"
             setting: "Yes,No"
+            settingNameDisplay: qsTr("Show scanlines")
+            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Show file name"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Show file name")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Show play stats"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Show play stats")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Demo triggering delay (in minutes)"
             setting: "Deactivated,1,2,3,4,5,10,20,30"
+            settingNameDisplay: qsTr("Demo triggering delay (in minutes)")
+            settingDisplay: qsTr("Deactivated,1,2,3,4,5,10,20,30")
         }
         ListElement {
             settingName: "Demo show full details"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Demo show full details")
+            settingDisplay: qsTr("No,Yes")
         }
     }
 
     property var gamePage: {
         return {
-            pageName: "Game details",
+            pageName: qsTr("Game details") + api.tr,
             listmodel: gameSettingsModel
         }
     }
@@ -285,6 +379,8 @@ FocusScope {
         ListElement {
             settingName: "Collection name"
             setting: "to edit"
+            settingNameDisplay: qsTr("Collection name")
+
         }
 //for later when menu for all collections will be available		
 /*      ListElement {
@@ -299,56 +395,70 @@ FocusScope {
         ListElement {
             settingName: "Name filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Name filter")
         }
         ListElement {
             settingName: "Region/Country filter"
             setting: "to edit"
-        }		
+            settingNameDisplay: qsTr("Region/Country filter")
+        }
         ListElement {
             settingName: "Nb players"
             setting: "1+,2,2+,3,3+,4,4+,5,1"
+            settingNameDisplay: qsTr("Nb players")
         }
         ListElement {
             settingName: "Rating"
             setting: "All,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+"
+            settingNameDisplay: qsTr("Rating")
+            settingDisplay: qsTr("All,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+")
         }
         ListElement {
             settingName: "Favorite"
             setting: "No,Yes"
+            settingNameDisplay: qsTr("Favorite")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Genre filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Genre filter")
         }
         ListElement {
             settingName: "Publisher filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Publisher filter")
         }
         ListElement {
             settingName: "Developer filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Developer filter")
         }
         ListElement {
             settingName: "System"
             setting: "to edit"
+            settingNameDisplay: qsTr("System")
         }
         ListElement {
             settingName: "File name filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("File name filter")
         }
         ListElement {
             settingName: "Release year filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Release year filter")
         }
         ListElement {
             settingName: "Exclusion filter"
             setting: "to edit"
+            settingNameDisplay: qsTr("Exclusion filter")
         }
     }
 
      property var myCollections: {
         return {
-            pageName: "My Collections",
+            pageName: qsTr("My Collections") + api.tr,
             listmodel: myCollectionsSettingsModel
         }
     }
@@ -369,9 +479,15 @@ FocusScope {
 		var initialCount = 5;
 		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
 		for(var i = 1; i <= nb_collections; ++i) {
-			showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),"setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"});
-			showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail","setting": "Wide,Tall,Square"});
-		}
+            showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),
+                                          "setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre",
+                                          "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount),
+                                          "settingDisplay": qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre") + api.tr});
+            showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail",
+                                          "setting": "Wide,Tall,Square",
+                                          "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount) + " - " + qsTr("Thumbnail"),
+                                          "settingDispolay": qsTr("Wide,Tall,Square") + api.tr});
+        }
 	}
 	
 	function initializeMyCollections()
@@ -468,7 +584,7 @@ FocusScope {
         Text {
             id: headertitle
             
-            text: "Settings"
+            text: qsTr("Settings") + api.tr
             
             anchors {
                 top: parent.top;
@@ -611,7 +727,7 @@ FocusScope {
         Text {
             id: headertitleCollections
             
-            text: "My Collections"
+            text: qsTr("My Collections") + api.tr
             
             anchors {
                 top: parent.top;
@@ -643,12 +759,12 @@ FocusScope {
 		if (visible)
 		{
 			//add help for My Collections
-			settingsHelpModel.append({"name":"Delete 'last' collection", "button":"details"});
-			settingsHelpModel.append({"name":"Add 'new' collection", "button":"filters"});
+            settingsHelpModel.append({"name":qsTr("Delete 'last' collection"), "button":"details"});
+            settingsHelpModel.append({"name":qsTr("Add 'new' collection"), "button":"filters"});
 		}
 		else
 		{
-			//remove the last 2 indexes corresponding to append done before.
+            //remove the last 2 indexes corresponding to append done before.
 			settingsHelpModel.remove((settingsHelpModel.count)-1);
 			settingsHelpModel.remove((settingsHelpModel.count)-1);
 		}
@@ -770,10 +886,10 @@ FocusScope {
 				{
 					//confirm deletion
 					var i = settingsCol.length;
-					collectionDeletionDialogBoxLoader.item.title = "Delete " + "'My Collection " + i + "'";
-					collectionDeletionDialogBoxLoader.item.message = "You are deleting this collection...\n\n" 
-																	+ "Collection name: " + api.memory.get("My Collection " + i + " - Collection name") + "\n"
-																	+ "Name filter: " +api.memory.get("My Collection " + i + " - Name filter"); 
+                    collectionDeletionDialogBoxLoader.item.title = qsTr("Delete") + " '" + qsTr("My Collection") + api.tr + " " + i + "'";
+                    collectionDeletionDialogBoxLoader.item.message = qsTr("You are deleting this collection") + api.tr + "...\n\n"
+                                                                    + qsTr("Collection name") + ": " + api.memory.get("My Collection " + i + " - Collection name") + "\n"
+                                                                    + qsTr("Name filter")+ ": " + api.memory.get("My Collection " + i + " - Name filter");
 					collectionDeletionDialogBoxLoader.focus = true;
 				}
 		    } 			
@@ -1099,8 +1215,8 @@ FocusScope {
 		GenericOkCancelDialog
 		{
 			focus: true
-			title: "Deletion 'Last' Collection"
-			message: "Are you sure that you want to delete this collection ?"
+            title: qsTr("Deletion 'Last' Collection") + api.tr
+            message: qsTr("Are you sure that you want to delete this collection ?") + api.tr
 			//symbol: "\u21BB"
  			//onAccept: 
 				// console.log("Collection deleted");
