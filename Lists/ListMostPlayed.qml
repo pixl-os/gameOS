@@ -40,7 +40,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "Most Played Games",
+            name:       qsTr("Most Played Games") + api.tr,
             shortName:  "mostplayed",
             games:      gamesFiltered
         }

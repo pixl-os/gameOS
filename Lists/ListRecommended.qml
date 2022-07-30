@@ -54,7 +54,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "Recommended Games",
+            name:       qsTr("Recommended Games") + api.tr,
             shortName:  "recommended",
             games:      gamesFiltered
         }

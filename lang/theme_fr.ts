@@ -152,6 +152,69 @@
     </message>
 </context>
 <context>
+    <name>ListAllGames</name>
+    <message>
+        <source>All games</source>
+        <translation>Tous les jeux</translation>
+    </message>
+</context>
+<context>
+    <name>ListFavorites</name>
+    <message>
+        <source>Favorite Games</source>
+        <translation>Jeux favoris</translation>
+    </message>
+</context>
+<context>
+    <name>ListGenre</name>
+    <message>
+        <source>Top Games of</source>
+        <translation>Meileurs jeux de</translation>
+    </message>
+</context>
+<context>
+    <name>ListLastPlayed</name>
+    <message>
+        <source>Continue Playing</source>
+        <translation>Continuer de jouer</translation>
+    </message>
+</context>
+<context>
+    <name>ListMostPlayed</name>
+    <message>
+        <source>Most Played Games</source>
+        <translation>Jeux les plus joués</translation>
+    </message>
+</context>
+<context>
+    <name>ListMyCollection</name>
+    <message>
+        <source>game(s)</source>
+        <translation>jeu(x)</translation>
+    </message>
+</context>
+<context>
+    <name>ListPublisher</name>
+    <message>
+        <source>Top Games by</source>
+        <translation>Meileurs jeux par</translation>
+    </message>
+</context>
+<context>
+    <name>ListRecommended</name>
+    <message>
+        <source>Recommended Games</source>
+        <translation>Jeux Recommandés</translation>
+    </message>
+</context>
+<context>
+    <name>ListTopGames</name>
+    <message>
+        <source>Top games</source>
+        <translation>Meilleurs jeux</translation>
+    </message>
+</context>
+<context>
     <name>MediaItem</name>
     <message>
         <source>Video</source>

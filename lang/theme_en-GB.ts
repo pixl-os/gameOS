@@ -152,6 +152,69 @@
     </message>
 </context>
 <context>
+    <name>ListAllGames</name>
+    <message>
+        <source>All games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListFavorites</name>
+    <message>
+        <source>Favorite Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListGenre</name>
+    <message>
+        <source>Top Games of</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListLastPlayed</name>
+    <message>
+        <source>Continue Playing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListMostPlayed</name>
+    <message>
+        <source>Most Played Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListMyCollection</name>
+    <message>
+        <source>game(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListPublisher</name>
+    <message>
+        <source>Top Games by</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListRecommended</name>
+    <message>
+        <source>Recommended Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListTopGames</name>
+    <message>
+        <source>Top games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MediaItem</name>
     <message>
         <source>Video</source>
