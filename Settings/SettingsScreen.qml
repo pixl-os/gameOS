@@ -538,6 +538,8 @@ FocusScope {
 			{
 				//Add this "My Collection n" to the list
 				showcaseSettingsModel.get(j).setting = showcaseSettingsModel.get(j).setting + "," + "My Collection " + i
+                //Add this "My Collection n" to the display list
+                showcaseSettingsModel.get(j).settingDisplay = showcaseSettingsModel.get(j).settingDisplay + "," + qsTr("My Collection") + api.tr + " " + i
 				f = f + 1;
 			}
 				
@@ -918,11 +920,13 @@ FocusScope {
         property string localeName: api.internal.settings.locales.currentName
         onLocaleNameChanged:{
             //console.log("onLocaleChanged");
-            if(typeof(settingsArr[pagelist.currentIndex].listmodel) !== "undefined"){
-                //reset model to force refresh
-                settingsList.model = null;
-                //reassign model to forece refresh
-                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            if(typeof(settingsArr[pagelist.currentIndex]) !== "undefined"){
+                if(typeof(settingsArr[pagelist.currentIndex].listmodel) !== "undefined"){
+                    //reset model to force refresh
+                    settingsList.model = null;
+                    //reassign model to forece refresh
+                    settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+                }
             }
         }
 
@@ -1033,13 +1037,16 @@ FocusScope {
 						if (setting !== "to edit")
 						{
 							//tips to refresh index (and to force update of text as not possible when we reuse the same listview as for collection)
-							var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
+                            //console.log("api.memory.get(" + fullSettingName + "'Index') : ",api.memory.get(fullSettingName + 'Index'));
+                            var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
 							//-----------------------------------------------------------------------
-							//console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
+                            //console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
                             if(settingListDisplay !== ""){
+                                //console.log("settingListDisplay[indexFromSettings] : ",settingListDisplay[indexFromSettings]);
                                 return settingListDisplay[indexFromSettings];
                             }
                             else{
+                                //console.log("settingList[indexFromSettings] : ",settingList[indexFromSettings]);
                                 return settingList[indexFromSettings];
                             }
 						}
