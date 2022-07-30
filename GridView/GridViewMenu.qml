@@ -473,19 +473,19 @@ FocusScope {
         id: gridviewHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
         ListElement {
-            name: "Toggle favorite"
+            name: qsTr("Toggle favorite")
             button: "details"
         }
         ListElement {
-            name: "Filters/Search"
+            name: qsTr("Filters/Search")
             button: "filters"
         }
         ListElement {
-            name: "View details"
+            name: qsTr("View details")
             button: "accept"
         }
     }

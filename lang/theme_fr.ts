@@ -114,6 +114,25 @@
     </message>
 </context>
 <context>
+    <name>GridViewMenu</name>
+    <message>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+    <message>
+        <source>Toggle favorite</source>
+        <translation>Basculer Favoris</translation>
+    </message>
+    <message>
+        <source>Filters/Search</source>
+        <translation>Filtres</translation>
+    </message>
+    <message>
+        <source>View details</source>
+        <translation>Voir détails</translation>
+    </message>
+</context>
+<context>
     <name>HeaderBar</name>
     <message>
         <source>Ascending</source>
