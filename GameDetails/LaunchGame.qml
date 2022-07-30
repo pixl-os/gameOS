@@ -119,7 +119,7 @@ FocusScope {
         Text {
             id: launchText
 
-            text: qsTr("Press any button to return") + "//" + qsTr("Launching") + " " + api.tr + currentGame.title
+            text: qsTr("Press any button to return") + api.tr
             width: contentWidth
             height: contentHeight
             font.family: titleFont.name
