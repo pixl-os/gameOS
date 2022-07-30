@@ -143,10 +143,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Launching</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,7 +185,11 @@
 <context>
     <name>ListMyCollection</name>
     <message>
-        <source>game(s)</source>
+        <source>games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>game</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -649,6 +649,26 @@
         <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>screenshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SoftwareListMenu</name>
@@ -673,6 +693,22 @@
     <name>theme</name>
     <message>
         <source>Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lastPlayed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>playCount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rating</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -110,7 +110,7 @@ Item {
 
     property var collection: {
         return {
-            name:       collectionName + " : " + gamesMyCollection.count + " " + qsTr("game(s)") + api.tr,
+            name:       collectionName + " : " + gamesMyCollection.count + (gamesMyCollection.count > 1 ? (" " + qsTr("games") + api.tr) : (" " + qsTr("game") + api.tr)),
             shortName:  "mycollection",
             games:      gamesMyCollection
         }

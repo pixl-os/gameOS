@@ -67,7 +67,7 @@ FocusScope {
 				*/
 				if (listLoader.status === Loader.Loading) {
 					if(!listLoader.measuring){
-						viewLoadingText = "Loading Collection " + (index + 1) + " ...";
+                        viewLoadingText = qsTr("Loading Collection") + " " + (index + 1) + " ...";
 						console.time("listLoader - Collection " + (index + 1));
 						listLoader.measuring = true;
 					}
@@ -77,7 +77,7 @@ FocusScope {
 					nbLoaderReady = nbLoaderReady + 1;
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
 					//console.log("listLoader.listType: ",listType);
-					viewLoadingText = "Loading Collection " + (index + 1) + " - " + listType + " ...";
+                    viewLoadingText = qsTr("Loading Collection") + " " + (index + 1) + " - " + listType + " ...";
 					if(listType.includes("My Collection") &&  (api.memory.get(listType + " - Collection name") !== null) &&
 						(api.memory.get(listType + " - Collection name") !== ""))
 					{
@@ -770,9 +770,9 @@ FocusScope {
                     id: title
                     text: {
                         if(modelData.name === "Screenshots")
-                            return (modelData.games.count + ((modelData.games.count)!==1 ? " screenshots" : " screenshot"));
+                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("screenshots") + api.tr : " " + qsTr("screenshot") + api.tr));
                         else
-                            return (modelData.games.count + ((modelData.games.count)!==1 ? " games" : " game"));
+                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
                     }
                     color: theme.text
                     font {

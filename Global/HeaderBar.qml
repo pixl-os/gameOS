@@ -259,7 +259,7 @@ FocusScope {
                 Text {
                     id: ordertitle
 
-                    text: qsTr("By") + api.tr + " " + sortByFilter[sortByIndex]
+                    text: qsTr("By") + api.tr + " " + sortByFilterDisplay[sortByIndex]
 
                     color: theme.text
                     font.family: subtitleFont.name

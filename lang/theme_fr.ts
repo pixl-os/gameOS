@@ -20,7 +20,7 @@
     <name>GameInfo</name>
     <message>
         <source>Rating</source>
-        <translation>Classement</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>Players</source>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Play count</source>
-        <translation>Nombre de partie</translation>
+        <translation>Nombre de parties</translation>
     </message>
     <message>
         <source>Last played</source>
@@ -143,10 +143,6 @@
         <translation>Appuyer un bouton pour revenir</translation>
     </message>
     <message>
-        <source>Launching</source>
-        <translation>Lancement</translation>
-    </message>
-    <message>
         <source>Back</source>
         <translation>Retour</translation>
     </message>
@@ -189,8 +185,12 @@
 <context>
     <name>ListMyCollection</name>
     <message>
-        <source>game(s)</source>
-        <translation>jeu(x)</translation>
+        <source>games</source>
+        <translation>jeux</translation>
+    </message>
+    <message>
+        <source>game</source>
+        <translation>jeu</translation>
     </message>
 </context>
 <context>
@@ -544,7 +544,7 @@
     </message>
     <message>
         <source>Rating</source>
-        <translation>Classement</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>All,1.0,0.9+,0.8+,0.7+,0.6+,0.5+,0.4+,0.3+,0.2+,0.1+</source>
@@ -649,6 +649,26 @@
         <source>Select</source>
         <translation>Selectionner</translation>
     </message>
+    <message>
+        <source>screenshots</source>
+        <translation>captures d&apos;écran</translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation>capture d&apos;écran</translation>
+    </message>
+    <message>
+        <source>games</source>
+        <translation>jeux</translation>
+    </message>
+    <message>
+        <source>game</source>
+        <translation>jeu</translation>
+    </message>
+    <message>
+        <source>Loading Collection</source>
+        <translation>Chargement Collection</translation>
+    </message>
 </context>
 <context>
     <name>SoftwareListMenu</name>
@@ -674,6 +694,22 @@
     <message>
         <source>Loading</source>
         <translation>Chargement</translation>
+    </message>
+    <message>
+        <source>title</source>
+        <translation>titre</translation>
+    </message>
+    <message>
+        <source>lastPlayed</source>
+        <translation>derniers joués</translation>
+    </message>
+    <message>
+        <source>playCount</source>
+        <translation>nombre de parties</translation>
+    </message>
+    <message>
+        <source>rating</source>
+        <translation>note</translation>
     </message>
 </context>
 </TS>
