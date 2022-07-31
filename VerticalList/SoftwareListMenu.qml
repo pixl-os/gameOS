@@ -14,9 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+//restored and adapted by BozoTheGeek 31/07/2022
+
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import "../Global"
+import "../GameDetails"
 import "../Lists"
 import "../utils.js" as Utils
 
@@ -44,7 +47,7 @@ FocusScope {
         height: vpx(75)
     }
 
-    Image {
+    /*Image {
         id: screenshot
 
         anchors {
@@ -68,6 +71,19 @@ FocusScope {
             }
             height: vpx(230)
         }
+    }*/
+    Rectangle{
+        anchors {
+            top: header.bottom; topMargin: - globalMargin + vpx(20)
+            left: softwarelist.right
+            right: parent.right
+            bottom: parent.bottom; //bottomMargin: vpx(10) + helpMargin
+        }
+
+        GameView{
+            //focus: true
+            game: currentGame
+        }
     }
 
     // Software list
@@ -89,7 +105,7 @@ FocusScope {
             bottom: parent.bottom; bottomMargin: globalMargin
             left: parent.left
         }
-        width: appWindow.width * (parseFloat("40%")/100)
+        width: appWindow.width * (parseFloat("30%")/100)
 
         spacing: vpx(0)
         orientation: ListView.Vertical
