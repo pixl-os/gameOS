@@ -222,7 +222,7 @@ FocusScope {
         id: mediaviewHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
     }

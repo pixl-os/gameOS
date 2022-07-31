@@ -119,7 +119,7 @@ FocusScope {
         Text {
             id: launchText
 
-            text: "Press any button to return"//"Launching " + currentGame.title
+            text: qsTr("Press any button to return") + api.tr
             width: contentWidth
             height: contentHeight
             font.family: titleFont.name
@@ -136,7 +136,7 @@ FocusScope {
         id: launchGameHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
     }

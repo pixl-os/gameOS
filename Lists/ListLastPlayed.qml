@@ -40,7 +40,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "Continue Playing",
+            name:       qsTr("Continue Playing") + api.tr,
             shortName:  "lastplayed",
             games:      gamesFiltered
         }

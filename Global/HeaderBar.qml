@@ -222,7 +222,7 @@ FocusScope {
                 Text {
                     id: directiontitle
 
-                    text: (orderBy === Qt.AscendingOrder) ? "Ascending" : "Descending"
+                    text: (orderBy === Qt.AscendingOrder) ? qsTr("Ascending") + api.tr : qsTr("Descending") + api.tr
 
                     color: theme.text
                     font.family: subtitleFont.name
@@ -259,7 +259,7 @@ FocusScope {
                 Text {
                     id: ordertitle
 
-                    text: "By " + sortByFilter[sortByIndex]
+                    text: qsTr("By") + api.tr + " " + sortByFilterDisplay[sortByIndex]
 
                     color: theme.text
                     font.family: subtitleFont.name
@@ -297,7 +297,7 @@ FocusScope {
                 Text {
                     id: filtertitle
 
-                    text: (showFavs) ? "Favorites" : "All games"
+                    text: (showFavs) ? qsTr("Favorites") + api.tr : qsTr("All games") + api.tr
 
                     color: theme.text
                     font.family: subtitleFont.name

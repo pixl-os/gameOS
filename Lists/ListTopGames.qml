@@ -60,7 +60,7 @@ Item {
     
     property var collection: {
         return {
-            name:       "All games",
+            name:       qsTr("Top games") + api.tr,
             shortName:  "allgames",
             games:      shuffle(gamesWithLimit)
         }

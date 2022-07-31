@@ -33,7 +33,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "All games",
+            name:       qsTr("All games") + api.tr,
             shortName:  "allgames",
             games:      gamesFiltered
         }

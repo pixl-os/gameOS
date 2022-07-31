@@ -51,7 +51,7 @@ Item {
 
     property var collection: {
         return {
-            name:       "Top Games by " + publisher,
+            name:       qsTr("Top Games by") + api.tr + " " + publisher,
             shortName:  "publisher",
             games:      gamesFiltered
         }

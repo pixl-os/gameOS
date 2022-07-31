@@ -31,7 +31,7 @@ FocusScope {
 	//DEBUG property
 	property bool detailed_debug: false
 	property bool viewIsLoading: true
-	property var viewLoadingText: "Loading..."
+    property var viewLoadingText: qsTr("Loading") + "..." + api.tr
 
 	//Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {
@@ -159,6 +159,7 @@ FocusScope {
     // Filtering options
     property bool showFavs: false
     property var sortByFilter: ["title", "lastPlayed", "playCount", "rating"]
+    property var sortByFilterDisplay: [qsTr("title") + api.tr, qsTr("lastPlayed") + api.tr, qsTr("playCount") + api.tr, qsTr("rating") + api.tr]
     property int sortByIndex: 0
     property var orderBy: Qt.AscendingOrder
     property string searchTerm: ""
