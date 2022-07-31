@@ -17,6 +17,8 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import "../Global"
+import "../Lists"
+import "../utils.js" as Utils
 
 FocusScope {
     id: root
@@ -24,14 +26,32 @@ FocusScope {
     property real itemheight: vpx(50)
     property int skipnum: 10
 
+    ListCollectionGames { id: list; }
+
+    Component.onCompleted: {
+        //to set game to display
+        currentGame = list.currentGame(softwarelist.currentIndex);
+    }
+
+    HeaderBar {
+        id: header
+        
+        anchors {
+            top:    parent.top
+            left:   parent.left
+            right:  parent.right
+        }
+        height: vpx(75)
+    }
+
     Image {
         id: screenshot
 
         anchors {
-            top: parent.top
+            top: header.bottom
             left: softwarelist.right
             right: parent.right
-            bottom: parent.bottom
+            bottom: parent.bottom; bottomMargin: globalMargin + helpMargin
         }
         asynchronous: true
         source: currentGame && currentGame.assets.screenshots[0] ? currentGame.assets.screenshots[0] : ""
@@ -50,25 +70,16 @@ FocusScope {
         }
     }
 
-    HeaderBar {
-        id: header
-        
-        anchors {
-            top:    parent.top
-            left:   parent.left
-            right:  parent.right
-        }
-        height: vpx(75)
-    }
-    
     // Software list
     ListView {
         id: softwarelist
 
         currentIndex: currentGameIndex
         onCurrentIndexChanged: {
-            if (currentIndex != -1)
+            if (currentIndex != -1){
                 currentGameIndex = currentIndex;
+                currentGame = list.currentGame(softwarelist.currentIndex)
+            }
         }
 
         focus: true
@@ -78,7 +89,7 @@ FocusScope {
             bottom: parent.bottom; bottomMargin: globalMargin
             left: parent.left
         }
-        width: vpx(400)
+        width: appWindow.width * (parseFloat("40%")/100)
 
         spacing: vpx(0)
         orientation: ListView.Vertical
@@ -89,7 +100,7 @@ FocusScope {
         highlightMoveDuration: 100
         clip: true
 
-        model: currentCustomCollection.games
+        model: list.games
         delegate: softwarelistdelegate
 
         // List item

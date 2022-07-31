@@ -178,10 +178,11 @@ FocusScope {
     ListModel {
         id: settingsModel
 
-        /*ListElement {
+        ListElement {
             settingName: "Game View"
             setting: "Grid,Vertical List"
-        }*/
+        }
+
         ListElement {
             settingName: "Allow video thumbnails"
             setting: "Yes,No"
