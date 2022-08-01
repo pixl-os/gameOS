@@ -123,7 +123,7 @@ id: infocontainer
     id: retroachievementstitle
         
         text : {
-			console.log("GameAchievements - if (gameData.retroAchievementsCount !== 0) return gameData.GetRaTitleAt(0);");
+            //console.log("GameAchievements - if (gameData.retroAchievementsCount !== 0) return gameData.GetRaTitleAt(0);");
 			if (gameData.retroAchievementsCount !== 0) return gameData.GetRaTitleAt(0);
 			else return "";
 		}
