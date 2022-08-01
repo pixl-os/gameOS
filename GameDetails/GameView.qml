@@ -145,8 +145,8 @@ FocusScope {
         //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
     }
 
-    ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
-    ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10 }
+    ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
+    ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10; enabled: embedded ? false : true }
 
     // Combine the video and the screenshot arrays into one
     function mediaArray() {
@@ -279,18 +279,17 @@ FocusScope {
         currentHelpbarModel = gameviewHelpModel;
     }
 
-
-
-
     onGameChanged: {
-                //console.log("GameView - onGameChanged");
-				//reset default value for a new game loading
-				reset();
-				//launch initialization of retroachievements
-				//the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
-				game.initRetroAchievements();
-                //init overlays parameters
-                root.getOverlaysParameters();
+        //console.log("GameView - onGameChanged");
+        //reset default value for a new game loading
+        reset();
+        if(!embedded){
+            //launch initialization of retroachievements
+            //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+            game.initRetroAchievements();
+            //init overlays parameters
+            root.getOverlaysParameters();
+        }
 	}	
 
 	Connections {
@@ -831,7 +830,7 @@ FocusScope {
 
             text: qsTr("Play game") + api.tr
             height: parent.height
-            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             property var launchedGame: api.launchedgame
             property var selectedGame : game
@@ -941,7 +940,7 @@ FocusScope {
 
             icon: "../assets/images/icon_details.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -960,7 +959,7 @@ FocusScope {
             //text: buttonText
             icon: favIcon
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -978,7 +977,7 @@ FocusScope {
             //text: "Back"
             icon: "../assets/images/icon_back.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected)
@@ -994,7 +993,7 @@ FocusScope {
             icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
             text: readyForNeplay ? qsTr("Netplay") + api.tr : ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
             enabled : visible
@@ -1023,7 +1022,7 @@ FocusScope {
             icon: "../assets/images/icon_cup.svg"
             text: ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
             enabled : visible
@@ -1268,13 +1267,26 @@ FocusScope {
 
     onFocusChanged: {
         if (focus) {
+            if(embedded){
+                //activate collections
+                publisherCollection.enabled = true;
+                genreCollection.enabled = true;
+                //launch initialization of retroachievements
+                //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+                game.initRetroAchievements();
+                //init overlays parameters
+                root.getOverlaysParameters();
+            }
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
             menu.currentIndex = 0;
         } 
 	else {
-            screenshot.opacity = 1;
-            toggleVideo(false);
+            if(embedded){
+                //deactivate collections
+                publisherCollection.enabled = false;
+                genreCollection.enabled = false;
+            }
         }
     }
 
