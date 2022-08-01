@@ -73,16 +73,26 @@ FocusScope {
         }
     }*/
     Rectangle{
+        id: gameViewArea
         anchors {
             top: header.bottom; topMargin: - globalMargin + vpx(20)
             left: softwarelist.right
             right: parent.right
             bottom: parent.bottom; //bottomMargin: vpx(10) + helpMargin
         }
-
+        focus: true
+        onFocusChanged: {
+            console.log("Rectangle::onFocusChanged()");
+            if (focus) {
+                currentHelpbarModel = gridviewHelpModel;
+                softwarelist.focus = false;
+            }
+        }
         GameView{
-            //focus: true
+            id: gameview
+            focus: false
             game: currentGame
+            embedded: true
         }
     }
 
@@ -99,7 +109,7 @@ FocusScope {
         }
 
         focus: true
-        
+
         anchors {
             top: header.bottom; topMargin: globalMargin
             bottom: parent.bottom; bottomMargin: globalMargin
@@ -138,7 +148,7 @@ FocusScope {
                         bottom: parent.bottom; bottomMargin: vpx(5)
                     }
                     color: theme.text
-                    visible: selected
+                    visible: selected && gameViewArea.focus
                 }
 
                 Text {
@@ -191,17 +201,19 @@ FocusScope {
     }
     // Left
     Keys.onLeftPressed: {
-        if (softwarelist.currentIndex > skipnum)
+        /*if (softwarelist.currentIndex > skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex - skipnum;
         else
-            softwarelist.currentIndex = 0;
+            softwarelist.currentIndex = 0;*/
     }
     // Right
     Keys.onRightPressed:  {
-        if (softwarelist.currentIndex < softwarelist.count - skipnum)
+        /*if (softwarelist.currentIndex < softwarelist.count - skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex + skipnum;
         else
-            softwarelist.currentIndex = softwarelist.count - 1
+            softwarelist.currentIndex = softwarelist.count - 1*/
+        softwarelist.focus = false;
+        gameview.focus = true;
     }
 
     Keys.onPressed: {
@@ -260,5 +272,8 @@ FocusScope {
         }
     }
     
-    onFocusChanged: { if (focus) currentHelpbarModel = gridviewHelpModel; }
+    onFocusChanged: {
+        //console.log("SoftwareListMenu::onFocusChanged()");
+        if (focus) currentHelpbarModel = gridviewHelpModel;
+    }
 }
