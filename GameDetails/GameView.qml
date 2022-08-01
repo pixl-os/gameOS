@@ -30,6 +30,7 @@ FocusScope {
     id: root
 
     property var game: api.allGames.get(0)
+    property bool embedded : false
     property bool readyForNeplay: isReadyForNetplay(game)
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
     property string collectionName: game ? game.collections.get(0).name : ""
@@ -830,7 +831,7 @@ FocusScope {
 
             text: qsTr("Play game") + api.tr
             height: parent.height
-            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
+            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             property var launchedGame: api.launchedgame
             property var selectedGame : game
@@ -940,7 +941,7 @@ FocusScope {
 
             icon: "../assets/images/icon_details.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -959,7 +960,7 @@ FocusScope {
             //text: buttonText
             icon: favIcon
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -977,7 +978,7 @@ FocusScope {
             //text: "Back"
             icon: "../assets/images/icon_back.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected)
@@ -993,7 +994,7 @@ FocusScope {
             icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
             text: readyForNeplay ? qsTr("Netplay") + api.tr : ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
             enabled : visible
@@ -1022,7 +1023,7 @@ FocusScope {
             icon: "../assets/images/icon_cup.svg"
             text: ""
             height: parent.height
-			selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && !root.parent.focus
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
             enabled : visible
@@ -1204,10 +1205,16 @@ FocusScope {
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            if (mediaScreen.visible)
-                closeMedia();
-            else
-                previousScreen();
+            if(embedded){
+                root.focus = false;
+                root.parent.focus = true;
+            }
+            else{
+                if (mediaScreen.visible)
+                    closeMedia();
+                else
+                    previousScreen();
+            }
         }
         // Filters
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
