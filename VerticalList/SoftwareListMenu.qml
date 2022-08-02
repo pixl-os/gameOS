@@ -22,6 +22,7 @@ import "../Global"
 import "../GameDetails"
 import "../Lists"
 import "../utils.js" as Utils
+import "qrc:/qmlutils" as PegasusUtils
 
 FocusScope {
     id: root
@@ -149,27 +150,44 @@ FocusScope {
                     }
                     color: theme.text
                     visible: selected && gameViewArea.focus
+
                 }
 
-                Text {
-                    id: gametitle
 
-                    text: modelData.title
-                    
+                // Description
+                PegasusUtils.HorizontalAutoScroll
+                {
+                    id: gameDescription
+
+                    scrollWaitDuration: 1000 // in ms
+                    pixelsPerSecond: 20
+                    activated: delegatecontainer.selected
+
                     height: parent.height
                     anchors {
                         left: parent.left; leftMargin: vpx(25)
                         right: parent.right; rightMargin: vpx(25)
                     }
-                    
-                    color: theme.text
-                    font.family: subtitleFont.name
-                    font.pixelSize: vpx(20)
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                    opacity: selected ? 1 : 0.2
-                }
 
+                    Text {
+                        id: gametitle
+
+                        text: modelData.title
+
+                        height: parent.height
+                        /*anchors {
+                            left: parent.left; leftMargin: vpx(25)
+                            right: parent.right; rightMargin: vpx(25)
+                        }*/
+
+                        color: theme.text
+                        font.family: subtitleFont.name
+                        font.pixelSize: vpx(20)
+                        //elide: Text.ElideRight
+                        verticalAlignment: Text.AlignVCenter
+                        opacity: selected ? 1 : 0.2
+                    }
+                }
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
