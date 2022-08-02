@@ -231,7 +231,7 @@ FocusScope {
 
     // Launch the current game
     function launchGame(game) {
-        if (game !== null) {
+        if (typeof(game) !== "undefined") {
             //if pegasus.multiwindows is no activated
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
               launchGameScreen();
