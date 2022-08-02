@@ -1122,7 +1122,7 @@ FocusScope {
         // More by publisher
         HorizontalCollection {
             id: list1
-            visible: (demoLaunched !== true)
+            visible: (demoLaunched !== true) && publisherCollection.enabled
             property bool selected: ListView.isCurrentItem
             focus: selected
             width: root.width - vpx(70) - globalMargin
@@ -1138,7 +1138,7 @@ FocusScope {
         // More in genre
         HorizontalCollection {
             id: list2
-            visible: (demoLaunched !== true)
+            visible: (demoLaunched !== true) && genreCollection.enabled
             property bool selected: ListView.isCurrentItem
             focus: selected
             width: root.width - vpx(70) - globalMargin
@@ -1315,8 +1315,8 @@ FocusScope {
 	else {
             if(embedded){
                 //deactivate collections
-                publisherCollection.enabled = false;
-                genreCollection.enabled = false;
+                //publisherCollection.enabled = false;
+                //genreCollection.enabled = false;
             }
         }
     }
