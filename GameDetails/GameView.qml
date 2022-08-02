@@ -1055,6 +1055,14 @@ FocusScope {
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
+                                    //if embedded and if we do left to come back to list
+                                    if (root.embedded ? !root.parent.focus : false){
+                                        if(currentIndex === 0){
+                                            root.focus = false;
+                                            root.parent.focus = true;
+                                        }
+                                    }
+
                                     //console.log("Menu - Keys.onLeftPressed");
 									sfxNav.play(); 
 									do{	
@@ -1215,11 +1223,25 @@ FocusScope {
                     previousScreen();
             }
         }
-        // Filters
-        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+        // Toggle Favorite
+        if (api.keys.isDetails(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxAccept.play();
             game.favorite = !game.favorite;
+        }
+
+        // Launch Netplay
+        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            sfxToggle.play();
+            if(readyForNeplay){
+                //to force focus & reload dialog
+                netplayRoomDialog.focus = false;
+                netplayRoomDialog.active = false;
+                netplayRoomDialog.game = game; //set game
+                netplayRoomDialog.active = true;
+                netplayRoomDialog.focus = true;
+            }
         }
 
         // Next game
@@ -1257,6 +1279,10 @@ FocusScope {
         }
         ListElement {
             name: qsTr("Toggle favorite")
+            button: "details"
+        }
+        ListElement {
+            name: qsTr("Netplay")
             button: "filters"
         }
         ListElement {
