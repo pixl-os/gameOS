@@ -37,7 +37,7 @@ FocusScope {
         currentGame = list.currentGame(softwarelist.currentIndex);
     }
 
-    HeaderBar {
+    Rectangle {
         id: header
         
         anchors {
@@ -46,6 +46,20 @@ FocusScope {
             right:  parent.right
         }
         height: vpx(75)
+        color: theme.main
+
+        HeaderBar {
+            id: headercontainer
+
+            anchors.fill: parent
+        }
+        Keys.onDownPressed: {
+            sfxNav.play();
+            softwarelist.focus = true;
+            if((softwarelist.currentIndex < softwarelist.count) && (softwarelist.currentIndex >= 0)){
+                //do nothing
+            } else softwarelist.currentIndex = 0; //set index
+        }
     }
 
     /*Image {
@@ -81,7 +95,7 @@ FocusScope {
             right: parent.right
             bottom: parent.bottom; //bottomMargin: vpx(10) + helpMargin
         }
-        focus: true
+        focus: false
         onFocusChanged: {
             if (focus) {
                 currentHelpbarModel = verticalListHelpModel;
@@ -148,7 +162,7 @@ FocusScope {
                         bottom: parent.bottom; bottomMargin: vpx(5)
                     }
                     color: theme.text
-                    visible: selected && gameViewArea.focus
+                    visible: selected && !gameview.focus
 
                 }
 
@@ -237,12 +251,14 @@ FocusScope {
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            if (softwarelist.focus) {
+            if (!gameview.focus) {
                 launchGame();
-            } else {
+            }
+            //is it really used ?!
+            /*else {
                 currentGameIndex = 0;
                 softwarelist.focus = true;
-            }
+            }*/
             
         }
         // Back
@@ -259,7 +275,10 @@ FocusScope {
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxToggle.play();
-            header.focus = true;
+            softwarelist.focus = false;
+            gameview.focus = false;
+            gameViewArea.focus = false;
+            headercontainer.focus = true;
             return;
         }
         // Toggle favorite
