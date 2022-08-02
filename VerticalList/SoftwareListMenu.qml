@@ -83,9 +83,8 @@ FocusScope {
         }
         focus: true
         onFocusChanged: {
-            console.log("Rectangle::onFocusChanged()");
             if (focus) {
-                currentHelpbarModel = gridviewHelpModel;
+                currentHelpbarModel = verticalListHelpModel;
                 softwarelist.focus = false;
             }
         }
@@ -256,42 +255,47 @@ FocusScope {
                 softwarelist.focus = true;
             }
         }
-        // Filters
+        // Filters/Search
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            toggleFavs();
+            sfxToggle.play();
+            header.focus = true;
+            return;
         }
-        // Details
+        // Toggle favorite
         if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            toggleSort();
+            //if (softwarelist.focus) {
+                console.log("Toggle favorite");
+                event.accepted = true;
+                sfxToggle.play();
+                list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
+            //}
         }
     }
 
     // Helpbar buttons
     ListModel {
-        id: gridviewHelpModel
-
+        id: verticalListHelpModel
         ListElement {
             name: qsTr("Back")
             button: "cancel"
         }
         ListElement {
-            name: qsTr("Order")
+            name: qsTr("Toggle favorite")
             button: "details"
         }
         ListElement {
-            name: qsTr("Filter")
+            name: qsTr("Filters/Search")
             button: "filters"
         }
         ListElement {
-            name: qsTr("View details")
+            name: qsTr("Launch")
             button: "accept"
         }
     }
     
     onFocusChanged: {
         //console.log("SoftwareListMenu::onFocusChanged()");
-        if (focus) currentHelpbarModel = gridviewHelpModel;
+        if (focus) currentHelpbarModel = verticalListHelpModel;
     }
 }
