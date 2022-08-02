@@ -830,7 +830,7 @@ FocusScope {
 
             text: qsTr("Play game") + api.tr
             height: parent.height
-            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             property var launchedGame: api.launchedgame
             property var selectedGame : game
@@ -940,7 +940,7 @@ FocusScope {
 
             icon: "../assets/images/icon_details.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -959,7 +959,7 @@ FocusScope {
             //text: buttonText
             icon: favIcon
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -977,11 +977,16 @@ FocusScope {
             //text: "Back"
             icon: "../assets/images/icon_back.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
-                if (selected)
-                    previousScreen();
+                if (selected) {
+                    if(embedded) {
+                        root.focus = false;
+                        root.parent.focus = true;
+                    }
+                    else previousScreen();
+                }
                 else {
                     sfxNav.play(); 
                     menu.currentIndex = ObjectModel.index;
@@ -993,7 +998,7 @@ FocusScope {
             icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
             text: readyForNeplay ? qsTr("Netplay") + api.tr : ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
             enabled : visible
@@ -1022,7 +1027,7 @@ FocusScope {
             icon: "../assets/images/icon_cup.svg"
             text: ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? !root.parent.focus : true)
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
             enabled : visible
