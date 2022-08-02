@@ -198,7 +198,9 @@ FocusScope {
         Keys.onDownPressed: {
             sfxNav.play();
             gamegrid.focus = true;
-            gamegrid.currentIndex = 0;
+            if((gamegrid.currentIndex < gamegrid.count) && (gamegrid.currentIndex >= 0)){
+                //do nothing
+            } else gamegrid.currentIndex = 0; //set index
         }
     }
 
