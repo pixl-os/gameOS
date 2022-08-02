@@ -806,7 +806,7 @@ FocusScope {
                     currentIndex = -1;
                 }
                 if(!focus){
-                    playMusic.stop();
+                    if(designs.SystemMusicSource !== "No") playMusic.stop();
                 }
             }
 
