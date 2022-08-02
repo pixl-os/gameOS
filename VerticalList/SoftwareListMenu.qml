@@ -27,6 +27,17 @@ import "qrc:/qmlutils" as PegasusUtils
 FocusScope {
     id: root
 
+    // While not necessary to do it here, this means we don't need to change it in both
+    // touch and gamepad functions each time
+    function gameActivated() {
+        //console.log("list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
+        //check added when search is empty and we try to launch a game in all cases
+        if(list.currentGame(softwarelist.currentIndex) !== null){
+            storedCollectionGameIndex = softwarelist.currentIndex
+            //gameDetails(list.currentGame(gamegrid.currentIndex));
+        }
+    }
+
     property real itemheight: vpx(50)
     property int skipnum: 10
 
@@ -122,6 +133,15 @@ FocusScope {
             }
         }
 
+        Component.onCompleted: {
+            currentIndex = storedCollectionGameIndex;
+            positionViewAtIndex(currentIndex, ListView.Visible);
+        }
+
+        populate: Transition {
+            NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+        }
+
         focus: true
 
         anchors {
@@ -205,10 +225,13 @@ FocusScope {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (selected)
+                        if (selected){
+                            gameActivated();
                             launchGame();
-                        else
+                        }
+                        else{
                             softwarelist.currentIndex = index
+                        }
                     }
                 }
             }
@@ -243,6 +266,7 @@ FocusScope {
             softwarelist.currentIndex = softwarelist.currentIndex + skipnum;
         else
             softwarelist.currentIndex = softwarelist.count - 1*/
+        gameActivated();
         softwarelist.focus = false;
         gameview.focus = true;
     }
@@ -252,6 +276,7 @@ FocusScope {
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
             if (!gameview.focus) {
+                gameActivated();
                 launchGame();
             }
             //is it really used ?!
@@ -265,6 +290,7 @@ FocusScope {
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
             if (softwarelist.focus) {
+                gameActivated();
                 previousScreen();
             } else {
                 currentGameIndex = 0;
