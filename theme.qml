@@ -151,6 +151,7 @@ FocusScope {
             OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
 			ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
+            ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
 			DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",

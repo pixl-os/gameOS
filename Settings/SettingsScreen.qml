@@ -497,6 +497,12 @@ FocusScope {
             settingDisplay: qsTr("No,Yes")
         }
         ListElement {
+            settingName: "Show file hash"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Show file hash")
+            settingDisplay: qsTr("No,Yes")
+        }
+        ListElement {
             settingName: "Show play stats"
             setting: "No,Yes"
             settingNameDisplay: qsTr("Show play stats")

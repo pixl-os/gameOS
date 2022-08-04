@@ -256,6 +256,53 @@ Item {
 			visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
+        Rectangle {
+            id: divider2_2
+            width: vpx(2)
+            anchors {
+                left: filenametext.right; leftMargin: (25)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+            visible: (settings.ShowFilehash == "Yes") ? true : false
+        }
+
+        // File hash
+        Text {
+            id: filehashtitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider2_2.right; leftMargin: vpx(25) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("File hash") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
+        Text {
+            id: filehashtext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: filehashtitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+                if (gameData){
+                    return gameData.hash + " (crc32)";
+                }
+                else return "";
+            }
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
     }
 
     // Meta data
