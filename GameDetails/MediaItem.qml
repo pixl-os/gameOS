@@ -74,7 +74,7 @@ Item {
 
         anchors.fill: parent
         anchors.margins: vpx(4)
-        source: isVideo ? "" : mediaItem
+        source: isVideo || isManual ? "" : mediaItem
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
 
