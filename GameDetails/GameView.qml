@@ -517,7 +517,7 @@ FocusScope {
 
     }
 
-    // Clear logo
+    // Game logo
     Image {
         id: logo
         anchors {
@@ -525,14 +525,14 @@ FocusScope {
             left:{
                 if (settings.GameLogoPosition === "Left") return parent.left;
             }
-            leftMargin: (settings.GameLogoPosition === "Left") ? vpx(70) : 0
+            leftMargin: (settings.GameLogoPosition === "Left") ? (parent.width * (parseFloat("5%")/100)) : 0
             right:{
                 if (settings.GameLogoPosition === "Right") return parent.right;
             }
-            rightMargin: (settings.GameLogoPosition === "Right") ? vpx(70) : 0
+            rightMargin: (settings.GameLogoPosition === "Right") ? (parent.width * (parseFloat("5%")/100)) : 0
         }
-        width: vpx(500)
-        height: vpx(450) + header.height
+        width: (parent.width * (parseFloat("40%")/100))
+        height: (parent.height * (parseFloat("60%")/100)) + header.height
         source: game ? Utils.logo(game) : ""
         fillMode: Image.PreserveAspectFit
         asynchronous: true
@@ -570,7 +570,7 @@ FocusScope {
         visible: settings.GameLogo === "Show"
     }
 
-    // Platform title
+    // Game title
     Text {
         id: gametitle
 
@@ -654,8 +654,8 @@ FocusScope {
 
             anchors { 
                 top: parent.top; topMargin: vpx(100)
-                left: parent.left; leftMargin: vpx(70)
-                right: parent.right; rightMargin: vpx(70)
+                left: parent.left; leftMargin: (parent.width * (parseFloat("5%")/100))
+                right: parent.right; rightMargin: (parent.width * (parseFloat("5%")/100))
             }
             height: vpx(parent.height * (parseFloat("70%")/100)) - header.height
 
@@ -700,7 +700,7 @@ FocusScope {
                 id: boxart
 
                 source: Utils.boxArt(game);
-                width: parent.width * (parseFloat("25%")/100)
+                width: embedded ? (parent.width * (parseFloat("25%")/100)) : (parent.width * (parseFloat("30%")/100))
                 height: parent.height * (parseFloat("95%")/100)
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
