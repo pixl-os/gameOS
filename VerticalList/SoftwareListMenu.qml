@@ -18,11 +18,11 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import "qrc:/qmlutils" as PegasusUtils
 import "../Global"
 import "../GameDetails"
 import "../Lists"
 import "../utils.js" as Utils
-import "qrc:/qmlutils" as PegasusUtils
 
 FocusScope {
     id: root
