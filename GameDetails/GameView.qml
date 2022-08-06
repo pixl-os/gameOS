@@ -977,6 +977,12 @@ FocusScope {
             onActivated:
                 if (selected) {
                     if(embedded) {
+                        if (retroachievementsOpacity === 1) {
+                            detailsOpacity = 1;
+                            retroachievementsOpacity = 0;
+                            achievements.selected = false;
+                            content.focus = true;
+                        }
                         root.focus = false;
                         root.parent.focus = true;
                     }
@@ -1058,6 +1064,12 @@ FocusScope {
                                     //if embedded and if we do left to come back to list
                                     if (root.embedded ? !root.parent.focus : false){
                                         if(currentIndex === 0){
+                                            if (retroachievementsOpacity === 1) {
+                                                detailsOpacity = 1;
+                                                retroachievementsOpacity = 0;
+                                                achievements.selected = false;
+                                                content.focus = true;
+                                            }
                                             root.focus = false;
                                             root.parent.focus = true;
                                         }
@@ -1213,6 +1225,12 @@ FocusScope {
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
             if(embedded){
+                if (retroachievementsOpacity === 1) {
+                    detailsOpacity = 1;
+                    retroachievementsOpacity = 0;
+                    achievements.selected = false;
+                    content.focus = true;
+                }
                 root.focus = false;
                 root.parent.focus = true;
             }
