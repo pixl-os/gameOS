@@ -20,10 +20,11 @@ import QtGraphicalEffects 1.0
 import SortFilterProxyModel 0.2
 import QtQml.Models 2.12
 import QtMultimedia 5.12
+import "qrc:/qmlutils" as PegasusUtils
+import "../utils.js" as Utils
 import "../Global"
 import "../GridView"
 import "../Lists"
-import "../utils.js" as Utils
 import "../Search"
 
 FocusScope {
@@ -301,12 +302,6 @@ FocusScope {
     }
 
     anchors.fill: parent
-
-    GridSpacer {
-        id: fakebox
-
-        width: vpx(100); height: vpx(100)
-    }
 
     // Video
     // Show/hide the video
@@ -662,7 +657,7 @@ FocusScope {
                 left: parent.left; leftMargin: vpx(70)
                 right: parent.right; rightMargin: vpx(70)
             }
-            height: vpx(484) - header.height
+            height: vpx(parent.height * (parseFloat("70%")/100)) - header.height
 
             GameAchievements {
             id: achievements
@@ -695,18 +690,18 @@ FocusScope {
             id: details
 
             anchors {
-                top: parent.top; topMargin: vpx(100)
-                left: parent.left; leftMargin: vpx(70)
-                right: parent.right; rightMargin: vpx(70)
+                top: parent.top; topMargin: parent.height * (parseFloat("15%")/100) //vpx(100)
+                left: parent.left; leftMargin: parent.width * (parseFloat("3%")/100) //vpx(70)
+                right: parent.right; rightMargin: parent.width * (parseFloat("3%")/100) //vpx(70)
             }
-            height: vpx(450) - header.height
+            height: (parent.height * (parseFloat("70%")/100)) - header.height //vpx(450)
 
             Image {
                 id: boxart
 
                 source: Utils.boxArt(game);
-                //width: vpx(350)
-                height: parent.height
+                width: parent.width * (parseFloat("25%")/100)
+                height: parent.height * (parseFloat("95%")/100)
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
                 smooth: true
@@ -714,10 +709,10 @@ FocusScope {
 
             GameInfo {
                 id: info
-
                 anchors {
-                    left: boxart.right; leftMargin: vpx(30)
-                    top: parent.top; bottom: parent.bottom; right: parent.right
+                    left: boxart.right; leftMargin: parent.width * (parseFloat("3%")/100); //vpx(30)
+                    right: parent.right;
+                    top: parent.top; bottom: parent.bottom;
                 }
             }
         }
@@ -1054,7 +1049,7 @@ FocusScope {
             property bool selected: parent.focus
             focus: selected
             width: parent.width
-            height: vpx(110) // to put media more at the bottom
+            height:vpx(parent.height * (parseFloat("7%")/100))
             model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
@@ -1159,7 +1154,7 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: header.height
+            top: parent.top; topMargin: header.height + (embedded ? 0 : (parent.height * (parseFloat("3%")/100))) //vpx(15)
             bottom: parent.bottom; bottomMargin: vpx(150)
         }
         model: extrasModel
