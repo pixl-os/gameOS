@@ -206,6 +206,7 @@ FocusScope {
         screenshot.opacity = 1;
         mediaScreen.opacity = 0;
         if(!embedded){
+            //to start video for new game
             toggleVideo(true);
             //launch initialization of retroachievements
             //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
@@ -214,16 +215,19 @@ FocusScope {
             root.getOverlaysParameters();
         }
         else{
-            //to be sure to stop video in all cases
-            toggleVideo(false);//need to stop video by other way certainly
+            //to be sure to stop video in all cases -> improve really perfrmance of scrolling !!!
+            videoPreviewLoader.sourceComponent = undefined;
+            videoDelay.stop();
+            fadescreenshot.stop();
             //to avoid issue with retroachievements loading
             retroachievementsOpacity = 0;
             achievements.selected = false;
-            content.focus = true;
             root.focus = false;
             root.parent.focus = true;
-            videoLaunch.restart();
+            //launch video with additional second in case of embedded
+            videoEmbeddedLaunch.restart();
         }
+
     }
 
 	function setRetroAchievements(){
@@ -325,20 +329,20 @@ FocusScope {
       } else {
         stopvideo.stop();
         // Turn on video
-        console.log("Turn on video");
+        //console.log("Turn on video");
         if(canPlayVideo)
             videoDelay.restart();
       }
     }
     //Timer to launch video with delay in case of embedded gameView
     Timer {
-        id: videoLaunch
+        id: videoEmbeddedLaunch
         running: false
         triggeredOnStart: false
         repeat: false
-        interval: 2000
+        interval: 1000
         onTriggered: {
-            console.log("videoLaunch.onTriggered");
+            //console.log("videoEmbeddedLaunch.onTriggered");
             if (embedded) {
                 toggleVideo(true);
             }
