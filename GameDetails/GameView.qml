@@ -197,7 +197,7 @@ FocusScope {
     }
 
     // Reset the screen to default state
-    function reset() {
+    function reset(){
         content.currentIndex = 0;
         menu.currentIndex = 0;
         media.savedIndex = 0;
@@ -205,7 +205,25 @@ FocusScope {
         list2.savedIndex = 0;
         screenshot.opacity = 1;
         mediaScreen.opacity = 0;
-        toggleVideo(true);
+        if(!embedded){
+            toggleVideo(true);
+            //launch initialization of retroachievements
+            //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+            game.initRetroAchievements();
+            //init overlays parameters
+            root.getOverlaysParameters();
+        }
+        else{
+            //to be sure to stop video in all cases
+            toggleVideo(false);//need to stop video by other way certainly
+            //to avoid issue with retroachievements loading
+            retroachievementsOpacity = 0;
+            achievements.selected = false;
+            content.focus = true;
+            root.focus = false;
+            root.parent.focus = true;
+            videoLaunch.restart();
+        }
     }
 
 	function setRetroAchievements(){
@@ -284,13 +302,6 @@ FocusScope {
         //console.log("GameView - onGameChanged");
         //reset default value for a new game loading
         reset();
-        if(!embedded){
-            //launch initialization of retroachievements
-            //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
-            game.initRetroAchievements();
-            //init overlays parameters
-            root.getOverlaysParameters();
-        }
 	}	
 
 	Connections {
@@ -314,15 +325,32 @@ FocusScope {
       } else {
         stopvideo.stop();
         // Turn on video
-        if (canPlayVideo)
+        console.log("Turn on video");
+        if(canPlayVideo)
             videoDelay.restart();
       }
+    }
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: videoLaunch
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 2000
+        onTriggered: {
+            console.log("videoLaunch.onTriggered");
+            if (embedded) {
+                toggleVideo(true);
+            }
+        }
     }
 
     // Timer to show the video
     Timer {
         id: videoDelay
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             if (game && game.assets.videos.length && canPlayVideo) {
@@ -335,7 +363,9 @@ FocusScope {
     // NOTE: Next fade out the bg so there is a smooth transition into the video
     Timer {
         id: fadescreenshot
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             screenshot.opacity = 0;
@@ -346,7 +376,9 @@ FocusScope {
 
     Timer {
         id: stopvideo
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             videoPreviewLoader.sourceComponent = undefined;
@@ -1166,7 +1198,7 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: header.height + (embedded ? 0 : (parent.height * (parseFloat("3%")/100))) //vpx(15)
+            top: parent.top; topMargin: header.height + (root.embedded ? 0 : (parent.height * (parseFloat("3%")/100))) //vpx(15)
             bottom: parent.bottom; bottomMargin: vpx(150)
         }
         model: extrasModel
@@ -1179,10 +1211,13 @@ FocusScope {
         displayMarginEnd: 150
         cacheBuffer: 250
         onCurrentIndexChanged: {
-            if (content.currentIndex === 0) {
-                toggleVideo(true);
-            } else {
-                toggleVideo(false);
+            console.log("onCurrentIndexChanged - focus: ", root.focus);
+            if(root.focus){
+                if (content.currentIndex === 0) {
+                    toggleVideo(true);
+                } else {
+                    toggleVideo(false);
+                }
             }
         }
         keyNavigationWraps: true
@@ -1262,6 +1297,7 @@ FocusScope {
             }
         }
 
+        if(!embedded){
         // Next game
         if (api.keys.isNextPage(event) && !event.isAutoRepeat && !global.guideButtonPressed) {
             event.accepted = true;
@@ -1284,6 +1320,7 @@ FocusScope {
                 currentGameIndex = game.collections.get(0).games.count-1;
             gameDetails(game.collections.get(0).games.get(currentGameIndex));
             lastState[lastState.length-1] = "showcasescreen";
+            }
         }
     }
 
@@ -1315,6 +1352,8 @@ FocusScope {
                 //activate collections
                 publisherCollection.enabled = true;
                 genreCollection.enabled = true;
+                //launch video
+                toggleVideo(true);
                 //launch initialization of retroachievements
                 //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
                 game.initRetroAchievements();
@@ -1325,11 +1364,12 @@ FocusScope {
             menu.focus = true;
             menu.currentIndex = 0;
         } 
-	else {
+        else {
             if(embedded){
                 //deactivate collections
-                //publisherCollection.enabled = false;
-                //genreCollection.enabled = false;
+                publisherCollection.enabled = false;
+                genreCollection.enabled = false;
+                toggleVideo(false);
             }
         }
     }
