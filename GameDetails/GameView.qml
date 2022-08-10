@@ -1091,7 +1091,7 @@ FocusScope {
             property bool selected: parent.focus
             focus: selected
             width: parent.width
-            height:vpx(parent.height * (parseFloat("7%")/100))
+            height:vpx(parent.height * (parseFloat("9%")/100))
             model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
@@ -1224,14 +1224,12 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: header.height + (root.embedded ? 0 : (parent.height * (parseFloat("3%")/100))) //vpx(15)
+            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + header.height + (root.embedded ? 0 : (parent.height * (parseFloat("3%")/100)))) : header.height //vpx(450 + 75)
             bottom: parent.bottom; bottomMargin: vpx(150)
         }
         model: extrasModel
         focus: true
         spacing: vpx(30)
-        header: Item { height: vpx(450) }
-
         snapMode: ListView.SnapToItem
         highlightMoveDuration: 100
         displayMarginEnd: 150
