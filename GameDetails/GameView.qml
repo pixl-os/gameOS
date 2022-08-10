@@ -1165,34 +1165,56 @@ FocusScope {
         // More by publisher
         HorizontalCollection {
             id: list1
-            visible: (demoLaunched !== true) && publisherCollection.enabled
             property bool selected: ListView.isCurrentItem
-            focus: selected
-            width: root.width - vpx(70) - globalMargin
-            height: itemHeight + vpx(60)
-            itemWidth: (root.width - globalMargin * 2) / 4.0
-            itemHeight: itemWidth * settings.WideRatio
+            property var currentList: list1
+            property var collection: publisherCollection
+
+            enabled: (demoLaunched !== true) && collection.enabled
+            visible: (demoLaunched !== true) && collection.enabled
+
+            width: root.width - globalMargin * 2
+            itemWidth: (width / 4.0);
+            itemHeight: itemWidth * settings.WideRatio;
+            height: itemHeight + vpx(40) + globalMargin
 
             title: game ? qsTr("More games by") + api.tr + " " + game.publisher : ""
-            search: publisherCollection
-            onListHighlighted: { sfxNav.play(); content.currentIndex = list1.ObjectModel.index; }
+            search: collection
+
+            focus: selected
+
+            x: globalMargin - vpx(8)
+
+            onActivate: { if (!selected) { content.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); content.currentIndex = currentList.ObjectModel.index; }
         }
+
 
         // More in genre
         HorizontalCollection {
             id: list2
-            visible: (demoLaunched !== true) && genreCollection.enabled
             property bool selected: ListView.isCurrentItem
-            focus: selected
-            width: root.width - vpx(70) - globalMargin
-            height: itemHeight + vpx(60)
-            itemWidth: (root.width - globalMargin * 2) / 8.0
-            itemHeight: itemWidth / settings.TallRatio
+            property var currentList: list2
+            property var collection: genreCollection
+
+            enabled: (demoLaunched !== true) && collection.enabled
+            visible: (demoLaunched !== true) && collection.enabled
+
+            width: root.width - globalMargin * 2
+            itemWidth: (width / 8.0);
+            itemHeight: itemWidth / settings.TallRatio;
+            height: itemHeight + vpx(40) + globalMargin
 
             title: game ? qsTr("More games of") + " " + game.genreList[0].toLowerCase() + api.tr  : ""
-            search: genreCollection
-            onListHighlighted: { sfxNav.play(); content.currentIndex = list2.ObjectModel.index; }
+            search: collection
+
+            focus: selected
+
+            x: globalMargin - vpx(8)
+
+            onActivate: { if (!selected) { content.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); content.currentIndex = currentList.ObjectModel.index; }
         }
+
 
     }
 
@@ -1215,7 +1237,7 @@ FocusScope {
         displayMarginEnd: 150
         cacheBuffer: 250
         onCurrentIndexChanged: {
-            console.log("onCurrentIndexChanged - focus: ", root.focus);
+            //console.log("onCurrentIndexChanged - focus: ", root.focus);
             if(root.focus){
                 if (content.currentIndex === 0) {
                     toggleVideo(true);
