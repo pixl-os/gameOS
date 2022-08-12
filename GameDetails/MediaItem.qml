@@ -79,11 +79,11 @@ Item {
         asynchronous: true
 
         Rectangle {
-            id: videopreview
+            id: preview
 
             anchors.fill: parent
             color: theme.secondary
-            visible: isVideo
+            visible: isVideo || isManual
         }
 
         Image {
@@ -115,6 +115,27 @@ Item {
             source: iconFill
             maskSource: mask
             visible: isVideo
+        }
+
+        Image {
+            id: mask_manual
+
+            source: "../assets/images/icon_manual.png"
+            anchors.centerIn: parent
+            width: vpx(150); height: width
+            sourceSize: Qt.size(parent.width, parent.height)
+            smooth: true
+            fillMode: Image.PreserveAspectFit
+            visible: false
+            asynchronous: true
+        }
+
+        OpacityMask {
+            anchors.fill: mask_manual
+            anchors.margins: vpx(30)
+            source: iconFill
+            maskSource: mask_manual
+            visible: isManual
         }
 
         Rectangle {
