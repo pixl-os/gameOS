@@ -130,14 +130,70 @@ FocusScope {
                 custom_viewport_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 custom_viewport_width = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_width\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 custom_viewport_height = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_height\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
-                //check if overlay 1080p or 720p
-                if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
-                    //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
-                    custom_viewport_x = custom_viewport_x * (1280/1920);
-                    custom_viewport_y = custom_viewport_y * (720/1080);
-                    custom_viewport_width = custom_viewport_width * (1280/1920);
-                    custom_viewport_height = custom_viewport_height * (720/1080);
+
+                //check if overlay 1080p or 720p (no other size supported for the moment
+                var is1080pOverlay = false;
+                //it's just a tips, no info to know really execpt to check image size
+                if((custom_viewport_height > 720) || (custom_viewport_width > 1280)){
+                    is1080pOverlay = true
                 }
+
+                //variables
+                let initialOverlayRatio;
+                let overlayNewWidth;
+                let OverlayWidthRatio;
+
+                //calculate initial ratio of image
+                let initialImageRatio = custom_viewport_width / custom_viewport_height;
+                //console.log("initialImageRatio : ",initialImageRatio);
+
+                //size of root
+                //console.log("root.width : ", root.width);
+                //console.log("root.height : ", root.height);
+                //initial values
+                //console.log("custom_viewport_x : ", custom_viewport_x);
+                //console.log("custom_viewport_y : ", custom_viewport_y);
+                //console.log("custom_viewport_height : ", custom_viewport_height);
+                //console.log("custom_viewport_width : ", custom_viewport_width);
+
+                if(is1080pOverlay === true){
+                    //initial ratio overlay in 1080p
+                    initialOverlayRatio = 1920 / 1080;
+                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                    //we start by height and y
+                    custom_viewport_y = custom_viewport_y * (root.height/1080);
+                    custom_viewport_height = custom_viewport_height * (root.height/1080);
+                    //x is more complex to recalculate
+                    //need to calculate the new size of overlay display (include cut)
+                    overlayNewWidth = root.height * initialOverlayRatio;
+                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                    OverlayWidthRatio = overlayNewWidth / 1920;
+                }
+                else{
+                    //initial ratio overlay in 720p
+                    initialOverlayRatio = 1280 / 720;
+                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                    //we start by height and y
+                    custom_viewport_y = custom_viewport_y * (root.height/720);
+                    custom_viewport_height = custom_viewport_height * (root.height/720);
+                    //x is more complex to recalculate
+                    //need to calculate the new size of overlay display (include cut)
+                    overlayNewWidth = root.height * initialOverlayRatio;
+                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                    OverlayWidthRatio = overlayNewWidth / 1280;
+                }
+                //we adapt x width and x from height
+                custom_viewport_width = custom_viewport_height * initialImageRatio;
+                //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
+                custom_viewport_x = (custom_viewport_x * OverlayWidthRatio) - ((overlayNewWidth - root.width)/2);
+
+                //value change
+                //console.log("custom_viewport_x : ", custom_viewport_x);
+                //console.log("custom_viewport_y : ", custom_viewport_y);
+                //console.log("custom_viewport_height : ", custom_viewport_height);
+                //console.log("custom_viewport_width : ", custom_viewport_width);
             }
         }
         //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
