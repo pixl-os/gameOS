@@ -179,11 +179,6 @@ FocusScope {
         id: settingsModel
 
         ListElement {
-            settingName: "Game View"
-            setting: "Grid,Vertical List"
-        }
-
-        ListElement {
             settingName: "Allow video thumbnails"
             setting: "Yes,No"
             settingNameDisplay: qsTr("Allow video thumbnails")
@@ -383,12 +378,17 @@ FocusScope {
         id: gridSettingsModel
 
         ListElement {
+            settingName: "Platform page style"
+            setting: "Grid,Vertical List"
+        }
+
+        ListElement {
             settingName: "Grid Thumbnail"
             setting: "Wide,Tall,Square,Box Art"
             settingNameDisplay: qsTr("Grid Thumbnail")
             settingDisplay: qsTr("Wide,Tall,Square,Box Art")
-
         }
+
         ListElement {
             settingName: "Number of columns"
             setting: "3,4,5,6,7,8"
