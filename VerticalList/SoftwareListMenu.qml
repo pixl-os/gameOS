@@ -41,7 +41,137 @@ FocusScope {
     property real itemheight: vpx(50)
     property int skipnum: 10
 
+    property var sortedGames: null;
+    property bool isLeftTriggerPressed: false;
+    property bool isRightTriggerPressed: false;
+
+    function nextChar(c, modifier) {
+        const firstAlpha = 97;
+        const lastAlpha = 122;
+
+        var charCode = c.charCodeAt(0) + modifier;
+
+        if (modifier > 0) { // Scroll down
+            if (charCode < firstAlpha || isNaN(charCode)) {
+                return 'a';
+            }
+            if (charCode > lastAlpha) {
+                return '';
+            }
+        } else { // Scroll up
+            if (charCode === firstAlpha - 1) {
+                return '';
+            }
+            if (charCode < firstAlpha || charCode > lastAlpha || isNaN(charCode)) {
+                return 'z';
+            }
+        }
+
+        return String.fromCharCode(charCode);
+    }
+
+    function navigateToNextLetter(modifier) {
+        if (sortByFilter[sortByIndex].toLowerCase() !== "title") {
+            return false;
+        }
+
+        var currentIndex = softwarelist.currentIndex;
+        if (currentIndex === -1) {
+            softwarelist.currentIndex = 0;
+        }
+        else {
+            // NOTE: We should be using the scroll proxy here, but this is significantly faster.
+            if (sortedGames === null) {
+                sortedGames = list.collection.games.toVarArray().map(g => g.title.toLowerCase()).sort((a, b) => a.localeCompare(b));
+            }
+
+            var currentGameTitle = sortedGames[currentIndex];
+            var currentLetter = currentGameTitle.toLowerCase().charAt(0);
+
+            const firstAlpha = 97;
+            const lastAlpha = 122;
+
+            if (currentLetter.charCodeAt(0) < firstAlpha || currentLetter.charCodeAt(0) > lastAlpha) {
+                currentLetter = '';
+            }
+
+            var nextIndex = currentIndex;
+            var nextLetter = currentLetter;
+
+            do {
+                do {
+                    nextLetter = nextChar(nextLetter, modifier);
+
+                    if (currentLetter === nextLetter) {
+                        break;
+                    }
+
+                    if (nextLetter === '') {
+                        if (sortedGames.some(g => g.toLowerCase().charCodeAt(0) < firstAlpha || g.toLowerCase().charCodeAt(0) > lastAlpha)) {
+                            break;
+                        }
+                    }
+                    else if (sortedGames.some(g => g.charAt(0) === nextLetter)) {
+                        break;
+                    }
+                } while (true)
+
+                nextIndex = sortedGames.findIndex(g => g.toLowerCase().localeCompare(nextLetter) >= 0);
+            } while(nextIndex === -1)
+
+            softwarelist.currentIndex = nextIndex;
+
+            nextLetter = sortedGames[nextIndex].toLowerCase().charAt(0);
+            var nextLetterCharCode = nextLetter.charCodeAt(0);
+            if (nextLetterCharCode < firstAlpha || nextLetterCharCode > lastAlpha) {
+                nextLetter = '#';
+            }
+
+            navigationLetterOpacityAnimator.running = false
+            navigationLetter.text = nextLetter.toUpperCase();
+            navigationOverlay.opacity = 0.8;
+            navigationLetterOpacityAnimator.running = true
+        }
+
+        softwarelist.focus = true;
+        sfxToggle.play();
+
+        return true;
+    }
+
     ListCollectionGames { id: list; }
+
+    Rectangle {
+        id: navigationOverlay
+        anchors.fill: parent;
+        color: theme.main
+        opacity: 0
+        z: 10
+
+        Text {
+            id: navigationLetter
+            antialiasing: true
+            renderType: Text.NativeRendering
+            font.hintingPreference: Font.PreferNoHinting
+            font.family: titleFont.name
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: vpx(200)
+            color: "white"
+            anchors.centerIn: parent
+        }
+
+        SequentialAnimation {
+            id: navigationLetterOpacityAnimator
+            PauseAnimation { duration: 500 }
+            OpacityAnimator {
+
+                target: navigationOverlay
+                from: navigationOverlay.opacity
+                to: 0;
+                duration: 500
+            }
+        }
+    }
 
     Component.onCompleted: {
         //to set game to display
@@ -271,6 +401,38 @@ FocusScope {
         gameview.focus = true;
     }
 
+    Keys.onReleased: {
+        // Scroll Down - use R1 now
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            //to reset demo
+            resetDemo();
+            return;
+        }
+
+        // Scroll Up - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            return;
+        }
+
+        // Next collection - R2 now
+        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
+            isRightTriggerPressed = false;
+            return;
+        }
+
+        // Previous collection - L2 now
+        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
+            isLeftTriggerPressed = false;
+            return;
+        }
+    }
+
     Keys.onPressed: {
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
@@ -315,6 +477,68 @@ FocusScope {
                 sfxToggle.play();
                 list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
             //}
+        }
+        // Scroll Down - use R1 now
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            navigateToNextLetter(+1);
+            return;
+        }
+
+        // Scroll Up - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            navigateToNextLetter(-1);
+            return;
+        }
+
+        // Next collection - R2 now
+        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            if (isRightTriggerPressed) {
+                return;
+            }
+            else isRightTriggerPressed = true;
+            if (currentCollectionIndex < api.collections.count-1)
+                currentCollectionIndex++;
+            else
+                currentCollectionIndex = 0;
+
+            softwarelist.currentIndex = 0;
+            //set currentgame also
+            currentGameIndex = softwarelist.currentIndex;
+            currentGame = list.currentGame(softwarelist.currentIndex)
+
+            sfxToggle.play();
+
+            // Reset our cached sorted games
+            sortedGames = null;
+            return;
+        }
+
+        // Previous collection - use L2 now
+        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            if (isLeftTriggerPressed) {
+                return;
+            }
+            else isLeftTriggerPressed = true;
+
+            if (currentCollectionIndex > 0)
+                currentCollectionIndex--;
+            else
+                currentCollectionIndex = api.collections.count-1;
+
+            softwarelist.currentIndex = 0;
+            //set currentgame also
+            currentGameIndex = softwarelist.currentIndex;
+            currentGame = list.currentGame(softwarelist.currentIndex)
+
+            sfxToggle.play();
+
+            // Reset our cached sorted games
+            sortedGames = null;
+            return;
         }
     }
 
