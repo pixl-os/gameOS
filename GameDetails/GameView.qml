@@ -157,14 +157,19 @@ FocusScope {
 
             //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
             if ((game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
+            if (game.assets.boxFront3d !== "") mediaList.push(game.assets.boxFront3d);
             if (game.assets.boxBack !== "") mediaList.push(game.assets.boxBack);
             if (game.assets.boxSpine !== "") mediaList.push(game.assets.boxSpine);
             if (game.assets.boxFull !== "") mediaList.push(game.assets.boxFull);
             if ((game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
+            if (game.assets.cartridgetexture !== "") mediaList.push(game.assets.cartridgetexture);
             if (game.assets.logo !== "") mediaList.push(game.assets.logo);
+            if (game.assets.logocarbon !== "") mediaList.push(game.assets.logocarbon);
+            if (game.assets.logosteel !== "") mediaList.push(game.assets.logosteel);
             if (game.assets.poster !== "") mediaList.push(game.assets.poster);
 
             if (game.assets.marquee !== "") mediaList.push(game.assets.marquee);
+            if (game.assets.screenmarqueesmall !== "") mediaList.push(game.assets.screenmarqueesmall);
             if (game.assets.bezel !== "") mediaList.push(game.assets.bezel);
             if (game.assets.panel !== "") mediaList.push(game.assets.panel);
             if (game.assets.cabinetLeft !== "") mediaList.push(game.assets.cabinetLeft);
@@ -178,6 +183,7 @@ FocusScope {
 
             if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
 
+            if (game.assets.map !== "") mediaList.push(game.assets.map);
         }
 
         return mediaList;
