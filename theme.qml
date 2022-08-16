@@ -96,7 +96,7 @@ FocusScope {
             FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
             SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "2",
             SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
-            NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "7",
+            NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "6",
             SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
             SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
             SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "60%",
