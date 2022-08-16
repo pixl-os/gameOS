@@ -2,6 +2,47 @@
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
 ## [recalbox-integration] - Next
+- new design management :
+	- Introduction of parameters to 'design' themes
+	- first way to select list to be focus at theme loading 
+	- new parameter to manage ratio of icon in systems list
+	- add round beta logo and change screenshots to imageviewer
+	- add more parameters to configure system logos
+	- system list and logo sizing/position fixed
+	- add support of system music for custom
+	- add management of region and especially for systems list background for the moment
+	- add recalbox.conf parameter to activate the designer from theme
+	- manage default, custom or no theme logo in theme designer
+	-  add more ratio percentages capability from 5% to 100% now.
+	- change default logo to use the pixl one
+	- restore info to add favorites when video is displayed
+	- add more parameters for video/favorites banner and systems list
+	- improvement and flexibility for video management now (keep linked to favorites banner
+	- add width for theme logo management
+	- introduce new component in theme to manage details/description on systems
+	- add screenscraper regional management
+	- rework SettingsScreen to have dedicated "Designer" menu
+	- beta version of detail lists, still to improve management of data/position
+	- cleaning unused parameters for the moment from settings
+	- integration of path expression to manage link/path dynamically
+	- improvements to well manage backgrounds finally and other details for systems list
+	- reactivation softwareListMenu + some adaptations
+	- some fixes to well play/stop music
+	- tentative using gameview directly
+	- add "embedded" property to manage behavior in vertical list
+	- to manage focus of embedded gameview, listview and helps
+	- add feature for "embedded" + improvements shorcuts/helps
+	- improve help for vertical game list view and assocaited commands
+	- new feature to display hash (crc32) in game info
+	- optimization of margin + auto horizontal scrolling for details and title
+	- optimization to manage position in purcentage for embedded or not
+	- keep focus on details when we come back in list
+	- using purcentage to calculate size of logo for embedded or not gameview
+	- add icon in media of gameview for manuals
+	- change name and place for selection of grid or vertical list
+	- add L1/R1 and L2/R2 management in vertical list
+	- dynamic calculations for 1080p & 72Op overlays and all screen resolutions
+
 - emulator-loading-improvements :
 	- stop playing video if lost focus (onCanPlayVideoChanged)
 	- deactivate LaunchGameScreen() in multiwindows cases
