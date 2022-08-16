@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
 ## [recalbox-integration] - Next
+- emulator-loading-improvements :
+	- stop playing video if lost focus (onCanPlayVideoChanged)
+	- deactivate LaunchGameScreen() in multiwindows cases
+	- introduction of rotation animation for button component
+	- introduce 'play game' button using spinner when game is launhed in multi-windows mode
+	- change finally to use api and not any variable
+	- usage of api.launchedgame in gameview to animate "play game" button
+	- ignore L1/R2 if guide button is pressed
+	- spinner management for game running in multi-windows mode
+	- change using global variable to check Guide Button state
+	
 - multi-languages-support :
 	- add project files to manage linguist tool now for translations
 	- add first .ts files for fr, en_GB and en_US genarted by lupdate

@@ -195,15 +195,18 @@ FocusScope {
     // Launch the current game
     function launchGame(game) {
         if (game !== null) {
-            //if (game.collections.get(0).name === "Steam")
-            launchGameScreen();
-
+            //if pegasus.multiwindows is no activated
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
+              launchGameScreen();
+            }
             saveCurrentState(game);
             game.launch();
         } else {
-            //if (currentGame.collections.get(0).name === "Steam")
-            launchGameScreen();
-
+            console.log("launchGame(game) with game is null");
+            //if pegasus.multiwindows is no activated
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
+              launchGameScreen();
+            }
             saveCurrentState(currentGame);
             currentGame.launch();
         }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.12
+import QtQuick 2.15
 
 FocusScope {
     id: root
@@ -22,6 +22,8 @@ FocusScope {
     property bool selected
     property alias text: buttonlabel.text
     property alias icon: buttonicon.source
+    property alias iconRotation: iconRotation
+
     property alias buttonWidth: container.width
     property real buttonMargin: vpx(25)
     width: container.width
@@ -58,6 +60,15 @@ FocusScope {
             anchors { left: parent.left; leftMargin: iconMargin }
             //anchors.horizontalCenter: (buttonlabel.text === "") ? parent.horizontalCenter : parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            RotationAnimator on rotation {
+                id: iconRotation
+                loops: Animator.Infinite;
+                from: 0;
+                to: 360;
+                duration: 500
+                running: false
+            }
         }
         
         Text {
