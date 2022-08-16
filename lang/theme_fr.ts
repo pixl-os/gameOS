@@ -58,6 +58,10 @@
         <source>No description available</source>
         <translation>Description indisponible</translation>
     </message>
+    <message>
+        <source>File hash</source>
+        <translation>Hash du fichier</translation>
+    </message>
 </context>
 <context>
     <name>GameView</name>
@@ -653,6 +657,10 @@
         <source>Next/Change/Edit</source>
         <translation>Continue/Change/Edite</translation>
     </message>
+    <message>
+        <source>Show file hash</source>
+        <translation>Montrer le hash du fichier</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -696,16 +704,16 @@
         <translation>Retour</translation>
     </message>
     <message>
-        <source>Order</source>
-        <translation>Ordre</translation>
+        <source>Toggle favorite</source>
+        <translation>Basculer Favoris</translation>
     </message>
     <message>
-        <source>Filter</source>
-        <translation>Filtre</translation>
+        <source>Filters/Search</source>
+        <translation>Filtres/Recherche</translation>
     </message>
     <message>
-        <source>View details</source>
-        <translation>Voir détails</translation>
+        <source>Launch</source>
+        <translation>Lancer</translation>
     </message>
 </context>
 <context>
