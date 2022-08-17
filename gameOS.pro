@@ -125,6 +125,7 @@ DISTFILES += \
     assets/images/icon_details.svg \
     assets/images/icon_down.png \
     assets/images/icon_heart.svg \
+    assets/images/icon_manual.png \
     assets/images/icon_mediaplayer.svg \
     assets/images/icon_play.svg \
     assets/images/icon_unheart.svg \

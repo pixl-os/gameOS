@@ -34,7 +34,7 @@ Item {
 		{
 			videoPreviewLoader.sourceComponent = undefined;
 			videoDelay.stop();
-			videoToStop = false;
+            //videoToStop = false;
 		}
 	}
 

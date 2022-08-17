@@ -20,16 +20,18 @@ import QtGraphicalEffects 1.0
 import SortFilterProxyModel 0.2
 import QtQml.Models 2.12
 import QtMultimedia 5.12
+import "qrc:/qmlutils" as PegasusUtils
+import "../utils.js" as Utils
 import "../Global"
 import "../GridView"
 import "../Lists"
-import "../utils.js" as Utils
 import "../Search"
 
 FocusScope {
     id: root
 
     property var game: api.allGames.get(0)
+    property bool embedded : false
     property bool readyForNeplay: isReadyForNetplay(game)
     property string favIcon: game && game.favorite ? "../assets/images/icon_unheart.svg" : "../assets/images/icon_heart.svg"
     property string collectionName: game ? game.collections.get(0).name : ""
@@ -128,14 +130,70 @@ FocusScope {
                 custom_viewport_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 custom_viewport_width = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_width\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 custom_viewport_height = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_height\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
-                //check if overlay 1080p or 720p
-                if((appWindow.height < custom_viewport_height) || (appWindow.width < custom_viewport_width)){
-                    //Need to divide by 2 because the overlay is certainly in 1080p and Window in 720p
-                    custom_viewport_x = custom_viewport_x * (1280/1920);
-                    custom_viewport_y = custom_viewport_y * (720/1080);
-                    custom_viewport_width = custom_viewport_width * (1280/1920);
-                    custom_viewport_height = custom_viewport_height * (720/1080);
+
+                //check if overlay 1080p or 720p (no other size supported for the moment
+                var is1080pOverlay = false;
+                //it's just a tips, no info to know really execpt to check image size
+                if((custom_viewport_height > 720) || (custom_viewport_width > 1280)){
+                    is1080pOverlay = true
                 }
+
+                //variables
+                let initialOverlayRatio;
+                let overlayNewWidth;
+                let OverlayWidthRatio;
+
+                //calculate initial ratio of image
+                let initialImageRatio = custom_viewport_width / custom_viewport_height;
+                //console.log("initialImageRatio : ",initialImageRatio);
+
+                //size of root
+                //console.log("root.width : ", root.width);
+                //console.log("root.height : ", root.height);
+                //initial values
+                //console.log("custom_viewport_x : ", custom_viewport_x);
+                //console.log("custom_viewport_y : ", custom_viewport_y);
+                //console.log("custom_viewport_height : ", custom_viewport_height);
+                //console.log("custom_viewport_width : ", custom_viewport_width);
+
+                if(is1080pOverlay === true){
+                    //initial ratio overlay in 1080p
+                    initialOverlayRatio = 1920 / 1080;
+                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                    //we start by height and y
+                    custom_viewport_y = custom_viewport_y * (root.height/1080);
+                    custom_viewport_height = custom_viewport_height * (root.height/1080);
+                    //x is more complex to recalculate
+                    //need to calculate the new size of overlay display (include cut)
+                    overlayNewWidth = root.height * initialOverlayRatio;
+                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                    OverlayWidthRatio = overlayNewWidth / 1920;
+                }
+                else{
+                    //initial ratio overlay in 720p
+                    initialOverlayRatio = 1280 / 720;
+                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                    //we start by height and y
+                    custom_viewport_y = custom_viewport_y * (root.height/720);
+                    custom_viewport_height = custom_viewport_height * (root.height/720);
+                    //x is more complex to recalculate
+                    //need to calculate the new size of overlay display (include cut)
+                    overlayNewWidth = root.height * initialOverlayRatio;
+                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                    OverlayWidthRatio = overlayNewWidth / 1280;
+                }
+                //we adapt x width and x from height
+                custom_viewport_width = custom_viewport_height * initialImageRatio;
+                //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
+                custom_viewport_x = (custom_viewport_x * OverlayWidthRatio) - ((overlayNewWidth - root.width)/2);
+
+                //value change
+                //console.log("custom_viewport_x : ", custom_viewport_x);
+                //console.log("custom_viewport_y : ", custom_viewport_y);
+                //console.log("custom_viewport_height : ", custom_viewport_height);
+                //console.log("custom_viewport_width : ", custom_viewport_width);
             }
         }
         //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
@@ -144,8 +202,8 @@ FocusScope {
         //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
     }
 
-    ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10 }
-    ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10 }
+    ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
+    ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10; enabled: embedded ? false : true }
 
     // Combine the video and the screenshot arrays into one
     function mediaArray() {
@@ -195,7 +253,7 @@ FocusScope {
     }
 
     // Reset the screen to default state
-    function reset() {
+    function reset(){
         content.currentIndex = 0;
         menu.currentIndex = 0;
         media.savedIndex = 0;
@@ -203,7 +261,29 @@ FocusScope {
         list2.savedIndex = 0;
         screenshot.opacity = 1;
         mediaScreen.opacity = 0;
-        toggleVideo(true);
+        if(!embedded){
+            //to start video for new game
+            toggleVideo(true);
+            //launch initialization of retroachievements
+            //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+            game.initRetroAchievements();
+            //init overlays parameters
+            root.getOverlaysParameters();
+        }
+        else{
+            //to be sure to stop video in all cases -> improve really perfrmance of scrolling !!!
+            videoPreviewLoader.sourceComponent = undefined;
+            videoDelay.stop();
+            fadescreenshot.stop();
+            //to avoid issue with retroachievements loading
+            retroachievementsOpacity = 0;
+            achievements.selected = false;
+            root.focus = false;
+            root.parent.focus = true;
+            //launch video with additional second in case of embedded
+            videoEmbeddedLaunch.restart();
+        }
+
     }
 
 	function setRetroAchievements(){
@@ -278,18 +358,10 @@ FocusScope {
         currentHelpbarModel = gameviewHelpModel;
     }
 
-
-
-
     onGameChanged: {
-                //console.log("GameView - onGameChanged");
-				//reset default value for a new game loading
-				reset();
-				//launch initialization of retroachievements
-				//the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
-				game.initRetroAchievements();
-                //init overlays parameters
-                root.getOverlaysParameters();
+        //console.log("GameView - onGameChanged");
+        //reset default value for a new game loading
+        reset();
 	}	
 
 	Connections {
@@ -302,12 +374,6 @@ FocusScope {
 
     anchors.fill: parent
 
-    GridSpacer {
-        id: fakebox
-
-        width: vpx(100); height: vpx(100)
-    }
-
     // Video
     // Show/hide the video
     function toggleVideo(toggle) {
@@ -319,15 +385,32 @@ FocusScope {
       } else {
         stopvideo.stop();
         // Turn on video
-        if (canPlayVideo)
+        //console.log("Turn on video");
+        if(canPlayVideo)
             videoDelay.restart();
       }
+    }
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: videoEmbeddedLaunch
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 1000
+        onTriggered: {
+            //console.log("videoEmbeddedLaunch.onTriggered");
+            if (embedded) {
+                toggleVideo(true);
+            }
+        }
     }
 
     // Timer to show the video
     Timer {
         id: videoDelay
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             if (game && game.assets.videos.length && canPlayVideo) {
@@ -340,7 +423,9 @@ FocusScope {
     // NOTE: Next fade out the bg so there is a smooth transition into the video
     Timer {
         id: fadescreenshot
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             screenshot.opacity = 0;
@@ -351,7 +436,9 @@ FocusScope {
 
     Timer {
         id: stopvideo
-
+        running: false
+        triggeredOnStart: false
+        repeat: false
         interval: 1000
         onTriggered: {
             videoPreviewLoader.sourceComponent = undefined;
@@ -522,7 +609,7 @@ FocusScope {
 
     }
 
-    // Clear logo
+    // Game logo
     Image {
         id: logo
         anchors {
@@ -530,14 +617,14 @@ FocusScope {
             left:{
                 if (settings.GameLogoPosition === "Left") return parent.left;
             }
-            leftMargin: (settings.GameLogoPosition === "Left") ? vpx(70) : 0
+            leftMargin: (settings.GameLogoPosition === "Left") ? (parent.width * (parseFloat("5%")/100)) : 0
             right:{
                 if (settings.GameLogoPosition === "Right") return parent.right;
             }
-            rightMargin: (settings.GameLogoPosition === "Right") ? vpx(70) : 0
+            rightMargin: (settings.GameLogoPosition === "Right") ? (parent.width * (parseFloat("5%")/100)) : 0
         }
-        width: vpx(500)
-        height: vpx(450) + header.height
+        width: (parent.width * (parseFloat("40%")/100))
+        height: (parent.height * (parseFloat("60%")/100)) + header.height
         source: game ? Utils.logo(game) : ""
         fillMode: Image.PreserveAspectFit
         asynchronous: true
@@ -575,7 +662,7 @@ FocusScope {
         visible: settings.GameLogo === "Show"
     }
 
-    // Platform title
+    // Game title
     Text {
         id: gametitle
 
@@ -659,10 +746,10 @@ FocusScope {
 
             anchors { 
                 top: parent.top; topMargin: vpx(100)
-                left: parent.left; leftMargin: vpx(70)
-                right: parent.right; rightMargin: vpx(70)
+                left: parent.left; leftMargin: (parent.width * (parseFloat("5%")/100))
+                right: parent.right; rightMargin: (parent.width * (parseFloat("5%")/100))
             }
-            height: vpx(484) - header.height
+            height: vpx(parent.height * (parseFloat("70%")/100)) - header.height
 
             GameAchievements {
             id: achievements
@@ -695,18 +782,18 @@ FocusScope {
             id: details
 
             anchors {
-                top: parent.top; topMargin: vpx(100)
-                left: parent.left; leftMargin: vpx(70)
-                right: parent.right; rightMargin: vpx(70)
+                top: parent.top; topMargin: parent.height * (parseFloat("15%")/100) //vpx(100)
+                left: parent.left; leftMargin: parent.width * (parseFloat("3%")/100) //vpx(70)
+                right: parent.right; rightMargin: parent.width * (parseFloat("3%")/100) //vpx(70)
             }
-            height: vpx(450) - header.height
+            height: (parent.height * (parseFloat("70%")/100)) - header.height //vpx(450)
 
             Image {
                 id: boxart
 
                 source: Utils.boxArt(game);
-                //width: vpx(350)
-                height: parent.height
+                width: embedded ? (parent.width * (parseFloat("25%")/100)) : (parent.width * (parseFloat("30%")/100))
+                height: parent.height * (parseFloat("95%")/100)
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
                 smooth: true
@@ -714,10 +801,10 @@ FocusScope {
 
             GameInfo {
                 id: info
-
                 anchors {
-                    left: boxart.right; leftMargin: vpx(30)
-                    top: parent.top; bottom: parent.bottom; right: parent.right
+                    left: boxart.right; leftMargin: parent.width * (parseFloat("3%")/100); //vpx(30)
+                    right: parent.right;
+                    top: parent.top; bottom: parent.bottom;
                 }
             }
         }
@@ -830,7 +917,7 @@ FocusScope {
 
             text: qsTr("Play game") + api.tr
             height: parent.height
-            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus
+            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             property var launchedGame: api.launchedgame
             property var selectedGame : game
@@ -940,7 +1027,7 @@ FocusScope {
 
             icon: "../assets/images/icon_details.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -959,7 +1046,7 @@ FocusScope {
             //text: buttonText
             icon: favIcon
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
@@ -977,11 +1064,22 @@ FocusScope {
             //text: "Back"
             icon: "../assets/images/icon_back.svg"
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
-                if (selected)
-                    previousScreen();
+                if (selected) {
+                    if(embedded) {
+                        if (retroachievementsOpacity === 1) {
+                            detailsOpacity = 1;
+                            retroachievementsOpacity = 0;
+                            achievements.selected = false;
+                            content.focus = true;
+                        }
+                        root.focus = false;
+                        root.parent.focus = true;
+                    }
+                    else previousScreen();
+                }
                 else {
                     sfxNav.play(); 
                     menu.currentIndex = ObjectModel.index;
@@ -993,7 +1091,7 @@ FocusScope {
             icon: readyForNeplay ? "../assets/images/multiplayer.svg" : "../assets/images/icon_cup.svg"
             text: readyForNeplay ? qsTr("Netplay") + api.tr : ""
             height: parent.height
-            selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: readyForNeplay || (!readyForNeplay && (game.retroAchievementsCount !== 0)) ? true : false
             enabled : visible
@@ -1022,7 +1120,7 @@ FocusScope {
             icon: "../assets/images/icon_cup.svg"
             text: ""
             height: parent.height
-			selected: ListView.isCurrentItem && menu.focus
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             visible: ((game.retroAchievementsCount !== 0) && readyForNeplay) ? true : false
             enabled : visible
@@ -1049,12 +1147,26 @@ FocusScope {
             property bool selected: parent.focus
             focus: selected
             width: parent.width
-            height: vpx(110) // to put media more at the bottom
+            height:vpx(parent.height * (parseFloat("9%")/100))
             model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
+                                    //if embedded and if we do left to come back to list
+                                    if (root.embedded ? !root.parent.focus : false){
+                                        if(currentIndex === 0){
+                                            if (retroachievementsOpacity === 1) {
+                                                detailsOpacity = 1;
+                                                retroachievementsOpacity = 0;
+                                                achievements.selected = false;
+                                                content.focus = true;
+                                            }
+                                            root.focus = false;
+                                            root.parent.focus = true;
+                                        }
+                                    }
+
                                     //console.log("Menu - Keys.onLeftPressed");
 									sfxNav.play(); 
 									do{	
@@ -1109,34 +1221,56 @@ FocusScope {
         // More by publisher
         HorizontalCollection {
             id: list1
-            visible: (demoLaunched !== true)
             property bool selected: ListView.isCurrentItem
-            focus: selected
-            width: root.width - vpx(70) - globalMargin
-            height: itemHeight + vpx(60)
-            itemWidth: (root.width - globalMargin * 2) / 4.0
-            itemHeight: itemWidth * settings.WideRatio
+            property var currentList: list1
+            property var collection: publisherCollection
+
+            enabled: (demoLaunched !== true) && collection.enabled
+            visible: (demoLaunched !== true) && collection.enabled
+
+            width: root.width - globalMargin * 2
+            itemWidth: (width / 4.0);
+            itemHeight: itemWidth * settings.WideRatio;
+            height: itemHeight + vpx(40) + globalMargin
 
             title: game ? qsTr("More games by") + api.tr + " " + game.publisher : ""
-            search: publisherCollection
-            onListHighlighted: { sfxNav.play(); content.currentIndex = list1.ObjectModel.index; }
+            search: collection
+
+            focus: selected
+
+            x: globalMargin - vpx(8)
+
+            onActivate: { if (!selected) { content.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); content.currentIndex = currentList.ObjectModel.index; }
         }
+
 
         // More in genre
         HorizontalCollection {
             id: list2
-            visible: (demoLaunched !== true)
             property bool selected: ListView.isCurrentItem
-            focus: selected
-            width: root.width - vpx(70) - globalMargin
-            height: itemHeight + vpx(60)
-            itemWidth: (root.width - globalMargin * 2) / 8.0
-            itemHeight: itemWidth / settings.TallRatio
+            property var currentList: list2
+            property var collection: genreCollection
+
+            enabled: (demoLaunched !== true) && collection.enabled
+            visible: (demoLaunched !== true) && collection.enabled
+
+            width: root.width - globalMargin * 2
+            itemWidth: (width / 8.0);
+            itemHeight: itemWidth / settings.TallRatio;
+            height: itemHeight + vpx(40) + globalMargin
 
             title: game ? qsTr("More games of") + " " + game.genreList[0].toLowerCase() + api.tr  : ""
-            search: genreCollection
-            onListHighlighted: { sfxNav.play(); content.currentIndex = list2.ObjectModel.index; }
+            search: collection
+
+            focus: selected
+
+            x: globalMargin - vpx(8)
+
+            onActivate: { if (!selected) { content.currentIndex = currentList.ObjectModel.index; } }
+            onListHighlighted: { sfxNav.play(); content.currentIndex = currentList.ObjectModel.index; }
         }
+
 
     }
 
@@ -1146,23 +1280,24 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: header.height
+            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + header.height + (root.embedded ? 0 : (parent.height * (parseFloat("3%")/100)))) : header.height //vpx(450 + 75)
             bottom: parent.bottom; bottomMargin: vpx(150)
         }
         model: extrasModel
         focus: true
         spacing: vpx(30)
-        header: Item { height: vpx(450) }
-
         snapMode: ListView.SnapToItem
         highlightMoveDuration: 100
         displayMarginEnd: 150
         cacheBuffer: 250
         onCurrentIndexChanged: {
-            if (content.currentIndex === 0) {
-                toggleVideo(true);
-            } else {
-                toggleVideo(false);
+            //console.log("onCurrentIndexChanged - focus: ", root.focus);
+            if(root.focus){
+                if (content.currentIndex === 0) {
+                    toggleVideo(true);
+                } else {
+                    toggleVideo(false);
+                }
             }
         }
         keyNavigationWraps: true
@@ -1204,18 +1339,45 @@ FocusScope {
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            if (mediaScreen.visible)
-                closeMedia();
-            else
-                previousScreen();
+            if(embedded){
+                if (retroachievementsOpacity === 1) {
+                    detailsOpacity = 1;
+                    retroachievementsOpacity = 0;
+                    achievements.selected = false;
+                    content.focus = true;
+                }
+                root.focus = false;
+                root.parent.focus = true;
+            }
+            else{
+                if (mediaScreen.visible)
+                    closeMedia();
+                else
+                    previousScreen();
+            }
         }
-        // Filters
-        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+        // Toggle Favorite
+        if (api.keys.isDetails(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxAccept.play();
             game.favorite = !game.favorite;
         }
 
+        // Launch Netplay
+        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            sfxToggle.play();
+            if(readyForNeplay){
+                //to force focus & reload dialog
+                netplayRoomDialog.focus = false;
+                netplayRoomDialog.active = false;
+                netplayRoomDialog.game = game; //set game
+                netplayRoomDialog.active = true;
+                netplayRoomDialog.focus = true;
+            }
+        }
+
+        if(!embedded){
         // Next game
         if (api.keys.isNextPage(event) && !event.isAutoRepeat && !global.guideButtonPressed) {
             event.accepted = true;
@@ -1238,6 +1400,7 @@ FocusScope {
                 currentGameIndex = game.collections.get(0).games.count-1;
             gameDetails(game.collections.get(0).games.get(currentGameIndex));
             lastState[lastState.length-1] = "showcasescreen";
+            }
         }
     }
 
@@ -1251,6 +1414,10 @@ FocusScope {
         }
         ListElement {
             name: qsTr("Toggle favorite")
+            button: "details"
+        }
+        ListElement {
+            name: qsTr("Netplay")
             button: "filters"
         }
         ListElement {
@@ -1261,13 +1428,29 @@ FocusScope {
 
     onFocusChanged: {
         if (focus) {
+            if(embedded){
+                //activate collections
+                publisherCollection.enabled = true;
+                genreCollection.enabled = true;
+                //launch video
+                toggleVideo(true);
+                //launch initialization of retroachievements
+                //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+                game.initRetroAchievements();
+                //init overlays parameters
+                root.getOverlaysParameters();
+            }
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
             menu.currentIndex = 0;
         } 
-	else {
-            screenshot.opacity = 1;
-            toggleVideo(false);
+        else {
+            if(embedded){
+                //deactivate collections
+                publisherCollection.enabled = false;
+                genreCollection.enabled = false;
+                toggleVideo(false);
+            }
         }
     }
 

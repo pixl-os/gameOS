@@ -22,7 +22,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
 import QtGraphicalEffects 1.12
-import QtMultimedia 5.12
+import QtMultimedia 5.15
 import QtQml.Models 2.12
 import "../Global"
 import "../GridView"
@@ -48,12 +48,9 @@ FocusScope {
 		//still to find a solution for "HorizontalCollection" loading dynamically
 		//that's why we can't change the number dynamically for the moment
 		//warning: index start from 0 but Colletions from 1
-	
-		//property alias listMyCollection: listMyCollectionLoader.item;
 		delegate: 
 		Loader {
 			id: listLoader
-			//source: Utils.isCollectionTypeRequested("My Collection 1") ? "../Lists/ListMyCollection.qml" : ""
 			source: getListSourceFromIndex(index + 1) // get qml file to load from index of "settings.ShowcaseCollectionX"
 			asynchronous: true
 			property bool measuring: false
@@ -330,7 +327,7 @@ FocusScope {
 
     }
 
-    property bool ftue: featuredCollection.games.count == 0
+    property bool ftue: featuredCollection.games.count === 0
 
     function storeIndices(secondary) {
         storedHomePrimaryIndex = mainList.currentIndex;
@@ -342,93 +339,27 @@ FocusScope {
 
     anchors.fill: parent
 
-	//ftueContainer
-    Item {
-        id: ftueContainer
-
-        width: parent.width
-        height: vpx(360)
-        visible: ftue
-        opacity: {
-            switch (mainList.currentIndex) {
-            case 0:
-                return 1;
-            case 1:
-                return 0.3;
-            case 2:
-                return 0.1;
-            case -1:
-                return 0.3;
-            default:
-                return 0
-            }
-        }
-        Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
-
-        //        Image {
-        //            anchors.fill: parent
-        //            source: "../assets/images/ftueBG01.jpeg"
-        //            sourceSize { width: root.width; height: root.height}
-        //            fillMode: Image.PreserveAspectCrop
-        //            smooth: true
-        //            asynchronous: true
-        //        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: "black"
-            opacity: 0.5
-        }
-
-        Video {
-            id: videocomponent
-
-            anchors.fill: parent
-            source: "../assets/video/ftue.mp4"
-            fillMode: VideoOutput.PreserveAspectCrop
-            muted: true
-            loops: MediaPlayer.Infinite
-            autoPlay: true
-
-            OpacityAnimator {
-                target: videocomponent
-                from: 0;
-                to: 1;
-                duration: 1000;
-                running: true;
-            }
-
-        }
-
-        Image {
-            id: ftueLogo
-
-            width: vpx(350)
-            anchors { left: parent.left; leftMargin: globalMargin }
-            source: "../assets/images/gameOS-logo.png"
-            sourceSize: Qt.size(parent.width, parent.height)
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            asynchronous: true
-            anchors.centerIn: parent
-        }
-
-        Text {
-            text: "Try adding some favorite games"
-
-            horizontalAlignment: Text.AlignHCenter
-            anchors { bottom: parent.bottom; bottomMargin: vpx(75) }
-            width: parent.width
-            height: contentHeight
-            color: theme.text
-            font.family: subtitleFont.name
-            font.pixelSize: vpx(16)
-            opacity: 0.5
-            visible: false
-        }
+    //ScreenScraper regions
+    ListModel {
+        id: regionSSModel
+        ListElement { region: "us" }
+        ListElement { region: "wor"}
+        ListElement { region: "eu" }
+        ListElement { region: "wor"}
+        ListElement { region: "jp"}
+        ListElement { region: "wor"}
     }
-	
-	//header
+
+    function getInitialRegionIndex(){
+        for(var i = 0; i < regionSSModel.count; i++){
+            if(settings.PreferedRegion === regionSSModel.get(i).region){
+                return i;
+            }
+        }
+        return 0; //eu by default
+    }
+
+    //header
     Item {
         id: header
 
@@ -438,15 +369,15 @@ FocusScope {
         Image {
             id: logo
 
-            width: vpx(150)
-            anchors { left: parent.left; leftMargin: globalMargin }
-            source: "../assets/images/gameOS-logo.png"
+            width: vpx(parseInt(designs.ThemeLogoWidth))
+            anchors { left: parent.left; leftMargin: vpx(20); top: parent.top; topMargin: vpx(20); }
+            source: (designs.ThemeLogoSource === "Default") ? "../assets/images/logo_white.png" : ((designs.ThemeLogoSource === "Custom") ? "../assets/custom/logo.png" : "")
             sourceSize: Qt.size(parent.width, parent.height)
             fillMode: Image.PreserveAspectFit
             smooth: true
             asynchronous: true
-            anchors.verticalCenter: parent.verticalCenter
-            visible: !ftueContainer.visible
+            //anchors.verticalCenter: parent.verticalCenter
+            visible: !ftueContainer.visible && (designs.ThemeLogoSource !== "No")
         }
 
         Rectangle {
@@ -473,7 +404,12 @@ FocusScope {
                     mainList.currentIndex = 0;
             }
 
-            Keys.onDownPressed: mainList.focus = true;
+            Keys.onDownPressed: {
+                mainList.focus = true;
+                while (!mainList.currentItem.enabled) {
+                    mainList.incrementCurrentIndex();
+                }
+            }
             Keys.onPressed: {
 				if (!viewIsLoading){
 					// Accept
@@ -484,7 +420,10 @@ FocusScope {
 					// Back
 					if (api.keys.isCancel(event) && !event.isAutoRepeat) {
 						event.accepted = true;
-						mainList.focus = true;
+                        mainList.focus = true;
+                        while (!mainList.currentItem.enabled) {
+                            mainList.incrementCurrentIndex();
+                        }
 					}
 				}
             }
@@ -539,18 +478,171 @@ FocusScope {
         }
     }
 
+
     // Using an object model to build the main list using other lists
     ObjectModel {
         id: mainModel
+
+        property var regionSSIndex : getInitialRegionIndex();
+
+        function findObjectAndMove(object,newPosition){
+            for(var i = 0; i < mainModel.count; i++){
+                if(mainModel.get(i) === object){ //need to move it
+                   //console.log("findObjectAndMove : ","move ",i," to ",newPosition);
+                   mainModel.move(i, newPosition , 1);
+                   return; //to exit immediately from function
+                }
+            }
+        }
+
+        function processPathExpression(pathExpression,systemSelected){
+            pathExpression = pathExpression.replace("{region}",settings.PreferedRegion);
+            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+            return pathExpression
+        }
+
+        function processPathExpressionNoRegion(pathExpression,systemSelected){
+            //to put region part as empty
+            pathExpression = pathExpression.replace("{region}","");
+            //to replace // by / if region is a directory
+            pathExpression = pathExpression.replace("//","/");
+            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+            return pathExpression
+        }
+
+
+        function processPathExpressionScreenScraper(pathExpression,systemSelected,regionIndexUsed){
+            pathExpression = pathExpression.replace("{screenscraper_region}",regionSSModel.get(regionIndexUsed).region);
+            pathExpression = pathExpression.replace("{screenscraper_id}",systemSelected.screenScraperId);
+            return pathExpression
+        }
+
+
+
+        Component.onCompleted: {
+            //set position of Video Banner (id: ftueContainer)
+            if(designs.VideoBannerPosition !== "No") findObjectAndMove(ftueContainer,parseInt(designs.VideoBannerPosition));
+            //set position of Favorites Banner (id: featuredlist)
+            if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
+            //set position of Systems List (id: platformlist)
+            if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
+            //set position of System Details (id: detailedlist)
+            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));
+        }
+
+        //ftueContainer
+        ListView{
+            id: ftueContainer
+            property bool selected : ListView.isCurrentItem
+
+            visible: (ftue || (designs.FavoritesBannerPosition !== designs.VideoBannerPosition)) && (designs.VideoBannerPosition !== "No")  //if no favorites or not same position between video/favorites
+            enabled: (designs.FavoritesBannerPosition === designs.VideoBannerPosition) && visible // we let selectable only if visible and video/favorites are linked by the same position on the screen.
+            width: appWindow.width
+            height: visible ? (appWindow.height * (parseFloat(designs.VideoBannerRatio)/100)) : 0
+            opacity: focus ? 1 : 0.7
+            //DEPREACETED, remove opacity rules
+            /*opacity: {
+                switch (mainList.currentIndex) {
+                case 0:
+                    return 1;
+                case 1:
+                    return 0.3;
+                case 2:
+                    return 0.1;
+                case -1:
+                    return 0.3;
+                default:
+                    return 0
+                }
+            }*/
+
+            Behavior on opacity { PropertyAnimation { duration: 1000; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 } }
+
+            //        Image {
+            //            anchors.fill: parent
+            //            source: "../assets/images/ftueBG01.jpeg"
+            //            sourceSize { width: root.width; height: root.height}
+            //            fillMode: Image.PreserveAspectCrop
+            //            smooth: true
+            //            asynchronous: true
+            //        }
+
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+                opacity: 0.5
+            }
+
+            Video {
+                id: videocomponent
+
+                anchors.fill: parent
+                source: {
+                    if(designs.VideoBannerSource === "Default"){
+                        return "../assets/video/ftue.mp4"
+                    }
+                    else{
+                        //unique url or path, no variable data for the moment
+                        return designs.VideoBannerPathExpression;
+                    }
+                }
+                fillMode: VideoOutput.PreserveAspectCrop
+                muted: true
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+
+                OpacityAnimator {
+                    target: videocomponent
+                    from: 0;
+                    to: 1;
+                    duration: 1000;
+                    running: true;
+                }
+
+            }
+
+            Image {
+                id: ftueLogo
+
+                width: vpx(350)
+                anchors { left: parent.left; leftMargin: globalMargin }
+                source: (designs.VideoBannerLogoSource === "Default") ? "../assets/images/logo.png" : "" // no possibility to have video with other log for the moment
+                sourceSize: Qt.size(parent.width, parent.height)
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                asynchronous: true
+                anchors.centerIn: parent
+                visible: designs.VideoBannerLogoSource !== "No"
+            }
+
+            Text {
+                text: qsTr("Try adding some favorite games") + api.tr
+
+                anchors { bottom: parent.bottom; bottomMargin: vpx(15)
+                          right: parent.right; rightMargin: vpx (15)
+                    }
+                width: contentWidth
+                height: contentHeight
+                color: theme.text
+                font.family: subtitleFont.name
+                font.pixelSize: vpx(16)
+                opacity: 0.5
+                visible: ftueContainer.focus && (designs.FavoritesBannerPosition === designs.VideoBannerPosition) //if same position, need to inform about favorites mechanism
+            }
+        }
 
 		// Favorites list at top with screenshot/fanart/marquee and logos
         ListView {
             id: featuredlist
 
-            property bool selected: ListView.isCurrentItem
-            focus: selected
-            width: parent.width
-            height: vpx(360)
+            property bool selected : ListView.isCurrentItem
+            //focus: selected
+            width: appWindow.width
+
+            height: visible ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
+            visible: (designs.FavoritesBannerPosition === "No")  ? false : (designs.FavoritesBannerPosition === designs.VideoBannerPosition) && ftue ? false : true
+            enabled: visible
+
             spacing: vpx(0)
             orientation: ListView.Horizontal
             clip: true
@@ -562,7 +654,9 @@ FocusScope {
             snapMode: ListView.SnapOneItem
             keyNavigationWraps: true
             currentIndex: (storedHomePrimaryIndex == 0) ? storedHomeSecondaryIndex : 0
-            Component.onCompleted: positionViewAtIndex(currentIndex, ListView.Visible)
+            Component.onCompleted: {
+                positionViewAtIndex(currentIndex, ListView.Visible)
+            }
 
             model: !ftue ? featuredCollection.games : 0
             delegate: featuredDelegate
@@ -663,7 +757,6 @@ FocusScope {
 			}	
 
 			// List specific input
-            Keys.onUpPressed: settingsbutton.focus = true;
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
             Keys.onPressed: {
@@ -674,7 +767,7 @@ FocusScope {
 	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
 	                    if (!ftue)
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
-	                }
+                    }
 				}
             }
         }
@@ -683,14 +776,17 @@ FocusScope {
         ListView {
             id: platformlist
 
-            property bool selected: ListView.isCurrentItem
+            property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
-            focus: selected
-            width: root.width
-            height: vpx(100) + globalMargin * 2
+            width: appWindow.width
+
+            height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
+            visible: designs.SystemsListPosition !== "No" ? true : false
+            enabled: visible
+
             anchors {
-                left: parent.left; leftMargin: globalMargin
-                right: parent.right; rightMargin: globalMargin
+                left: parent.left;
+                right: parent.right;
             }
             spacing: vpx(12)
             orientation: ListView.Horizontal
@@ -709,58 +805,154 @@ FocusScope {
                     savedIndex = currentIndex;
                     currentIndex = -1;
                 }
+                if(!focus){
+                    if(designs.SystemMusicSource !== "No") playMusic.stop();
+                }
             }
 
             Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
 
             model: api.collections//Utils.reorderCollection(api.collections);
+
             delegate: Rectangle {
-                property bool selected: ListView.isCurrentItem && platformlist.focus
-                width: (root.width - globalMargin * 2) / 7.0
-                height: width * settings.WideRatio
-                //                color: selected ? theme.accent : theme.secondary
+                id:rectangleLogo
+                property bool selected: ListView.isCurrentItem
+                width: platformlist.width / parseFloat(designs.NbSystemLogos)
+                height: platformlist.height
                 color: "transparent"
+                property string shortName: modelData.shortName
+                Image {
+                    id: systemBackground
+                    visible: (designs.SystemsListBackground !== "No") ? true : false
+                    height: rectangleLogo.height
+                    width: rectangleLogo.width
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    z:-1
+                    source:{
+                        if(designs.SystemsListBackground === "Custom"){
+                            // for {region} & {shortname} tags
+                            return mainModel.processPathExpression(designs.SystemsListBackgroundPathExpression, modelData)
+                        }
+                        else return "";
+                    }
+                }
 
-                scale: selected ? 1.1 : 1
-                Behavior on scale { NumberAnimation { duration: 100 } }
-                //                border.width: vpx(1)
-                //                border.color: "#19FFFFFF"
 
-//                anchors.verticalCenter: parent.verticalCenter
+                onSelectedChanged: {
+                    //console.log("selected : ",selected)
+                    if(selected && (designs.SystemMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
+                    }
+                    else{
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                }
+
+                onActiveFocusChanged: {
+                    console.log("Focus changed to " + focus)
+                    console.log("Active Focus changed to " + activeFocus)
+                    if(selected && (designs.SystemMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
+                    }
+                    else{
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                }
+
+                Audio {
+                    id: playMusic
+                    loops: Audio.Infinite
+                    source: {
+                        if (designs.SystemMusicSource === "Custom") {
+                            if (modelData.shortName !=="imageviewer"){
+                                return mainModel.processPathExpression(designs.SystemMusicPathExpression,modelData)
+                            }
+                            else return "";
+                        }
+                        else if(designs.SystemMusicSource !== "No") {
+                            return ""; //to do
+                        }
+                        else return "";
+                    }
+                }
 
                 Image {
                     id: collectionlogo
-
-                    anchors.fill: parent
-                    anchors.centerIn: parent
-                    anchors.margins: vpx(15)
+                    height: parent.height * (parseFloat(designs.SystemLogoRatio)/100)
+                    width: parent.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     source: {
-                        if(settings.SystemLogoStyle === "White")
-                        {
-                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                        if (designs.SystemLogoSource === "Custom"){
+                            // for {region} & {shortname} tags
+                            var result = mainModel.processPathExpression(designs.SystemLogoPathExpression,modelData)
+                            return result;
+
+                            //for test purpose, need to do new parameters using prefix and sufix in path
+                            //return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/" + settings.PreferedRegion + "/logo_right.svg";
                         }
-                        else
-                        {
-                            return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                        else if(designs.SystemLogoSource !== "No"){
+                            if(settings.SystemLogoStyle === "White")
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                            }
+                            else
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                            }
                         }
-                    }
-                    sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    }                      
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    opacity: selected ? 1 : 0.3
-                    scale: selected ? 1.1 : 1
+                    opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
+                    scale: selected ? 0.9 : 0.8
                     Behavior on scale { NumberAnimation { duration: 100 } }
-
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            //for test purpose, need to do new parameters using prefix and sufix in path
+                            //change source in case of error
+                            //source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
+                            source = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
+                        }
+                    }
                     Image{
-                        id: alphaLogo
-                        anchors.top: parent.top
+                        id: betaLogo
+                        anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
                         width: parent.width/2
                         height: parent.height/2
 
                         //to alert when system is in beta
-                        source: "../assets/images/beta.png";
+                        source: "../assets/images/beta-round.png";
+                        fillMode: Image.PreserveAspectFit
+                        asynchronous: true
+                        smooth: true
+                        scale: selected ? 0.9 : 0.8
                         //for the moment, just check if first core for this system still low
                         visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
                     }
@@ -785,11 +977,11 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
 
-                    anchors.top: parent.bottom
+                    anchors.top: collectionlogo.bottom
 
                     width: parent.width
 
-                    opacity: 0.2
+                    opacity: designs.NbSystemLogos === "1" ?  0.0 : 0.2
                     visible: settings.AlwaysShowTitles === "Yes" || selected
                 }
 
@@ -805,7 +997,7 @@ FocusScope {
                     font.family: subtitleFont.name
                     font.bold: true
                     style: Text.Outline; styleColor: theme.main
-                    visible: collectionlogo.status == Image.Error
+                    visible: collectionlogo.status === Image.Error && (designs.NbSystemLogos === "1" ? selected : true)
                     anchors.centerIn: parent
                     elide: Text.ElideRight
                     wrapMode: Text.WordWrap
@@ -847,10 +1039,352 @@ FocusScope {
 					}
 				}
             }
-
         }
 
-		//first list
+        // Details/Description list by system
+        ListView {
+            id: detailedlist
+            width: appWindow.width
+            height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
+            visible: designs.SystemDetailsPosition !== "No" ? true : false
+            enabled: false //not selectable
+
+            anchors {
+                left: parent.left; leftMargin: globalMargin
+                right: parent.right; rightMargin: globalMargin
+            }
+
+            spacing: vpx(12)
+            orientation: ListView.Horizontal
+            preferredHighlightBegin: vpx(0)
+            preferredHighlightEnd: parent.width - vpx(60)
+            highlightRangeMode: ListView.ApplyRange
+            snapMode: ListView.SnapOneItem
+            highlightMoveDuration: 100
+            keyNavigationWraps: true
+            currentIndex: platformlist.currentIndex
+            Component.onCompleted: {}
+            model: api.collections//Utils.reorderCollection(api.collections);
+
+            delegate: Rectangle {
+                width: detailedlist.width
+                height: detailedlist.height
+                color: "transparent"
+                property string shortName: modelData.shortName
+
+                Image {
+                    id: detailsBackground
+                    visible: designs.SystemDetailsBackground !== "No" ? true : false
+                    anchors.centerIn: parent
+                    anchors.margins: 0
+                    width: appWindow.width
+                    height: designs.SystemDetailsPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemDetailsRatio)/100) : 0
+                    property var regionIndexUsed: mainModel.regionSSIndex
+                    source: {
+                        //for test purpose, need to do new parameters using prefix and sufix in path
+                        if(designs.SystemDetailsBackground === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsBackgroundPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                        }
+                        else if(designs.SystemsListBackground !== "No") {
+                            return ""; //RFU
+                        }
+                        else return ""; // N/A
+                    }
+                    fillMode: Image.Stretch
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsBackgroundPathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                //change source in case of error
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=background&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                            }
+
+                        }
+                    }
+                }
+
+                //RFU
+                /*Image {
+                    id: detailsHardware3DCasePicture
+                    anchors.left : parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(15)
+                    height: parent.height
+                    width: parent.width / 4
+                    property var regionIndexUsed: mainModel.regionSSIndex
+                    source: {
+                        if(designs.SystemDetailsSource === "ScreenScraper"){
+                            if(modelData.screenScraperId !=="0"){
+                                return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
+                            }
+                            else return "";
+                        }
+                        else //to do for other cases
+                        {
+                            return "";
+                        }
+                    }
+                    //sourceSize: Qt.size(collectionlogo.width, collectionlogo.height)
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    //opacity: selected ? 1 : (designs.NbSystemLogos === "1" ? 0.0 : 0.3)
+                    //scale: selected ? 0.9 : 0.8
+                    //Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                //change source in case of error
+                                source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=BoitierConsole3D&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                            }
+                        }
+                    }
+                }*/
+
+                Image {
+                    id: detailsHardwarePicture
+
+                    anchors.left : parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+                    property var regionIndexUsed: mainModel.regionSSIndex
+                    source: {
+                        if(designs.SystemDetailsHardware === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                        }
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
+                        }
+                        else return ""; // N/A
+                    }
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = pmainModel.rocessPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                //change source in case of error
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                            }
+
+                        }
+                    }
+                }
+
+                //RFU
+/*                Text {
+                    id: detailsDescription
+
+                    //for test purpose
+                    text: modelData.name
+
+                    //anchors { fill: parent; margins: vpx(10) }
+
+                    anchors.left : detailsHardwarePicture.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(15)
+                    height: parent.height
+                    width: parent.width / 3
+
+                    color: theme.text
+                    font.pixelSize: vpx(18)
+                    font.family: subtitleFont.name
+                    font.bold: true
+                    style: Text.Outline; styleColor: theme.main
+
+                    elide: Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    lineHeight: 0.8
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    visible: true
+                }
+*/
+
+                Video{
+                    id: detailsVideo
+
+                    anchors.left : detailsHardwarePicture.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+
+                    property var regionIndexUsed: mainModel.regionSSIndex
+
+                    source:{
+                        if(designs.SystemDetailsVideo === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsVideoPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                        }
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
+                        }
+                        else return ""; // N/A
+                    }
+                    fillMode: VideoOutput.PreserveAspectFit
+                    muted: true
+                    loops: MediaPlayer.Infinite
+                    autoPlay: true
+
+                    OpacityAnimator {
+                        target: detailsVideo
+                        from: 0;
+                        to: 1;
+                        duration: 1000;
+                        running: true;
+                    }
+                }
+
+                Image {
+                    id: detailsControllerPicture
+                    anchors.left : detailsVideo.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: vpx(5)
+                    height: vpx(parent.height - 5*2)
+                    width: parent.width / 3
+                    property var regionIndexUsed: mainModel.regionSSIndex
+
+                    source: {
+                        if(designs.SystemDetailsController === "Custom"){
+                            var pathExpression;
+                            //process path/url for system/region selected if needed
+                            pathExpression = mainModel.processPathExpression(designs.SystemDetailsControllerPathExpression, modelData);
+                            //process path/url for screenscraper parameters if needed
+                            return mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                            //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                            //return "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + settings.PreferedRegion + "&num=&version=&maxwidth=640&maxheight=";
+
+                        }
+                        else if(designs.SystemDetailsHardware !== "No") {
+                            return ""; //RFU
+                        }
+                        else return ""; // N/A
+                    }
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            if(regionIndexUsed < regionSSModel.count-1){
+                                regionIndexUsed = regionIndexUsed + 1;
+                            }
+                            else{
+                                regionIndexUsed = 0;
+                            }
+                            if(regionSSModel.get(regionIndexUsed).region !== settings.PreferedRegion){
+                                var pathExpression;
+                                //process path/url for system/region selected if needed
+                                pathExpression = mainModel.processPathExpression(designs.SystemDetailsControllerPathExpression, modelData);
+                                //process path/url for screenscraper parameters if needed
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
+                                //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
+                                //change source in case of error
+                                //source = "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=controller&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight="
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        //first list
         HorizontalCollection {
             id: list1
             property bool selected: ListView.isCurrentItem
@@ -1192,9 +1726,23 @@ FocusScope {
         cacheBuffer: 1000
         footer: Item { height: helpMargin }
 
+        Component.onCompleted:{
+            //to manage focus
+            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
+            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 3;
+            //if you add new component, please put existing index/order before to change position at this place
+            mainList.currentIndex = storedHomePrimaryIndex;
+        }
+
         Keys.onUpPressed: {
             sfxNav.play();
             do {
+                if(currentIndex === 0){
+                    settingsbutton.focus = true;
+                    break;
+                }
                 decrementCurrentIndex();
             } while (!currentItem.enabled);
         }

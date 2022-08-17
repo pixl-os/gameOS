@@ -58,6 +58,10 @@
         <source>No description available</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>File hash</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GameView</name>
@@ -653,6 +657,18 @@
         <source>Next/Change/Edit</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Show file hash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prefered region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Regional Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -688,6 +704,10 @@
         <source>Loading Collection</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Try adding some favorite games</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SoftwareListMenu</name>
@@ -696,15 +716,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Order</source>
+        <source>Toggle favorite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Filter</source>
+        <source>Filters/Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>View details</source>
+        <source>Launch</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

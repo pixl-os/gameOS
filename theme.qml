@@ -83,10 +83,46 @@ FocusScope {
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
     FontLoader { id: bodyFont; source: "assets/fonts/OpenSans-Semibold.ttf" }
 
+    // Load designer settings
+    property var designs: {
+        return {
+            InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Systems list",
+            VideoBannerPosition:           api.memory.has("Video Banner screen position") ? api.memory.get("Video Banner screen position") : "0",
+            VideoBannerRatio:              api.memory.has("Video Banner screen ratio") ? api.memory.get("Video Banner screen ratio") : "50%",
+            VideoBannerSource:             api.memory.has("Video Banner source") ? api.memory.get("Video Banner source") : "Default",
+            VideoBannerLogoSource:         api.memory.has("Video Banner logo source") ? api.memory.get("Video Banner logo source") : "Default",
+            VideoBannerPathExpression:     api.memory.has("Video Banner path expression") ? api.memory.get("Video Banner path expression") : "",
+            FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
+            FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
+            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "2",
+            SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
+            NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "6",
+            SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
+            SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
+            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "60%",
+            SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
+            SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
+            SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
+            SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
+            SystemDetailsPosition:       api.memory.has("System Details screen position") ? api.memory.get("System Details screen position") : "No",
+            SystemDetailsRatio:          api.memory.has("System Details screen ratio") ? api.memory.get("System Details screen ratio") : "30%",
+            SystemDetailsBackground:         api.memory.has("System Details background source") ? api.memory.get("System Details background source") : "No",
+            SystemDetailsBackgroundPathExpression:         api.memory.has("System Details background path expression") ? api.memory.get("System Details background path expression") : "",
+            SystemDetailsVideo:         api.memory.has("System Details video source") ? api.memory.get("System Details video source") : "No",
+            SystemDetailsVideoPathExpression:         api.memory.has("System Details video path expression") ? api.memory.get("System Details video path expression") : "",
+            SystemDetailsHardware:         api.memory.has("System Details hardware source") ? api.memory.get("System Details hardware source") : "No",
+            SystemDetailsHardwarePathExpression:         api.memory.has("System Details hardware path expression") ? api.memory.get("System Details hardware path expression") : "",
+            SystemDetailsController:         api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
+            SystemDetailsControllerPathExpression:         api.memory.has("System Details controller path expression") ? api.memory.get("System Details controller path expression") : "",
+            ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
+            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
+        }
+    }
+
     // Load settings
     property var settings: {
         return {
-            PlatformView:                  api.memory.has("Game View") ? api.memory.get("Game View") : "Grid",
+            PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
             GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
             GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "3",
             GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
@@ -115,6 +151,7 @@ FocusScope {
             OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
 			ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
+            ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
 			DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
@@ -134,7 +171,8 @@ FocusScope {
 			ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
 			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
 			DemoTriggeringDelay:		   api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
-			DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No"		
+            DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
+            PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
         }
     }
 
@@ -194,7 +232,7 @@ FocusScope {
 
     // Launch the current game
     function launchGame(game) {
-        if (game !== null) {
+        if (typeof(game) !== "undefined") {
             //if pegasus.multiwindows is no activated
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
               launchGameScreen();

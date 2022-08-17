@@ -24,17 +24,19 @@ Item {
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(publisherGames.mapToSource(index)) }
     property int max: publisherGames.count
+    property bool enabled: true
 
     property string publisher: "Nintendo"
 
     SortFilterProxyModel {
         id: publisherGames
-
+        delayed: true
         sourceModel: api.allGames
-        sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder }
-        filters: [RegExpFilter { roleName: "publisher"; pattern: publisher; caseSensitivity: Qt.CaseInsensitive; },
-		         RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; }, // USE HASH to avoid consecutive same games on different regions
-				 ExpressionFilter {
+        sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }
+        filters: [RegExpFilter { roleName: "publisher"; pattern: publisher; caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  },
+                 RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  }, // USE HASH to avoid consecutive same games on different regions
+                 ExpressionFilter {
+                    enabled: root.enabled
 					expression: {
 						return (Math.random() <= 0.33); // to get 1/3 of games total.
 					}
@@ -44,9 +46,9 @@ Item {
 
     SortFilterProxyModel {
         id: gamesFiltered
-
+        delayed: true
         sourceModel: publisherGames
-        filters: IndexFilter { maximumIndex: max - 1 }
+        filters: IndexFilter { maximumIndex: max - 1; enabled: root.enabled}
     }
 
     property var collection: {

@@ -25,29 +25,41 @@ Item {
     property var gameData: currentGame
 
     // Game title
-    Text {
+    PegasusUtils.HorizontalAutoScroll{
         id: gametitle
-        
-        text: gameData ? gameData.title : ""
-        
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
+
         anchors {
             top:    parent.top;
             left:   parent.left;
             right:  parent.right
         }
-        
-        color: theme.text
-        font.family: titleFont.name
-        font.pixelSize: vpx(44)
-        font.bold: true
-        horizontalAlignment: Text.AlignHLeft
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+        height: vpx(60)
+
+        Text {
+            id: gametitletext
+
+            text: gameData ? gameData.title : ""
+
+            color: theme.text
+            font.family: titleFont.name
+            font.pixelSize: vpx(44)
+            font.bold: true
+            horizontalAlignment: Text.AlignHLeft
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     // Meta data
-    Item {
+    PegasusUtils.HorizontalAutoScroll{
         id: metarow
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
 
         height: vpx(40)
         anchors {
@@ -55,7 +67,6 @@ Item {
             left: parent.left
             right: parent.right
         }
-
         // Rating box
         Text {
             id: ratingtitle
@@ -89,7 +100,7 @@ Item {
             id: divider1
             width: vpx(2)
             anchors {
-                left: ratingtext.right; leftMargin: (25)
+                left: ratingtext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -102,7 +113,7 @@ Item {
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider1.right; leftMargin: vpx(25) }
+            anchors { left: divider1.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: qsTr("Players") + ": " + api.tr
             font.pixelSize: vpx(16)
@@ -128,7 +139,7 @@ Item {
             id: divider2
             width: vpx(2)
             anchors {
-                left: playerstext.right; leftMargin: (25)
+                left: playerstext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -141,7 +152,7 @@ Item {
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider2.right; leftMargin: vpx(25) }
+            anchors { left: divider2.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: qsTr("Genre") + ": " + api.tr
             font.pixelSize: vpx(16)
@@ -153,24 +164,25 @@ Item {
         Text {
             id: genretext
 
-            anchors {
-                left: genretitle.right; leftMargin: vpx(5)
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
+            width: contentWidth
+            height: parent.height
+            anchors { left: genretitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: gameData ? gameData.genre : ""
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
-            elide: Text.ElideRight
             color: theme.text
         }
     }
 
     // Meta data
-    Item {
+    PegasusUtils.HorizontalAutoScroll
+    {
         id: metarow_2
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
 
         height: vpx(40)
         anchors {
@@ -211,7 +223,7 @@ Item {
             id: divider1_2
             width: vpx(2)
             anchors {
-                left: releasetext.right; leftMargin: (25)
+                left: releasetext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -225,7 +237,7 @@ Item {
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider1_2.right; leftMargin: vpx(25) }
+            anchors { left: divider1_2.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: qsTr("File name") + ": " + api.tr
             font.pixelSize: vpx(16)
@@ -256,11 +268,63 @@ Item {
 			visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
+        Rectangle {
+            id: divider2_2
+            width: vpx(2)
+            anchors {
+                left: filenametext.right; leftMargin: (5)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+            visible: (settings.ShowFilehash == "Yes") ? true : false
+        }
+
+        // File hash
+        Text {
+            id: filehashtitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider2_2.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("File hash") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
+        Text {
+            id: filehashtext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: filehashtitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+                if (gameData){
+                    return gameData.hash + " (crc32)";
+                }
+                else return "";
+            }
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
     }
 
     // Meta data
-    Item {
+    PegasusUtils.HorizontalAutoScroll
+    {
         id: metarow_3
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
 
         height: vpx(40)
         anchors {
@@ -301,7 +365,7 @@ Item {
             id: divider1_3
             width: vpx(2)
             anchors {
-                left: playtimetext.right; leftMargin: (25)
+                left: playtimetext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -314,7 +378,7 @@ Item {
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider1_3.right; leftMargin: vpx(25) }
+            anchors { left: divider1_3.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: qsTr("Play count") + ": " + api.tr
             font.pixelSize: vpx(16)
@@ -340,7 +404,7 @@ Item {
             id: divider2_3
             width: vpx(2)
             anchors {
-                left: playcounttext.right; leftMargin: (25)
+                left: playcounttext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -353,7 +417,7 @@ Item {
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider2_3.right; leftMargin: vpx(25) }
+            anchors { left: divider2_3.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: qsTr("Last played") + ": " + api.tr
             font.pixelSize: vpx(16)
@@ -390,6 +454,7 @@ Item {
             color: theme.text
         }
     }
+
     // Description
     PegasusUtils.AutoScroll
     {

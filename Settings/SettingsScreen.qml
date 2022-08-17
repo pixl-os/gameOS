@@ -25,12 +25,159 @@ FocusScope {
     id: root
 
     ListModel {
+        id: designsModel
+        ListElement {
+            settingName: "Initial Focus on"
+            setting: "Systems list,Video Banner,Favorites Banner,System Details"
+        }
+        ListElement {
+            settingName: "Video Banner screen position"
+            setting: "0,1,2,3,No"
+        }
+        ListElement {
+            settingName: "Video Banner screen ratio"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+        }
+        ListElement {
+            settingName: "Video Banner source"
+            setting: "Default,Custom" //Other idea for later ",Random,BySystem"
+        }
+        ListElement {
+            settingName: "Video Banner logo source"
+            setting: "Default,No"
+        }
+        ListElement {
+            settingName: "Video Banner path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Favorites Banner screen position"
+            setting: "0,1,2,3,No"
+        }
+        ListElement {
+            settingName: "Favorites Banner screen ratio"
+            setting: "50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,20%,25%,30%,35%,40%,45%"
+        }
+        ListElement {
+            settingName: "Systems list screen position"
+            setting: "2,3,No,0,1"
+        }
+        ListElement {
+            settingName: "Systems list screen ratio"
+            setting: "20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%"
+        }
+        ListElement {
+            settingName: "Systems list background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Systems list background path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Number of System logos visible"
+            setting: "7,8,9,10,1,2,3,4,5,6"
+        }
+        ListElement {
+            settingName: "System logo ratio"
+            setting: "60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%"
+        }
+        ListElement {
+            settingName: "System logo source"
+            setting: "Default,Custom,No"
+        }
+        ListElement {
+            settingName: "System logo path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System music source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System music path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details screen position"
+            setting: "No,0,1,2,3"
+        }
+        ListElement {
+            settingName: "System Details screen ratio"
+            setting: "30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%"
+        }
+        ListElement {
+            settingName: "System Details background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details background path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details video source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details video path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details hardware source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details hardware path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "System Details controller source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "System Details controller path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Theme logo source"
+            setting: "Default,Custom,No"
+        }
+        ListElement {
+            settingName: "Theme logo width"
+            setting: "100,125,150,175,200,50,75"
+        }
+
+        //after this line, parameters not yet took into account, just ideas ;-)
+        /*
+        ListElement {
+            settingName: "Systems list direction"
+            setting: "Horizontal,Vertical-left,Vertical-right"
+        }
+        ListElement {
+            settingName: "Systems group display"
+            setting: "No,Yes"
+        }
+        ListElement {
+            settingName: "Systems display in group"
+            setting: "When Selected, Always"
+        }
+        ListElement {
+            settingName: "Collections display"
+            setting: "In home page, In a dedicated system, Both"
+        }*/
+
+    }
+
+    property var designerPage: {
+        return {
+            pageName: "Home page design",
+            listmodel: designsModel
+        }
+    }
+
+    ListModel {
         id: settingsModel
 
-        /*ListElement {
-            settingName: "Game View"
-            setting: "Grid,Vertical List"
-        }*/
         ListElement {
             settingName: "Allow video thumbnails"
             setting: "Yes,No"
@@ -231,12 +378,17 @@ FocusScope {
         id: gridSettingsModel
 
         ListElement {
+            settingName: "Platform page style"
+            setting: "Grid,Vertical List"
+        }
+
+        ListElement {
             settingName: "Grid Thumbnail"
             setting: "Wide,Tall,Square,Box Art"
             settingNameDisplay: qsTr("Grid Thumbnail")
             settingDisplay: qsTr("Wide,Tall,Square,Box Art")
-
         }
+
         ListElement {
             settingName: "Number of columns"
             setting: "3,4,5,6,7,8"
@@ -345,6 +497,12 @@ FocusScope {
             settingDisplay: qsTr("No,Yes")
         }
         ListElement {
+            settingName: "Show file hash"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Show file hash")
+            settingDisplay: qsTr("No,Yes")
+        }
+        ListElement {
             settingName: "Show play stats"
             setting: "No,Yes"
             settingNameDisplay: qsTr("Show play stats")
@@ -371,8 +529,27 @@ FocusScope {
         }
     }
 
-    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, advancedPage]
+    ListModel {
+        id: regionalSettingsModel
+
+        ListElement {
+            settingName: "Prefered region"
+            setting: "eu,jp,us"
+            settingNameDisplay: qsTr("Prefered region")
+        }
+    }
+
+    property var regionalPage: {
+        return {
+            pageName: qsTr("Regional Settings") + api.tr,
+            listmodel: regionalSettingsModel
+        }
+    }
+
+    property var designerArr: [designerPage]
+    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
     property real itemheight: vpx(50)
+    property var settingsCol: []
 
     ListModel {
         id: myCollectionsSettingsModel
@@ -456,20 +633,22 @@ FocusScope {
         }
     }
 
-     property var myCollections: {
+    property var myCollections: {
         return {
             pageName: qsTr("My Collections") + api.tr,
             listmodel: myCollectionsSettingsModel
         }
     }
 
-	property var settingsCol: []
-
 	Component.onCompleted: {
+
+        if(api.internal.recalbox.getBoolParameter("theme.designer")) settingsList.model = designerArr[pagelist.currentIndex].listmodel;
+        else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+
 		//for 10 collections to display on showcase (main page)
 		//-> possibility to have more in the future for HomePage
 		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
-		addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
+        addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
 		//generate My collection(s), no limit ;-)
 		initializeMyCollections();
 	}
@@ -573,10 +752,150 @@ FocusScope {
 	}
 
     Rectangle {
+        id: headerdev
+        visible : api.internal.recalbox.getBoolParameter("theme.designer")
+        anchors {
+            top: parent.top
+            left: parent.left
+            //right: parent.right
+        }
+        height: api.internal.recalbox.getBoolParameter("theme.designer") ? vpx(75) : 0
+        width: designertitle.contentWidth
+        color: theme.main
+
+        // Designer title
+        Text {
+            id: designertitle
+
+            text: "Designer (Dev only)"
+
+            anchors {
+                top: parent.top;
+                left: parent.left; leftMargin: globalMargin
+                bottom: parent.bottom
+            }
+
+            color: theme.text
+            font.family: titleFont.name
+            font.pixelSize: vpx(30)
+            font.bold: true
+            opacity: 1
+            horizontalAlignment: Text.AlignHLeft
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+
+            // Mouse/touch functionality
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    previousScreen();
+                }
+            }
+        }
+    }
+
+    ListView {
+        id: pagelistdev
+        visible : api.internal.recalbox.getBoolParameter("theme.designer")
+        focus: api.internal.recalbox.getBoolParameter("theme.designer") ? true : false
+        anchors {
+            top: headerdev.bottom
+            //bottom: parent.bottom; bottomMargin: helpMargin
+            left: parent.left; leftMargin: globalMargin
+        }
+        height: api.internal.recalbox.getBoolParameter("theme.designer") ? contentHeight : 0
+        width: vpx(300)
+        model: designerArr
+        delegate: Component {
+            id: pageDevDelegate
+
+            Item {
+                id: pageRow
+
+                property bool selected: ListView.isCurrentItem && pagelistdev.focus
+
+                width: ListView.view.width
+                height: itemheight
+
+                // Page name
+                Text {
+                    id: pageNameText
+
+                    text: modelData.pageName
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(22)
+                    font.bold: true
+                    verticalAlignment: Text.AlignVCenter
+                    opacity: selected ? 1 : 0.2
+
+                    width: contentWidth
+                    height: parent.height
+                    anchors {
+                        left: parent.left; leftMargin: vpx(25)
+                    }
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: { sfxNav.play(); }
+                    onClicked: {
+                        sfxNav.play();
+                        pagelistdev.currentIndex = index;
+                        settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+                        settingsList.focus = true;
+                    }
+                }
+
+            }
+        }
+
+        Keys.onUpPressed: {
+            sfxNav.play(); decrementCurrentIndex();
+            settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+        Keys.onDownPressed: {
+            sfxNav.play();
+            var previousIndex = currentIndex;
+            incrementCurrentIndex();
+            if (previousIndex == currentIndex)
+            {
+                pagelistdev.focus = false
+                pagelist.focus = true
+                //displayMyCollectionsHelp(true);
+                headertitle.opacity = 1
+                designertitle.opacity = 0.2
+                pagelist.currentIndex = 0;
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            }
+            else
+            {
+                settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+        }
+        Keys.onPressed: {
+            // Accept
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                sfxAccept.play();
+                settingsList.focus = true;
+            }
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                previousScreen();
+            }
+        }
+
+    }
+
+    Rectangle {
         id: header
 
         anchors {
-            top: parent.top
+            top: pagelistdev.bottom
             left: parent.left
             //right: parent.right
         }
@@ -584,7 +903,7 @@ FocusScope {
 		width: headertitle.contentWidth
         color: theme.main
 
-        // Platform title
+        // Settings title
         Text {
             id: headertitle
             
@@ -600,7 +919,7 @@ FocusScope {
             font.family: titleFont.name
             font.pixelSize: vpx(30)
             font.bold: true
-			opacity: 1
+            opacity: api.internal.recalbox.getBoolParameter("theme.designer") ? 0.2 : 1.0
             horizontalAlignment: Text.AlignHLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -617,8 +936,7 @@ FocusScope {
 
     ListView {
         id: pagelist
-
-        focus: true
+        focus: api.internal.recalbox.getBoolParameter("theme.designer") ? false : true
         anchors {
             top: header.bottom
             //bottom: parent.bottom; bottomMargin: helpMargin
@@ -674,9 +992,24 @@ FocusScope {
         }
 
         Keys.onUpPressed: { 
-			sfxNav.play(); decrementCurrentIndex();
-			settingsList.model = settingsArr[pagelist.currentIndex].listmodel;			
-			}
+            sfxNav.play();
+            var previousIndex = currentIndex;
+            decrementCurrentIndex();
+            if ((previousIndex === currentIndex) && api.internal.recalbox.getBoolParameter("theme.designer"))
+            {
+                pagelist.focus = false
+                headertitle.opacity = 0.2
+                designertitle.opacity = 1
+                pagelistdev.focus = true;
+                settingsList.model = designerArr[pagelistdev.currentIndex].listmodel;
+            }
+            else
+            {
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+            }
+            //reset index of listview for settingsList
+            settingsList.currentIndex = 0;
+            }
         Keys.onDownPressed: { 
 			sfxNav.play(); 
 			var previousIndex = currentIndex;
@@ -933,7 +1266,7 @@ FocusScope {
         delegate: settingsDelegate
         
         anchors {
-            top: header.bottom; 
+            top: api.internal.recalbox.getBoolParameter("theme.designer") ? headerdev.bottom : header.bottom
 			bottom: parent.bottom; bottomMargin: helpMargin
             left: pagelist.right; leftMargin: globalMargin
             right: parent.right; rightMargin: globalMargin
@@ -1167,7 +1500,8 @@ FocusScope {
 						}
 						//else we come back to parent menu
 						else if (settingsList.model === myCollections.listmodel) collectionslist.focus = true;
-						else pagelist.focus = true;
+                        else if (settingsList.model === settingsArr[pagelist.currentIndex].listmodel) pagelist.focus = true;
+                        else pagelistdev.focus = true;
                     }
 					if (setting === "to edit" && settingtextfield.readOnly === false ) {
 						event.accepted, settingtextfield.focus, active = virtualKeyboardOnPressed(event,settingtextfield,active);
