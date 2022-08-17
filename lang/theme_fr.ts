@@ -661,6 +661,14 @@
         <source>Show file hash</source>
         <translation>Montrer le hash du fichier</translation>
     </message>
+    <message>
+        <source>Prefered region</source>
+        <translation>Région préférée</translation>
+    </message>
+    <message>
+        <source>Regional Settings</source>
+        <translation>Options régionales</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -674,7 +682,7 @@
     </message>
     <message>
         <source>Select</source>
-        <translation>Selectionner</translation>
+        <translation>Sélectionner</translation>
     </message>
     <message>
         <source>screenshots</source>
@@ -695,6 +703,10 @@
     <message>
         <source>Loading Collection</source>
         <translation>Chargement Collection</translation>
+    </message>
+    <message>
+        <source>Try adding some favorite games</source>
+        <translation>Essai de rajouter tes jeux favoris</translation>
     </message>
 </context>
 <context>

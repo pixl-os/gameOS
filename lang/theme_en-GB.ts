@@ -661,6 +661,14 @@
         <source>Show file hash</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Prefered region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Regional Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -694,6 +702,10 @@
     </message>
     <message>
         <source>Loading Collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try adding some favorite games</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -616,7 +616,7 @@ FocusScope {
             }
 
             Text {
-                text: "Try adding some favorite games"
+                text: qsTr("Try adding some favorite games") + api.tr
 
                 anchors { bottom: parent.bottom; bottomMargin: vpx(15)
                           right: parent.right; rightMargin: vpx (15)

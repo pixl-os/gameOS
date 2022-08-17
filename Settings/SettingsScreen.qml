@@ -535,12 +535,13 @@ FocusScope {
         ListElement {
             settingName: "Prefered region"
             setting: "eu,jp,us"
+            settingNameDisplay: qsTr("Prefered region")
         }
     }
 
     property var regionalPage: {
         return {
-            pageName: "Regional Settings",
+            pageName: qsTr("Regional Settings") + api.tr,
             listmodel: regionalSettingsModel
         }
     }
