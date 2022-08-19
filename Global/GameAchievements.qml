@@ -24,8 +24,8 @@ id: infocontainer
     property var gameData: currentGame
 	property alias model: achievementsgrid.model
 	property alias index: achievementsgrid.currentIndex
-	property var icon_size: 92
-	property var margin: 4
+    property int icon_size: 92
+    property int margin: 4
 	property bool selected
 
 	function showDirection()
@@ -281,8 +281,8 @@ id: infocontainer
 				id: rect
 				width: achievementsgrid.cellWidth; height: achievementsgrid.cellHeight
 				color: theme.accent; radius: margin
-                x: (achievementsgrid.currentItem !== null) ? achievementsgrid.currentItem.x : 0
-                y: (achievementsgrid.currentItem !== null) ? achievementsgrid.currentItem.y : 0
+                x: (achievementsgrid.currentItem != null) ? achievementsgrid.currentItem.x : 0
+                y: (achievementsgrid.currentItem != null) ? achievementsgrid.currentItem.y : 0
 				Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
                                 Behavior on y { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
 			}

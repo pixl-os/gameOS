@@ -16,64 +16,64 @@ Item {
 	}	
 
 	//name of the collection
-	property var collectionName: ""
+    property string collectionName: ""
 	
 	//filter on favorite
-	property var favorite: "No"
-	property var favoriteToFind: (favorite === "No") ? false : true
+    property string favorite: "No"
+    property bool favoriteToFind: (favorite === "No") ? false : true
 		
 	//filter on "title"
-	property var filter: ""
-	property var titleToFilter: (filter === "") ? false : true
+    property string filter: ""
+    property bool titleToFilter: (filter === "") ? false : true
 	
-	property var region: ""
-	property var regionToFilter: (region === "") ? false : true
+    property string region: ""
+    property bool regionToFilter: (region === "") ? false : true
 	//example of region:
 	//	"europe|USA" to have 2 regions
 	//	"fr" french and france and fr ones ;-)
 	
 	//filter using lists for nb players
-	property var nb_players: ""
-	property var nb_playersToFilter: (nb_players === "1+") ? false : true
-	property var minimumNb_players : nb_players.replace("+","")
+    property string nb_players: ""
+    property bool nb_playersToFilter: (nb_players === "1+") ? false : true
+    property string minimumNb_players : nb_players.replace("+","")
 	property var maximumNb_players: nb_players.includes("+") ? 5 : minimumNb_players
 	
 	//filter using lists for rating
-	property var rating: "1.0"
-	property var ratingToFilter: (rating === "All") ? false : true
+    property string rating: "1.0"
+    property bool ratingToFilter: (rating === "All") ? false : true
 	property var minimumRating : (rating !== "All") ? parseFloat(rating.replace("+","")) : 1.0
 	
 	//additional filters
-	property var genre: ""
-	property var genreToFilter: (genre === "") ? false : true
+    property string genre: ""
+    property bool genreToFilter: (genre === "") ? false : true
 	//example of genre:
 	//	"plateforme|platform"
 	
-	property var publisher: ""
-	property var publisherToFilter: (publisher === "") ? false : true
+    property string publisher: ""
+    property bool publisherToFilter: (publisher === "") ? false : true
 	//example of publisher:
 	//	"nintendo"
 	
-	property var developer: ""
-	property var developerToFilter: (developer === "") ? false : true
+    property string developer: ""
+    property bool developerToFilter: (developer === "") ? false : true
 	//example of developer:
 	//	"sega"
 	
-	property var system: ""
-	property var systemToFilter: (system === "") ? false : true
+    property string system: ""
+    property bool systemToFilter: (system === "") ? false : true
 	//example of system:
 	//	"nes|snes"
 	
-	property var filename: ""
-	property var filenameToFilter: (filename === "") ? false : true
+    property string filename: ""
+    property bool filenameToFilter: (filename === "") ? false : true
 	
-	property var release: ""
-	property var releaseToFilter: (release === "") ? false : true
+    property string release: ""
+    property bool releaseToFilter: (release === "") ? false : true
 	
-	property var exclusion: ""
+    property string exclusion: ""
 	//example of exclusion:
 	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
-	property var toExclude: (exclusion === "") ? false : true
+    property bool toExclude: (exclusion === "") ? false : true
 	
     //FILTERING
     SortFilterProxyModel {

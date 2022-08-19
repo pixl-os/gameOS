@@ -228,7 +228,7 @@ Item {
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
             opacity: 0.2
-			visible: (settings.ShowFilename == "Yes") ? true : false
+            visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
         // File name box
@@ -332,7 +332,7 @@ Item {
             left: parent.left
             right: parent.right
         }
-		visible: (settings.ShowPlayStats == "Yes") ? true : false
+        visible: (settings.ShowPlayStats === "Yes") ? true : false
         // Play time
         Text {
             id: playtimetitle
