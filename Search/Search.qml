@@ -68,7 +68,7 @@ Item {
             },
             ExpressionFilter {
                 enabled: years.length
-                expression: releaseYear == 0 || (years[0] <= releaseYear && releaseYear <= years[1])
+                expression: releaseYear === 0 || (years[0] <= releaseYear && releaseYear <= years[1])
             },
             IndexFilter {
                 enabled: maxResults != 0

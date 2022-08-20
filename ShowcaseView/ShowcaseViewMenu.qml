@@ -737,9 +737,9 @@ FocusScope {
                     Rectangle {
                         width: vpx(10)
                         height: width
-                        color: (featuredlist.currentIndex == index) && featuredlist.focus ? theme.accent : theme.text
+                        color: (featuredlist.currentIndex === index) && featuredlist.focus ? theme.accent : theme.text
                         radius: width/2
-                        opacity: (featuredlist.currentIndex == index) ? 1 : 0.5
+                        opacity: (featuredlist.currentIndex === index) ? 1 : 0.5
                     }
                 }
             }
@@ -1784,7 +1784,7 @@ FocusScope {
     }
 
     //timer to update Helpbar buttons if change after loading of the ShowcaseViewMenu
-    property var counter: 0
+    property int counter: 0
     Timer {
         id: helpBarTimer
         interval: 1000 // Run the timer every seconds

@@ -676,7 +676,7 @@ FocusScope {
 		do{
 
 			value = (api.memory.has("My Collection " + i + " - Collection name")) ? api.memory.get("My Collection " + i + " - Collection name") : null;
-			if (value !== null)
+            if (value !== null)
 			{
 				//console.log("My Collection " + i + " - Collection name");
 				//Add the new collection in settings menu

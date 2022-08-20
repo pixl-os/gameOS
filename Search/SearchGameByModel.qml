@@ -8,7 +8,7 @@ import SortFilterProxyModel 0.2
 
 Item {
     id: root
-    property var activated: false
+    property bool activated: false
     property alias sourceModel: foundGames.sourceModel
     readonly property var games: foundGames
     readonly property int max: activated ? foundGames.count : 0
@@ -19,57 +19,57 @@ Item {
         return foundGames.mapToSource(index);
     }
     //name of the collection
-    property var collectionName: ""
+    property string collectionName: ""
 
     //filter on favorite
-    property var favorite: "No"
+    property string favorite: "No"
     property var favoriteToFind: (favorite === "No") ? false : true
 
     //filter on "title"
-    property var filter: ""
+    property string filter: ""
     property var titleToFilter: (filter === "") ? false : true
 
-    property var region: ""
+    property string region: ""
     property var regionToFilter: (region === "") ? false : true
     //example of region:
     //	"europe|USA" to have 2 regions
     //	"fr" french and france and fr ones ;-)
 
     //filter using lists for nb players
-    property var nb_players: "1+"
+    property string nb_players: "1+"
     property var nb_playersToFilter: (nb_players === "1+") ? false : true
-    property var minimumNb_players : nb_players.replace("+","")
+    property string minimumNb_players : nb_players.replace("+","")
     property var maximumNb_players: nb_players.includes("+") ? 5 : minimumNb_players
 
     //filter using lists for rating
-    property var rating: "All"
+    property string rating: "All"
     property var ratingToFilter: (rating === "All") ? false : true
     property var minimumRating : (rating !== "All") ? parseFloat(rating.replace("+","")) : 1.0
 
     //additional filters
-    property var genre: ""
+    property string genre: ""
     property var genreToFilter: (genre === "") ? false : true
     //example of genre:
     //	"plateforme|platform"
 
-    property var publisher: ""
+    property string publisher: ""
     property var publisherToFilter: (publisher === "") ? false : true
     //example of publisher:
     //	"nintendo"
 
-    property var developer: ""
+    property string developer: ""
     property var developerToFilter: (developer === "") ? false : true
     //example of developer:
     //	"sega"
 
-    property var system: ""
+    property string system: ""
     property var systemToFilter: (system === "") ? false : true
     //example of system:
     //	"nes|snes"
 
-    property var filename: ""
-    property var filenameToFind: false
-    property var filenameRegEx: ""
+    property string filename: ""
+    property bool filenameToFind: false
+    property string filenameRegEx: ""
     property var filenameToFilter:  ((filenameRegEx !== "") && (filename !== "")) && !filenameToFind ? true : false
 
     Component.onCompleted:{
@@ -82,16 +82,16 @@ Item {
         }
     }
 
-    property var release: ""
+    property string release: ""
     property var releaseToFilter: (release === "") ? false : true
 
-    property var exclusion: ""
+    property string exclusion: ""
     //example of exclusion:
     //"beta|virtual console|proto|rev|sega channel|classic collection|unl"
     property var toExclude: (exclusion === "") ? false : true
 
     //filter on CRC
-    property var crc: ""
+    property string crc: ""
     property var crcToFind: (crc === "" || crc === "00000000") ? false : true
 
     //FILTERING
