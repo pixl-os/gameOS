@@ -66,6 +66,8 @@ All notable changes to this project will be documented in this file (focus on ch
 	- first full translation done for french
 	- add more trad especially for sorting, showcase and my collection
 	- add fix also for gridviewMenu
+- fixes :
+	- replace many var by string, int or bool
 
 ## [recalbox-integration] - 2022-07-08
 - New logos for: NAOMI 2, PORTS & Screenshots (5 by systems)
