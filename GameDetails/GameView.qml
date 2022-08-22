@@ -38,6 +38,10 @@ FocusScope {
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
     property bool iamsteam: game ? (collectionShortName === "steam") : false
     property bool canPlayVideo: ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
+
+    //clipping activated especially for embedded mode
+    clip: embedded
+
     onCanPlayVideoChanged:{
         //to force to stop video playing when we lost focus
        if(canPlayVideo === false) toggleVideo(false);
