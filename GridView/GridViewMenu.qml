@@ -41,7 +41,21 @@ FocusScope {
     //warning: don't replace var by int in this case due to usage of Date.now(). it returns a too long integer.
     property var lastL1PressedTimestamp: 0
     property var lastR1PressedTimestamp: 0
+    property int nextLetterDirection
 
+    //Timer to launch nextLetterDirection after 250 ms (to let detection of L1+R1)
+    Timer {
+        id: navigateToNextLetterTimer
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 200
+        onTriggered: {
+            if ((lastL1PressedTimestamp !== 0) || (lastR1PressedTimestamp !== 0)) {
+                navigateToNextLetter(nextLetterDirection)
+            }
+        }
+    }
 
     function nextChar(c, modifier) {
         const firstAlpha = 97;
@@ -423,10 +437,10 @@ FocusScope {
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             lastR1PressedTimestamp = Date.now();
-            console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
+            //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
             if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
                 //press L1+R1 detected
-                console.log("press L1+R1 detected");
+                //console.log("press L1+R1 detected");
                 //launch action here
                 gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
                 gameActivated();
@@ -435,7 +449,9 @@ FocusScope {
                 lastL1PressedTimestamp = 0;
             }
             else{
-                navigateToNextLetter(+1);
+                //launch potential navigation to next letter using timer now
+                nextLetterDirection = +1
+                navigateToNextLetterTimer.start();
             }
             return;
         }
@@ -444,10 +460,10 @@ FocusScope {
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             lastL1PressedTimestamp = Date.now();
-            console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
+            //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
             if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
                 //press R1+L1 detected
-                console.log("press R1+L1 detected");
+                //console.log("press R1+L1 detected");
                 //launch action here
                 gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
                 gameActivated();
@@ -456,7 +472,9 @@ FocusScope {
                 lastL1PressedTimestamp = 0;
             }
             else{
-                navigateToNextLetter(-1);
+                //launch potential navigation to next letter using timer now
+                nextLetterDirection = +1
+                navigateToNextLetterTimer.start();
             }
             return;
         }
