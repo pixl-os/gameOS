@@ -381,6 +381,11 @@ DISTFILES += \
     assets/images/logospng/gx4000_carbon.png \
     assets/images/logospng/gx4000_color.png \
     assets/images/logospng/gx4000_steel.png \
+    assets/images/logospng/imageviewer.png \
+    assets/images/logospng/imageviewer_black.png \
+    assets/images/logospng/imageviewer_carbon.png \
+    assets/images/logospng/imageviewer_color.png \
+    assets/images/logospng/imageviewer_steel.png \
     assets/images/logospng/intellivision.png \
     assets/images/logospng/intellivision_black.png \
     assets/images/logospng/intellivision_carbon.png \
@@ -448,11 +453,11 @@ DISTFILES += \
     assets/images/logospng/n64_color.png \
     assets/images/logospng/n64_steel.png \
     assets/images/logospng/naomi.png \
+    assets/images/logospng/naomi2.png \
     assets/images/logospng/naomi2_black.png \
     assets/images/logospng/naomi2_carbon.png \
     assets/images/logospng/naomi2_color.png \
     assets/images/logospng/naomi2_steel.png \
-    assets/images/logospng/naomi2_white.png \
     assets/images/logospng/naomi_black.png \
     assets/images/logospng/naomi_carbon.png \
     assets/images/logospng/naomi_color.png \
@@ -552,11 +557,11 @@ DISTFILES += \
     assets/images/logospng/pokemini_carbon.png \
     assets/images/logospng/pokemini_color.png \
     assets/images/logospng/pokemini_steel.png \
+    assets/images/logospng/ports.png \
     assets/images/logospng/ports_black.png \
     assets/images/logospng/ports_carbon.png \
     assets/images/logospng/ports_color.png \
     assets/images/logospng/ports_steel.png \
-    assets/images/logospng/ports_white.png \
     assets/images/logospng/ps2.png \
     assets/images/logospng/ps2_black.png \
     assets/images/logospng/ps2_carbon.png \
