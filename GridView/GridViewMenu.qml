@@ -38,6 +38,11 @@ FocusScope {
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
+    //warning: don't replace var by int in this case due to usage of Date.now(). it returns a too long integer.
+    property var lastL1PressedTimestamp: 0
+    property var lastR1PressedTimestamp: 0
+
+
     function nextChar(c, modifier) {
         const firstAlpha = 97;
         const lastAlpha = 122;
@@ -417,14 +422,42 @@ FocusScope {
         // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            navigateToNextLetter(+1);
+            lastR1PressedTimestamp = Date.now();
+            console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
+            if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                console.log("press L1+R1 detected");
+                //launch action here
+                gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
+                gameActivated();
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                navigateToNextLetter(+1);
+            }
             return;
         }
 
         // Scroll Up - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            navigateToNextLetter(-1);
+            lastL1PressedTimestamp = Date.now();
+            console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
+            if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
+                //press R1+L1 detected
+                console.log("press R1+L1 detected");
+                //launch action here
+                gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
+                gameActivated();
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                navigateToNextLetter(-1);
+            }
             return;
         }
 
