@@ -883,7 +883,7 @@ FocusScope {
                             else return "";
                         }
                         else if(designs.SystemMusicSource !== "No") {
-                            return ""; //to do
+                            return "";
                         }
                         else return "";
                     }
@@ -897,12 +897,9 @@ FocusScope {
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: {
                         if (designs.SystemLogoSource === "Custom"){
-                            // for {region} & {shortname} tags
+                            // Able to manage {region} & {shortname} tags
                             var result = mainModel.processPathExpression(designs.SystemLogoPathExpression,modelData)
                             return result;
-
-                            //for test purpose, need to do new parameters using prefix and sufix in path
-                            //return "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/" + settings.PreferedRegion + "/logo_right.svg";
                         }
                         else if(designs.SystemLogoSource !== "No"){
                             if(settings.SystemLogoStyle === "White")
@@ -934,10 +931,11 @@ FocusScope {
                             //OK do nothing, loading ok, image exists
                         }
                         else if (status === Image.Error){
-                            //for test purpose, need to do new parameters using prefix and sufix in path
-                            //change source in case of error
-                            //source = "../assets/custom/" + Utils.processPlatformName(modelData.shortName) + "/data/logo_right.svg";
-                            source = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
+                            //change source in case of error with custom logo
+                            if (designs.SystemLogoSource !== "Default"){
+                                //if custom logo, we are trying to load without region
+                                source = mainModel.processPathExpressionNoRegion(designs.SystemLogoPathExpression,modelData)
+                            }
                         }
                     }
                     Image{
