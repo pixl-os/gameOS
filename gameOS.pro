@@ -595,11 +595,6 @@ DISTFILES += \
     assets/images/logospng/saturn_carbon.png \
     assets/images/logospng/saturn_color.png \
     assets/images/logospng/saturn_steel.png \
-    assets/images/logospng/screenshots_black.png \
-    assets/images/logospng/screenshots_carbon.png \
-    assets/images/logospng/screenshots_color.png \
-    assets/images/logospng/screenshots_steel.png \
-    assets/images/logospng/screenshots_white.png \
     assets/images/logospng/scummvm.png \
     assets/images/logospng/scummvm_black.png \
     assets/images/logospng/scummvm_carbon.png \
