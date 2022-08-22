@@ -472,8 +472,8 @@ FocusScope {
                 lastL1PressedTimestamp = 0;
             }
             else{
-                //launch potential navigation to next letter using timer now
-                nextLetterDirection = +1
+                //launch potential navigation to previous letter using timer now
+                nextLetterDirection = -1
                 navigateToNextLetterTimer.start();
             }
             return;
