@@ -628,9 +628,13 @@ FocusScope {
             button: "random"
         }
     }
-    
-    onFocusChanged: {
-        //console.log("SoftwareListMenu::onFocusChanged()");
-        if (focus) currentHelpbarModel = verticalListHelpModel;
+        
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = verticalListHelpModel;
+        }
     }
 }

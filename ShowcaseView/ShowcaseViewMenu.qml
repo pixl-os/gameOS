@@ -1796,11 +1796,14 @@ FocusScope {
         }
     }
 
-    onFocusChanged: {
-       if (focus){
-			previousHelpbarModel = gridviewHelpModel; // the same in case of showcaseview
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            previousHelpbarModel = ""; // to force reload for transkation
+            previousHelpbarModel = gridviewHelpModel; // the same in case of showcaseview
+            currentHelpbarModel = ""; // to force reload for transkation
             currentHelpbarModel = gridviewHelpModel;
-		}
+        }
     }
-
 }

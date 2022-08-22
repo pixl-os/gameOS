@@ -1425,6 +1425,15 @@ FocusScope {
         }
     }
 
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = gameviewHelpModel;
+        }
+    }
+
     onFocusChanged: {
         if (focus) {
             if(embedded){

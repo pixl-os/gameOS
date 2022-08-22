@@ -559,4 +559,13 @@ FocusScope {
             gamegrid.focus = true;
         }
     }
+
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = gridviewHelpModel;
+        }
+    }
 }
