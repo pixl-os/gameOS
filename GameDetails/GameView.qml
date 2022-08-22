@@ -219,36 +219,35 @@ FocusScope {
             game.assets.backgroundList.forEach(v => mediaList.push(v));
 
             //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
-            if ((game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
-            if (game.assets.boxFront3d !== "") mediaList.push(game.assets.boxFront3d);
-            if (game.assets.boxBack !== "") mediaList.push(game.assets.boxBack);
-            if (game.assets.boxSpine !== "") mediaList.push(game.assets.boxSpine);
-            if (game.assets.boxFull !== "") mediaList.push(game.assets.boxFull);
-            if ((game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
-            if (game.assets.cartridgetexture !== "") mediaList.push(game.assets.cartridgetexture);
-            if (game.assets.logo !== "") mediaList.push(game.assets.logo);
-            if (game.assets.logocarbon !== "") mediaList.push(game.assets.logocarbon);
-            if (game.assets.logosteel !== "") mediaList.push(game.assets.logosteel);
-            if (game.assets.poster !== "") mediaList.push(game.assets.poster);
+            //WARNING: some apis doesn't exist yet that why we added a test on API now to know if it's defined or not.
+            if ((typeof(game.assets.boxFront) !== "undefined") && (game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
+            if ((typeof(game.assets.boxFront3d) !== "undefined") && (game.assets.boxFront3d !== "")) mediaList.push(game.assets.boxFront3d);
+            if ((typeof(game.assets.boxBack) !== "undefined") && (game.assets.boxBack !== "")) mediaList.push(game.assets.boxBack);
+            if ((typeof(game.assets.boxSpine) !== "undefined") && (game.assets.boxSpine !== "")) mediaList.push(game.assets.boxSpine);
+            if ((typeof(game.assets.boxFull) !== "undefined") && (game.assets.boxFull !== "")) mediaList.push(game.assets.boxFull);
+            if ((typeof(game.assets.cartridge) !== "undefined") && (game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
+            if ((typeof(game.assets.cartridgetexture) !== "undefined") && (game.assets.cartridgetexture !== "")) mediaList.push(game.assets.cartridgetexture);
+            if ((typeof(game.assets.logo) !== "undefined") && (game.assets.logo !== "")) mediaList.push(game.assets.logo);
+            if ((typeof(game.assets.logocarbon) !== "undefined") && (game.assets.logocarbon !== "")) mediaList.push(game.assets.logocarbon);
+            if ((typeof(game.assets.logosteel) !== "undefined") && (game.assets.logosteel !== "")) mediaList.push(game.assets.logosteel);
+            if ((typeof(game.assets.poster) !== "undefined") && (game.assets.poster !== "")) mediaList.push(game.assets.poster);
 
-            if (game.assets.marquee !== "") mediaList.push(game.assets.marquee);
-            if (game.assets.screenmarqueesmall !== "") mediaList.push(game.assets.screenmarqueesmall);
-            if (game.assets.bezel !== "") mediaList.push(game.assets.bezel);
-            if (game.assets.panel !== "") mediaList.push(game.assets.panel);
-            if (game.assets.cabinetLeft !== "") mediaList.push(game.assets.cabinetLeft);
-            if (game.assets.cabinetRight !== "") mediaList.push(game.assets.cabinetRight);
+            if ((typeof(game.assets.marquee) !== "undefined") && (game.assets.marquee !== "")) mediaList.push(game.assets.marquee);
+            if ((typeof(game.assets.screenmarqueesmall) !== "undefined") && (game.assets.screenmarqueesmall !== "")) mediaList.push(game.assets.screenmarqueesmall);
+            if ((typeof(game.assets.bezel) !== "undefined") && (game.assets.bezel !== "")) mediaList.push(game.assets.bezel);
+            if ((typeof(game.assets.panel) !== "undefined") && (game.assets.panel !== "")) mediaList.push(game.assets.panel);
+            if ((typeof(game.assets.cabinetLeft) !== "undefined") && (game.assets.cabinetLeft !== "")) mediaList.push(game.assets.cabinetLeft);
+            if ((typeof(game.assets.cabinetRight) !== "undefined") && (game.assets.cabinetRight !== "")) mediaList.push(game.assets.cabinetRight);
 
-            if (game.assets.tile !== "") mediaList.push(game.assets.tile);
-            if (game.assets.steam !== "") mediaList.push(game.assets.steam);
-            if (game.assets.banner !== "") mediaList.push(game.assets.banner);
+            if ((typeof(game.assets.tile) !== "undefined") && (game.assets.tile !== "")) mediaList.push(game.assets.tile);
+            if ((typeof(game.assets.steam) !== "undefined") && (game.assets.steam !== "")) mediaList.push(game.assets.steam);
+            if ((typeof(game.assets.banner) !== "undefined") && (game.assets.banner !== "")) mediaList.push(game.assets.banner);
 
-            //if (game.assets.music !== "") mediaList.push(game.assets.music);//RFU
+            //if ((typeof(game.assets.music) !== "undefined") && (game.assets.music !== "")) mediaList.push(game.assets.music);//RFU
 
-            if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
-
-            if (game.assets.map !== "") mediaList.push(game.assets.map);
+            if ((typeof(game.assets.titlescreen) !== "undefined") && (game.assets.titlescreen !== "")) mediaList.push(game.assets.titlescreen);
+            if ((typeof(game.assets.map) !== "undefined") && (game.assets.map !== "")) mediaList.push(game.assets.map);
         }
-
         return mediaList;
     }
 
