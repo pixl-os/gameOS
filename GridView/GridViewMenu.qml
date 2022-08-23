@@ -434,16 +434,19 @@ FocusScope {
             return;
         }
 
-        // Scroll Down - use R1 now
+        // Scroll Up - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             lastR1PressedTimestamp = Date.now();
             //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
             if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
-                event.accepted = true;
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
                 gamegrid.currentIndex = randomGame
+                sfxToggle.play();
                 gameActivated();
-                console.log("ramdom game selected");
+                //console.log("ramdom game selected");
                 //reset timestamps
                 lastR1PressedTimestamp = 0;
                 lastL1PressedTimestamp = 0;
@@ -456,16 +459,19 @@ FocusScope {
             return;
         }
 
-        // Scroll Up - use L1 now
+        // Scroll Down - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             lastL1PressedTimestamp = Date.now();
             //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
             if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
                 gamegrid.currentIndex = randomGame
                 sfxToggle.play();
                 gameActivated();
-                console.log("ramdom game selected");
+                //console.log("ramdom game selected");
                 //reset timestamps
                 lastR1PressedTimestamp = 0;
                 lastL1PressedTimestamp = 0;
@@ -540,10 +546,10 @@ FocusScope {
             name: qsTr("View details")
             button: "accept"
         }
-        //ListElement {
-        //  name: qsTr("random game (R1+L1)")
-        //  button: "accept"
-        //}
+        ListElement {
+          name: qsTr("random game (L1+R1)")
+          button: "random"
+        }
     }
 
     onFocusChanged: {

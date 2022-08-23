@@ -91,6 +91,9 @@ Item {
 		case "netplay":
             buttonModel = api.keys.netplay;
             break;
+        case "random": //specific keyword to manage case of usage of L1+R1 in this theme
+            return "random";
+            break;
 		default:
             buttonModel = api.keys.accept;
         }
