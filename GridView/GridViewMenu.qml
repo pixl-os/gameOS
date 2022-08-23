@@ -39,8 +39,8 @@ FocusScope {
     property bool isRightTriggerPressed: false;
 
     //warning: don't replace var by int in this case due to usage of Date.now(). it returns a too long integer.
-    property var lastL1PressedTimestamp: 0
-    property var lastR1PressedTimestamp: 0
+    property real lastL1PressedTimestamp: 0
+    property real lastR1PressedTimestamp: 0
     property int nextLetterDirection
 
     //Timer to launch nextLetterDirection after 250 ms (to let detection of L1+R1)
@@ -303,7 +303,6 @@ FocusScope {
                             modelData.favorite = !modelData.favorite;
                         }
                     }
-
                 }
             }
 
@@ -364,7 +363,6 @@ FocusScope {
             Keys.onLeftPressed:     { sfxNav.play(); moveCurrentIndexLeft() }
             Keys.onRightPressed:    { sfxNav.play(); moveCurrentIndexRight() }
         }
-
     }
 
     Keys.onReleased: {
@@ -397,9 +395,12 @@ FocusScope {
             isLeftTriggerPressed = false;
             return;
         }
-
-
     }
+
+    //Random Game
+    property int maximum: gamegrid.count
+    property int minimum: 0
+    property int randomGame:  Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
     Keys.onPressed: {
         // Accept
@@ -429,7 +430,7 @@ FocusScope {
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxToggle.play();
-			headercontainer.focus = true;
+            headercontainer.focus = true;
             return;
         }
 
@@ -439,11 +440,10 @@ FocusScope {
             lastR1PressedTimestamp = Date.now();
             //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
             if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
-                //press L1+R1 detected
-                //console.log("press L1+R1 detected");
-                //launch action here
-                gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
+                event.accepted = true;
+                gamegrid.currentIndex = randomGame
                 gameActivated();
+                console.log("ramdom game selected");
                 //reset timestamps
                 lastR1PressedTimestamp = 0;
                 lastL1PressedTimestamp = 0;
@@ -462,11 +462,10 @@ FocusScope {
             lastL1PressedTimestamp = Date.now();
             //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
             if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
-                //press R1+L1 detected
-                //console.log("press R1+L1 detected");
-                //launch action here
-                gamegrid.currentIndex = gamegrid.count-1; // in this example, we select last game of the list
+                gamegrid.currentIndex = randomGame
+                sfxToggle.play();
                 gameActivated();
+                console.log("ramdom game selected");
                 //reset timestamps
                 lastR1PressedTimestamp = 0;
                 lastL1PressedTimestamp = 0;
@@ -541,6 +540,10 @@ FocusScope {
             name: qsTr("View details")
             button: "accept"
         }
+        //ListElement {
+        //  name: qsTr("random game (R1+L1)")
+        //  button: "accept"
+        //}
     }
 
     onFocusChanged: {
