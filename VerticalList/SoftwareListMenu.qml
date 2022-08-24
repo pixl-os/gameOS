@@ -330,7 +330,7 @@ FocusScope {
                         bottom: parent.bottom; bottomMargin: vpx(5)
                     }
                     color: theme.text
-                    visible: selected && !gameview.focus
+                    visible: selected && !gameview.focus && !headercontainer.focus
 
                 }
 
