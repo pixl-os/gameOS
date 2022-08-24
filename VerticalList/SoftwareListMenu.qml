@@ -273,11 +273,18 @@ FocusScope {
     ListView {
         id: softwarelist
 
-        currentIndex: currentGameIndex
         onCurrentIndexChanged: {
-            if (currentIndex != -1){
+            //console.log("softwarelist::onCurrentIndexChanged - currentIndex",currentIndex);
+            //console.log("softwarelist::onCurrentIndexChanged - headercontainer.focus",headercontainer.focus);
+            //we read header "focus" status to restore it later if needed
+            var headerStatus = headercontainer.focus;
+            if (currentIndex !== -1){
                 currentGameIndex = currentIndex;
                 currentGame = list.currentGame(softwarelist.currentIndex)
+                if(headerStatus === true){
+                    //we restore header "focus" status to avoid to focus vertical list during a search/filtering.
+                    headercontainer.focus = true;
+                }
             }
         }
 
