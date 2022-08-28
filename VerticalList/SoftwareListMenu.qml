@@ -277,7 +277,16 @@ FocusScope {
             //console.log("softwarelist::onCurrentIndexChanged - currentIndex",currentIndex);
             //console.log("softwarelist::onCurrentIndexChanged - headercontainer.focus",headercontainer.focus);
             //we read header "focus" status to restore it later if needed
+            //console.log("----- onCurrentIndexChanged before -----");
+            //console.log(" headercontainer.searchActive : ", headercontainer.searchActive);
+            //console.log(" headercontainer.searchInput.focus : ", headercontainer.searchInput.focus);
+            //console.log(" Qt.inputMethod.visible : ", Qt.inputMethod.visible);
+
+
             var headerStatus = headercontainer.focus;
+            var searchInputStatus = headercontainer.searchInput.focus;
+            var searchActiveStatus = headercontainer.searchInput.searchActive;
+
             if (currentIndex !== -1){
                 currentGameIndex = currentIndex;
                 currentGame = list.currentGame(softwarelist.currentIndex)
@@ -285,7 +294,19 @@ FocusScope {
                     //we restore header "focus" status to avoid to focus vertical list during a search/filtering.
                     headercontainer.focus = true;
                 }
+                if(searchInputStatus === true){
+                    //we restore header searchInput "focus" status to avoid to focus vertical list during a search/filtering.
+                    headercontainer.searchInput.focus = true;
+                }
+                if(searchActiveStatus === true){
+                    //we restore header searchActive state to keep cursor/edition during a search/filtering.
+                    headercontainer.searchInput.searchActive = true;
+                }
             }
+            //console.log("----- onCurrentIndexChanged after -----");
+            //console.log(" headercontainer.searchActive : ", headercontainer.searchActive);
+            //console.log(" headercontainer.searchInput.focus : ", headercontainer.searchInput.focus);
+            //console.log(" Qt.inputMethod.visible : ", Qt.inputMethod.visible);
         }
 
         Component.onCompleted: {

@@ -24,6 +24,9 @@ import QtQuick.VirtualKeyboard 2.15
 FocusScope {
     id: root
 
+    //to have access to input and know information about it if needed
+    property alias searchInput : searchInput
+
     Item {
         id: container
 
