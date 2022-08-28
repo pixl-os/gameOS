@@ -857,8 +857,8 @@ FocusScope {
                 }
 
                 onActiveFocusChanged: {
-                    console.log("Focus changed to " + focus)
-                    console.log("Active Focus changed to " + activeFocus)
+                    //console.log("Focus changed to " + focus)
+                    //console.log("Active Focus changed to " + activeFocus)
                     if(selected && (designs.SystemMusicSource !== "No")){
                         if(activeFocus && focus){
                            if (modelData.shortName !=="imageviewer") playMusic.play();
