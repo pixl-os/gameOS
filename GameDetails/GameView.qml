@@ -48,8 +48,8 @@ FocusScope {
     }
 
     property real detailsOpacity: ((settings.DetailsDefault === "Yes") && (demoLaunched !== true)) || ((settings.DemoShowFullDetails === "Yes") && (demoLaunched === true)) ? 1 : 0
-	property real retroachievementsOpacity: 0
-	property bool blurBG: settings.GameBlurBackground === "Yes"
+    property real retroachievementsOpacity: 0
+    property bool blurBG: settings.GameBlurBackground === "Yes"
     property string publisherName: {
         if (game !== null && game.publisher !== null) {
             var str = game.publisher;
@@ -289,7 +289,7 @@ FocusScope {
 
     }
 
-	function setRetroAchievements(){
+    function setRetroAchievements(){
         if(game.retroAchievementsCount !== 0){
             //to force update of GameAchievements model for gridView
             achievements.model = game.retroAchievementsCount;
@@ -311,21 +311,21 @@ FocusScope {
             //hide retroachievements if displayed from a previous game
             if(retroachievementsOpacity === 1) showDetails();
         }
-	}
+    }
 
     // Show/hide the details overlay
     function showDetails() {
         if (detailsOpacity === 1) {
             toggleVideo(true);
             detailsOpacity = 0;
-	        retroachievementsOpacity = 0;
+            retroachievementsOpacity = 0;
         }
         else {
             detailsOpacity = 1;
-	        retroachievementsOpacity = 0;
+            retroachievementsOpacity = 0;
             toggleVideo(false);
-	        achievements.selected = false;
-	        content.focus = true;
+            achievements.selected = false;
+            content.focus = true;
         }
     }
 
@@ -334,15 +334,15 @@ FocusScope {
         if (retroachievementsOpacity === 1) {
             detailsOpacity = 1;
             retroachievementsOpacity = 0;
-	        achievements.selected = false;
-	        content.focus = true;
+            achievements.selected = false;
+            content.focus = true;
         }
         else {
-	        detailsOpacity = 0;
-	        retroachievementsOpacity = 1;
+            detailsOpacity = 0;
+            retroachievementsOpacity = 1;
             toggleVideo(false);
-		    achievements.index = -1;
-		    achievements.updateDetails(0);
+            achievements.index = -1;
+            achievements.updateDetails(0);
         }
     }
 
@@ -365,14 +365,14 @@ FocusScope {
         //console.log("GameView - onGameChanged");
         //reset default value for a new game loading
         reset();
-	}	
+    }    
 
-	Connections {
+    Connections {
         target: game
-		function onRetroAchievementsInitialized() {
+        function onRetroAchievementsInitialized() {
             //console.log("GameView - retroAchievements is now initialized !");
-			setRetroAchievements();	
-		}
+            setRetroAchievements();    
+        }
     }
 
     anchors.fill: parent
@@ -762,7 +762,7 @@ FocusScope {
                     top: parent.top; bottom: parent.bottom; right: parent.right
                 }
             }
-			
+            
         }
     }
     
@@ -996,7 +996,7 @@ FocusScope {
                             //stop existing animation
                             iconRotation.stop();
                             //limit to one cycle
-                            iconRotation.loops = 1;
+                            iconRotation.loops = 30;
                             //restart animation
                             iconRotation.start();
                         }
@@ -1014,12 +1014,36 @@ FocusScope {
                     }
                 }
             }
+            
+            Timer {
+                id: launchGameDelay
+                running: false
+                triggeredOnStart: false
+                repeat: false
+                interval: 500
+                onTriggered: {
+                    launchGame(game);
+                }
+            }
 
             onActivated:
                 if (selected) {
-                    sfxAccept.play();
-                    launchGame(game);
-                } else {
+                    //if game not already launched
+                    if(!launchedGame){
+                        sfxAccept.play();
+                        if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                            //to launch animation at launch
+                            icon = "../assets/images/loading.png";
+                            //start animation without end
+                            iconRotation.loops = 30;
+                            iconRotation.start();
+                        }
+                        //stop video before to launch game
+                        toggleVideo(false);
+                        launchGameDelay.start();
+                    }
+                }
+                else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
@@ -1135,7 +1159,7 @@ FocusScope {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
-			}
+            }
         }
     }
 
@@ -1171,18 +1195,18 @@ FocusScope {
                                     }
 
                                     //console.log("Menu - Keys.onLeftPressed");
-									sfxNav.play(); 
-									do{	
-										decrementCurrentIndex();
-									}while(!currentItem.enabled);								
-								}
+                                    sfxNav.play(); 
+                                    do{    
+                                        decrementCurrentIndex();
+                                    }while(!currentItem.enabled);                                
+                                }
             Keys.onRightPressed:{ 
                                     //console.log("Menu - Keys.onLeftPressed");
-									sfxNav.play(); 
-									do{	
-										incrementCurrentIndex();
-									}while(!currentItem.enabled);
-								}
+                                    sfxNav.play(); 
+                                    do{    
+                                        incrementCurrentIndex();
+                                    }while(!currentItem.enabled);
+                                }
         }
 
         //media list
@@ -1305,23 +1329,23 @@ FocusScope {
         }
         keyNavigationWraps: true
         Keys.onUpPressed: { 
-							sfxNav.play(); 
- 							if(currentIndex !== 0)	
-							{
-								decrementCurrentIndex();
-							}
-							else //focus on retroachievements gridView if display
-							{
-								if((retroachievementsOpacity === 1) && (game.retroAchievementsCount !== 0)) 
-								{
-								   	menu.currentIndex = -1;
-									achievements.index = 0;
-									achievements.selected = true;
-									achievements.updateDetails(0);
-								}
-								else  decrementCurrentIndex();
-							}
-						  }
+                            sfxNav.play(); 
+                             if(currentIndex !== 0)    
+                            {
+                                decrementCurrentIndex();
+                            }
+                            else //focus on retroachievements gridView if display
+                            {
+                                if((retroachievementsOpacity === 1) && (game.retroAchievementsCount !== 0)) 
+                                {
+                                       menu.currentIndex = -1;
+                                    achievements.index = 0;
+                                    achievements.selected = true;
+                                    achievements.updateDetails(0);
+                                }
+                                else  decrementCurrentIndex();
+                            }
+                          }
         Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
     }
 
@@ -1431,7 +1455,6 @@ FocusScope {
 
     onActiveFocusChanged:
     {
-        //console.log("onActiveFocusChanged : ", activeFocus);
         if (activeFocus){
             currentHelpbarModel = ""; // to force reload for transkation
             currentHelpbarModel = gameviewHelpModel;
