@@ -30,6 +30,7 @@ import "../Search"
 FocusScope {
     id: root
 
+    property bool gameToLaunched: false
     property var game: api.allGames.get(0)
     property bool embedded : false
     property bool readyForNeplay: isReadyForNetplay(game)
@@ -1468,22 +1469,43 @@ FocusScope {
     }
 
     onFocusChanged: {
+        //console.log("onFocusChanged - focus",focus);
         if (focus) {
+            currentHelpbarModel = gameviewHelpModel;
+            menu.focus = true;
+            menu.currentIndex = 0;
             if(embedded){
                 //activate collections
                 publisherCollection.enabled = true;
                 genreCollection.enabled = true;
-                //launch video
-                toggleVideo(true);
-                //launch initialization of retroachievements
                 //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
                 game.initRetroAchievements();
                 //init overlays parameters
                 root.getOverlaysParameters();
+                if(gameToLaunched && !api.launchedgame){
+                    if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                        //to launch animation at launch
+                        button1.icon = "../assets/images/loading.png";
+                        //start animation without end
+                        button1.iconRotation.loops = 30;
+                        button1.iconRotation.start();
+                    }
+                    //stop video before to launch game
+                    toggleVideo(false);
+                    //also for collections in background in case of multi-windows
+                    videoToStop = true;
+                    //reset flag for game to launched
+                    gameToLaunched = false;
+                    launchGameDelay.start();
+                }
+                else
+                {
+                    //launch video
+                    toggleVideo(true);
+                    //init overlays parameters
+                    root.getOverlaysParameters();
+                }
             }
-            currentHelpbarModel = gameviewHelpModel;
-            menu.focus = true;
-            menu.currentIndex = 0;
         } 
         else {
             if(embedded){

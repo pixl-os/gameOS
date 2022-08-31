@@ -503,7 +503,10 @@ FocusScope {
             event.accepted = true;
             if (!gameview.focus) {
                 gameActivated();
-                launchGame();
+                //launchGame();
+                gameview.gameToLaunched = true;
+                softwarelist.focus = false;
+                gameview.focus = true;
             }
         }
         // Back
@@ -524,12 +527,10 @@ FocusScope {
         }
         // Toggle favorite
         if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-            //if (softwarelist.focus) {
-                console.log("Toggle favorite");
-                event.accepted = true;
-                sfxToggle.play();
-                list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
-            //}
+            //console.log("Toggle favorite");
+            event.accepted = true;
+            sfxToggle.play();
+            list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
         }
 
         // Random Game math here for best refresh
