@@ -1040,6 +1040,8 @@ FocusScope {
                         }
                         //stop video before to launch game
                         toggleVideo(false);
+                        //also for collections in background in case of multi-windows
+                        videoToStop = true;
                         launchGameDelay.start();
                     }
                 }
@@ -1095,6 +1097,8 @@ FocusScope {
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
+                    //to let video to run if needed
+                    videoToStop = false;
                     if(embedded) {
                         if (retroachievementsOpacity === 1) {
                             detailsOpacity = 1;
@@ -1366,6 +1370,8 @@ FocusScope {
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            //to let video to run if needed
+            videoToStop = false;
             if(embedded){
                 if (retroachievementsOpacity === 1) {
                     detailsOpacity = 1;

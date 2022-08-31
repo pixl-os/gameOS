@@ -73,7 +73,7 @@ Item {
 
     onSelectedChanged: {
 		if(detailed_debug) console.log("DynamicGridItem.onSelectedChanged");
-        if (selected && playVideo)
+        if (selected && playVideo && !videoToStop)
             fadescreenshot.restart();
         else {
             fadescreenshot.stop();

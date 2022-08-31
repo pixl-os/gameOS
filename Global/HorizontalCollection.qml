@@ -71,8 +71,11 @@ FocusScope {
         
         property int savedIndex: 0
         onFocusChanged: {
-            if (focus)
+            if(detailed_debug) console.log("onFocusChanged - focus : ",focus);
+            if (focus){
+                videoToStop = false;
                 currentIndex = savedIndex;
+            }
             else {
                 savedIndex = currentIndex;
                 currentIndex = -1;
@@ -90,12 +93,14 @@ FocusScope {
             height: itemHeight
             
             onHighlighted: {
+                if(detailed_debug) console.log("onHighlighted - selected : ",selected);
                 collectionList.savedIndex = index;
                 collectionList.currentIndex = index;
                 listHighlighted();
             }
 
             onActivated: {
+                if(detailed_debug) console.log("onActivated - selected : ",selected);
                 if (selected) {
 					videoToStop = true;
 					activateSelected();
