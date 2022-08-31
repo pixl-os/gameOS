@@ -194,6 +194,7 @@ FocusScope {
     Component.onCompleted: {
         //to set game to display
         currentGame = list.currentGame(softwarelist.currentIndex);
+        softwarelist.focus = true;
     }
 
     Rectangle {
@@ -218,6 +219,17 @@ FocusScope {
             if((softwarelist.currentIndex < softwarelist.count) && (softwarelist.currentIndex >= 0)){
                 //do nothing
             } else softwarelist.currentIndex = 0; //set index
+        }
+        Keys.onPressed: {
+            // Accept
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                //RFU
+            }
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                softwarelist.focus = true;
+            }
         }
     }
 
@@ -421,6 +433,7 @@ FocusScope {
             softwarelist.currentIndex--;
         else
             softwarelist.currentIndex = softwarelist.count - 1
+        softwarelist.focus = true;
     }
     // Down
     Keys.onDownPressed: {
@@ -428,6 +441,7 @@ FocusScope {
             softwarelist.currentIndex++;
         else
             softwarelist.currentIndex = 0;
+        softwarelist.focus = true;
     }
     // Left
     Keys.onLeftPressed: {
@@ -491,23 +505,12 @@ FocusScope {
                 gameActivated();
                 launchGame();
             }
-            //is it really used ?!
-            /*else {
-                currentGameIndex = 0;
-                softwarelist.focus = true;
-            }*/
-            
         }
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            if (softwarelist.focus) {
-                gameActivated();
-                previousScreen();
-            } else {
-                currentGameIndex = 0;
-                softwarelist.focus = true;
-            }
+            gameActivated();
+            previousScreen();
         }
         // Filters/Search
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
