@@ -30,7 +30,6 @@ import "../Search"
 FocusScope {
     id: root
 
-    property bool gameToLaunched: false
     property var game: api.allGames.get(0)
     property bool embedded : false
     property bool readyForNeplay: isReadyForNetplay(game)
@@ -1043,6 +1042,8 @@ FocusScope {
                         toggleVideo(false);
                         //also for collections in background in case of multi-windows
                         videoToStop = true;
+                        //force gameToLaunched flag also in this case
+                        gameToLaunched = true;
                         launchGameDelay.start();
                     }
                 }
@@ -1185,6 +1186,14 @@ FocusScope {
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
+                                    //console.log("api.launchedgame : ",api.launchedgame);
+                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                    if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                        //console.log("Block Keys.onLeftPressed on ListView(menu) of GameView");
+                                        return;
+                                    }
                                     //if embedded and if we do left to come back to list
                                     if (root.embedded ? !root.parent.focus : false){
                                         if(currentIndex === 0){
@@ -1206,6 +1215,14 @@ FocusScope {
                                     }while(!currentItem.enabled);                                
                                 }
             Keys.onRightPressed:{ 
+                                    //console.log("api.launchedgame : ",api.launchedgame);
+                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                    if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                        //console.log("Block Keys.onRightPressed on ListView(menu) of GameView");
+                                        return;
+                                    }
                                     //console.log("Menu - Keys.onLeftPressed");
                                     sfxNav.play(); 
                                     do{    
@@ -1334,6 +1351,13 @@ FocusScope {
         }
         keyNavigationWraps: true
         Keys.onUpPressed: { 
+                            //console.log("api.launchedgame : ",api.launchedgame);
+                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                //console.log("Block Keys.onUpPressed on ListView(content) of GameView");
+                                return;
+                            }
                             sfxNav.play(); 
                              if(currentIndex !== 0)    
                             {
@@ -1351,7 +1375,17 @@ FocusScope {
                                 else  decrementCurrentIndex();
                             }
                           }
-        Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
+        Keys.onDownPressed: { 
+                            //console.log("api.launchedgame : ",api.launchedgame);
+                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                //console.log("Block Keys.onDownPressed on ListView(content) of GameView");
+                                return;
+                            }
+                          sfxNav.play();
+                          incrementCurrentIndex() 
+        }
     }
 
     MediaView {
@@ -1368,6 +1402,14 @@ FocusScope {
 
     // Input handling
     Keys.onPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onPressed on GameView");
+            return;
+        }
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -1494,8 +1536,6 @@ FocusScope {
                     toggleVideo(false);
                     //also for collections in background in case of multi-windows
                     videoToStop = true;
-                    //reset flag for game to launched
-                    gameToLaunched = false;
                     launchGameDelay.start();
                 }
                 else

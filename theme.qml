@@ -28,11 +28,13 @@ import "Settings"
 FocusScope {
     id: root
 
+
     //DEBUG property
     property bool detailed_debug: false
     property bool viewIsLoading: true
     property string viewLoadingText: qsTr("Loading") + "..." + api.tr
-
+    property bool gameToLaunched: false
+    
     //Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {
         id: spinnerloader
@@ -260,7 +262,8 @@ FocusScope {
         interval: 100
         onTriggered: {
             gameToLaunch.launch();
-
+            //reset flag for game to launched
+            gameToLaunched = false;
         }
     }
 
