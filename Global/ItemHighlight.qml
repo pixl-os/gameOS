@@ -26,7 +26,7 @@ Item {
     property bool boxArt
     property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
 	
-	property bool validated: selected && videoToStop
+    property bool validated: selected && (videoToStop || demoLaunched)
 	onValidatedChanged:
 	{
 		if(detailed_debug) console.log("ItemHighlight.onValidatedChanged:", validated);
@@ -45,7 +45,7 @@ Item {
         }
         videoPreviewLoader.sourceComponent = undefined;
         //videoToStop = false;
-        if (playVideo && selected && !videoToStop) {
+        if (playVideo && selected && !videoToStop && !demoLaunched) {
             if(detailed_debug) console.log("ItemHighlight.onGameChanged - videoDelay.restart()");
             videoDelay.restart();
         }

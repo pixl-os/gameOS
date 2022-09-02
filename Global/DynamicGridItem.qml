@@ -58,12 +58,17 @@ Item {
     z: selected ? 10 : 1
 
 
-	property bool validated: videoToStop
+    property bool validated: videoToStop || demoLaunched
 
 	onValidatedChanged:
 	{
-		if(detailed_debug) console.log("DynamicGridItem.onValidatedChanged:", validated);
-		if (selected && validated) 
+        if(detailed_debug) {
+            console.log("DynamicGridItem.onValidatedChanged - validated :", validated);
+            console.log("DynamicGridItem.onValidatedChanged - selected :", selected);
+            console.log("DynamicGridItem.onValidatedChanged - videoToStop : ", videoToStop);
+            console.log("DynamicGridItem.onValidatedChanged - demoLaunched :", demoLaunched);
+        }
+        if (selected && validated)
 		{
             fadescreenshot.stop();
             screenshot.opacity = 1;
@@ -72,8 +77,13 @@ Item {
 	}
 
     onSelectedChanged: {
-		if(detailed_debug) console.log("DynamicGridItem.onSelectedChanged");
-        if (selected && playVideo && !videoToStop)
+        if(detailed_debug) {
+            console.log("DynamicGridItem.onSelectedChanged - validated :", validated);
+            console.log("DynamicGridItem.onSelectedChanged - selected :", selected);
+            console.log("DynamicGridItem.onSelectedChanged - videoToStop : ", videoToStop);
+            console.log("DynamicGridItem.onSelectedChanged - demoLaunched : ",demoLaunched);
+        }
+        if (selected && playVideo && !validated)
             fadescreenshot.restart();
         else {
             fadescreenshot.stop();
