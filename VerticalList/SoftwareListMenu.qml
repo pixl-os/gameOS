@@ -503,8 +503,7 @@ FocusScope {
             event.accepted = true;
             if (!gameview.focus) {
                 gameActivated();
-                //launchGame();
-                gameview.gameToLaunched = true;
+                gameToLaunched = true;
                 softwarelist.focus = false;
                 gameview.focus = true;
             }
