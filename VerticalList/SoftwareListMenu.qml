@@ -45,6 +45,8 @@ FocusScope {
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
+    property bool hotkeyPressed: false;
+    
     property real lastL1PressedTimestamp: 0
     property real lastR1PressedTimestamp: 0
     property int nextLetterDirection
@@ -214,6 +216,13 @@ FocusScope {
             anchors.fill: parent
         }
         Keys.onDownPressed: {
+            //console.log("api.launchedgame : ",api.launchedgame);
+            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                //console.log("Block Keys.onDownPressed from header");
+                return;
+            }                
             sfxNav.play();
             softwarelist.focus = true;
             if((softwarelist.currentIndex < softwarelist.count) && (softwarelist.currentIndex >= 0)){
@@ -221,6 +230,13 @@ FocusScope {
             } else softwarelist.currentIndex = 0; //set index
         }
         Keys.onPressed: {
+            //console.log("api.launchedgame : ",api.launchedgame);
+            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                //console.log("Block Keys.onUpPressed from header");
+                return;
+            }                
             // Accept
             if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                 //RFU
@@ -429,6 +445,13 @@ FocusScope {
     // Handle input
     // Up
     Keys.onUpPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onUpPressed");
+            return;
+        }        
         if (softwarelist.currentIndex != 0)
             softwarelist.currentIndex--;
         else
@@ -437,6 +460,13 @@ FocusScope {
     }
     // Down
     Keys.onDownPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onDownPressed");
+            return;
+        }        
         if (softwarelist.currentIndex != softwarelist.count - 1)
             softwarelist.currentIndex++;
         else
@@ -445,6 +475,13 @@ FocusScope {
     }
     // Left
     Keys.onLeftPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onLeftPressed");
+            return;
+        }            
         /*if (softwarelist.currentIndex > skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex - skipnum;
         else
@@ -452,6 +489,13 @@ FocusScope {
     }
     // Right
     Keys.onRightPressed:  {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onRightPressed");
+            return;
+        }        
         /*if (softwarelist.currentIndex < softwarelist.count - skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex + skipnum;
         else
@@ -462,6 +506,21 @@ FocusScope {
     }
 
     Keys.onReleased: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onReleased on SoftwareListMenu");
+            return;
+        }
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
         // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -469,13 +528,11 @@ FocusScope {
             resetDemo();
             return;
         }
-
         // Scroll Up - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             return;
         }
-
         // Next collection - R2 now
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -483,7 +540,6 @@ FocusScope {
             isRightTriggerPressed = false;
             return;
         }
-
         // Previous collection - L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -498,6 +554,21 @@ FocusScope {
     property int minimum: 0
 
     Keys.onPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onPressed on SoftwareListMenu");
+            return;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;        
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+        }        
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;

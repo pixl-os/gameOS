@@ -37,6 +37,7 @@ FocusScope {
     property var sortedGames: null;
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
+    property bool hotkeyPressed: false;
 
     property real lastL1PressedTimestamp: 0
     property real lastR1PressedTimestamp: 0
@@ -365,6 +366,13 @@ FocusScope {
     }
 
     Keys.onReleased: {
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
         // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -372,13 +380,11 @@ FocusScope {
             resetDemo();
             return;
         }
-
         // Scroll Up - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             return;
         }
-
         // Next collection - R2 now
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -386,7 +392,6 @@ FocusScope {
             isRightTriggerPressed = false;
             return;
         }
-
         // Previous collection - L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -401,6 +406,13 @@ FocusScope {
     property int minimum: 0
 
     Keys.onPressed: {
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+        }
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -412,7 +424,6 @@ FocusScope {
             }
             return;
         }
-
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -423,7 +434,6 @@ FocusScope {
             }
             return;
         }
-
         // Details
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -484,7 +494,6 @@ FocusScope {
             }
             return;
         }
-
         // Next collection - R2 now
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -499,12 +508,10 @@ FocusScope {
 
             gamegrid.currentIndex = 0;
             sfxToggle.play();
-
             // Reset our cached sorted games
             sortedGames = null;
             return;
         }
-
         // Previous collection - use L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;

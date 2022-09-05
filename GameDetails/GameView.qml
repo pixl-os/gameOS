@@ -38,7 +38,8 @@ FocusScope {
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
     property bool iamsteam: game ? (collectionShortName === "steam") : false
     property bool canPlayVideo: ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
-
+    property bool hotkeyPressed: false;
+    
     //clipping activated especially for embedded mode
     clip: embedded
 
@@ -1399,7 +1400,16 @@ FocusScope {
         mediaIndex: media.currentIndex !== -1 ? media.currentIndex : 0
         onClose: closeMedia();
     }
-
+    Keys.onReleased: {
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+            return;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+    }
     // Input handling
     Keys.onPressed: {
         //console.log("api.launchedgame : ",api.launchedgame);
@@ -1410,6 +1420,14 @@ FocusScope {
             //console.log("Block Keys.onPressed on GameView");
             return;
         }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+            return;
+        }            
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
