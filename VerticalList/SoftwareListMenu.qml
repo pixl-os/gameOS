@@ -45,6 +45,24 @@ FocusScope {
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
+    property real lastL1PressedTimestamp: 0
+    property real lastR1PressedTimestamp: 0
+    property int nextLetterDirection
+
+    //Timer to launch nextLetterDirection after 250 ms (to let detection of L1+R1)
+    Timer {
+        id: navigateToNextLetterTimer
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 200
+        onTriggered: {
+            if ((lastL1PressedTimestamp !== 0) || (lastR1PressedTimestamp !== 0)) {
+                navigateToNextLetter(nextLetterDirection)
+            }
+        }
+    }
+
     function nextChar(c, modifier) {
         const firstAlpha = 97;
         const lastAlpha = 122;
@@ -433,6 +451,10 @@ FocusScope {
         }
     }
 
+    //Random Game
+    property int maximum: softwarelist.count
+    property int minimum: 0
+
     Keys.onPressed: {
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
@@ -478,17 +500,57 @@ FocusScope {
                 list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
             //}
         }
-        // Scroll Down - use R1 now
+
+        // Random Game math here for best refresh
+        var randomGame = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+
+        // Scroll Up - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            navigateToNextLetter(+1);
+            lastR1PressedTimestamp = Date.now();
+            //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
+            if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
+                softwarelist.currentIndex = randomGame
+                sfxToggle.play();
+                gameActivated();
+                //console.log("ramdom game selected");
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                //launch potential navigation to next letter using timer now
+                nextLetterDirection = +1
+                navigateToNextLetterTimer.start();
+            }
             return;
         }
 
-        // Scroll Up - use L1 now
+        // Scroll Down - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            navigateToNextLetter(-1);
+            lastL1PressedTimestamp = Date.now();
+            //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
+            if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
+                softwarelist.currentIndex = randomGame
+                sfxToggle.play();
+                gameActivated();
+                //console.log("ramdom game selected");
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                //launch potential navigation to previous letter using timer now
+                nextLetterDirection = -1
+                navigateToNextLetterTimer.start();
+            }
             return;
         }
 
@@ -560,6 +622,10 @@ FocusScope {
         ListElement {
             name: qsTr("Launch")
             button: "accept"
+        }
+        ListElement {
+            name: qsTr("random game (L1+R1)")
+            button: "random"
         }
     }
     

@@ -42,7 +42,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- change name and place for selection of grid or vertical list
 	- add L1/R1 and L2/R2 management in vertical list
 	- dynamic calculations for 1080p & 72Op overlays and all screen resolutions
-	- select random game in games list with R1+L1
+	- select random game in games list with R1+L1 (from Grid or VerticalList)
 
 - emulator-loading-improvements :
 	- stop playing video if lost focus (onCanPlayVideoChanged)

@@ -38,7 +38,6 @@ FocusScope {
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
-    //warning: don't replace var by int in this case due to usage of Date.now(). it returns a too long integer.
     property real lastL1PressedTimestamp: 0
     property real lastR1PressedTimestamp: 0
     property int nextLetterDirection
@@ -400,7 +399,6 @@ FocusScope {
     //Random Game
     property int maximum: gamegrid.count
     property int minimum: 0
-    property int randomGame:  Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
     Keys.onPressed: {
         // Accept
@@ -433,6 +431,9 @@ FocusScope {
             headercontainer.focus = true;
             return;
         }
+
+        // Random Game math here for best refresh
+        var randomGame = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
         // Scroll Up - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
