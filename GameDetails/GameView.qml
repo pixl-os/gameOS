@@ -38,14 +38,19 @@ FocusScope {
     property string collectionShortName: game ? game.collections.get(0).shortName : ""
     property bool iamsteam: game ? (collectionShortName === "steam") : false
     property bool canPlayVideo: ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
+    property bool hotkeyPressed: false;
+    
+    //clipping activated especially for embedded mode
+    clip: embedded
+
     onCanPlayVideoChanged:{
         //to force to stop video playing when we lost focus
        if(canPlayVideo === false) toggleVideo(false);
     }
 
     property real detailsOpacity: ((settings.DetailsDefault === "Yes") && (demoLaunched !== true)) || ((settings.DemoShowFullDetails === "Yes") && (demoLaunched === true)) ? 1 : 0
-	property real retroachievementsOpacity: 0
-	property bool blurBG: settings.GameBlurBackground === "Yes"
+    property real retroachievementsOpacity: 0
+    property bool blurBG: settings.GameBlurBackground === "Yes"
     property string publisherName: {
         if (game !== null && game.publisher !== null) {
             var str = game.publisher;
@@ -219,36 +224,35 @@ FocusScope {
             game.assets.backgroundList.forEach(v => mediaList.push(v));
 
             //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
-            if ((game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
-            if (game.assets.boxFront3d !== "") mediaList.push(game.assets.boxFront3d);
-            if (game.assets.boxBack !== "") mediaList.push(game.assets.boxBack);
-            if (game.assets.boxSpine !== "") mediaList.push(game.assets.boxSpine);
-            if (game.assets.boxFull !== "") mediaList.push(game.assets.boxFull);
-            if ((game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
-            if (game.assets.cartridgetexture !== "") mediaList.push(game.assets.cartridgetexture);
-            if (game.assets.logo !== "") mediaList.push(game.assets.logo);
-            if (game.assets.logocarbon !== "") mediaList.push(game.assets.logocarbon);
-            if (game.assets.logosteel !== "") mediaList.push(game.assets.logosteel);
-            if (game.assets.poster !== "") mediaList.push(game.assets.poster);
+            //WARNING: some apis doesn't exist yet that why we added a test on API now to know if it's defined or not.
+            if ((typeof(game.assets.boxFront) !== "undefined") && (game.assets.boxFront !== "") && (game.assets.boxFront !== game.assets.screenshots[0]) && (game.assets.boxFront !== game.assets.background)) mediaList.push(game.assets.boxFront);
+            if ((typeof(game.assets.boxFront3d) !== "undefined") && (game.assets.boxFront3d !== "")) mediaList.push(game.assets.boxFront3d);
+            if ((typeof(game.assets.boxBack) !== "undefined") && (game.assets.boxBack !== "")) mediaList.push(game.assets.boxBack);
+            if ((typeof(game.assets.boxSpine) !== "undefined") && (game.assets.boxSpine !== "")) mediaList.push(game.assets.boxSpine);
+            if ((typeof(game.assets.boxFull) !== "undefined") && (game.assets.boxFull !== "")) mediaList.push(game.assets.boxFull);
+            if ((typeof(game.assets.cartridge) !== "undefined") && (game.assets.cartridge !== "") && (game.assets.cartridge !== game.assets.boxFront)) mediaList.push(game.assets.cartridge);
+            if ((typeof(game.assets.cartridgetexture) !== "undefined") && (game.assets.cartridgetexture !== "")) mediaList.push(game.assets.cartridgetexture);
+            if ((typeof(game.assets.logo) !== "undefined") && (game.assets.logo !== "")) mediaList.push(game.assets.logo);
+            if ((typeof(game.assets.logocarbon) !== "undefined") && (game.assets.logocarbon !== "")) mediaList.push(game.assets.logocarbon);
+            if ((typeof(game.assets.logosteel) !== "undefined") && (game.assets.logosteel !== "")) mediaList.push(game.assets.logosteel);
+            if ((typeof(game.assets.poster) !== "undefined") && (game.assets.poster !== "")) mediaList.push(game.assets.poster);
 
-            if (game.assets.marquee !== "") mediaList.push(game.assets.marquee);
-            if (game.assets.screenmarqueesmall !== "") mediaList.push(game.assets.screenmarqueesmall);
-            if (game.assets.bezel !== "") mediaList.push(game.assets.bezel);
-            if (game.assets.panel !== "") mediaList.push(game.assets.panel);
-            if (game.assets.cabinetLeft !== "") mediaList.push(game.assets.cabinetLeft);
-            if (game.assets.cabinetRight !== "") mediaList.push(game.assets.cabinetRight);
+            if ((typeof(game.assets.marquee) !== "undefined") && (game.assets.marquee !== "")) mediaList.push(game.assets.marquee);
+            if ((typeof(game.assets.screenmarqueesmall) !== "undefined") && (game.assets.screenmarqueesmall !== "")) mediaList.push(game.assets.screenmarqueesmall);
+            if ((typeof(game.assets.bezel) !== "undefined") && (game.assets.bezel !== "")) mediaList.push(game.assets.bezel);
+            if ((typeof(game.assets.panel) !== "undefined") && (game.assets.panel !== "")) mediaList.push(game.assets.panel);
+            if ((typeof(game.assets.cabinetLeft) !== "undefined") && (game.assets.cabinetLeft !== "")) mediaList.push(game.assets.cabinetLeft);
+            if ((typeof(game.assets.cabinetRight) !== "undefined") && (game.assets.cabinetRight !== "")) mediaList.push(game.assets.cabinetRight);
 
-            if (game.assets.tile !== "") mediaList.push(game.assets.tile);
-            if (game.assets.steam !== "") mediaList.push(game.assets.steam);
-            if (game.assets.banner !== "") mediaList.push(game.assets.banner);
+            if ((typeof(game.assets.tile) !== "undefined") && (game.assets.tile !== "")) mediaList.push(game.assets.tile);
+            if ((typeof(game.assets.steam) !== "undefined") && (game.assets.steam !== "")) mediaList.push(game.assets.steam);
+            if ((typeof(game.assets.banner) !== "undefined") && (game.assets.banner !== "")) mediaList.push(game.assets.banner);
 
-            //if (game.assets.music !== "") mediaList.push(game.assets.music);//RFU
+            //if ((typeof(game.assets.music) !== "undefined") && (game.assets.music !== "")) mediaList.push(game.assets.music);//RFU
 
-            if (game.assets.titlescreen !== "") mediaList.push(game.assets.titlescreen);
-
-            if (game.assets.map !== "") mediaList.push(game.assets.map);
+            if ((typeof(game.assets.titlescreen) !== "undefined") && (game.assets.titlescreen !== "")) mediaList.push(game.assets.titlescreen);
+            if ((typeof(game.assets.map) !== "undefined") && (game.assets.map !== "")) mediaList.push(game.assets.map);
         }
-
         return mediaList;
     }
 
@@ -286,7 +290,7 @@ FocusScope {
 
     }
 
-	function setRetroAchievements(){
+    function setRetroAchievements(){
         if(game.retroAchievementsCount !== 0){
             //to force update of GameAchievements model for gridView
             achievements.model = game.retroAchievementsCount;
@@ -308,21 +312,21 @@ FocusScope {
             //hide retroachievements if displayed from a previous game
             if(retroachievementsOpacity === 1) showDetails();
         }
-	}
+    }
 
     // Show/hide the details overlay
     function showDetails() {
         if (detailsOpacity === 1) {
             toggleVideo(true);
             detailsOpacity = 0;
-	        retroachievementsOpacity = 0;
+            retroachievementsOpacity = 0;
         }
         else {
             detailsOpacity = 1;
-	        retroachievementsOpacity = 0;
+            retroachievementsOpacity = 0;
             toggleVideo(false);
-	        achievements.selected = false;
-	        content.focus = true;
+            achievements.selected = false;
+            content.focus = true;
         }
     }
 
@@ -331,15 +335,15 @@ FocusScope {
         if (retroachievementsOpacity === 1) {
             detailsOpacity = 1;
             retroachievementsOpacity = 0;
-	        achievements.selected = false;
-	        content.focus = true;
+            achievements.selected = false;
+            content.focus = true;
         }
         else {
-	        detailsOpacity = 0;
-	        retroachievementsOpacity = 1;
+            detailsOpacity = 0;
+            retroachievementsOpacity = 1;
             toggleVideo(false);
-		    achievements.index = -1;
-		    achievements.updateDetails(0);
+            achievements.index = -1;
+            achievements.updateDetails(0);
         }
     }
 
@@ -362,14 +366,14 @@ FocusScope {
         //console.log("GameView - onGameChanged");
         //reset default value for a new game loading
         reset();
-	}	
+    }    
 
-	Connections {
+    Connections {
         target: game
-		function onRetroAchievementsInitialized() {
+        function onRetroAchievementsInitialized() {
             //console.log("GameView - retroAchievements is now initialized !");
-			setRetroAchievements();	
-		}
+            setRetroAchievements();    
+        }
     }
 
     anchors.fill: parent
@@ -759,7 +763,7 @@ FocusScope {
                     top: parent.top; bottom: parent.bottom; right: parent.right
                 }
             }
-			
+            
         }
     }
     
@@ -993,7 +997,7 @@ FocusScope {
                             //stop existing animation
                             iconRotation.stop();
                             //limit to one cycle
-                            iconRotation.loops = 1;
+                            iconRotation.loops = 30;
                             //restart animation
                             iconRotation.start();
                         }
@@ -1011,12 +1015,40 @@ FocusScope {
                     }
                 }
             }
+            
+            Timer {
+                id: launchGameDelay
+                running: false
+                triggeredOnStart: false
+                repeat: false
+                interval: 500
+                onTriggered: {
+                    launchGame(game);
+                }
+            }
 
             onActivated:
                 if (selected) {
-                    sfxAccept.play();
-                    launchGame(game);
-                } else {
+                    //if game not already launched
+                    if(!launchedGame){
+                        sfxAccept.play();
+                        if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                            //to launch animation at launch
+                            icon = "../assets/images/loading.png";
+                            //start animation without end
+                            iconRotation.loops = 30;
+                            iconRotation.start();
+                        }
+                        //stop video before to launch game
+                        toggleVideo(false);
+                        //also for collections in background in case of multi-windows
+                        videoToStop = true;
+                        //force gameToLaunched flag also in this case
+                        gameToLaunched = true;
+                        launchGameDelay.start();
+                    }
+                }
+                else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
@@ -1068,6 +1100,8 @@ FocusScope {
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
             onActivated:
                 if (selected) {
+                    //to let video to run if needed
+                    videoToStop = false;
                     if(embedded) {
                         if (retroachievementsOpacity === 1) {
                             detailsOpacity = 1;
@@ -1132,7 +1166,7 @@ FocusScope {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
-			}
+            }
         }
     }
 
@@ -1153,6 +1187,14 @@ FocusScope {
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
+                                    //console.log("api.launchedgame : ",api.launchedgame);
+                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                    if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                        //console.log("Block Keys.onLeftPressed on ListView(menu) of GameView");
+                                        return;
+                                    }
                                     //if embedded and if we do left to come back to list
                                     if (root.embedded ? !root.parent.focus : false){
                                         if(currentIndex === 0){
@@ -1168,18 +1210,26 @@ FocusScope {
                                     }
 
                                     //console.log("Menu - Keys.onLeftPressed");
-									sfxNav.play(); 
-									do{	
-										decrementCurrentIndex();
-									}while(!currentItem.enabled);								
-								}
+                                    sfxNav.play(); 
+                                    do{    
+                                        decrementCurrentIndex();
+                                    }while(!currentItem.enabled);                                
+                                }
             Keys.onRightPressed:{ 
+                                    //console.log("api.launchedgame : ",api.launchedgame);
+                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                    if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                        //console.log("Block Keys.onRightPressed on ListView(menu) of GameView");
+                                        return;
+                                    }
                                     //console.log("Menu - Keys.onLeftPressed");
-									sfxNav.play(); 
-									do{	
-										incrementCurrentIndex();
-									}while(!currentItem.enabled);
-								}
+                                    sfxNav.play(); 
+                                    do{    
+                                        incrementCurrentIndex();
+                                    }while(!currentItem.enabled);
+                                }
         }
 
         //media list
@@ -1302,24 +1352,41 @@ FocusScope {
         }
         keyNavigationWraps: true
         Keys.onUpPressed: { 
-							sfxNav.play(); 
- 							if(currentIndex !== 0)	
-							{
-								decrementCurrentIndex();
-							}
-							else //focus on retroachievements gridView if display
-							{
-								if((retroachievementsOpacity === 1) && (game.retroAchievementsCount !== 0)) 
-								{
-								   	menu.currentIndex = -1;
-									achievements.index = 0;
-									achievements.selected = true;
-									achievements.updateDetails(0);
-								}
-								else  decrementCurrentIndex();
-							}
-						  }
-        Keys.onDownPressed: { sfxNav.play(); incrementCurrentIndex() }
+                            //console.log("api.launchedgame : ",api.launchedgame);
+                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                //console.log("Block Keys.onUpPressed on ListView(content) of GameView");
+                                return;
+                            }
+                            sfxNav.play(); 
+                             if(currentIndex !== 0)    
+                            {
+                                decrementCurrentIndex();
+                            }
+                            else //focus on retroachievements gridView if display
+                            {
+                                if((retroachievementsOpacity === 1) && (game.retroAchievementsCount !== 0)) 
+                                {
+                                       menu.currentIndex = -1;
+                                    achievements.index = 0;
+                                    achievements.selected = true;
+                                    achievements.updateDetails(0);
+                                }
+                                else  decrementCurrentIndex();
+                            }
+                          }
+        Keys.onDownPressed: { 
+                            //console.log("api.launchedgame : ",api.launchedgame);
+                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                //console.log("Block Keys.onDownPressed on ListView(content) of GameView");
+                                return;
+                            }
+                          sfxNav.play();
+                          incrementCurrentIndex() 
+        }
     }
 
     MediaView {
@@ -1333,12 +1400,39 @@ FocusScope {
         mediaIndex: media.currentIndex !== -1 ? media.currentIndex : 0
         onClose: closeMedia();
     }
-
+    Keys.onReleased: {
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+            return;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+    }
     // Input handling
     Keys.onPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onPressed on GameView");
+            return;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+            return;
+        }            
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            //to let video to run if needed
+            videoToStop = false;
             if(embedded){
                 if (retroachievementsOpacity === 1) {
                     detailsOpacity = 1;
@@ -1426,23 +1520,50 @@ FocusScope {
         }
     }
 
+    onActiveFocusChanged:
+    {
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = gameviewHelpModel;
+        }
+    }
+
     onFocusChanged: {
+        //console.log("onFocusChanged - focus",focus);
         if (focus) {
+            currentHelpbarModel = gameviewHelpModel;
+            menu.focus = true;
+            menu.currentIndex = 0;
             if(embedded){
                 //activate collections
                 publisherCollection.enabled = true;
                 genreCollection.enabled = true;
-                //launch video
-                toggleVideo(true);
-                //launch initialization of retroachievements
                 //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
                 game.initRetroAchievements();
                 //init overlays parameters
                 root.getOverlaysParameters();
+                if(gameToLaunched && !api.launchedgame){
+                    if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                        //to launch animation at launch
+                        button1.icon = "../assets/images/loading.png";
+                        //start animation without end
+                        button1.iconRotation.loops = 30;
+                        button1.iconRotation.start();
+                    }
+                    //stop video before to launch game
+                    toggleVideo(false);
+                    //also for collections in background in case of multi-windows
+                    videoToStop = true;
+                    launchGameDelay.start();
+                }
+                else
+                {
+                    //launch video
+                    toggleVideo(true);
+                    //init overlays parameters
+                    root.getOverlaysParameters();
+                }
             }
-            currentHelpbarModel = gameviewHelpModel;
-            menu.focus = true;
-            menu.currentIndex = 0;
         } 
         else {
             if(embedded){

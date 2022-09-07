@@ -135,6 +135,10 @@
         <source>View details</source>
         <translation>Voir détails</translation>
     </message>
+    <message>
+        <source>random game (L1+R1)</source>
+        <translation>jeu au hasard (L1+R1)</translation>
+    </message>
 </context>
 <context>
     <name>HeaderBar</name>
@@ -726,6 +730,10 @@
     <message>
         <source>Launch</source>
         <translation>Lancer</translation>
+    </message>
+    <message>
+        <source>random game (L1+R1)</source>
+        <translation>jeu au hasard (L1+R1)</translation>
     </message>
 </context>
 <context>

@@ -29,7 +29,7 @@ Image {
             var gamesource = currentCollection.games.get(i);
             if (Utils.boxArt(gamesource) !== "")
             {
-                console.log("Utils.boxArt(gamesource) : ", Utils.boxArt(gamesource))
+                //console.log("Utils.boxArt(gamesource) : ", Utils.boxArt(gamesource))
                 return Utils.boxArt(gamesource);
             }
         }

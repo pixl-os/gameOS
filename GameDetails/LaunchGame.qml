@@ -151,7 +151,14 @@ FocusScope {
 		}
     }
 	
-    onFocusChanged: { if (focus) currentHelpbarModel = launchGameHelpModel; }
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = launchGameHelpModel;
+        }
+    }
 
     // Input handling
     Keys.onPressed: {

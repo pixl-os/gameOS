@@ -26,7 +26,7 @@ Item {
     property bool boxArt
     property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
 	
-	property bool validated: selected && videoToStop
+    property bool validated: selected && (videoToStop || demoLaunched)
 	onValidatedChanged:
 	{
 		if(detailed_debug) console.log("ItemHighlight.onValidatedChanged:", validated);
@@ -39,22 +39,30 @@ Item {
 	}
 
     onGameChanged: {
-		if(detailed_debug) console.log("ItemHighlight.onGameChanged");
+        if(detailed_debug) {
+            console.log("ItemHighlight.onGameChanged - selected : ", selected);
+            console.log("ItemHighlight.onGameChanged - videoToStop : ", videoToStop);
+        }
         videoPreviewLoader.sourceComponent = undefined;
-		videoToStop = false;
-        if (playVideo && selected) {
+        //videoToStop = false;
+        if (playVideo && selected && !videoToStop && !demoLaunched) {
+            if(detailed_debug) console.log("ItemHighlight.onGameChanged - videoDelay.restart()");
             videoDelay.restart();
         }
     }
 
     onSelectedChanged: {
-		if(detailed_debug) console.log("ItemHighlight.onSelectedChanged");
+        if(detailed_debug) {
+            console.log("ItemHighlight.onSelectedChanged - selected : ", selected);
+            console.log("ItemHighlight.onSelectedChanged - videoToStop : ", videoToStop);
+        }
         if (!selected) {
             videoPreviewLoader.sourceComponent = undefined;
 			videoToStop = false;
             videoDelay.stop();
         }
-        else if (playVideo && selected && !videoDelay.running) {
+        else if (playVideo && selected && !videoDelay.running && !videoToStop) {
+            if(detailed_debug) console.log("ItemHighlight.onSelectedChanged - videoDelay.restart()");
             videoDelay.restart();
         }
 

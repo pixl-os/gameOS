@@ -45,6 +45,8 @@ FocusScope {
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
 
+    property bool hotkeyPressed: false;
+    
     property real lastL1PressedTimestamp: 0
     property real lastR1PressedTimestamp: 0
     property int nextLetterDirection
@@ -194,6 +196,7 @@ FocusScope {
     Component.onCompleted: {
         //to set game to display
         currentGame = list.currentGame(softwarelist.currentIndex);
+        softwarelist.focus = true;
     }
 
     Rectangle {
@@ -213,11 +216,36 @@ FocusScope {
             anchors.fill: parent
         }
         Keys.onDownPressed: {
+            //console.log("api.launchedgame : ",api.launchedgame);
+            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                //console.log("Block Keys.onDownPressed from header");
+                return;
+            }                
             sfxNav.play();
             softwarelist.focus = true;
             if((softwarelist.currentIndex < softwarelist.count) && (softwarelist.currentIndex >= 0)){
                 //do nothing
             } else softwarelist.currentIndex = 0; //set index
+        }
+        Keys.onPressed: {
+            //console.log("api.launchedgame : ",api.launchedgame);
+            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+            if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+                //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                //console.log("Block Keys.onUpPressed from header");
+                return;
+            }                
+            // Accept
+            if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                //RFU
+            }
+            // Back
+            if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                event.accepted = true;
+                softwarelist.focus = true;
+            }
         }
     }
 
@@ -273,12 +301,40 @@ FocusScope {
     ListView {
         id: softwarelist
 
-        currentIndex: currentGameIndex
         onCurrentIndexChanged: {
-            if (currentIndex != -1){
+            //console.log("softwarelist::onCurrentIndexChanged - currentIndex",currentIndex);
+            //console.log("softwarelist::onCurrentIndexChanged - headercontainer.focus",headercontainer.focus);
+            //we read header "focus" status to restore it later if needed
+            //console.log("----- onCurrentIndexChanged before -----");
+            //console.log(" headercontainer.searchActive : ", headercontainer.searchActive);
+            //console.log(" headercontainer.searchInput.focus : ", headercontainer.searchInput.focus);
+            //console.log(" Qt.inputMethod.visible : ", Qt.inputMethod.visible);
+
+
+            var headerStatus = headercontainer.focus;
+            var searchInputStatus = headercontainer.searchInput.focus;
+            var searchActiveStatus = headercontainer.searchInput.searchActive;
+
+            if (currentIndex !== -1){
                 currentGameIndex = currentIndex;
                 currentGame = list.currentGame(softwarelist.currentIndex)
+                if(headerStatus === true){
+                    //we restore header "focus" status to avoid to focus vertical list during a search/filtering.
+                    headercontainer.focus = true;
+                }
+                if(searchInputStatus === true){
+                    //we restore header searchInput "focus" status to avoid to focus vertical list during a search/filtering.
+                    headercontainer.searchInput.focus = true;
+                }
+                if(searchActiveStatus === true){
+                    //we restore header searchActive state to keep cursor/edition during a search/filtering.
+                    headercontainer.searchInput.searchActive = true;
+                }
             }
+            //console.log("----- onCurrentIndexChanged after -----");
+            //console.log(" headercontainer.searchActive : ", headercontainer.searchActive);
+            //console.log(" headercontainer.searchInput.focus : ", headercontainer.searchInput.focus);
+            //console.log(" Qt.inputMethod.visible : ", Qt.inputMethod.visible);
         }
 
         Component.onCompleted: {
@@ -330,7 +386,7 @@ FocusScope {
                         bottom: parent.bottom; bottomMargin: vpx(5)
                     }
                     color: theme.text
-                    visible: selected && !gameview.focus
+                    visible: selected && !gameview.focus && !headercontainer.focus
 
                 }
 
@@ -389,20 +445,43 @@ FocusScope {
     // Handle input
     // Up
     Keys.onUpPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onUpPressed");
+            return;
+        }        
         if (softwarelist.currentIndex != 0)
             softwarelist.currentIndex--;
         else
             softwarelist.currentIndex = softwarelist.count - 1
+        softwarelist.focus = true;
     }
     // Down
     Keys.onDownPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onDownPressed");
+            return;
+        }        
         if (softwarelist.currentIndex != softwarelist.count - 1)
             softwarelist.currentIndex++;
         else
             softwarelist.currentIndex = 0;
+        softwarelist.focus = true;
     }
     // Left
     Keys.onLeftPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onLeftPressed");
+            return;
+        }            
         /*if (softwarelist.currentIndex > skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex - skipnum;
         else
@@ -410,6 +489,13 @@ FocusScope {
     }
     // Right
     Keys.onRightPressed:  {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            //console.log("Block Keys.onRightPressed");
+            return;
+        }        
         /*if (softwarelist.currentIndex < softwarelist.count - skipnum)
             softwarelist.currentIndex = softwarelist.currentIndex + skipnum;
         else
@@ -420,6 +506,21 @@ FocusScope {
     }
 
     Keys.onReleased: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onReleased on SoftwareListMenu");
+            return;
+        }
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
         // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -427,13 +528,11 @@ FocusScope {
             resetDemo();
             return;
         }
-
         // Scroll Up - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
             return;
         }
-
         // Next collection - R2 now
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -441,7 +540,6 @@ FocusScope {
             isRightTriggerPressed = false;
             return;
         }
-
         // Previous collection - L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -456,30 +554,36 @@ FocusScope {
     property int minimum: 0
 
     Keys.onPressed: {
+        //console.log("api.launchedgame : ",api.launchedgame);
+        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
+            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+            event.accepted = true;
+            //console.log("Block Keys.onPressed on SoftwareListMenu");
+            return;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;        
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+        }        
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
             if (!gameview.focus) {
                 gameActivated();
-                launchGame();
+                gameToLaunched = true;
+                softwarelist.focus = false;
+                gameview.focus = true;
             }
-            //is it really used ?!
-            /*else {
-                currentGameIndex = 0;
-                softwarelist.focus = true;
-            }*/
-            
         }
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            if (softwarelist.focus) {
-                gameActivated();
-                previousScreen();
-            } else {
-                currentGameIndex = 0;
-                softwarelist.focus = true;
-            }
+            gameActivated();
+            previousScreen();
         }
         // Filters/Search
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
@@ -493,12 +597,10 @@ FocusScope {
         }
         // Toggle favorite
         if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-            //if (softwarelist.focus) {
-                console.log("Toggle favorite");
-                event.accepted = true;
-                sfxToggle.play();
-                list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
-            //}
+            //console.log("Toggle favorite");
+            event.accepted = true;
+            sfxToggle.play();
+            list.currentGame(softwarelist.currentIndex).favorite = !list.currentGame(softwarelist.currentIndex).favorite;
         }
 
         // Random Game math here for best refresh
@@ -628,9 +730,13 @@ FocusScope {
             button: "random"
         }
     }
-    
-    onFocusChanged: {
-        //console.log("SoftwareListMenu::onFocusChanged()");
-        if (focus) currentHelpbarModel = verticalListHelpModel;
+        
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = verticalListHelpModel;
+        }
     }
 }

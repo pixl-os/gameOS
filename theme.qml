@@ -28,55 +28,57 @@ import "Settings"
 FocusScope {
     id: root
 
-	//DEBUG property
-	property bool detailed_debug: false
-	property bool viewIsLoading: true
-    property string viewLoadingText: qsTr("Loading") + "..." + api.tr
 
-	//Spinner Loader for all views loading... (principally for main menu for the moment)
+    //DEBUG property
+    property bool detailed_debug: false
+    property bool viewIsLoading: true
+    property string viewLoadingText: qsTr("Loading") + "..." + api.tr
+    property bool gameToLaunched: false
+    
+    //Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {
         id: spinnerloader
-		z:10 
+        z:10 
         anchors.centerIn: parent        
         active: viewIsLoading && (showcaseLoader.opacity === 1)
         sourceComponent: spinner
     }
 
     Component {
-		id: spinner
+        id: spinner
         Rectangle{
-			Image {
-				id: imageSpinner
-				anchors.centerIn: parent
-				source: "assets/images/loading.png"
-				width: vpx(100)
-				height: vpx(100)
-				z: 10
-				asynchronous: true
-				sourceSize { width: vpx(50); height: vpx(50) }
-				RotationAnimator on rotation {
-					loops: Animator.Infinite;
-					from: 0;
-					to: 360;
-					duration: 3000
-				}
-			}
-			Text {
-				id: textSpinner
-				text: viewLoadingText
-				width: contentWidth
-				height: contentHeight
-				font.family: titleFont.name
-				font.pixelSize: vpx(24)
-				color: theme.text
-				property real centerOffset: imageSpinner.height/2
-				visible: settings.ShowLoadingDetails === "No" ? false : true
-				anchors {
-					top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
-					horizontalCenter: imageSpinner.horizontalCenter
-				}
-			}
-		}
+            Image {
+                id: imageSpinner
+                anchors.centerIn: parent
+                source: "assets/images/loading.png"
+                width: vpx(100)
+                height: vpx(100)
+                z: 10
+                asynchronous: true
+                sourceSize { width: vpx(50); height: vpx(50) }
+                RotationAnimator on rotation {
+                    loops: Animator.Infinite;
+                    from: 0;
+                    to: 360;
+                    duration: 3000
+                }
+            }
+            Text {
+                id: textSpinner
+                text: viewLoadingText
+                width: contentWidth
+                height: contentHeight
+                font.family: titleFont.name
+                font.pixelSize: vpx(24)
+                color: theme.text
+                property real centerOffset: imageSpinner.height/2
+                visible: settings.ShowLoadingDetails === "No" ? false : true
+                anchors {
+                    top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
+                    horizontalCenter: imageSpinner.horizontalCenter
+                }
+            }
+        }
     } 
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
@@ -150,12 +152,12 @@ FocusScope {
             AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "No",
             OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
-			ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
+            ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
             ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
-			DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
+            DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
-			ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
+            ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
             ShowcaseCollection1_Thumbnail: api.memory.has("Collection 1 - Thumbnail") ? api.memory.get("Collection 1 - Thumbnail") : "Wide",
             ShowcaseCollection2:           api.memory.has("Collection 2") ? api.memory.get("Collection 2") : "Most Played",
@@ -168,9 +170,9 @@ FocusScope {
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
             TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
-			ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
-			ShowPlayStats:				   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
-			DemoTriggeringDelay:		   api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
+            ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
+            ShowPlayStats:                   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
+            DemoTriggeringDelay:           api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
             DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
             PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
         }
@@ -188,8 +190,8 @@ FocusScope {
     property int storedCollectionIndex: 0
     property int storedCollectionGameIndex: 0
 
-	//global property
-	property bool videoToStop: false
+    //global property
+    property bool videoToStop: false
 
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
@@ -230,23 +232,69 @@ FocusScope {
             orderBy = Qt.AscendingOrder;
     }
 
+    property var gameToLaunch
+    
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: launchGameTimer
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 500
+        onTriggered: {
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+            //if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ // || !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+              launchGameScreen();
+            }
+            else{
+                launchGameTimerBis.start();
+            }
+
+        }
+    }
+
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: launchGameTimerBis
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 100
+        onTriggered: {
+            gameToLaunch.launch();
+            //reset flag for game to launched
+            gameToLaunched = false;
+        }
+    }
+
+
     // Launch the current game
     function launchGame(game) {
         if (typeof(game) !== "undefined") {
             //if pegasus.multiwindows is no activated
-            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
-              launchGameScreen();
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                launchGameScreen();
+                saveCurrentState(game);
+                game.launch();
             }
-            saveCurrentState(game);
-            game.launch();
+            else{
+                gameToLaunch = game;
+                saveCurrentState(game);
+                launchGameTimer.start();
+            }
         } else {
             console.log("launchGame(game) with game is null");
             //if pegasus.multiwindows is no activated
-            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ //&& !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded"))
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
               launchGameScreen();
+              saveCurrentState(currentGame);
+              currentGame.launch();
             }
-            saveCurrentState(currentGame);
-            currentGame.launch();
+            else{
+                gameToLaunch = currentGame;
+                saveCurrentState(currentGame);
+                launchGameTimer.start();
+            }
         }
     }
 
@@ -298,48 +346,48 @@ FocusScope {
     // Theme settings
     property var theme: {
 
-        var background = 		"#000000";
-        var text = 		        "#ebebeb";
-        var gradientstart = 	        "#001f1f1f";
-        var gradientend = 		"#FF000000";
-        var secondary = 		"#303030";
+        var background =         "#000000";
+        var text =                 "#ebebeb";
+        var gradientstart =             "#001f1f1f";
+        var gradientend =         "#FF000000";
+        var secondary =         "#303030";
 
         if (settings.ColorBackground === "Original") {
-            background = 	 "#1d253d";
+            background =      "#1d253d";
             text =           "#ececec";
             gradientstart =  "#000d111d";
             gradientend =    "#FF0d111d";
         }
         else if (settings.ColorBackground === "Black") {
-            background = 	"#000000";
+            background =     "#000000";
             gradientstart = "#001f1f1f";
-            gradientend = 	"#FF000000";
+            gradientend =     "#FF000000";
         }
         else if (settings.ColorBackground === "White") {
-            background = 	"#ebebeb";
+            background =     "#ebebeb";
             gradientstart = "#00ebebeb";
-            gradientend = 	"#FFebebeb";
-            text         = 	"#101010";
+            gradientend =     "#FFebebeb";
+            text         =     "#101010";
         }
         else if (settings.ColorBackground === "Gray") {
-            background = 	"#1f1f1f";
+            background =     "#1f1f1f";
             gradientstart = "#001f1f1f";
-            gradientend = 	"#FF1F1F1F";
+            gradientend =     "#FF1F1F1F";
         }
         else if (settings.ColorBackground === "Blue") {
-            background = 	"#1d253d";
+            background =     "#1d253d";
             gradientstart = "#001d253d";
-            gradientend = 	"#FF1d253d";
+            gradientend =     "#FF1d253d";
         }
         else if (settings.ColorBackground === "Green") {
-            background = 	"#054b16";
+            background =     "#054b16";
             gradientstart = "#00054b16";
-            gradientend = 	"#00054b16";
+            gradientend =     "#00054b16";
         }
         else if (settings.ColorBackground === "Red") {
-            background = 	"#520000";
+            background =     "#520000";
             gradientstart = "#00520000";
-            gradientend = 	"#FF520000";
+            gradientend =     "#FF520000";
         }
 
         var accent = "#288928";
@@ -474,18 +522,18 @@ FocusScope {
         sfxAccept.play();
         //if (game !== null) console.log("gameDetails - game.title:", game.title);
         //else console.log("gameDetails - game.title:", "null");
-		
+        
         // As long as there is a state history, save the last game
         if (lastState.length != 0){
             //console.log("gameDetails - currentGame.title:", currentGame.title);
             lastGame.push(currentGame);
-		}
+        }
 
         // Push the new game
         if (game !== null){
             currentGame = game;
             //console.log("gameDetails - new currentGame.title:", currentGame.title);
-		}
+        }
         
         // Save the state before pushing the new one
         //console.log("Previous State:", state);
@@ -503,19 +551,20 @@ FocusScope {
         sfxAccept.play();
         lastState.push(state);
         root.state = "launchgamescreen";
+        launchGameTimerBis.start();
     }
 
     function previousScreen() {
         sfxBack.play();
-	
-	    if (state === lastState[lastState.length-1])
+    
+        if (state === lastState[lastState.length-1])
         {    
-			popLastGame();
-		}
-		else if(previousHelpbarModel) {
-			currentHelpbarModel = previousHelpbarModel;
-		}
-		
+            popLastGame();
+        }
+        else if(previousHelpbarModel) {
+            currentHelpbarModel = previousHelpbarModel;
+        }
+        
         state = lastState[lastState.length - 1];
         lastState.pop();
     }
@@ -547,8 +596,8 @@ FocusScope {
         id: showcaseLoader
 
         focus: (root.state === "showcasescreen")
-		active: true //force loading in all cases
-		opacity: focus ? 1 : 0
+        active: true //force loading in all cases
+        opacity: focus ? 1 : 0
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent
@@ -624,8 +673,8 @@ FocusScope {
 
     Component {
         id: showcaseview
-	
-	ShowcaseViewMenu { focus: true; visible: !viewIsLoading; }
+    
+    ShowcaseViewMenu { focus: true; visible: !viewIsLoading; }
     }
 
     Component {
@@ -651,8 +700,8 @@ FocusScope {
 
     //property, timers & functions to manage a demo mode in gameOS theme ;-)
     property bool demoLaunched: false
-	
-	function getRandomInt(max) {
+    
+    function getRandomInt(max) {
       return Math.floor(Math.random() * max);
     }
 
@@ -735,7 +784,7 @@ FocusScope {
     
     // Button help
     property var currentHelpbarModel
-	property var previousHelpbarModel
+    property var previousHelpbarModel
     ButtonHelpBar {
         id: helpbuttonbar
         height: vpx(50)
@@ -743,7 +792,7 @@ FocusScope {
             left: parent.left; right: parent.right; rightMargin: globalMargin
             bottom: parent.bottom
         }
-		opacity: viewIsLoading && (showcaseLoader.opacity === 1) ? 0 : 1
+        opacity: viewIsLoading && (showcaseLoader.opacity === 1) ? 0 : 1
         visible: settings.HideButtonHelp === "No"
     }
 

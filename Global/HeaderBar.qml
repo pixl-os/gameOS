@@ -24,8 +24,8 @@ import QtQuick.VirtualKeyboard 2.15
 FocusScope {
     id: root
 
-    onFocusChanged: buttonbar.currentIndex = 0;
-
+    //to have access to input and know information about it if needed
+    property alias searchInput : searchInput
 
     Item {
         id: container
@@ -319,7 +319,7 @@ FocusScope {
         // Buttons
         ListView {
             id: buttonbar
-
+            currentIndex: 0
             focus: true
             model: headermodel
             spacing: vpx(10)

@@ -1551,7 +1551,14 @@ FocusScope {
 		}
 	}
     
-    onFocusChanged: { if (focus) currentHelpbarModel = settingsHelpModel; }
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = settingsHelpModel;
+        }
+    }
 
     Component {
         id: collectionDeletionDialogBox
