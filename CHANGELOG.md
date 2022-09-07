@@ -42,7 +42,6 @@ All notable changes to this project will be documented in this file (focus on ch
 	- change name and place for selection of grid or vertical list
 	- add L1/R1 and L2/R2 management in vertical list
 	- dynamic calculations for 1080p & 72Op overlays and all screen resolutions
-	- select random game in games list with R1+L1 (from Grid or VerticalList)
 
 - emulator-loading-improvements :
 	- stop playing video if lost focus (onCanPlayVideoChanged)
@@ -67,8 +66,20 @@ All notable changes to this project will be documented in this file (focus on ch
 	- first full translation done for french
 	- add more trad especially for sorting, showcase and my collection
 	- add fix also for gridviewMenu
+
+- other new feature:
+	- select random game in games list with R1+L1 (from Grid or VerticalList)
+
 - fixes :
 	- replace many var by string, int or bool
+	- fixes to ignore hotkeys in vertical list/grid/gameview to avoid issue when we switch in multi-windows using Hotkey + R1
+	- fixes on video reading in background, in horizontal list during launching of game if we keep theme loaded.
+	- fixes on header for search in case of grid and vertical list
+	- fixes for clipping of horizontal list used in gameview and especially in vertical list
+	- fixes on helpers and translation
+	- fixes for API robustness and for parameters not yet available
+	- fixes on logos
+	- fixes on platform name display
 
 ## [recalbox-integration] - 2022-07-08
 - New logos for: NAOMI 2, PORTS & Screenshots (5 by systems)
