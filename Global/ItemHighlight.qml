@@ -14,35 +14,63 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.8
+import QtQuick 2.12
 import QtGraphicalEffects 1.0
-import QtMultimedia 5.9
+import QtMultimedia 5.12
 
 Item {
-id: root
+    id: root
 
     property var game
     property bool selected
     property bool boxArt
     property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
+	
+    property bool validated: selected && (videoToStop || demoLaunched)
+	onValidatedChanged:
+	{
+		if(detailed_debug) console.log("ItemHighlight.onValidatedChanged:", validated);
+		if (selected && validated) 
+		{
+			videoPreviewLoader.sourceComponent = undefined;
+			videoDelay.stop();
+            //videoToStop = false;
+		}
+	}
 
     onGameChanged: {
+        if(detailed_debug) {
+            console.log("ItemHighlight.onGameChanged - selected : ", selected);
+            console.log("ItemHighlight.onGameChanged - videoToStop : ", videoToStop);
+        }
         videoPreviewLoader.sourceComponent = undefined;
-        if (playVideo) {
+        //videoToStop = false;
+        if (playVideo && selected && !videoToStop && !demoLaunched) {
+            if(detailed_debug) console.log("ItemHighlight.onGameChanged - videoDelay.restart()");
             videoDelay.restart();
         }
     }
 
     onSelectedChanged: {
+        if(detailed_debug) {
+            console.log("ItemHighlight.onSelectedChanged - selected : ", selected);
+            console.log("ItemHighlight.onSelectedChanged - videoToStop : ", videoToStop);
+        }
         if (!selected) {
             videoPreviewLoader.sourceComponent = undefined;
+			videoToStop = false;
             videoDelay.stop();
         }
+        else if (playVideo && selected && !videoDelay.running && !videoToStop) {
+            if(detailed_debug) console.log("ItemHighlight.onSelectedChanged - videoDelay.restart()");
+            videoDelay.restart();
+        }
+
     }
 
     // Timer to show the video
     Timer {
-    id: videoDelay
+        id: videoDelay
 
         interval: 600
         onTriggered: {
@@ -53,7 +81,7 @@ id: root
     }
 
     Timer {
-    id: stopvideo
+        id: stopvideo
 
         interval: 1000
         onTriggered: {
@@ -64,13 +92,20 @@ id: root
 
     // NOTE: Video Preview
     Component {
-    id: videoPreviewWrapper
+        id: videoPreviewWrapper
 
         Video {
-        id: videocomponent
+            id: videocomponent
 
             anchors.fill: parent
-            source: game.assets.videoList.length ? game.assets.videoList[0] : ""
+            source: {
+						var video_path;
+						if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
+						else video_path = ""
+						if(detailed_debug) console.log("video_path: ",video_path);
+						return video_path;
+					}
+			
             fillMode: VideoOutput.PreserveAspectCrop
             muted: settings.AllowThumbVideoAudio === "No"
             loops: MediaPlayer.Infinite
@@ -82,7 +117,7 @@ id: root
     }
 
     DropShadow {
-    id: outershadow
+        id: outershadow
 
         anchors.fill: videocontainer
         horizontalOffset: 0
@@ -97,13 +132,13 @@ id: root
     }
 
     Item {
-    id: videocontainer
+        id: videocontainer
 
         anchors.fill: parent
 
         // Video
         Loader {
-        id: videoPreviewLoader
+            id: videoPreviewLoader
 
             asynchronous: true
             anchors { fill: parent }

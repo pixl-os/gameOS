@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.11
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import "../Lists"
 
 FocusScope {
-id: root
+    id: root
 
     property var collectionData
     property int itemWidth: vpx(150)
@@ -37,7 +37,7 @@ id: root
     signal listHighlighted
 
     Text {
-    id: collectiontitle
+        id: collectiontitle
 
         text: collectionData.name
         font.family: subtitleFont.name
@@ -49,12 +49,12 @@ id: root
     }
 
     ListView {
-    id: collectionList
+        id: collectionList
 
         focus: root.focus
         anchors {
             top: collectiontitle.bottom; topMargin: vpx(10)
-            left: parent.left; 
+            left: parent.left;
             right: parent.right;
             bottom: parent.bottom
         }
@@ -63,7 +63,7 @@ id: root
         preferredHighlightBegin: vpx(0)
         preferredHighlightEnd: parent.width - vpx(60)
         highlightRangeMode: ListView.ApplyRange
-        snapMode: ListView.SnapOneItem 
+        snapMode: ListView.SnapOneItem
         highlightMoveDuration: 100
         highlight: highlightcomponent
         displayMarginEnd: itemWidth*2
@@ -71,43 +71,50 @@ id: root
         
         property int savedIndex: 0
         onFocusChanged: {
-            if (focus)
+            if(detailed_debug) console.log("onFocusChanged - focus : ",focus);
+            if (focus){
+                videoToStop = false;
                 currentIndex = savedIndex;
+            }
             else {
                 savedIndex = currentIndex;
                 currentIndex = -1;
             }
-                
+
         }
 
         currentIndex: focus ? savedIndex : -1
         Component.onCompleted: positionViewAtIndex(savedIndex, ListView.Visible)
 
-        model: search.games ? search.games : api.allGames
+        model: typeof(search) !== "undefined" ? search.games : api.allGames
         delegate: DynamicGridItem {
             selected: ListView.isCurrentItem && collectionList.focus
             width: itemWidth
             height: itemHeight
             
             onHighlighted: {
+                if(detailed_debug) console.log("onHighlighted - selected : ",selected);
                 collectionList.savedIndex = index;
                 collectionList.currentIndex = index;
                 listHighlighted();
             }
 
             onActivated: {
+                if(detailed_debug) console.log("onActivated - selected : ",selected);
                 if (selected) {
-                    activateSelected();
-                    gameDetails(search.currentGame(currentIndex));
+					videoToStop = true;
+					activateSelected();
+                    gameDetails(search.currentGame(collectionList.currentIndex));
                 } else {
                     activate(index);
                     collectionList.currentIndex = index;
+					videoToStop = false;
                 }
             }
         }
 
         Component {
-        id: highlightcomponent
+            id: highlightcomponent
 
             ItemHighlight {
                 width: collectionList.cellWidth

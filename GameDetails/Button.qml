@@ -14,14 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.15
 
 FocusScope {
-id: root
+    id: root
 
     property bool selected
     property alias text: buttonlabel.text
     property alias icon: buttonicon.source
+    property alias iconRotation: iconRotation
+
     property alias buttonWidth: container.width
     property real buttonMargin: vpx(25)
     width: container.width
@@ -30,7 +32,7 @@ id: root
     signal highlighted
 
     Rectangle {
-    id: container
+        id: container
 
         width: (buttonlabel.text !== "") ? buttonlabel.x + buttonlabel.contentWidth + buttonMargin : height
         Behavior on width { NumberAnimation { duration: 100 } }
@@ -42,7 +44,7 @@ id: root
         opacity: selected ? 1 : 0.2
         
         Image {
-        id: buttonicon
+            id: buttonicon
 
             source: "../assets/images/icon_play.svg"
             width: parent.height - vpx(30)
@@ -58,10 +60,19 @@ id: root
             anchors { left: parent.left; leftMargin: iconMargin }
             //anchors.horizontalCenter: (buttonlabel.text === "") ? parent.horizontalCenter : parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            RotationAnimator on rotation {
+                id: iconRotation
+                loops: Animator.Infinite;
+                from: 0;
+                to: 360;
+                duration: 500
+                running: false
+            }
         }
         
         Text {
-        id: buttonlabel
+            id: buttonlabel
 
             font.family: subtitleFont.name
             font.pixelSize: vpx(16)
@@ -86,7 +97,7 @@ id: root
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onExited: {}
         onClicked: activated();

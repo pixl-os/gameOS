@@ -14,20 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.12
 import "../utils.js" as Utils
 import QtGraphicalEffects 1.0
 
 
 FocusScope {
-id: root
+    id: root
 
     property var game: currentGame
     focus: true
 
     // Background
     Image {
-    id: screenshot
+        id: screenshot
 
         anchors.fill: parent
         asynchronous: true
@@ -55,18 +55,18 @@ id: root
 
     // Scanlines
     Image {
-    id: scanlines
+        id: scanlines
 
         anchors.fill: parent
         source: "../assets/images/scanlines_v3.png"
         asynchronous: true
         opacity: 0.2
-        visible: (settings.ShowScanlines == "Yes")
+        visible: (settings.ShowScanlines === "Yes")
     }
 
     // Clear logo
     Image {
-    id: logo
+        id: logo
 
         width: vpx(500)
         height: vpx(500)
@@ -79,7 +79,7 @@ id: root
     }
 
     DropShadow {
-    id: logoshadow
+        id: logoshadow
 
         anchors.fill: logo
         horizontalOffset: 0
@@ -92,11 +92,10 @@ id: root
     }
 
     Item {
-    id: container
+        id: container
 
         width: launchText.width + vpx(50)
         height: launchText.height + vpx(50)
-
         property real centerOffset: logo.paintedHeight/2
         
         anchors {
@@ -107,7 +106,7 @@ id: root
         //color: theme.secondary
 
         Rectangle {
-        id: regborder
+            id: regborder
 
             anchors.fill: parent
             color: "black"
@@ -118,9 +117,9 @@ id: root
         }
 
         Text {
-        id: launchText
+            id: launchText
 
-            text: "Press any button to return"//"Launching " + currentGame.title
+            text: qsTr("Press any button to return") + api.tr
             width: contentWidth
             height: contentHeight
             font.family: titleFont.name
@@ -137,23 +136,39 @@ id: root
         id: launchGameHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
     }
+
+
     
-    onFocusChanged: { if (focus) currentHelpbarModel = launchGameHelpModel; }
+	Connections {
+        target: game
+		function onRetroAchievementsChanged() {
+			 console.log("LaunchGame - retroAchievements has changed! we could left the screen...");
+			 previousScreen();
+		}
+    }
+	
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = launchGameHelpModel;
+        }
+    }
 
     // Input handling
     Keys.onPressed: {
+	    // Back
+	    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+	        event.accepted = true;
+		}
 
-        // Back
-        if (api.keys.isCancel(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            previousScreen();
-        } else {
-            previousScreen();
-        }
+		if (game.retroAchievementsCount !== 0) game.updateRetroAchievements();
+	    else previousScreen();
     }
 
     // Mouse/touch functionality

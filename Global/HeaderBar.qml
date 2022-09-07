@@ -1,5 +1,5 @@
 // gameOS theme
-// Copyright (C) 2018-2020 Seth Powell 
+// Copyright (C) 2018-2020 Seth Powell
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,78 +15,73 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import QtQuick 2.12
-import QtQuick.Layouts 1.11
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.10
-import QtQml.Models 2.1
+import QtQml.Models 2.12
 import "../utils.js" as Utils
+import QtQuick.VirtualKeyboard 2.15
 
 FocusScope {
-id: root
+    id: root
 
-    property bool searchActive
-
-    onFocusChanged: buttonbar.currentIndex = 0;
-
-    function toggleSearch() {
-        searchActive = !searchActive;
-    }
+    //to have access to input and know information about it if needed
+    property alias searchInput : searchInput
 
     Item {
-    id: container
+        id: container
 
         anchors.fill: parent
 
-        // Platform logo
-        Image {
-        id: logobg
-
-            anchors.fill: platformlogo
-            source: "../assets/images/gradient.png"
-            asynchronous: true
-            visible: false
-        }
 
         Image {
-        id: platformlogo
+            id: platformlogo
 
             anchors {
-                top: parent.top; topMargin: vpx(20)
-                bottom: parent.bottom; bottomMargin: vpx(20)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
                 left: parent.left; leftMargin: globalMargin
             }
             fillMode: Image.PreserveAspectFit
-            source: "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png"
-            sourceSize: Qt.size(parent.width, parent.height)
+            source: {
+                if(settings.SystemLogoStyle === "White")
+                {
+                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png";
+                }
+                else
+                {
+                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                }
+            }
             smooth: true
-            visible: false
-            asynchronous: true           
-        }
+            asynchronous: true
 
-        OpacityMask {
-            anchors.fill: logobg
-            source: logobg
-            maskSource: platformlogo
-            // Mouse/touch functionality
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: previousScreen();
+            Image{
+                id: alphaLogo
+                anchors.top: parent.top
+                anchors.right: parent.right
+                width: parent.width/2
+                height: parent.height/2
+
+                //to alert when system is in beta
+                source: "../assets/images/beta.png";
+                //for the moment, just check if first core for this system still low
+                visible: currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false
             }
         }
 
         // Platform title
         Text {
-        id: softwareplatformtitle
-            
+            id: softwareplatformtitle
+
             text: currentCollection.name
-            
+
             anchors {
                 top:    parent.top;
                 left:   parent.left;    leftMargin: globalMargin
                 right:  parent.right
                 bottom: parent.bottom
             }
-            
+
             color: theme.text
             font.family: titleFont.name
             font.pixelSize: vpx(30)
@@ -105,56 +100,65 @@ id: root
         }
 
         ObjectModel {
-        id: headermodel
+            id: headermodel
 
             // Search bar
             Item {
-            id: searchbar
-                
-                property bool selected: ListView.isCurrentItem && root.focus
-                onSelectedChanged: if (!selected && searchActive) toggleSearch();
+                id: searchbar
 
-                width: (searchActive || searchTerm != "") ? vpx(250) : height
+                property bool selected: (buttonbar.currentIndex === 0) && root.focus
+                onSelectedChanged:{
+					//console.log("onSelectedChanged");
+					//console.log("searchbar.selected :",searchbar.selected); 
+					//console.log("searchInput.searchActive : ",searchInput.searchActive);
+					//console.log("searchInput.focus : ",searchInput.focus);
+                    if (!searchbar.selected && searchInput.searchActive) searchInput.searchActive = !searchInput.searchActive;
+					if(searchbar.selected) {
+						searchbar.focus = true;
+						searchInput.cursorVisible = false;
+					}
+				}
+
+                width: (searchInput.searchActive || searchTerm != "") ? vpx(250) : height
                 height: vpx(40)
 
                 Behavior on width {
                     PropertyAnimation { duration: 200; easing.type: Easing.OutQuart; easing.amplitude: 2.0; easing.period: 1.5 }
                 }
-                
+
                 Rectangle {
                     width: parent.width
                     height: parent.height
-                    color: searchbar.selected && !searchActive ? theme.accent : "white"
+                    color: searchbar.selected && !searchInput.searchActive ? theme.accent : "white"
                     radius: height/2
-                    opacity: searchbar.selected && !searchActive ? 1 : searchActive ? 0.4 : 0.2
-
+                    opacity: searchbar.selected && !searchInput.searchActive ? 1 : searchInput.searchActive ? 0.4 : 0.2
                 }
 
                 Image {
-                id: searchicon
+                    id: searchicon
 
                     width: height
                     height: vpx(18)
-                    anchors { 
+                    anchors {
                         left: parent.left; leftMargin: vpx(11)
                         top: parent.top; topMargin: vpx(10)
                     }
                     source: "../assets/images/searchicon.svg"
-                    opacity: searchbar.selected && !searchActive ? 1 : searchActive ? 0.8 : 0.5
+                    opacity: searchbar.selected && !searchInput.searchActive ? 1 : searchInput.searchActive ? 0.8 : 0.5
                     asynchronous: true
                 }
 
                 TextInput {
-                id: searchInput
-                    
-                    anchors { 
+                    id: searchInput
+					property bool searchActive: false
+                    anchors {
                         left: searchicon.right; leftMargin: vpx(10)
                         top: parent.top; bottom: parent.bottom
                         right: parent.right; rightMargin: vpx(15)
                     }
                     verticalAlignment: Text.AlignVCenter
                     color: theme.text
-                    focus: searchbar.selected && searchActive
+                    focus: searchbar.selected && searchInput.searchActive
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
                     clip: true
@@ -167,43 +171,48 @@ id: root
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
-                    enabled: !searchActive
+                    enabled: !searchInput.searchActive
                     hoverEnabled: true
                     onEntered: {}
                     onExited: {}
                     onClicked: {
-                        if (!searchActive)
+                        if (!searchInput.searchActive)
                         {
-                            toggleSearch();
-                            searchInput.selectAll();
+                            searchInput.searchActive != searchInput.searchActive;
                         }
                     }
                 }
 
+                Keys.onReleased:{ 
+					event.accepted = virtualKeyboardOnReleased(event);
+					//to reset demo if needed
+					if (event.accepted) resetDemo();
+				}
+
                 Keys.onPressed: {
-                    // Accept
-                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-                        event.accepted = true;
-                        if (!searchActive) {
-                            toggleSearch();
-                            searchInput.selectAll();
-                        } else {
-                            searchInput.selectAll();
-                        }
-                    }
+                    event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);
+                    //console.log("-----After update-----");
+                    //console.log("event.accepted : ", event.accepted);
+                    //console.log("searchInput.focus : ", searchInput.focus);
+                    //console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    //console.log("searchbar.selected : ",searchbar.selected);
+                    //console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
+                    //console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
+                    //console.log("root.focus : ", root.focus);
                 }
+
             }
 
             // Ascending/descending
             Item {
-            id: directionbutton
+                id: directionbutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: directiontitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
@@ -211,10 +220,10 @@ id: root
                 }
 
                 Text {
-                id: directiontitle
-                    
-                    text: (orderBy === Qt.AscendingOrder) ? "Ascending" : "Descending"
-                                    
+                    id: directiontitle
+
+                    text: (orderBy === Qt.AscendingOrder) ? qsTr("Ascending") + api.tr : qsTr("Descending") + api.tr
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -233,14 +242,14 @@ id: root
 
             // Order by title
             Item {
-            id: titlebutton
+                id: titlebutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: ordertitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
@@ -248,10 +257,10 @@ id: root
                 }
 
                 Text {
-                id: ordertitle
-                    
-                    text: "By " + sortByFilter[sortByIndex]
-                                    
+                    id: ordertitle
+
+                    text: qsTr("By") + api.tr + " " + sortByFilterDisplay[sortByIndex]
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -267,29 +276,29 @@ id: root
                     }
                 }
             }
-            
+
             // Filters menu
             Item {
-            id: filterbutton
+                id: filterbutton
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 width: filtertitle.contentWidth + vpx(30)
                 height: searchbar.height
 
                 Rectangle
-                { 
+                {
                     anchors.fill: parent
                     radius: height/2
                     color: theme.accent
                     visible: filterbutton.selected
                 }
-                
+
                 // Filter title
                 Text {
-                id: filtertitle
-                    
-                    text: (showFavs) ? "Favorites" : "All games"
-                                    
+                    id: filtertitle
+
+                    text: (showFavs) ? qsTr("Favorites") + api.tr : qsTr("All games") + api.tr
+
                     color: theme.text
                     font.family: subtitleFont.name
                     font.pixelSize: vpx(18)
@@ -309,8 +318,8 @@ id: root
 
         // Buttons
         ListView {
-        id: buttonbar
-
+            id: buttonbar
+            currentIndex: 0
             focus: true
             model: headermodel
             spacing: vpx(10)
@@ -320,9 +329,6 @@ id: root
                 right: parent.right; rightMargin: globalMargin
                 left: parent.left; top: parent.top; topMargin: vpx(15)
             }
-            
         }
-        
     }
-
 }

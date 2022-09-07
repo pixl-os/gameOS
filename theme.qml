@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import SortFilterProxyModel 0.2
-import QtMultimedia 5.9
+import QtMultimedia 5.12
 import "VerticalList"
 import "GridView"
 import "Global"
@@ -26,35 +26,138 @@ import "ShowcaseView"
 import "Settings"
 
 FocusScope {
-id: root
+    id: root
+
+
+    //DEBUG property
+    property bool detailed_debug: false
+    property bool viewIsLoading: true
+    property string viewLoadingText: qsTr("Loading") + "..." + api.tr
+    property bool gameToLaunched: false
+    
+    //Spinner Loader for all views loading... (principally for main menu for the moment)
+    Loader {
+        id: spinnerloader
+        z:10 
+        anchors.centerIn: parent        
+        active: viewIsLoading && (showcaseLoader.opacity === 1)
+        sourceComponent: spinner
+    }
+
+    Component {
+        id: spinner
+        Rectangle{
+            Image {
+                id: imageSpinner
+                anchors.centerIn: parent
+                source: "assets/images/loading.png"
+                width: vpx(100)
+                height: vpx(100)
+                z: 10
+                asynchronous: true
+                sourceSize { width: vpx(50); height: vpx(50) }
+                RotationAnimator on rotation {
+                    loops: Animator.Infinite;
+                    from: 0;
+                    to: 360;
+                    duration: 3000
+                }
+            }
+            Text {
+                id: textSpinner
+                text: viewLoadingText
+                width: contentWidth
+                height: contentHeight
+                font.family: titleFont.name
+                font.pixelSize: vpx(24)
+                color: theme.text
+                property real centerOffset: imageSpinner.height/2
+                visible: settings.ShowLoadingDetails === "No" ? false : true
+                anchors {
+                    top: imageSpinner.verticalCenter; topMargin: centerOffset + vpx(100)
+                    horizontalCenter: imageSpinner.horizontalCenter
+                }
+            }
+        }
+    } 
 
     FontLoader { id: titleFont; source: "assets/fonts/SourceSansPro-Bold.ttf" }
     FontLoader { id: subtitleFont; source: "assets/fonts/OpenSans-Bold.ttf" }
     FontLoader { id: bodyFont; source: "assets/fonts/OpenSans-Semibold.ttf" }
 
+    // Load designer settings
+    property var designs: {
+        return {
+            InitialPosition:               api.memory.has("Initial Focus on") ? api.memory.get("Initial Focus on") : "Systems list",
+            VideoBannerPosition:           api.memory.has("Video Banner screen position") ? api.memory.get("Video Banner screen position") : "0",
+            VideoBannerRatio:              api.memory.has("Video Banner screen ratio") ? api.memory.get("Video Banner screen ratio") : "50%",
+            VideoBannerSource:             api.memory.has("Video Banner source") ? api.memory.get("Video Banner source") : "Default",
+            VideoBannerLogoSource:         api.memory.has("Video Banner logo source") ? api.memory.get("Video Banner logo source") : "Default",
+            VideoBannerPathExpression:     api.memory.has("Video Banner path expression") ? api.memory.get("Video Banner path expression") : "",
+            FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
+            FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
+            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "2",
+            SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
+            NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "6",
+            SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
+            SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
+            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "60%",
+            SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
+            SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
+            SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
+            SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
+            SystemDetailsPosition:       api.memory.has("System Details screen position") ? api.memory.get("System Details screen position") : "No",
+            SystemDetailsRatio:          api.memory.has("System Details screen ratio") ? api.memory.get("System Details screen ratio") : "30%",
+            SystemDetailsBackground:         api.memory.has("System Details background source") ? api.memory.get("System Details background source") : "No",
+            SystemDetailsBackgroundPathExpression:         api.memory.has("System Details background path expression") ? api.memory.get("System Details background path expression") : "",
+            SystemDetailsVideo:         api.memory.has("System Details video source") ? api.memory.get("System Details video source") : "No",
+            SystemDetailsVideoPathExpression:         api.memory.has("System Details video path expression") ? api.memory.get("System Details video path expression") : "",
+            SystemDetailsHardware:         api.memory.has("System Details hardware source") ? api.memory.get("System Details hardware source") : "No",
+            SystemDetailsHardwarePathExpression:         api.memory.has("System Details hardware path expression") ? api.memory.get("System Details hardware path expression") : "",
+            SystemDetailsController:         api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
+            SystemDetailsControllerPathExpression:         api.memory.has("System Details controller path expression") ? api.memory.get("System Details controller path expression") : "",
+            ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
+            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
+        }
+    }
+
     // Load settings
     property var settings: {
         return {
-            PlatformView:                  api.memory.has("Game View") ? api.memory.get("Game View") : "Grid",
-            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Dynamic Wide",
+            PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
+            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
             GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "3",
             GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
+            AllowGameBackgroundOverlay:    api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No",
             GameLogo:                      api.memory.has("Game Logo") ? api.memory.get("Game Logo") : "Show",
+            GameLogoPosition:              api.memory.has("Game Logo position") ? api.memory.get("Game Logo position") : "Left",
             GameRandomBackground:          api.memory.has("Randomize Background") ? api.memory.get("Randomize Background") : "No",
+            SystemLogo:                    api.memory.has("System Logo") ? api.memory.get("System Logo") : "Show",
+            SystemLogoPosition:            api.memory.has("System Logo position") ? api.memory.get("System Logo position") : "Left",
             GameBlurBackground:            api.memory.has("Blur Background") ? api.memory.get("Blur Background") : "No",
             VideoPreview:                  api.memory.has("Video preview") ? api.memory.get("Video preview") : "Yes",
             AllowThumbVideo:               api.memory.has("Allow video thumbnails") ? api.memory.get("Allow video thumbnails") : "Yes",
             AllowThumbVideoAudio:          api.memory.has("Play video thumbnail audio") ? api.memory.get("Play video thumbnail audio") : "No",
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
+            HelpButtonsStyle:              api.memory.has("Help buttons style") ? api.memory.get("Help buttons style") : "Gamepad",
+            HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
+            ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
+            ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
+            SystemLogoStyle:               api.memory.has("System Logo Style") ? api.memory.get("System Logo Style") : "Color",
             MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
             AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
             AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
             AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "No",
+            AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "No",
+            OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
+            ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
+            ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
             DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
-            ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
+            //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
+            ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
             ShowcaseCollection1_Thumbnail: api.memory.has("Collection 1 - Thumbnail") ? api.memory.get("Collection 1 - Thumbnail") : "Wide",
             ShowcaseCollection2:           api.memory.has("Collection 2") ? api.memory.get("Collection 2") : "Most Played",
@@ -66,15 +169,19 @@ id: root
             ShowcaseCollection5:           api.memory.has("Collection 5") ? api.memory.get("Collection 5") : "None",
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
-            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66"
-            
+            TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
+            ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
+            ShowPlayStats:                   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
+            DemoTriggeringDelay:           api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
+            DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
+            PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
         }
     }
 
     // Collections
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex)    
+    property var currentCollection: api.collections.get(currentCollectionIndex)
     property var currentGame
 
     // Stored variables for page navigation
@@ -83,14 +190,18 @@ id: root
     property int storedCollectionIndex: 0
     property int storedCollectionGameIndex: 0
 
+    //global property
+    property bool videoToStop: false
+
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
 
     // Filtering options
     property bool showFavs: false
-    property var sortByFilter: ["sort_title", "lastPlayed", "playCount", "rating"]
+    property var sortByFilter: ["title", "lastPlayed", "playCount", "rating"]
+    property var sortByFilterDisplay: [qsTr("title") + api.tr, qsTr("lastPlayed") + api.tr, qsTr("playCount") + api.tr, qsTr("rating") + api.tr]
     property int sortByIndex: 0
-    property var orderBy: Qt.AscendingOrder
+    property int orderBy: Qt.AscendingOrder
     property string searchTerm: ""
     property bool steam: currentCollection.name === "Steam"
     function steamExists() {
@@ -121,20 +232,69 @@ id: root
             orderBy = Qt.AscendingOrder;
     }
 
+    property var gameToLaunch
+    
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: launchGameTimer
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 500
+        onTriggered: {
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+            //if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ // || !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+              launchGameScreen();
+            }
+            else{
+                launchGameTimerBis.start();
+            }
+
+        }
+    }
+
+    //Timer to launch video with delay in case of embedded gameView
+    Timer {
+        id: launchGameTimerBis
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 100
+        onTriggered: {
+            gameToLaunch.launch();
+            //reset flag for game to launched
+            gameToLaunched = false;
+        }
+    }
+
+
     // Launch the current game
     function launchGame(game) {
-        if (game !== null) {
-            //if (game.collections.get(0).name === "Steam")
+        if (typeof(game) !== "undefined") {
+            //if pegasus.multiwindows is no activated
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
                 launchGameScreen();
-
-            saveCurrentState(game);
-            game.launch();
+                saveCurrentState(game);
+                game.launch();
+            }
+            else{
+                gameToLaunch = game;
+                saveCurrentState(game);
+                launchGameTimer.start();
+            }
         } else {
-            //if (currentGame.collections.get(0).name === "Steam")
-                launchGameScreen();
-
-            saveCurrentState(currentGame);
-            currentGame.launch();
+            console.log("launchGame(game) with game is null");
+            //if pegasus.multiwindows is no activated
+            if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+              launchGameScreen();
+              saveCurrentState(currentGame);
+              currentGame.launch();
+            }
+            else{
+                gameToLaunch = currentGame;
+                saveCurrentState(currentGame);
+                launchGameTimer.start();
+            }
         }
     }
 
@@ -185,20 +345,132 @@ id: root
 
     // Theme settings
     property var theme: {
-        return {
-            main:           "#1d253d",
-            secondary:      "#202a44",
-            accent:         "#f00980",
-            highlight:      "#f00980",
-            text:           "#ececec",
-            button:         "#f00980",
-            gradientstart:  "#000d111d",
-            gradientend:    "#FF0d111d"
+
+        var background =         "#000000";
+        var text =                 "#ebebeb";
+        var gradientstart =             "#001f1f1f";
+        var gradientend =         "#FF000000";
+        var secondary =         "#303030";
+
+        if (settings.ColorBackground === "Original") {
+            background =      "#1d253d";
+            text =           "#ececec";
+            gradientstart =  "#000d111d";
+            gradientend =    "#FF0d111d";
         }
-    }
+        else if (settings.ColorBackground === "Black") {
+            background =     "#000000";
+            gradientstart = "#001f1f1f";
+            gradientend =     "#FF000000";
+        }
+        else if (settings.ColorBackground === "White") {
+            background =     "#ebebeb";
+            gradientstart = "#00ebebeb";
+            gradientend =     "#FFebebeb";
+            text         =     "#101010";
+        }
+        else if (settings.ColorBackground === "Gray") {
+            background =     "#1f1f1f";
+            gradientstart = "#001f1f1f";
+            gradientend =     "#FF1F1F1F";
+        }
+        else if (settings.ColorBackground === "Blue") {
+            background =     "#1d253d";
+            gradientstart = "#001d253d";
+            gradientend =     "#FF1d253d";
+        }
+        else if (settings.ColorBackground === "Green") {
+            background =     "#054b16";
+            gradientstart = "#00054b16";
+            gradientend =     "#00054b16";
+        }
+        else if (settings.ColorBackground === "Red") {
+            background =     "#520000";
+            gradientstart = "#00520000";
+            gradientend =     "#FF520000";
+        }
+
+        var accent = "#288928";
+        if (settings.ColorLayout === "Original") {
+            accent = "#f00980";
+            secondary = "#202a44";
+        }
+        else if (settings.ColorLayout === "Dark Green") {
+            accent = "#288928";
+        }
+        else if (settings.ColorLayout === "Light Green") {
+            accent = "#65b032";
+        }
+        else if (settings.ColorLayout === "Turquoise") {
+            accent = "#288e80";
+        }
+        else if (settings.ColorLayout === "Dark Red") {
+            accent = "#ab283b";
+        }
+        else if (settings.ColorLayout === "Light Red") {
+            accent = "#e52939";
+        }
+        else if (settings.ColorLayout === "Dark Pink") {
+            accent = "#c52884";
+        }
+        else if (settings.ColorLayout === "Light Pink") {
+            accent = "#ee6694";
+        }
+        else if (settings.ColorLayout === "Dark Blue") {
+            accent = "#30519c";
+        }
+        else if (settings.ColorLayout === "Light Blue") {
+            accent = "#288dcf";
+        }
+        else if (settings.ColorLayout === "Orange") {
+            accent = "#ed5b28";
+        }
+        else if (settings.ColorLayout === "Yellow") {
+            accent = "#ed9728";
+        }
+        else if (settings.ColorLayout === "Magenta") {
+            accent = "#b857c6";
+        }
+        else if (settings.ColorLayout === "Purple") {
+            accent = "#825fb1";
+        }
+        else if (settings.ColorLayout === "Dark Gray") {
+            accent = "#5e5c5d";
+        }
+        else if (settings.ColorLayout === "Light Gray") {
+            accent = "#818181";
+        }
+        else if (settings.ColorLayout === "Dark Gray") {
+            accent = "#5e5c5d";
+        }
+        else if (settings.ColorLayout === "Steel") {
+            accent = "#768294";
+        }
+        else if (settings.ColorLayout === "Stone") {
+            accent = "#658780";
+        }
+        else if (settings.ColorLayout === "Dark Brown") {
+            accent = "#806044";
+        }
+        else if (settings.ColorLayout === "Light Brown") {
+            accent = "#7e715c";
+        }
+        return {
+            main:           background,
+            secondary:      secondary,
+            accent:         accent,
+            highlight:      accent,
+            text:           text,
+            button:         accent,
+            gradientstart:  gradientstart,
+            gradientend:    gradientend
+        };
+
+    };
+    
 
     property real globalMargin: vpx(30)
-    property real helpMargin: buttonbar.height
+    property real helpMargin: helpbuttonbar.height
     property int transitionTime: 100
 
     // State settings
@@ -232,11 +504,11 @@ id: root
         lastState.push(state);
         searchTerm = "";
         switch(settings.PlatformView) {
-            case "Grid":
-                root.state = "softwaregridscreen";
-                break;
-            default:
-                root.state = "softwarescreen";
+        case "Grid":
+            root.state = "softwaregridscreen";
+            break;
+        default:
+            root.state = "softwarescreen";
         }
     }
 
@@ -248,15 +520,23 @@ id: root
 
     function gameDetails(game) {
         sfxAccept.play();
+        //if (game !== null) console.log("gameDetails - game.title:", game.title);
+        //else console.log("gameDetails - game.title:", "null");
+        
         // As long as there is a state history, save the last game
-        if (lastState.length != 0)
+        if (lastState.length != 0){
+            //console.log("gameDetails - currentGame.title:", currentGame.title);
             lastGame.push(currentGame);
+        }
 
         // Push the new game
-        if (game !== null)
+        if (game !== null){
             currentGame = game;
-
+            //console.log("gameDetails - new currentGame.title:", currentGame.title);
+        }
+        
         // Save the state before pushing the new one
+        //console.log("Previous State:", state);
         lastState.push(state);
         root.state = "gameviewscreen";
     }
@@ -271,13 +551,20 @@ id: root
         sfxAccept.play();
         lastState.push(state);
         root.state = "launchgamescreen";
+        launchGameTimerBis.start();
     }
 
     function previousScreen() {
         sfxBack.play();
-        if (state == lastState[lastState.length-1])
+    
+        if (state === lastState[lastState.length-1])
+        {    
             popLastGame();
-
+        }
+        else if(previousHelpbarModel) {
+            currentHelpbarModel = previousHelpbarModel;
+        }
+        
         state = lastState[lastState.length - 1];
         lastState.pop();
     }
@@ -290,7 +577,7 @@ id: root
     }
 
     // Set default state to the platform screen
-    Component.onCompleted: { 
+    Component.onCompleted: {
         root.state = "showcasescreen";
 
         if (fromGame)
@@ -299,17 +586,17 @@ id: root
 
     // Background
     Rectangle {
-    id: background
+        id: background
         
         anchors.fill: parent
         color: theme.main
     }
 
     Loader  {
-    id: showcaseLoader
+        id: showcaseLoader
 
         focus: (root.state === "showcasescreen")
-        active: opacity !== 0
+        active: true //force loading in all cases
         opacity: focus ? 1 : 0
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
@@ -319,7 +606,7 @@ id: root
     }
 
     Loader  {
-    id: gridviewloader
+        id: gridviewloader
 
         focus: (root.state === "softwaregridscreen")
         active: opacity !== 0
@@ -332,7 +619,7 @@ id: root
     }
 
     Loader  {
-    id: listviewloader
+        id: listviewloader
 
         focus: (root.state === "softwarescreen")
         active: opacity !== 0
@@ -345,7 +632,7 @@ id: root
     }
 
     Loader  {
-    id: gameviewloader
+        id: gameviewloader
 
         focus: (root.state === "gameviewscreen")
         active: opacity !== 0
@@ -356,11 +643,10 @@ id: root
         anchors.fill: parent
         sourceComponent: gameview
         asynchronous: true
-        //game: currentGame
     }
 
     Loader  {
-    id: launchgameloader
+        id: launchgameloader
 
         focus: (root.state === "launchgamescreen")
         active: opacity !== 0
@@ -373,7 +659,7 @@ id: root
     }
 
     Loader  {
-    id: settingsloader
+        id: settingsloader
 
         focus: (root.state === "settingsscreen")
         active: opacity !== 0
@@ -386,25 +672,25 @@ id: root
     }
 
     Component {
-    id: showcaseview
-
-        ShowcaseViewMenu { focus: true }
+        id: showcaseview
+    
+    ShowcaseViewMenu { focus: true; visible: !viewIsLoading; }
     }
 
     Component {
-    id: gridview
+        id: gridview
 
         GridViewMenu { focus: true }
     }
 
     Component {
-    id: listview
+        id: listview
 
         SoftwareListMenu { focus: true }
     }
 
     Component {
-    id: gameview
+        id: gameview
 
         GameView {
             focus: true
@@ -412,14 +698,85 @@ id: root
         }
     }
 
+    //property, timers & functions to manage a demo mode in gameOS theme ;-)
+    property bool demoLaunched: false
+    
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+
+    //in this section, we use timers/function/events to detect any move in theme but could be catch by other view.
+    //Optionally: add resetDemo() if you have Keys.onReleased if other view outside theme.qml.
+    //We advice also to do it where the event is accepted near line: "event.accepted = true;"
+    function resetDemo(){
+        //console.log("resetDemo() launched !");
+        if(settings.DemoTriggeringDelay !== "Deactivated"){
+            //if any key is used, we restart demoTrigger timer.
+            demoTrigger.running = false;
+            demoTrigger.running = true;
+        }
+        else demoTrigger.running = false;
+        //and stop demo in all cases
+        demoTimer.running = false;
+        demoLaunched = false;
+    }
+
+    //we use Keys.OnReleased because this event is rarelly used in children views.
+    Keys.onReleased:{
+        resetDemo();
+    }
+
+    //this timer is use to trigger the demo
+    Timer {
+        id: demoTrigger
+        interval: settings.DemoTriggeringDelay !== "Deactivated" ? parseInt(settings.DemoTriggeringDelay,10) * 60000 : 60000 //no set to 0 to avoid launch of demo during settings udpate
+        repeat: false
+        running: settings.DemoTriggeringDelay !== "Deactivated" ? true : false
+        triggeredOnStart: false
+        onTriggered: {
+            demoTimer.running = true;
+        }
+    }
+
+    //this timer is used during demo to change video every each minutes
+    Timer {
+        id: demoTimer
+        interval: 60000 // Run the timer every 60s
+        repeat: true
+        running: false
+        triggeredOnStart: true
+        onTriggered: {
+            //selection any collection
+            var demoCollectionIndex = 0;
+            do{
+                demoCollectionIndex = getRandomInt(api.collections.count-1);
+                //console.log("api.collections.get(demoCollectionIndex).shortName:",api.collections.get(demoCollectionIndex).shortName);
+            }while(api.collections.get(demoCollectionIndex).shortName === "imageviewer")
+            //selection game in collection
+            var demoGameIndex = 0;
+            var loopCount = 0; //loopCount is here to unlock when system is not or no well scrapped
+            do{
+                demoGameIndex = getRandomInt(api.collections.get(demoCollectionIndex).games.count-1);
+                loopCount++;
+            }while((api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length === 0) && (loopCount <= 10))
+
+            if(api.collections.get(demoCollectionIndex).games.get(demoGameIndex).assets.videos.length !== 0){
+                demoLaunched = true;
+                gameDetails(api.collections.get(demoCollectionIndex).games.get(demoGameIndex));
+                lastState[lastState.length-1] = "showcasescreen";
+            }
+        }
+    }
+
     Component {
-    id: launchgameview
+        id: launchgameview
 
         LaunchGame { focus: true }
     }
 
     Component {
-    id: settingsview
+        id: settingsview
 
         SettingsScreen { focus: true }
     }
@@ -427,14 +784,15 @@ id: root
     
     // Button help
     property var currentHelpbarModel
+    property var previousHelpbarModel
     ButtonHelpBar {
-    id: buttonbar
-
+        id: helpbuttonbar
         height: vpx(50)
         anchors {
             left: parent.left; right: parent.right; rightMargin: globalMargin
             bottom: parent.bottom
         }
+        opacity: viewIsLoading && (showcaseLoader.opacity === 1) ? 0 : 1
         visible: settings.HideButtonHelp === "No"
     }
 

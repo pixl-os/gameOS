@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
 Item {
-id: root
+    id: root
 
     Image {
-    id: border
+        id: border
 
         anchors.fill: parent
         source: "../assets/images/gradient.png"
@@ -34,7 +34,7 @@ id: root
             color: "#fff"
             visible: settings.AnimateHighlight === "Yes"
             SequentialAnimation on opacity {
-            id: colorAnim
+                id: colorAnim
 
                 running: true
                 loops: Animation.Infinite
@@ -46,7 +46,7 @@ id: root
     }
 
     BorderImage {
-    id: mask
+        id: mask
 
         anchors.fill: parent
         source: "../assets/images/borderimage.gif"
@@ -64,7 +64,7 @@ id: root
     }
 
     Rectangle {
-    id: titlecontainer
+        id: titlecontainer
 
         width: bubbletitle.contentWidth + vpx(20)
         height: bubbletitle.contentHeight + vpx(8)
@@ -79,7 +79,7 @@ id: root
         visible: opacity !== 0
 
         Text {
-        id: bubbletitle
+            id: bubbletitle
 
             text: modelData.title
             color: theme.text

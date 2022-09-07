@@ -14,56 +14,68 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import "qrc:/qmlutils" as PegasusUtils
+import "../moment.js" as DateUtils
 
 Item {
-id: infocontainer
+    id: infocontainer
 
     property var gameData: currentGame
 
     // Game title
-    Text {
-    id: gametitle
-        
-        text: gameData ? gameData.title : ""
-        
+    PegasusUtils.HorizontalAutoScroll{
+        id: gametitle
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
+
         anchors {
             top:    parent.top;
             left:   parent.left;
             right:  parent.right
         }
-        
-        color: theme.text
-        font.family: titleFont.name
-        font.pixelSize: vpx(44)
-        font.bold: true
-        horizontalAlignment: Text.AlignHLeft
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+        height: vpx(60)
+
+        Text {
+            id: gametitletext
+
+            text: gameData ? gameData.title : ""
+
+            color: theme.text
+            font.family: titleFont.name
+            font.pixelSize: vpx(44)
+            font.bold: true
+            horizontalAlignment: Text.AlignHLeft
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     // Meta data
-    Item {
-    id: metarow
+    PegasusUtils.HorizontalAutoScroll{
+        id: metarow
 
-        height: vpx(50)
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
+
+        height: vpx(40)
         anchors {
-            top: gametitle.bottom; 
+            top: gametitle.bottom;
             left: parent.left
             right: parent.right
         }
-
         // Rating box
         Text {
-        id: ratingtitle
+            id: ratingtitle
 
             width: contentWidth
             height: parent.height
             anchors { left: parent.left; }
             verticalAlignment: Text.AlignVCenter
-            text: "Rating: "
+            text: qsTr("Rating")+ ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -71,7 +83,7 @@ id: infocontainer
         }
 
         Text {
-        id: ratingtext
+            id: ratingtext
             
             property real processedRating: gameData ? Math.round(gameData.rating * 100) / 100 : ""
             width: contentWidth
@@ -85,10 +97,10 @@ id: infocontainer
         }
 
         Rectangle {
-        id: divider1
+            id: divider1
             width: vpx(2)
             anchors {
-                left: ratingtext.right; leftMargin: (25)
+                left: ratingtext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -97,13 +109,13 @@ id: infocontainer
 
         // Players box
         Text {
-        id: playerstitle
+            id: playerstitle
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider1.right; leftMargin: vpx(25) }
+            anchors { left: divider1.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: "Players: "
+            text: qsTr("Players") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -111,7 +123,7 @@ id: infocontainer
         }
 
         Text {
-        id: playerstext
+            id: playerstext
 
             width: contentWidth
             height: parent.height
@@ -124,10 +136,10 @@ id: infocontainer
         }
 
         Rectangle {
-        id: divider2
+            id: divider2
             width: vpx(2)
             anchors {
-                left: playerstext.right; leftMargin: (25)
+                left: playerstext.right; leftMargin: (5)
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
             }
@@ -136,13 +148,13 @@ id: infocontainer
 
         // Genre box
         Text {
-        id: genretitle
+            id: genretitle
 
             width: contentWidth
             height: parent.height
-            anchors { left: divider2.right; leftMargin: vpx(25) }
+            anchors { left: divider2.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: "Genre: "
+            text: qsTr("Genre") + ": " + api.tr
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             font.bold: true
@@ -150,19 +162,295 @@ id: infocontainer
         }
 
         Text {
-        id: genretext
+            id: genretext
 
-            anchors { 
-                left: genretitle.right; leftMargin: vpx(5)
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
+            width: contentWidth
+            height: parent.height
+            anchors { left: genretitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: gameData ? gameData.genre : ""
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
-            elide: Text.ElideRight
+            color: theme.text
+        }
+    }
+
+    // Meta data
+    PegasusUtils.HorizontalAutoScroll
+    {
+        id: metarow_2
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
+
+        height: vpx(40)
+        anchors {
+            top: metarow.bottom;
+            left: parent.left
+            right: parent.right
+        }
+
+        // Release box
+        Text {
+            id: releasetitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: parent.left; }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Release year") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: releasetext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: releasetitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.releaseYear : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider1_2
+            width: vpx(2)
+            anchors {
+                left: releasetext.right; leftMargin: (5)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+            visible: (settings.ShowFilename === "Yes") ? true : false
+        }
+
+        // File name box
+        Text {
+            id: filenametitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider1_2.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("File name") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+			visible: (settings.ShowFilename === "Yes") ? true : false
+        }
+
+        Text {
+            id: filenametext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: filenametitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+				if (gameData){
+					var path = gameData.files.get(0).path;
+					var word = path.split('/');
+					return word[word.length-1];
+				}
+				else return "";
+			}
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+			visible: (settings.ShowFilename === "Yes") ? true : false
+        }
+
+        Rectangle {
+            id: divider2_2
+            width: vpx(2)
+            anchors {
+                left: filenametext.right; leftMargin: (5)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+            visible: (settings.ShowFilehash == "Yes") ? true : false
+        }
+
+        // File hash
+        Text {
+            id: filehashtitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider2_2.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("File hash") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
+        Text {
+            id: filehashtext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: filehashtitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+                if (gameData){
+                    return gameData.hash + " (crc32)";
+                }
+                else return "";
+            }
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+            visible: (settings.ShowFilehash === "Yes") ? true : false
+        }
+
+    }
+
+    // Meta data
+    PegasusUtils.HorizontalAutoScroll
+    {
+        id: metarow_3
+
+        scrollWaitDuration: 1000 // in ms
+        pixelsPerSecond: 20
+        activated: true
+
+        height: vpx(40)
+        anchors {
+            top: metarow_2.bottom;
+            left: parent.left
+            right: parent.right
+        }
+        visible: (settings.ShowPlayStats === "Yes") ? true : false
+        // Play time
+        Text {
+            id: playtimetitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: parent.left; }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Play time") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: playtimetext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: playtimetitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? (Math. floor(gameData.playTime/60) + " min") : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider1_3
+            width: vpx(2)
+            anchors {
+                left: playtimetext.right; leftMargin: (5)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Play Count
+        Text {
+            id: playcounttitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider1_3.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Play count") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: playcounttext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: playcounttitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: gameData ? gameData.playCount : ""
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            color: theme.text
+        }
+
+        Rectangle {
+            id: divider2_3
+            width: vpx(2)
+            anchors {
+                left: playcounttext.right; leftMargin: (5)
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+            }
+            opacity: 0.2
+        }
+
+        // Last played
+        Text {
+            id: lastplayedtitle
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: divider2_3.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Last played") + ": " + api.tr
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
+            font.bold: true
+            color: theme.accent
+        }
+
+        Text {
+            id: lastplayedtext
+
+            width: contentWidth
+            height: parent.height
+            anchors { left: lastplayedtitle.right; leftMargin: vpx(5) }
+            verticalAlignment: Text.AlignVCenter
+            text: {
+				if (gameData)
+				{	
+					//console.log("gameData.lastPlayed = ",gameData.lastPlayed);					
+					let lastplayed = String(gameData.lastPlayed);
+					if (lastplayed.toLowerCase().includes("invalid"))
+					{
+                        return qsTr("N/A") + api.tr;
+					}
+					else
+					{
+						return DateUtils.moment(lastplayed).format('YYYY-MM-DD HH:mm:ss');
+					}
+				}
+                else return  qsTr("N/A") + api.tr;
+			}
+            font.pixelSize: vpx(16)
+            font.family: subtitleFont.name
             color: theme.text
         }
     }
@@ -170,18 +458,18 @@ id: infocontainer
     // Description
     PegasusUtils.AutoScroll
     {
-    id: gameDescription
-    
+        id: gameDescription
+
         anchors {
-            left: parent.left; 
+            left: parent.left;
             right: parent.right;
-            top: metarow.bottom
+            top: (settings.ShowPlayStats === "Yes") ? metarow_3.bottom : metarow_2.bottom
             bottom: parent.bottom;
         }
 
         Text {
             width: parent.width
-            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : "No description available"
+            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : qsTr("No description available") + api.tr
             font.pixelSize: vpx(16)
             font.family: bodyFont.name
             color: theme.text

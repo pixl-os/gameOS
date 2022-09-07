@@ -14,25 +14,48 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.11
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.12
 import "../Global"
 import "../Lists"
 import "../utils.js" as Utils
 
 FocusScope {
-id: root
+    id: root
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
-        storedCollectionGameIndex = gamegrid.currentIndex
-        gameDetails(list.currentGame(gamegrid.currentIndex));
+        //console.log("list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
+        //check added when search is empty and we try to launch a game in all cases
+        if(list.currentGame(gamegrid.currentIndex) !== null){
+            storedCollectionGameIndex = gamegrid.currentIndex
+            gameDetails(list.currentGame(gamegrid.currentIndex));
+        }
     }
 
-    property var sortedGames;
+    property var sortedGames: null;
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
+    property bool hotkeyPressed: false;
+
+    property real lastL1PressedTimestamp: 0
+    property real lastR1PressedTimestamp: 0
+    property int nextLetterDirection
+
+    //Timer to launch nextLetterDirection after 250 ms (to let detection of L1+R1)
+    Timer {
+        id: navigateToNextLetterTimer
+        running: false
+        triggeredOnStart: false
+        repeat: false
+        interval: 200
+        onTriggered: {
+            if ((lastL1PressedTimestamp !== 0) || (lastR1PressedTimestamp !== 0)) {
+                navigateToNextLetter(nextLetterDirection)
+            }
+        }
+    }
 
     function nextChar(c, modifier) {
         const firstAlpha = 97;
@@ -48,7 +71,7 @@ id: root
                 return '';
             }
         } else { // Scroll up
-            if (charCode == firstAlpha - 1) {
+            if (charCode === firstAlpha - 1) {
                 return '';
             }
             if (charCode < firstAlpha || charCode > lastAlpha || isNaN(charCode)) {
@@ -60,21 +83,17 @@ id: root
     }
 
     function navigateToNextLetter(modifier) {
-        if (isRightTriggerPressed || isLeftTriggerPressed) {
-            return false;
-        }
-
-        if (sortByFilter[sortByIndex].toLowerCase() != "title") {
+        if (sortByFilter[sortByIndex].toLowerCase() !== "title") {
             return false;
         }
 
         var currentIndex = gamegrid.currentIndex;
-        if (currentIndex == -1) {
+        if (currentIndex === -1) {
             gamegrid.currentIndex = 0;
         }
         else {
             // NOTE: We should be using the scroll proxy here, but this is significantly faster.
-            if (sortedGames == null) {
+            if (sortedGames === null) {
                 sortedGames = list.collection.games.toVarArray().map(g => g.title.toLowerCase()).sort((a, b) => a.localeCompare(b));
             }
 
@@ -95,16 +114,16 @@ id: root
                 do {
                     nextLetter = nextChar(nextLetter, modifier);
 
-                    if (currentLetter == nextLetter) {
+                    if (currentLetter === nextLetter) {
                         break;
                     }
 
-                    if (nextLetter == '') {
+                    if (nextLetter === '') {
                         if (sortedGames.some(g => g.toLowerCase().charCodeAt(0) < firstAlpha || g.toLowerCase().charCodeAt(0) > lastAlpha)) {
                             break;
                         }
                     }
-                    else if (sortedGames.some(g => g.charAt(0) == nextLetter)) {
+                    else if (sortedGames.some(g => g.charAt(0) === nextLetter)) {
                         break;
                     }
                 } while (true)
@@ -140,21 +159,21 @@ id: root
     property int titleMargin: settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0
 
     GridSpacer {
-    id: fakebox
+        id: fakebox
 
         width: vpx(100); height: vpx(100)
         games: list.games
     }
 
     Rectangle {
-    id: navigationOverlay
+        id: navigationOverlay
         anchors.fill: parent;
         color: theme.main
         opacity: 0
         z: 10
 
         Text {
-        id: navigationLetter
+            id: navigationLetter
             antialiasing: true
             renderType: Text.NativeRendering
             font.hintingPreference: Font.PreferNoHinting
@@ -166,7 +185,7 @@ id: root
         }
 
         SequentialAnimation {
-        id: navigationLetterOpacityAnimator
+            id: navigationLetterOpacityAnimator
             PauseAnimation { duration: 500 }
             OpacityAnimator {
 
@@ -179,7 +198,7 @@ id: root
     }
 
     Rectangle {
-    id: header
+        id: header
 
         anchors {
             top:    parent.top
@@ -191,19 +210,21 @@ id: root
         z: 5
 
         HeaderBar {
-        id: headercontainer
+            id: headercontainer
 
             anchors.fill: parent
         }
         Keys.onDownPressed: {
             sfxNav.play();
             gamegrid.focus = true;
-            gamegrid.currentIndex = 0;
+            if((gamegrid.currentIndex < gamegrid.count) && (gamegrid.currentIndex >= 0)){
+                //do nothing
+            } else gamegrid.currentIndex = 0; //set index
         }
     }
 
     Item {
-    id: gridContainer
+        id: gridContainer
 
         anchors {
             top: header.bottom; topMargin: globalMargin
@@ -213,14 +234,14 @@ id: root
         }
 
         GridView {
-        id: gamegrid
+            id: gamegrid
 
             // Figuring out the aspect ratio for box art
             property real cellHeightRatio: fakebox.paintedHeight / fakebox.paintedWidth
             property real savedCellHeight: {
-                if (settings.GridThumbnail == "Tall") {
+                if (settings.GridThumbnail === "Tall") {
                     return cellWidth / settings.TallRatio;
-                } else if (settings.GridThumbnail == "Square") {
+                } else if (settings.GridThumbnail === "Square") {
                     return cellWidth;
                 } else {
                     return cellWidth * settings.WideRatio;
@@ -256,7 +277,7 @@ id: root
             delegate: (showBoxes) ? boxartdelegate : dynamicDelegate
 
             Component {
-            id: boxartdelegate
+                id: boxartdelegate
 
                 BoxArtGridItem {
                     selected: GridView.isCurrentItem && root.focus
@@ -282,15 +303,14 @@ id: root
                             modelData.favorite = !modelData.favorite;
                         }
                     }
-
                 }
             }
 
             Component {
-            id: dynamicDelegate
+                id: dynamicDelegate
 
                 DynamicGridItem {
-                id: dynamicdelegatecontainer
+                    id: dynamicdelegatecontainer
 
                     selected: GridView.isCurrentItem && root.focus
 
@@ -318,7 +338,7 @@ id: root
             }
 
             Component {
-            id: highlightcomponent
+                id: highlightcomponent
 
                 ItemHighlight {
                     width: gamegrid.cellWidth
@@ -343,26 +363,56 @@ id: root
             Keys.onLeftPressed:     { sfxNav.play(); moveCurrentIndexLeft() }
             Keys.onRightPressed:    { sfxNav.play(); moveCurrentIndexRight() }
         }
-
     }
 
     Keys.onReleased: {
-        // Scroll Down
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = false;
+            event.accepted = true;
+        }
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+        // Scroll Down - use R1 now
+        if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            //to reset demo
+            resetDemo();
+            return;
+        }
+        // Scroll Up - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            return;
+        }
+        // Next collection - R2 now
         if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
             isRightTriggerPressed = false;
             return;
         }
-
-        // Scroll Up
+        // Previous collection - L2 now
         if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
             isLeftTriggerPressed = false;
             return;
         }
     }
 
+    //Random Game
+    property int maximum: gamegrid.count
+    property int minimum: 0
+
     Keys.onPressed: {
+        //to ignore keys if hotkey still pressed
+        if(hotkeyPressed) return;
+        // Guide
+        if (api.keys.isGuide(event) && !event.isAutoRepeat) {
+            hotkeyPressed = true;
+            event.accepted = true;
+        }
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -374,7 +424,6 @@ id: root
             }
             return;
         }
-
         // Back
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -385,32 +434,73 @@ id: root
             }
             return;
         }
-
         // Details
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
             sfxToggle.play();
-            cycleSort();
+            headercontainer.focus = true;
             return;
         }
 
-        // Scroll Down
-        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            isRightTriggerPressed = navigateToNextLetter(+1) ? true : isRightTriggerPressed;
-            return;
-        }
+        // Random Game math here for best refresh
+        var randomGame = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 
-        // Scroll Up
-        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            isLeftTriggerPressed = navigateToNextLetter(-1) ? true : isLeftTriggerPressed;
-            return;
-        }
-
-        // Next collection
+        // Scroll Up - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            lastR1PressedTimestamp = Date.now();
+            //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
+            if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
+                gamegrid.currentIndex = randomGame
+                sfxToggle.play();
+                gameActivated();
+                //console.log("ramdom game selected");
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                //launch potential navigation to next letter using timer now
+                nextLetterDirection = +1
+                navigateToNextLetterTimer.start();
+            }
+            return;
+        }
+
+        // Scroll Down - use L1 now
+        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            lastL1PressedTimestamp = Date.now();
+            //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
+            if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
+                //press L1+R1 detected
+                //console.log("press L1+R1 detected");
+                //launch action here
+                gamegrid.currentIndex = randomGame
+                sfxToggle.play();
+                gameActivated();
+                //console.log("ramdom game selected");
+                //reset timestamps
+                lastR1PressedTimestamp = 0;
+                lastL1PressedTimestamp = 0;
+            }
+            else{
+                //launch potential navigation to previous letter using timer now
+                nextLetterDirection = -1
+                navigateToNextLetterTimer.start();
+            }
+            return;
+        }
+        // Next collection - R2 now
+        if (api.keys.isPageDown(event) && !event.isAutoRepeat) {
+            event.accepted = true;
+            if (isRightTriggerPressed) {
+                return;
+            }
+            else isRightTriggerPressed = true;
             if (currentCollectionIndex < api.collections.count-1)
                 currentCollectionIndex++;
             else
@@ -418,15 +508,18 @@ id: root
 
             gamegrid.currentIndex = 0;
             sfxToggle.play();
-
             // Reset our cached sorted games
             sortedGames = null;
             return;
         }
-
-        // Previous collection
-        if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
+        // Previous collection - use L2 now
+        if (api.keys.isPageUp(event) && !event.isAutoRepeat) {
             event.accepted = true;
+            if (isLeftTriggerPressed) {
+                return;
+            }
+            else isLeftTriggerPressed = true;
+
             if (currentCollectionIndex > 0)
                 currentCollectionIndex--;
             else
@@ -446,20 +539,24 @@ id: root
         id: gridviewHelpModel
 
         ListElement {
-            name: "Back"
+            name: qsTr("Back")
             button: "cancel"
         }
         ListElement {
-            name: "Toggle favorite"
+            name: qsTr("Toggle favorite")
             button: "details"
         }
         ListElement {
-            name: "Filters"
+            name: qsTr("Filters/Search")
             button: "filters"
         }
         ListElement {
-            name: "View details"
+            name: qsTr("View details")
             button: "accept"
+        }
+        ListElement {
+          name: qsTr("random game (L1+R1)")
+          button: "random"
         }
     }
 
@@ -467,6 +564,15 @@ id: root
         if (focus) {
             currentHelpbarModel = gridviewHelpModel;
             gamegrid.focus = true;
+        }
+    }
+
+    onActiveFocusChanged:
+    {
+        //console.log("onActiveFocusChanged : ", activeFocus);
+        if (activeFocus){
+            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = gridviewHelpModel;
         }
     }
 }

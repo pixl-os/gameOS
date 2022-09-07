@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
 Item {
-id: root
+    id: root
 
     signal activated
     signal highlighted
@@ -26,13 +26,14 @@ id: root
     property string mediaItem: ""
     property bool selected
     property bool isVideo: mediaItem.includes(".mp4") || mediaItem.includes(".webm")
+    property bool isManual: mediaItem.includes(".pdf")
 
     scale: selected ? 1.05 : 1
     Behavior on scale { NumberAnimation { duration: 100 } }
     z: selected ? 10 : 1
 
     Image {
-    id: border
+        id: border
 
         anchors.fill: parent
         source: "../assets/images/gradient.png"
@@ -40,7 +41,7 @@ id: root
         asynchronous: true
 
         Rectangle {
-        id: titlecontainer
+            id: titlecontainer
 
             width: bubbletitle.contentWidth + vpx(20)
             height: bubbletitle.contentHeight + vpx(8)
@@ -52,9 +53,9 @@ id: root
             radius: height/2
 
             Text {
-            id: bubbletitle
+                id: bubbletitle
 
-                text: isVideo ? "Video" : "Screenshot"
+                text: isVideo ? qsTr("Video") + api.tr : (isManual ? qsTr("Manual") + api.tr : qsTr("Picture") + api.tr)
                 color: theme.text
                 font {
                     family: subtitleFont.name
@@ -69,24 +70,24 @@ id: root
     }
 
     Image {
-    id: bg
+        id: bg
 
         anchors.fill: parent
         anchors.margins: vpx(4)
-        source: isVideo ? "" : mediaItem
+        source: isVideo || isManual ? "" : mediaItem
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
 
         Rectangle {
-        id: videopreview
+            id: preview
 
             anchors.fill: parent
             color: theme.secondary
-            visible: isVideo
+            visible: isVideo || isManual
         }
 
         Image {
-        id: iconFill
+            id: iconFill
 
             anchors.fill: parent
             source: "../assets/images/gradient.png"
@@ -96,7 +97,7 @@ id: root
         }
 
         Image {
-        id: mask
+            id: mask
 
             source: "../assets/images/icon_mediaplayer.svg"
             anchors.centerIn: parent
@@ -116,6 +117,27 @@ id: root
             visible: isVideo
         }
 
+        Image {
+            id: mask_manual
+
+            source: "../assets/images/icon_manual.png"
+            anchors.centerIn: parent
+            width: vpx(150); height: width
+            sourceSize: Qt.size(parent.width, parent.height)
+            smooth: true
+            fillMode: Image.PreserveAspectFit
+            visible: false
+            asynchronous: true
+        }
+
+        OpacityMask {
+            anchors.fill: mask_manual
+            anchors.margins: vpx(30)
+            source: iconFill
+            maskSource: mask_manual
+            visible: isManual
+        }
+
         Rectangle {
             anchors.fill: parent
             color: "black"
@@ -130,14 +152,14 @@ id: root
         // Accept
         if (api.keys.isAccept(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            activated();        
+            activated();
         }
     }
 
     // Mouse/touch functionality
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: settings.MouseHover == "Yes"
+        hoverEnabled: settings.MouseHover === "Yes"
         onEntered: { sfxNav.play(); highlighted(); }
         onExited: {}
         onClicked: activated();

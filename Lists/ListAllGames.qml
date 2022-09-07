@@ -14,18 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.12
 import SortFilterProxyModel 0.2
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(gamesFiltered.mapToSource(index)) }
     property int max: gamesFiltered.count
 
     SortFilterProxyModel {
-    id: gamesFiltered
+        id: gamesFiltered
 
         sourceModel: api.allGames
         filters: IndexFilter { maximumIndex: max - 1 }
@@ -33,7 +33,7 @@ id: root
 
     property var collection: {
         return {
-            name:       "All games",
+            name:       qsTr("All games") + api.tr,
             shortName:  "allgames",
             games:      gamesFiltered
         }

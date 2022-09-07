@@ -14,35 +14,45 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.0
+import QtQuick 2.12
 import SortFilterProxyModel 0.2
+import "../utils.js" as Utils
 
 Item {
-id: root
+    id: root
     
     readonly property alias games: gamesFiltered
     function currentGame(index) { return api.allGames.get(genreGames.mapToSource(index)) }
     property int max: genreGames.count
     property string genre: ""
+    property bool enabled: true
 
     SortFilterProxyModel {
-    id: genreGames
-
+        id: genreGames
+        delayed: true
         sourceModel: api.allGames
-        filters: RegExpFilter { roleName: "genre"; pattern: genre; caseSensitivity: Qt.CaseInsensitive; }
-        sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder }
+        sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }
+        filters:[RegExpFilter{ roleName: "genre"; pattern: "^" + genre + "$"; caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  },
+                 RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  }, // USE HASH to avoid consecutive same games on different regions
+                  ExpressionFilter {
+                     enabled: root.enabled
+                     expression: {
+                         return (Math.random() <= 0.33); // to get 1/3 of games total.
+                     }
+                  }
+		]
     }
 
     SortFilterProxyModel {
-    id: gamesFiltered
-
+        id: gamesFiltered
+        delayed: true
         sourceModel: genreGames
-        filters: IndexFilter { maximumIndex: max - 1 }
+        filters: IndexFilter { maximumIndex: max - 1; enabled: root.enabled }
     }
 
     property var collection: {
         return {
-            name:       "Top " + genre + " Games",
+            name:       qsTr("Top Games of") + " " + genre + api.tr,
             shortName:  genre + "games",
             games:      gamesFiltered
         }
