@@ -135,6 +135,10 @@
         <source>View details</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>random game (L1+R1)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HeaderBar</name>
@@ -725,6 +729,10 @@
     </message>
     <message>
         <source>Launch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>random game (L1+R1)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

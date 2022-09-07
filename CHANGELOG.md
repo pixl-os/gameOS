@@ -80,6 +80,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- fixes for API robustness and for parameters not yet available
 	- fixes on logos
 	- fixes on platform name display
+	- update fr translation for randome game helper
 
 ## [recalbox-integration] - 2022-07-08
 - New logos for: NAOMI 2, PORTS & Screenshots (5 by systems)
