@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [recalbox-integration] - Next
+## [recalbox-integration] - 2022-09-12
 - new design management :
 	- Introduction of parameters to 'design' themes
 	- first way to select list to be focus at theme loading 
