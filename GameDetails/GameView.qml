@@ -251,7 +251,7 @@ FocusScope {
             //if ((typeof(game.assets.music) !== "undefined") && (game.assets.music !== "")) mediaList.push(game.assets.music);//RFU
 
             if ((typeof(game.assets.titlescreen) !== "undefined") && (game.assets.titlescreen !== "")) mediaList.push(game.assets.titlescreen);
-            if ((typeof(game.assets.map) !== "undefined") && (game.assets.map !== "")) mediaList.push(game.assets.map);
+            if ((typeof(game.assets.maps) !== "undefined") && (game.assets.maps !== "")) mediaList.push(game.assets.maps);
         }
         return mediaList;
     }
