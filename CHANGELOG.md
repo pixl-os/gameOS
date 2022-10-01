@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - yyyy-mm-dd
+- new design management :
+	- Fix demo mode launched in game #[16]
+
 ## [recalbox-integration] - 2022-09-12
 - new design management :
 	- Introduction of parameters to 'design' themes

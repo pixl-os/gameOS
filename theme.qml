@@ -734,8 +734,11 @@ FocusScope {
         repeat: false
         running: settings.DemoTriggeringDelay !== "Deactivated" ? true : false
         triggeredOnStart: false
+        // Check if game not launch before launch demo trigger
         onTriggered: {
-            demoTimer.running = true;
+            if ( !api.launchedgame ){
+                demoTimer.running = true;
+            }
         }
     }
 
