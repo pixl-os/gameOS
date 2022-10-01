@@ -429,6 +429,66 @@
         <source>Collection 5 - Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
+        <message>
+        <source>Collection 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collection 6 - Thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
+        <message>
+        <source>Collection 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collection 7 - Thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
+        <message>
+        <source>Collection 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collection 8 - Thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
+        <message>
+        <source>Collection 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collection 9 - Thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
+        <message>
+        <source>Collection 10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Collection 10 - Thumbnail</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Home page</source>
         <translation type="unfinished"></translation>

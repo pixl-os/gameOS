@@ -192,7 +192,7 @@
     <name>ListGenre</name>
     <message>
         <source>Top Games of</source>
-        <translation>Meileurs jeux de</translation>
+        <translation>Meilleurs jeux de</translation>
     </message>
 </context>
 <context>
@@ -224,7 +224,7 @@
     <name>ListPublisher</name>
     <message>
         <source>Top Games by</source>
-        <translation>Meileurs jeux par</translation>
+        <translation>Meilleurs jeux par</translation>
     </message>
 </context>
 <context>
@@ -343,11 +343,11 @@
     </message>
     <message>
         <source>Wide - Ratio</source>
-        <translation>Wide - Ratio</translation>
+        <translation>Horizontal - Ratio</translation>
     </message>
     <message>
         <source>Tall - Ratio</source>
-        <translation>Tall - Ratio</translation>
+        <translation>Vertical - Ratio</translation>
     </message>
     <message>
         <source>Show loading details</source>
@@ -432,6 +432,66 @@
     <message>
         <source>Collection 5 - Thumbnail</source>
         <translation>Collection 5 - Vignette</translation>
+    </message>
+        <message>
+        <source>Collection 6</source>
+        <translation>Collection 6</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+    </message>
+    <message>
+        <source>Collection 6 - Thumbnail</source>
+        <translation>Collection 6 - Vignette</translation>
+    </message>
+        <message>
+        <source>Collection 7</source>
+        <translation>Collection 7</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+    </message>
+    <message>
+        <source>Collection 7 - Thumbnail</source>
+        <translation>Collection 7 - Vignette</translation>
+    </message>
+        <message>
+        <source>Collection 8</source>
+        <translation>Collection 8</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+    </message>
+    <message>
+        <source>Collection 8 - Thumbnail</source>
+        <translation>Collection 8 - Vignette</translation>
+    </message>
+        <message>
+        <source>Collection 9</source>
+        <translation>Collection 9</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+    </message>
+    <message>
+        <source>Collection 9 - Thumbnail</source>
+        <translation>Collection 9 - Vignette</translation>
+    </message>
+        <message>
+        <source>Collection 10</source>
+        <translation>Collection 10</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+    </message>
+    <message>
+        <source>Collection 10 - Thumbnail</source>
+        <translation>Collection 10 - Vignette</translation>
     </message>
     <message>
         <source>Home page</source>
