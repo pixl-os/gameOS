@@ -1,7 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL] - yyyy-mm-dd
+## [pixL-master] - yyyy-mm-dd
+- new design management :
+	- Fix demo mode launched in game #[16]
+
 - other new feature:
 	- optimize scan folder for load all media download by scraper
 
