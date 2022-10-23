@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file (focus on ch
 - new design management :
 	- Fix demo mode launched in game #[16]
 
+- other new feature:
+	- optimize scan folder for load all media download by scraper
+
 ## [recalbox-integration] - 2022-09-12
 - new design management :
 	- Introduction of parameters to 'design' themes

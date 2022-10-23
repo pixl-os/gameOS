@@ -670,7 +670,7 @@ FocusScope {
                     property bool selected: ListView.isCurrentItem && featuredlist.focus
                     width: featuredlist.width
                     height: featuredlist.height
-                    source: Utils.fanArt(modelData);
+                    source: Utils.favorite(modelData);
                     //sourceSize { width: featuredlist.width; height: featuredlist.height }
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
