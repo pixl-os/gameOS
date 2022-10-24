@@ -214,21 +214,20 @@ FocusScope {
     function mediaArray() {
         let mediaList = [];
         //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
-        //WARNING: some apis doesn't exist yet that why we added a test on API now to know if it's defined or not.
         if (game) {
-            game.assets.videoList.forEach(v => mediaList.push(v));//videos
-            game.assets.manualList.forEach(v => mediaList.push(v));//manuals
-            game.assets.marqueeList.forEach(v => mediaList.push(v));//marquee,screenmarquee,screenmarqueesmall,steamgrid
-            game.assets.bezelList.forEach(v => mediaList.push(v));//bezel
-            game.assets.backgroundList.forEach(v => mediaList.push(v));//fanart,screenshot
-            game.assets.boxBackList.forEach(v => mediaList.push(v));//box2dback
-            game.assets.boxFrontList.forEach(v => mediaList.push(v));//box3d,support,box2dfront,supporttexture
-            game.assets.boxFullList.forEach(v => mediaList.push(v));//boxtexture
-            game.assets.boxSpineList.forEach(v => mediaList.push(v));//box2dside
-            game.assets.logoList.forEach(v => mediaList.push(v));//wheel,wheelcarbon,wheelsteel
-            game.assets.titlescreenList.forEach(v => mediaList.push(v));//screenshottitle
-            game.assets.mapsList.forEach(v => mediaList.push(v));//maps
-            game.assets.musicList.forEach(v => mediaList.push(v));//music
+            game.assets.videoList.forEach(v => mediaList.push(v));
+            game.assets.manualList.forEach(v => mediaList.push(v));
+            game.assets.marqueeList.forEach(v => mediaList.push(v));
+            game.assets.bezelList.forEach(v => mediaList.push(v));
+            game.assets.backgroundList.forEach(v => mediaList.push(v));
+            game.assets.boxBackList.forEach(v => mediaList.push(v));
+            game.assets.boxFrontList.forEach(v => mediaList.push(v));
+            game.assets.boxFullList.forEach(v => mediaList.push(v));
+            game.assets.boxSpineList.forEach(v => mediaList.push(v));
+            game.assets.logoList.forEach(v => mediaList.push(v));
+            game.assets.titlescreenList.forEach(v => mediaList.push(v));
+            game.assets.mapsList.forEach(v => mediaList.push(v));
+            game.assets.musicList.forEach(v => mediaList.push(v));
         }
         return mediaList;
     }
