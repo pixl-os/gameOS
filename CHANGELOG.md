@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file (focus on ch
 
 - other new feature:
 	- optimize scan folder for load all media download by scraper
+	- add logo for roms in base
 
 ## [recalbox-integration] - 2022-09-12
 - new design management :
