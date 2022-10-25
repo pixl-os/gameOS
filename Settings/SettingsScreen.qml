@@ -380,6 +380,8 @@ FocusScope {
         ListElement {
             settingName: "Platform page style"
             setting: "Grid,Vertical List"
+            settingNameDisplay: qsTr("Platform page style")
+            settingDisplay: qsTr("Grid,Vertical List")
         }
 
         ListElement {

@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file (focus on ch
 
 - multi-languages-support :
 	- Fix in qml code to translate in french for collection 6 to 10 #[23]
-	- Add  fr for wide and tall #[25]
+	- Fix in qml code to be able to translate in french for platform page style #[24]
+	- Add fr for wide and tall #[25]
 	- correction wording "Meileurs" to "Meilleurs"
 
 ## [recalbox-integration] - 2022-09-12

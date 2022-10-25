@@ -673,6 +673,14 @@
         <source>Regional Settings</source>
         <translation>Options régionales</translation>
     </message>
+    <message>
+        <source>Platform page style</source>
+        <translation>Style de la page système</translation>
+    </message>
+    <message>
+        <source>Grid,Vertical List</source>
+        <translation>Grille,Liste Verticale</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
