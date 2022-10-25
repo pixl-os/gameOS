@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file (focus on ch
 	- add logo for roms in base
 
 - multi-languages-support :
-	- Add translate en_GB and en_US and fr for collection 6 to 10 #[23]
-	- Add translate en_GB and en_US and fr for wide and tall #[25]
+	- Fix in qml code to translate in french for collection 6 to 10 #[23]
+	- Add  fr for wide and tall #[25]
 	- correction wording "Meileurs" to "Meilleurs"
 
 ## [recalbox-integration] - 2022-09-12
