@@ -192,7 +192,7 @@
     <name>ListGenre</name>
     <message>
         <source>Top Games of</source>
-        <translation>Meileurs jeux de</translation>
+        <translation>Meilleurs jeux de</translation>
     </message>
 </context>
 <context>
@@ -224,7 +224,7 @@
     <name>ListPublisher</name>
     <message>
         <source>Top Games by</source>
-        <translation>Meileurs jeux par</translation>
+        <translation>Meilleurs jeux par</translation>
     </message>
 </context>
 <context>
@@ -343,11 +343,11 @@
     </message>
     <message>
         <source>Wide - Ratio</source>
-        <translation>Wide - Ratio</translation>
+        <translation>Horizontal - Ratio</translation>
     </message>
     <message>
         <source>Tall - Ratio</source>
-        <translation>Tall - Ratio</translation>
+        <translation>Vertical - Ratio</translation>
     </message>
     <message>
         <source>Show loading details</source>
@@ -672,6 +672,14 @@
     <message>
         <source>Regional Settings</source>
         <translation>Options régionales</translation>
+    </message>
+    <message>
+        <source>Platform page style</source>
+        <translation>Style de la page système</translation>
+    </message>
+    <message>
+        <source>Grid,Vertical List</source>
+        <translation>Grille,Liste Verticale</translation>
     </message>
 </context>
 <context>

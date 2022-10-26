@@ -380,6 +380,8 @@ FocusScope {
         ListElement {
             settingName: "Platform page style"
             setting: "Grid,Vertical List"
+            settingNameDisplay: qsTr("Platform page style")
+            settingDisplay: qsTr("Grid,Vertical List")
         }
 
         ListElement {
@@ -665,7 +667,7 @@ FocusScope {
             showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail",
                                           "setting": "Wide,Tall,Square",
                                           "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount) + " - " + qsTr("Thumbnail"),
-                                          "settingDispolay": qsTr("Wide,Tall,Square") + api.tr});
+                                          "settingDisplay": qsTr("Wide,Tall,Square") + api.tr});
         }
 	}
 	

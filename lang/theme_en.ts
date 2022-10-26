@@ -673,6 +673,14 @@
         <source>Regional Settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Platform page style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grid,Vertical List</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
