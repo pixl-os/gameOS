@@ -117,7 +117,17 @@ FocusScope {
             SystemDetailsController:         api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
             SystemDetailsControllerPathExpression:         api.memory.has("System Details controller path expression") ? api.memory.get("System Details controller path expression") : "",
             ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
-            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
+            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100",
+            GroupsListPosition:           api.memory.has("Groups list screen position") ? api.memory.get("Groups list screen position") : "No",
+            GroupsListRatio:              api.memory.has("Groups list screen ratio") ? api.memory.get("Groups list screen ratio") : "20%",
+            NbGroupLogos:                 api.memory.has("Number of group logos visible") ? api.memory.get("Number of group logos visible") : "1",
+            GroupsListBackground:         api.memory.has("Groups list background source") ? api.memory.get("Groups list background source") : "No",
+            GroupsListBackgroundPathExpression:         api.memory.has("Groups list background path expression") ? api.memory.get("Groups list background path expression") : "",
+            GroupLogoRatio:               api.memory.has("Group logo ratio") ? api.memory.get("Group logo ratio") : "60%",
+            GroupLogoSource:              api.memory.has("Group logo source") ? api.memory.get("Group logo source") : "Default",
+            GroupLogoPathExpression:         api.memory.has("Group logo path expression") ? api.memory.get("Group logo path expression") : "",
+            GroupMusicSource:             api.memory.has("Group music source") ? api.memory.get("Group music source") : "No",
+            GroupMusicPathExpression:         api.memory.has("Group music path expression") ? api.memory.get("Group music path expression") : ""
         }
     }
 
@@ -179,6 +189,7 @@ FocusScope {
     }
 
     // Collections
+    property int currentGroupIndex: 0
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
     property var currentCollection: api.collections.get(currentCollectionIndex)

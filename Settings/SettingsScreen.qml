@@ -166,6 +166,46 @@ FocusScope {
             setting: "In home page, In a dedicated system, Both"
         }*/
 
+        ListElement {
+            settingName: "Groups list screen position"
+            setting: "No,0,1,2,3"
+        }
+        ListElement {
+            settingName: "Groups list screen ratio"
+            setting: "20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%"
+        }
+        ListElement {
+            settingName: "Groups list background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Groups list background path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Number of group logos visible"
+            setting: "1,2,3,4,5,6,7,8,9,10"
+        }
+        ListElement {
+            settingName: "Group logo ratio"
+            setting: "60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%"
+        }
+        ListElement {
+            settingName: "Group logo source"
+            setting: "Default,Custom,No"
+        }
+        ListElement {
+            settingName: "Group logo path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Group music source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Group music path expression"
+            setting: "to edit"
+        }
     }
 
     property var designerPage: {
