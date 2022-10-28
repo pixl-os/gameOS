@@ -524,10 +524,12 @@ FocusScope {
             if(designs.VideoBannerPosition !== "No") findObjectAndMove(ftueContainer,parseInt(designs.VideoBannerPosition));
             //set position of Favorites Banner (id: featuredlist)
             if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
+            //set position of Groups List (id: grouplist)
+            if(designs.GroupsListPosition !== "No") findObjectAndMove(grouplist,parseInt(designs.GroupsListPosition));
             //set position of Systems List (id: platformlist)
             if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
             //set position of System Details (id: detailedlist)
-            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));
+            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));        
         }
 
         //ftueContainer
@@ -769,6 +771,274 @@ FocusScope {
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
                     }
 				}
+            }
+        }
+
+        // List by group of systems
+        ListView {
+            id: grouplist
+
+            property bool selected : ListView.isCurrentItem
+            property int myIndex: ObjectModel.index
+            width: appWindow.width
+
+            height: designs.GroupsListPosition !== "No" ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
+            visible: designs.GroupsListPosition !== "No" ? true : false
+            enabled: visible
+
+            anchors {
+                left: parent.left;
+                right: parent.right;
+            }
+            spacing: vpx(12)
+            orientation: ListView.Horizontal
+            preferredHighlightBegin: vpx(0)
+            preferredHighlightEnd: parent.width - vpx(60)
+            highlightRangeMode: ListView.ApplyRange
+            snapMode: ListView.SnapOneItem
+            highlightMoveDuration: 100
+            keyNavigationWraps: true
+
+            property int savedIndex: currentGroupIndex
+            onFocusChanged: {
+                if (focus)
+                    currentIndex = savedIndex;
+                else {
+                    savedIndex = currentIndex;
+                    currentIndex = -1;
+                }
+                if(!focus){
+                    if(designs.GroupMusicSource !== "No") playMusic.stop();
+                }
+            }
+
+            Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
+
+            //to adapt for groups
+            model: api.collections//Utils.reorderCollection(api.collections);
+
+            delegate: Rectangle {
+                id:rectangleLogo
+                property bool selected: ListView.isCurrentItem
+                width: grouplist.width / parseFloat(designs.NbGroupLogos)
+                height: grouplist.height
+                color: "transparent"
+                property string shortName: modelData.shortName //to adapt for groups
+                Image {
+                    id: groupBackground
+                    visible: (designs.GroupsListBackground !== "No") ? true : false
+                    height: rectangleLogo.height
+                    width: rectangleLogo.width
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    z:-1
+                    source:{
+                        if(designs.GroupsListBackground === "Custom"){
+                            // for {region} & {shortname} tags
+                            return mainModel.processPathExpression(designs.GroupsListBackgroundPathExpression, modelData)
+                        }
+                        else return "";
+                    }
+                }
+
+
+                onSelectedChanged: {
+                    //console.log("selected : ",selected)
+                    if(selected && (designs.GroupMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
+                    }
+                    else{
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                }
+
+                onActiveFocusChanged: {
+                    //console.log("Focus changed to " + focus)
+                    //console.log("Active Focus changed to " + activeFocus)
+                    if(selected && (designs.GroupMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                        }
+                        else{
+                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        }
+                    }
+                    else{
+                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                }
+
+                Audio {
+                    id: playMusic
+                    loops: Audio.Infinite
+                    source: {
+                        if (designs.GroupMusicSource === "Custom") {
+                            if (modelData.shortName !=="imageviewer"){
+                                return mainModel.processPathExpression(designs.GroupMusicPathExpression,modelData)
+                            }
+                            else return "";
+                        }
+                        else if(designs.GroupMusicSource !== "No") {
+                            return "";
+                        }
+                        else return "";
+                    }
+                }
+
+                Image {
+                    id: grouplogo
+                    height: parent.height * (parseFloat(designs.GroupLogoRatio)/100)
+                    width: parent.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: {
+                        if (designs.GroupLogoSource === "Custom"){
+                            // Able to manage {region} & {shortname} tags
+                            var result = mainModel.processPathExpression(designs.GroupLogoPathExpression,modelData)
+                            return result;
+                        }
+                        else if(designs.GroupLogoSource !== "No"){
+                            if(settings.GroupLogoStyle === "White")
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                            }
+                            else
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                            }
+                        }
+                    }
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    opacity: selected ? 1 : 0.3 //designs.NbGroupLogos === "1" ? 0.0 : 0.3
+                    scale: selected ? 0.9 : 0.8
+                    Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            //change source in case of error with custom logo
+                            if (designs.GroupLogoSource !== "Default"){
+                                //if custom logo, we are trying to load without region
+                                source = mainModel.processPathExpressionNoRegion(designs.GroupLogoPathExpression,modelData)
+                            }
+                        }
+                    }
+//                    Image{
+//                        id: betaLogo
+//                        anchors.verticalCenter: parent.verticalCenter
+//                        anchors.right: parent.right
+//                        width: parent.width/2
+//                        height: parent.height/2
+
+//                        //to alert when system is in beta
+//                        source: "../assets/images/beta-round.png";
+//                        fillMode: Image.PreserveAspectFit
+//                        asynchronous: true
+//                        smooth: true
+//                        scale: selected ? 0.9 : 0.8
+//                        //for the moment, just check if first core for this system still low
+//                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
+//                    }
+                }
+
+                Text {
+                    id: title
+                    text: {
+                        if(modelData.name === "Screenshots")
+                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("screenshots") + api.tr : " " + qsTr("screenshot") + api.tr));
+                        else
+                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                    }
+                    color: theme.text
+                    font {
+                        family: subtitleFont.name
+                        pixelSize: vpx(12)
+                        bold: true
+                    }
+
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    anchors.top: grouplogo.bottom
+
+                    width: parent.width
+
+                    opacity: designs.NbGroupLogos === "1" ?  0.0 : 0.2
+                    visible: settings.AlwaysShowTitles === "Yes" || selected
+                }
+
+                Text {
+                    id: groupname
+
+                    text: modelData.name
+                    anchors { fill: parent; margins: vpx(10) }
+                    color: theme.text
+                    opacity: selected ? 1 : 0.2
+                    Behavior on opacity { NumberAnimation { duration: 100 } }
+                    font.pixelSize: vpx(18)
+                    font.family: subtitleFont.name
+                    font.bold: true
+                    style: Text.Outline; styleColor: theme.main
+                    visible: grouplogo.status === Image.Error && (designs.NbGroupLogos === "1" ? selected : true)
+                    anchors.centerIn: parent
+                    elide: Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    lineHeight: 0.8
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: { sfxNav.play(); mainList.currentIndex = grouplist.ObjectModel.index; grouplist.savedIndex = index; grouplist.currentIndex = index; }
+                    onExited: {}
+                    onClicked: {
+                        if (selected)
+                        {
+                            currentGroupIndex = index;
+                            //softwareScreen();
+                        } else {
+                            mainList.currentIndex = grouplist.ObjectModel.index;
+                            grouplist.currentIndex = index;
+                        }
+
+                    }
+                }
+            }
+
+            // List specific input
+            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
+            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            Keys.onPressed: {
+                if (!viewIsLoading){
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        currentGroupIndex = grouplist.currentIndex;
+                        //softwareScreen();
+                    }
+                }
             }
         }
 
