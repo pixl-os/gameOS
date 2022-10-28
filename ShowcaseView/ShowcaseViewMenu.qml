@@ -815,20 +815,49 @@ FocusScope {
             Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
 
             //to adapt for groups
-            model: api.collections//Utils.reorderCollection(api.collections);
+            ListModel{
+                id: typeOfSystems
+                ListElement {
+                    shortName : "nes" //"arcade"
+                }
+                ListElement {
+                    shortName : "neogeo" //"console"
+                }
+                ListElement {
+                    shortName : "computer"
+                }
+                ListElement {
+                    shortName : "engine"
+                }
+                ListElement {
+                    shortName : "handheld"
+                }
+                ListElement {
+                    shortName : "port"
+                }
+                ListElement {
+                    shortName : "virtual"
+                }
+            }
+
+            model: typeOfSystems //.get(ListView.currentIndex); //api.collections//Utils.reorderCollection(api.collections);
 
             delegate: Rectangle {
-                id:rectangleLogo
+                id:rectangleGroupLogo
                 property bool selected: ListView.isCurrentItem
                 width: grouplist.width / parseFloat(designs.NbGroupLogos)
                 height: grouplist.height
                 color: "transparent"
-                property string shortName: modelData.shortName //to adapt for groups
+                property string shortName: {
+                    //console.log("typeOfSystems.get(ListView.currentIndex).shortName",typeOfSystems.get(ListView.currentIndex).shortName);
+                    console.log("model.shortName", model.shortName);
+                    return model.shortName //to adapt for groups
+                }
                 Image {
                     id: groupBackground
                     visible: (designs.GroupsListBackground !== "No") ? true : false
-                    height: rectangleLogo.height
-                    width: rectangleLogo.width
+                    height: rectangleGroupLogo.height
+                    width: rectangleGroupLogo.width
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     smooth: true
@@ -837,7 +866,7 @@ FocusScope {
                     source:{
                         if(designs.GroupsListBackground === "Custom"){
                             // for {region} & {shortname} tags
-                            return mainModel.processPathExpression(designs.GroupsListBackgroundPathExpression, modelData)
+                            return mainModel.processPathExpression(designs.GroupsListBackgroundPathExpression, model)
                         }
                         else return "";
                     }
@@ -848,14 +877,14 @@ FocusScope {
                     //console.log("selected : ",selected)
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
-                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                           if (model.shortName !=="imageviewer") playMusic.play();
                         }
                         else{
-                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                            if (model.shortName !=="imageviewer") playMusic.stop();
                         }
                     }
                     else{
-                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        if (model.shortName !=="imageviewer") playMusic.stop();
                     }
                 }
 
@@ -881,7 +910,7 @@ FocusScope {
                     source: {
                         if (designs.GroupMusicSource === "Custom") {
                             if (modelData.shortName !=="imageviewer"){
-                                return mainModel.processPathExpression(designs.GroupMusicPathExpression,modelData)
+                                return mainModel.processPathExpression(designs.GroupMusicPathExpression,model)
                             }
                             else return "";
                         }
@@ -901,17 +930,17 @@ FocusScope {
                     source: {
                         if (designs.GroupLogoSource === "Custom"){
                             // Able to manage {region} & {shortname} tags
-                            var result = mainModel.processPathExpression(designs.GroupLogoPathExpression,modelData)
+                            var result = mainModel.processPathExpression(designs.GroupLogoPathExpression,model)
                             return result;
                         }
                         else if(designs.GroupLogoSource !== "No"){
                             if(settings.GroupLogoStyle === "White")
                             {
-                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + ".png";
+                                return "../assets/images/logospng/" + Utils.processPlatformName(model.shortName) + ".png";
                             }
                             else
                             {
-                                return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                                return "../assets/images/logospng/" + Utils.processPlatformName(model.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                             }
                         }
                     }
@@ -937,7 +966,7 @@ FocusScope {
                             //change source in case of error with custom logo
                             if (designs.GroupLogoSource !== "Default"){
                                 //if custom logo, we are trying to load without region
-                                source = mainModel.processPathExpressionNoRegion(designs.GroupLogoPathExpression,modelData)
+                                source = mainModel.processPathExpressionNoRegion(designs.GroupLogoPathExpression,model)
                             }
                         }
                     }
@@ -958,7 +987,7 @@ FocusScope {
 //                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
 //                    }
                 }
-
+/*
                 Text {
                     id: title
                     text: {
@@ -1006,7 +1035,7 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
-
+*/
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
