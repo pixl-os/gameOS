@@ -819,24 +819,34 @@ FocusScope {
                 id: typeOfSystems
                 ListElement {
                     shortName : "nes" //"arcade"
+                    name: qsTr("Arcades")
                 }
                 ListElement {
                     shortName : "neogeo" //"console"
+                    name: qsTr("home consoles")
                 }
                 ListElement {
                     shortName : "computer"
+                    name: qsTr("Computers")
                 }
                 ListElement {
                     shortName : "engine"
+                    name: qsTr("Engines")
+
                 }
                 ListElement {
                     shortName : "handheld"
+                    name: qsTr("Handheld consoles")
+
                 }
                 ListElement {
                     shortName : "port"
+                    name: qsTr("Ports")
+
                 }
                 ListElement {
                     shortName : "virtual"
+                    name: qsTr("Virtual systems")
                 }
             }
 
@@ -877,14 +887,14 @@ FocusScope {
                     //console.log("selected : ",selected)
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
-                           if (model.shortName !=="imageviewer") playMusic.play();
+                           if (model.shortName !=="imageviewer") playGroupMusic.play();
                         }
                         else{
-                            if (model.shortName !=="imageviewer") playMusic.stop();
+                            if (model.shortName !=="imageviewer") playGroupMusic.stop();
                         }
                     }
                     else{
-                        if (model.shortName !=="imageviewer") playMusic.stop();
+                        if (model.shortName !=="imageviewer") playGroupMusic.stop();
                     }
                 }
 
@@ -893,23 +903,23 @@ FocusScope {
                     //console.log("Active Focus changed to " + activeFocus)
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
-                           if (modelData.shortName !=="imageviewer") playMusic.play();
+                           if (model.shortName !=="imageviewer") playGroupMusic.play();
                         }
                         else{
-                            if (modelData.shortName !=="imageviewer") playMusic.stop();
+                            if (model.shortName !=="imageviewer") playGroupMusic.stop();
                         }
                     }
                     else{
-                        if (modelData.shortName !=="imageviewer") playMusic.stop();
+                        if (model.shortName !=="imageviewer") playGroupMusic.stop();
                     }
                 }
 
                 Audio {
-                    id: playMusic
+                    id: playGroupMusic
                     loops: Audio.Infinite
                     source: {
                         if (designs.GroupMusicSource === "Custom") {
-                            if (modelData.shortName !=="imageviewer"){
+                            if (model.shortName !=="imageviewer"){
                                 return mainModel.processPathExpression(designs.GroupMusicPathExpression,model)
                             }
                             else return "";
@@ -986,9 +996,9 @@ FocusScope {
 //                        //for the moment, just check if first core for this system still low
 //                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
 //                    }
-                }
-/*
-                Text {
+                  }
+
+/*                Text {
                     id: title
                     text: {
                         if(modelData.name === "Screenshots")
@@ -1014,11 +1024,11 @@ FocusScope {
                     opacity: designs.NbGroupLogos === "1" ?  0.0 : 0.2
                     visible: settings.AlwaysShowTitles === "Yes" || selected
                 }
-
+*/
                 Text {
                     id: groupname
 
-                    text: modelData.name
+                    text: model.name
                     anchors { fill: parent; margins: vpx(10) }
                     color: theme.text
                     opacity: selected ? 1 : 0.2
@@ -1027,7 +1037,7 @@ FocusScope {
                     font.family: subtitleFont.name
                     font.bold: true
                     style: Text.Outline; styleColor: theme.main
-                    visible: grouplogo.status === Image.Error && (designs.NbGroupLogos === "1" ? selected : true)
+                    visible: grouplogo.status === Image.Error ? ((designs.NbGroupLogos === "1") ? selected : true) : false
                     anchors.centerIn: parent
                     elide: Text.ElideRight
                     wrapMode: Text.WordWrap
@@ -1035,7 +1045,7 @@ FocusScope {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
-*/
+
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
