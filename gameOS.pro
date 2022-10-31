@@ -261,6 +261,11 @@ DISTFILES += \
     assets/images/logospng/apple2gs_carbon.png \
     assets/images/logospng/apple2gs_color.png \
     assets/images/logospng/apple2gs_steel.png \
+    assets/images/logospng/arcade.png \
+    assets/images/logospng/arcade_black.png \
+    assets/images/logospng/arcade_carbon.png \
+    assets/images/logospng/arcade_color.png \
+    assets/images/logospng/arcade_steel.png \
     assets/images/logospng/atari2600.png \
     assets/images/logospng/atari2600_black.png \
     assets/images/logospng/atari2600_carbon.png \
