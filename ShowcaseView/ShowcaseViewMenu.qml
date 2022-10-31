@@ -818,12 +818,12 @@ FocusScope {
             ListModel{
                 id: typeOfSystems
                 ListElement {
-                    shortName : "nes" //"arcade"
+                    shortName : "arcade"
                     name: qsTr("Arcades")
                 }
                 ListElement {
-                    shortName : "neogeo" //"console"
-                    name: qsTr("home consoles")
+                    shortName : "console"
+                    name: qsTr("Home consoles")
                 }
                 ListElement {
                     shortName : "computer"
