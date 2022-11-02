@@ -826,22 +826,22 @@ FocusScope {
                     name: qsTr("Home consoles")
                 }
                 ListElement {
-                    shortName : "computer"
-                    name: qsTr("Computers")
-                }
-                ListElement {
-                    shortName : "engine"
-                    name: qsTr("Engines")
-
-                }
-                ListElement {
                     shortName : "handheld"
                     name: qsTr("Handheld consoles")
 
                 }
                 ListElement {
+                    shortName : "computer"
+                    name: qsTr("Computers")
+                }
+                ListElement {
                     shortName : "port"
                     name: qsTr("Ports")
+
+                }
+                ListElement {
+                    shortName : "engine"
+                    name: qsTr("Engines")
 
                 }
                 ListElement {
@@ -944,7 +944,7 @@ FocusScope {
                             return result;
                         }
                         else if(designs.GroupLogoSource !== "No"){
-                            if(settings.GroupLogoStyle === "White")
+                            if(settings.SystemLogoStyle === "White")
                             {
                                 return "../assets/images/logospng/" + Utils.processPlatformName(model.shortName) + ".png";
                             }
