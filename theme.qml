@@ -166,6 +166,7 @@ FocusScope {
             ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
             DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "10",
+            GroupSystemsByType:            api.memory.has("Group systems by type") ? api.memory.get("Group systems by type") : "No",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
             ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
@@ -190,9 +191,10 @@ FocusScope {
 
     // Collections
     property int currentGroupIndex: 0
+    property var currentGroup : (settings.GroupSystemsByType === "No") ? api.collections : null
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex)
+    property var currentCollection: currentGroup.get(currentCollectionIndex)
     property var currentGame
 
     // Stored variables for page navigation
