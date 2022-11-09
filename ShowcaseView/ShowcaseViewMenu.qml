@@ -782,9 +782,11 @@ FocusScope {
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: designs.GroupsListPosition !== "No" ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
-            visible: designs.GroupsListPosition !== "No" ? true : false
+            height: (designs.GroupsListPosition !== "No" && settings.GroupSystemsByType !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
+            visible: (designs.GroupsListPosition !== "No" && settings.GroupSystemsByType !== "No") ? true : false
             enabled: visible
+            currentIndex: -1
+            focus: false
 
             anchors {
                 left: parent.left;
@@ -801,68 +803,119 @@ FocusScope {
 
             property int savedIndex: currentGroupIndex
             onFocusChanged: {
+                //console.log("focus : ",focus);
                 if (focus)
                     currentIndex = savedIndex;
                 else {
                     savedIndex = currentIndex;
                     currentIndex = -1;
-                }
-                if(!focus){
                     if(designs.GroupMusicSource !== "No") playMusic.stop();
                 }
             }
 
-            Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
+            Component.onCompleted: {
+                currentIndex = currentGroupIndex;
+                positionViewAtIndex(currentIndex, ListView.Visible);
 
-            //to adapt for groups
+                //positionViewAtIndex(savedIndex, ListView.End)
+                //currentGroup = groupSelected;
+            }
+
+            //to adapt for groups / not visible by defaults
             ListModel{
                 id: typeOfSystems
                 ListElement {
                     shortName : "arcade"
-                    name: qsTr("Arcades")
+                    name: qsTr("Arcade system")
+                    names: qsTr("Arcade systems")
                 }
                 ListElement {
                     shortName : "console"
-                    name: qsTr("Home consoles")
+                    name: qsTr("Home console")
+                    names: qsTr("Home consoles")
                 }
                 ListElement {
                     shortName : "handheld"
-                    name: qsTr("Handheld consoles")
-
+                    name: qsTr("Handheld console")
+                    names: qsTr("Handheld consoles")
                 }
                 ListElement {
                     shortName : "computer"
-                    name: qsTr("Computers")
+                    name: qsTr("Computer")
+                    names: qsTr("Computers")
+                    visible: false
                 }
                 ListElement {
                     shortName : "port"
-                    name: qsTr("Ports")
-
+                    name: qsTr("Port")
+                    names: qsTr("Ports")
                 }
                 ListElement {
                     shortName : "engine"
-                    name: qsTr("Engines")
-
+                    name: qsTr("Engine")
+                    names: qsTr("Engines")
                 }
                 ListElement {
                     shortName : "virtual"
-                    name: qsTr("Virtual systems")
+                    name: qsTr("Virtual system")
+                    names: qsTr("Virtual systems")
                 }
             }
 
-            model: typeOfSystems //.get(ListView.currentIndex); //api.collections//Utils.reorderCollection(api.collections);
+            //FILTERING for Group of systems to display (Display only group if not empty)
+            SortFilterProxyModel {
+                id: groupsDisplayed
+                sourceModel: typeOfSystems
+                delayed: true //to avoid loop binding
+                filters:[
+                    //to search i fany collection exists for this type of system
+                    ExpressionFilter {
+                        enabled: settings.GroupSystemsByType !== "No"
+                        expression:{
+                            //to avoid to check collections if undefined
+                            if(model.shortName === 'undefined') return false;
+                            //console.log("model.shortName : ",model.shortName);
+                            //console.log("api.collections.count: ",api.collections.count);
+                            for(var i = 0;i <= api.collections.count; i++)
+                            {
+                                if(api.collections.get(i) !== null){
+                                    if(api.collections.get(i).type === model.shortName){
+                                        //console.log("api.collections.get(i).type : ", api.collections.get(i).type)
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                    }
+                ]
+            }
+
+            model: groupsDisplayed
+
+            //FILTERING collections to display by group
+            SortFilterProxyModel {
+                id: groupSelected
+                sourceModel: api.collections
+                delayed: true //to avoid loop binding
+                //filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex).shortName; enabled: true}]
+                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex  ).shortName; enabled: settings.GroupSystemsByType !== "No"}]
+                            //groupsDisplayed.get(grouplist.currentIndex).shortName; enabled: true}]
+            }
+
 
             delegate: Rectangle {
                 id:rectangleGroupLogo
-                property bool selected: ListView.isCurrentItem
+                property bool selected: ListView.isCurrentItem && grouplist.focus
                 width: grouplist.width / parseFloat(designs.NbGroupLogos)
                 height: grouplist.height
                 color: "transparent"
-                property string shortName: {
+                property string shortName: { //that's short name of group, not of collections !!!
                     //console.log("typeOfSystems.get(ListView.currentIndex).shortName",typeOfSystems.get(ListView.currentIndex).shortName);
-                    console.log("model.shortName", model.shortName);
-                    return model.shortName //to adapt for groups
+                    //console.log("model.shortName", model.shortName);
+                    return model.shortName
                 }
+
                 Image {
                     id: groupBackground
                     visible: (designs.GroupsListBackground !== "No") ? true : false
@@ -882,19 +935,18 @@ FocusScope {
                     }
                 }
 
-
                 onSelectedChanged: {
                     //console.log("selected : ",selected)
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
-                           if (model.shortName !=="imageviewer") playGroupMusic.play();
+                           playGroupMusic.play();
                         }
                         else{
-                            if (model.shortName !=="imageviewer") playGroupMusic.stop();
+                           playGroupMusic.stop();
                         }
                     }
                     else{
-                        if (model.shortName !=="imageviewer") playGroupMusic.stop();
+                        playGroupMusic.stop();
                     }
                 }
 
@@ -903,14 +955,14 @@ FocusScope {
                     //console.log("Active Focus changed to " + activeFocus)
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
-                           if (model.shortName !=="imageviewer") playGroupMusic.play();
+                           playGroupMusic.play();
                         }
                         else{
-                            if (model.shortName !=="imageviewer") playGroupMusic.stop();
+                            playGroupMusic.stop();
                         }
                     }
                     else{
-                        if (model.shortName !=="imageviewer") playGroupMusic.stop();
+                        playGroupMusic.stop();
                     }
                 }
 
@@ -957,7 +1009,7 @@ FocusScope {
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
-                    opacity: selected ? 1 : 0.3 //designs.NbGroupLogos === "1" ? 0.0 : 0.3
+                    opacity: selected ? 1 : (designs.NbGroupLogos === "1" ? 0.0 : 0.3)
                     scale: selected ? 0.9 : 0.8
                     Behavior on scale { NumberAnimation { duration: 100 } }
                     onStatusChanged: {
@@ -998,13 +1050,10 @@ FocusScope {
 //                    }
                   }
 
-/*                Text {
-                    id: title
+                Text {
+                    id: grouptitle
                     text: {
-                        if(modelData.name === "Screenshots")
-                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("screenshots") + api.tr : " " + qsTr("screenshot") + api.tr));
-                        else
-                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                        return (groupSelected.count + " " + ((groupSelected.count > 1) ? model.names + api.tr : model.name + api.tr));
                     }
                     color: theme.text
                     font {
@@ -1022,10 +1071,10 @@ FocusScope {
                     width: parent.width
 
                     opacity: designs.NbGroupLogos === "1" ?  0.0 : 0.2
-                    visible: settings.AlwaysShowTitles === "Yes" || selected
+                    visible: (settings.AlwaysShowTitles === "Yes") || selected
                 }
-*/
-                Text {
+
+/*                Text {
                     id: groupname
 
                     text: model.name
@@ -1044,7 +1093,7 @@ FocusScope {
                     lineHeight: 0.8
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                }
+                }*/
 
                 // Mouse/touch functionality
                 MouseArea {
@@ -1055,28 +1104,34 @@ FocusScope {
                     onClicked: {
                         if (selected)
                         {
-                            currentGroupIndex = index;
-                            //softwareScreen();
+                            mainList.currentIndex = grouplist.ObjectModel.index + 1;
                         } else {
                             mainList.currentIndex = grouplist.ObjectModel.index;
-                            grouplist.currentIndex = index;
                         }
-
+                        //grouplist.currentIndex = index;
+                        savedIndex = grouplist.currentIndex
+                        currentGroupIndex = savedIndex;
+                        //currentGroup = groupSelected;
                     }
                 }
             }
 
             // List specific input
-            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
-            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
+            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
             Keys.onPressed: {
                 if (!viewIsLoading){
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
-                        currentGroupIndex = grouplist.currentIndex;
-                        //softwareScreen();
+                        mainList.currentIndex = grouplist.ObjectModel.index + 1;
+
+                        //grouplist.currentIndex = index;
+                        savedIndex = grouplist.currentIndex
+                        currentGroupIndex = savedIndex;
+                        //currentGroup = groupSelected;
                     }
+
                 }
             }
         }
@@ -1092,6 +1147,8 @@ FocusScope {
             height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
             visible: designs.SystemsListPosition !== "No" ? true : false
             enabled: visible
+            currentIndex: -1
+            focus: false
 
             anchors {
                 left: parent.left;
@@ -1106,26 +1163,32 @@ FocusScope {
             highlightMoveDuration: 100
             keyNavigationWraps: true
 
+
             property int savedIndex: currentCollectionIndex
             onFocusChanged: {
-                if (focus)
-                    currentIndex = savedIndex;
+                if (focus){
+                    if(savedIndex < platformlist.count)
+                        currentIndex = currentCollectionIndex;
+                    else
+                        currentIndex = 0;
+                }
                 else {
                     savedIndex = currentIndex;
+                    currentCollectionIndex = savedIndex;
                     currentIndex = -1;
-                }
-                if(!focus){
                     if(designs.SystemMusicSource !== "No") playMusic.stop();
                 }
             }
 
-            Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
+            Component.onCompleted:{
+                positionViewAtIndex(currentCollectionIndex, ListView.End)
+            }
 
-            model: api.collections//Utils.reorderCollection(api.collections);
+            model: groupSelected  //api.collections//Utils.reorderCollection(api.collections);
 
             delegate: Rectangle {
                 id:rectangleLogo
-                property bool selected: ListView.isCurrentItem
+                property bool selected: ListView.isCurrentItem && platformlist.focus
                 width: platformlist.width / parseFloat(designs.NbSystemLogos)
                 height: platformlist.height
                 color: "transparent"
@@ -1220,7 +1283,7 @@ FocusScope {
                                 return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                             }
                         }
-                    }                      
+                    }
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
@@ -1322,7 +1385,7 @@ FocusScope {
                     onClicked: {
                         if (selected)
                         {
-                            currentCollectionIndex = index;
+                            currentCollectionIndex = groupSelected.mapToSource(index);
                             softwareScreen();
                         } else {
                             mainList.currentIndex = platformlist.ObjectModel.index;
@@ -1337,14 +1400,14 @@ FocusScope {
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
             Keys.onPressed: {
-				if (!viewIsLoading){
-					// Accept
-					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-						event.accepted = true;
-						currentCollectionIndex = platformlist.currentIndex;
-						softwareScreen();
-					}
-				}
+                if (!viewIsLoading){
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                        softwareScreen();
+                    }
+                }
             }
         }
 
@@ -2037,8 +2100,10 @@ FocusScope {
             //to manage focus
             if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
             if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
-            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 3;
+            if(designs.InitialPosition === "Groups list" && settings.GroupSystemsByType !== "No" ) storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "Groups list" && settings.GroupSystemsByType === "No" ) storedHomePrimaryIndex = 3; //to select system list in this case
+            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
+            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
             //if you add new component, please put existing index/order before to change position at this place
             mainList.currentIndex = storedHomePrimaryIndex;
         }

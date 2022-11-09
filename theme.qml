@@ -191,10 +191,10 @@ FocusScope {
 
     // Collections
     property int currentGroupIndex: 0
-    property var currentGroup : (settings.GroupSystemsByType === "No") ? api.collections : null
+    //property var currentGroup : (settings.GroupSystemsByType === "No") ? api.collections : api.collections
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
-    property var currentCollection: currentGroup.get(currentCollectionIndex)
+    property var currentCollection: api.collections.get(currentCollectionIndex) //(settings.GroupSystemsByType === "No") ? api.collections.get(currentCollectionIndex) : currentGroup.get(currentCollectionIndex)
     property var currentGame
 
     // Stored variables for page navigation
@@ -314,11 +314,12 @@ FocusScope {
     // Save current states for returning from game
     function saveCurrentState(game) {
         api.memory.set('savedState', root.state);
-        api.memory.set('savedCollection', currentCollectionIndex);
+        api.memory.set('savedCollection', currentCollection);
         api.memory.set('lastState', JSON.stringify(lastState));
         api.memory.set('lastGame', JSON.stringify(lastGame));
         api.memory.set('storedHomePrimaryIndex', storedHomePrimaryIndex);
         api.memory.set('storedHomeSecondaryIndex', storedHomeSecondaryIndex);
+        api.memory.set('storedGroupIndex',currentGroupIndex);
         api.memory.set('storedCollectionIndex', currentCollectionIndex);
         api.memory.set('storedCollectionGameIndex', storedCollectionGameIndex);
 
@@ -333,9 +334,10 @@ FocusScope {
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
-        currentCollectionIndex      = api.memory.get('savedCollection');
+        currentCollection           = api.memory.get('savedCollection');
         storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
         storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
+        currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollectionIndex      = api.memory.get('storedCollectionIndex');
         storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
 
@@ -345,6 +347,7 @@ FocusScope {
         // Remove these from memory so as to not clog it up
         api.memory.unset('savedState');
         api.memory.unset('savedGame');
+        api.memory.unset('savedCollection');
         api.memory.unset('lastState');
         api.memory.unset('lastGame');
         api.memory.unset('storedHomePrimaryIndex');
