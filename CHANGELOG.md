@@ -4,19 +4,21 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 202a-mm-dd - v1.2x.x
 - 
 
-## [pixL-master] - 2022-11-18 - v1.20.0 
+## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
-	- Fix demo mode launched in game #[16]
-
+	- fix demo mode launched in game #[16]
+	- fix for resolution upper than 1080p support in gameview #[17]
+	
 - other new feature:
 	- optimize scan folder for load all media download by scraper
 	- fix list of media
 	- add logo for roms in base
+	- set now version and details in theme.cfg for each release
 
 - multi-languages-support :
-	- Fix in qml code to translate in french for collection 6 to 10 #[23]
-	- Fix in qml code to be able to translate in french for platform page style #[24]
-	- Add fr for wide and tall #[25]
+	- fix in qml code to translate in french for collection 6 to 10 #[23]
+	- fix in qml code to be able to translate in french for platform page style #[24]
+	- add fr for wide and tall #[25]
 	- correction wording "Meileurs" to "Meilleurs"
 
 ## [recalbox-integration] - 2022-09-12
@@ -31,7 +33,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- add management of region and especially for systems list background for the moment
 	- add recalbox.conf parameter to activate the designer from theme
 	- manage default, custom or no theme logo in theme designer
-	-  add more ratio percentages capability from 5% to 100% now.
+	- add more ratio percentages capability from 5% to 100% now.
 	- change default logo to use the pixl one
 	- restore info to add favorites when video is displayed
 	- add more parameters for video/favorites banner and systems list

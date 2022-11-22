@@ -1154,11 +1154,11 @@ FocusScope {
         ListView {
             id: menu
             visible: (demoLaunched !== true)
-            property bool selected: parent.focus
+            property bool selected: root.focus
             focus: selected
-            width: parent.width
-            height:vpx(parent.height * (parseFloat("9%")/100))
-            model: menuModel
+			width: root.width
+            height: vpx(root.height * (parseFloat("9%")/100))
+			model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
             keyNavigationWraps: true
@@ -1208,7 +1208,7 @@ FocusScope {
                                 }
         }
 
-        //media list
+        // Media list
         HorizontalCollection {
             id: media
             visible: (demoLaunched !== true)
@@ -1306,7 +1306,7 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + header.height + (root.embedded ? 0 : (parent.height * (parseFloat("3%")/100)))) : header.height //vpx(450 + 75)
+            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + 75) : header.height
             bottom: parent.bottom; bottomMargin: vpx(150)
         }
         model: extrasModel
@@ -1370,6 +1370,7 @@ FocusScope {
 
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 100 } }
+		opacity: 0
         visible: opacity !== 0
 
         mediaModel: mediaArray();
