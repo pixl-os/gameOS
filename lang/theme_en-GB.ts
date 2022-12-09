@@ -681,6 +681,10 @@
         <source>Grid,Vertical List</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Group systems by type</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -718,6 +722,62 @@
     </message>
     <message>
         <source>Try adding some favorite games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arcade system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arcade systems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home consoles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handheld console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handheld consoles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual systems</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
