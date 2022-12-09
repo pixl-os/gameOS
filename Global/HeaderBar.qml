@@ -43,6 +43,8 @@ FocusScope {
             }
             fillMode: Image.PreserveAspectFit
             source: {
+	    	//to force update of currentCollection because bug identified in some case :-(
+	    	currentCollection = api.collections.get(currentCollectionIndex);
                 if(settings.SystemLogoStyle === "White")
                 {
                     return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png";
