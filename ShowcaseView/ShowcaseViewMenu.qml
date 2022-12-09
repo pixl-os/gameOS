@@ -815,10 +815,8 @@ FocusScope {
 
             Component.onCompleted: {
                 currentIndex = currentGroupIndex;
-                positionViewAtIndex(currentIndex, ListView.Visible);
+                positionViewAtIndex(currentIndex, ListView.End);
 
-                //positionViewAtIndex(savedIndex, ListView.End)
-                //currentGroup = groupSelected;
             }
 
             //to adapt for groups / not visible by defaults
@@ -1074,7 +1072,7 @@ FocusScope {
                     visible: (settings.AlwaysShowTitles === "Yes") || selected
                 }
 
-/*                Text {
+                Text {
                     id: groupname
 
                     text: model.name
@@ -1093,7 +1091,7 @@ FocusScope {
                     lineHeight: 0.8
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                }*/
+                }
 
                 // Mouse/touch functionality
                 MouseArea {
@@ -1108,10 +1106,6 @@ FocusScope {
                         } else {
                             mainList.currentIndex = grouplist.ObjectModel.index;
                         }
-                        //grouplist.currentIndex = index;
-                        savedIndex = grouplist.currentIndex
-                        currentGroupIndex = savedIndex;
-                        //currentGroup = groupSelected;
                     }
                 }
             }
@@ -1125,13 +1119,7 @@ FocusScope {
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
                         mainList.currentIndex = grouplist.ObjectModel.index + 1;
-
-                        //grouplist.currentIndex = index;
-                        savedIndex = grouplist.currentIndex
-                        currentGroupIndex = savedIndex;
-                        //currentGroup = groupSelected;
                     }
-
                 }
             }
         }
@@ -1166,6 +1154,8 @@ FocusScope {
 
             property int savedIndex: currentCollectionIndex
             onFocusChanged: {
+   	        //console.log("onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
+		//console.log("onFocusChanged - focus : ",focus);
                 if (focus){
                     if(savedIndex < platformlist.count)
                         currentIndex = currentCollectionIndex;
@@ -1181,10 +1171,13 @@ FocusScope {
             }
 
             Component.onCompleted:{
+   	        //console.log("onCompleted - currentCollectionIndex : ",currentCollectionIndex);
+		//console.log("onCompleted - currentIndex : ",currentIndex);
+	    	currentIndex = currentCollectionIndex;
                 positionViewAtIndex(currentCollectionIndex, ListView.End)
             }
 
-            model: groupSelected  //api.collections//Utils.reorderCollection(api.collections);
+            model: groupSelected //Utils.reorderCollection(api.collections);
 
             delegate: Rectangle {
                 id:rectangleLogo
@@ -1385,7 +1378,7 @@ FocusScope {
                     onClicked: {
                         if (selected)
                         {
-                            currentCollectionIndex = groupSelected.mapToSource(index);
+                            currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
                             softwareScreen();
                         } else {
                             mainList.currentIndex = platformlist.ObjectModel.index;
