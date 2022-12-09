@@ -191,10 +191,10 @@ FocusScope {
 
     // Collections
     property int currentGroupIndex: 0
-    //property var currentGroup : (settings.GroupSystemsByType === "No") ? api.collections : api.collections
+    property var currentGroup : api.collections
     property int currentCollectionIndex: 0
     property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex) //(settings.GroupSystemsByType === "No") ? api.collections.get(currentCollectionIndex) : currentGroup.get(currentCollectionIndex)
+    property var currentCollection: api.collections.get(currentCollectionIndex)
     property var currentGame
 
     // Stored variables for page navigation
@@ -208,6 +208,7 @@ FocusScope {
 
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
+    onCurrentGroupIndexChanged: currentCollectionIndex = 0
 
     // Filtering options
     property bool showFavs: false
@@ -334,13 +335,14 @@ FocusScope {
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
+        currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollection           = api.memory.get('savedCollection');
         storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
         storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
-        currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollectionIndex      = api.memory.get('storedCollectionIndex');
         storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
 
+        currentCollection           = api.collections.get(currentCollectionIndex);
         currentGame                 = api.allGames.get(api.memory.get('savedGame'));
         root.state                  = api.memory.get('savedState');
 
