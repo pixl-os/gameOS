@@ -1,8 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 202a-mm-dd - v1.2x.x
-- 
+## [pixL-master] - 202a-mm-dd - v1.21
+- new features:
+	- Add management of systems group activable in theme's general settings
 
 ## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
