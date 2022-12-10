@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 202a-mm-dd - v1.21
 - new features:
 	- Add management of systems group activable in theme's general settings
+	- Adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
 
 ## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
