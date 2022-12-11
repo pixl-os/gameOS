@@ -891,14 +891,16 @@ FocusScope {
 
             model: groupsDisplayed
 
-            //FILTERING collections to display by group
+            //FILTERING collections to display by group & SORTERING collections to sort by name, releasedate or manufacturer
             SortFilterProxyModel {
                 id: groupSelected
                 sourceModel: api.collections
                 delayed: true //to avoid loop binding
-                //filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex).shortName; enabled: true}]
-                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex  ).shortName; enabled: settings.GroupSystemsByType !== "No"}]
-                sorters: RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; }
+                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.GroupSystemsByType !== "No"}
+                ]
+                sorters:[RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; enabled: true},
+                         RoleSorter { roleName: settings.SortSystemsSecondlyBy; sortOrder: Qt.AscendingOrder; enabled: settings.SortSystemsBy !== settings.SortSystemsSecondlyBy}
+                ]
             }
 
 

@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- Add management of systems group activable in theme's general settings
 	- Adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
 	- Sorting systems by name, release date or manufacturer
+	- Add a second sorting by name, release date or manufacturer criteria
 
 ## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
