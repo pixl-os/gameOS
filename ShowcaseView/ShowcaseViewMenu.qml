@@ -898,7 +898,7 @@ FocusScope {
                 delayed: true //to avoid loop binding
                 //filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex).shortName; enabled: true}]
                 filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex  ).shortName; enabled: settings.GroupSystemsByType !== "No"}]
-                            //groupsDisplayed.get(grouplist.currentIndex).shortName; enabled: true}]
+                sorters: RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; }
             }
 
 
