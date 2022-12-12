@@ -685,6 +685,22 @@
         <source>Group systems by type</source>
         <translation>Systèmes groupés par type</translation>
     </message>
+    <message>
+        <source>Sort systems by</source>
+        <translation>Systèmes triés par</translation>
+    </message>
+    <message>
+        <source>manufacturer,release date,name</source>
+        <translation>fabricant,date de sortie,nom</translation>
+    </message>
+    <message>
+        <source>Sort systems secondly by</source>
+        <translation>Systèmes triés deuxièmement par</translation>
+    </message>
+    <message>
+        <source>release date,name,manufacturer</source>
+        <translation>date de sortie,nom,fabricant</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>

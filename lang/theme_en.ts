@@ -685,6 +685,22 @@
         <source>Group systems by type</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Sort systems by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>manufacturer,release date,name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort systems secondly by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>release date,name,manufacturer</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
