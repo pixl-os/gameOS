@@ -69,6 +69,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    Global/SnowFall.qml \
     assets/fonts/OpenSans-Bold.ttf \
     assets/fonts/OpenSans-Semibold.ttf \
     assets/fonts/SourceSansPro-Bold.ttf \
@@ -775,6 +776,7 @@ DISTFILES += \
     assets/images/searchicon.svg \
     assets/images/settingsicon.svg \
     assets/images/simpleOS-logo.png \
+    assets/images/snowflake.png \
     assets/sfx/accept.wav \
     assets/sfx/back.wav \
     assets/sfx/desktop.ini \
