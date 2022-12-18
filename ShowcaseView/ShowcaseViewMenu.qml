@@ -781,9 +781,8 @@ FocusScope {
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             width: appWindow.width
-
-            height: (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
-            visible: (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No") ? true : false
+            height: 0
+            visible: false
             enabled: visible
             currentIndex: -1
             focus: false
@@ -802,6 +801,34 @@ FocusScope {
             keyNavigationWraps: true
 
             property int savedIndex: currentGroupIndex
+            onSelectedChanged: {
+                //console.log("grouplist.onSelectedChanged : ", grouplist.selected);
+                //console.log("settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
+                //console.log("platformlist.visible : ",platformlist.visible);
+                //console.log("platformlist.selected : ",platformlist.selected);
+                if(grouplist.selected === true || platformlist.selected === true){
+                    if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                        if (settings.SystemsGroupDisplay !== "same slot"){
+                            grouplist.visible = true;
+                            grouplist.height = appWindow.height * (parseFloat(designs.GroupsListRatio)/100)
+                        }
+                        else if (grouplist.selected === true && platformlist.visible === false) {
+                            grouplist.visible = true;
+                            grouplist.height = appWindow.height * (parseFloat(designs.GroupsListRatio)/100)
+                        }
+                        else {
+                            grouplist.visible = false;
+                            grouplist.height = 0;
+                        }
+                    }
+                    else{
+                        grouplist.visible = false;
+                        grouplist.height = 0;
+                    }
+                }
+                //console.log("grouplist.height : ",grouplist.height);
+                //console.log("grouplist.visible : ",grouplist.visible);
+            }
             onFocusChanged: {
                 //console.log("focus : ",focus);
                 if (focus)
@@ -1032,23 +1059,7 @@ FocusScope {
                             }
                         }
                     }
-//                    Image{
-//                        id: betaLogo
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        anchors.right: parent.right
-//                        width: parent.width/2
-//                        height: parent.height/2
-
-//                        //to alert when system is in beta
-//                        source: "../assets/images/beta-round.png";
-//                        fillMode: Image.PreserveAspectFit
-//                        asynchronous: true
-//                        smooth: true
-//                        scale: selected ? 0.9 : 0.8
-//                        //for the moment, just check if first core for this system still low
-//                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
-//                    }
-                  }
+                }
 
                 Text {
                     id: grouptitle
@@ -1115,12 +1126,29 @@ FocusScope {
             // List specific input
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
             Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
+            Keys.onDownPressed: { sfxNav.play();
+                                  if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                                      if(settings.SystemsGroupDisplay === "same slot") {
+                                          mainList.currentIndex = platformlist.ObjectModel.index + 2; //to avoid to select system list
+                                      }
+                                      else mainList.currentIndex = grouplist.ObjectModel.index + 1;
+                                  }
+            }
             Keys.onPressed: {
                 if (!viewIsLoading){
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
-                        mainList.currentIndex = grouplist.ObjectModel.index + 1;
+                        if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                            if(settings.SystemsGroupDisplay === "same slot") {
+                                grouplist.height = 0;
+                                grouplist.visible = false;
+                            }
+                            mainList.currentIndex = platformlist.ObjectModel.index;
+                            //to force update of display if needed
+                            platformlist.selected = false;
+                            platformlist.selected = true;
+                        }
                     }
                 }
             }
@@ -1134,8 +1162,37 @@ FocusScope {
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
-            visible: designs.SystemsListPosition !== "No" ? true : false
+            height: 0
+            visible: false
+
+            onSelectedChanged: {
+                //console.log("platformlist.onSelectedChanged : ", selected);
+                //console.log("settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
+                //console.log("grouplist.visible : ",grouplist.visible);
+                //console.log("grouplist.selected : ",grouplist.selected);
+                //console.log("grouplist.height : ",grouplist.height);
+                if(designs.SystemsListPosition !== "No"){
+                    if (settings.SystemsGroupDisplay !== "same slot"){
+                        platformlist.visible = true;
+                        platformlist.height = appWindow.height * (parseFloat(designs.SystemsListRatio)/100);
+                    }
+                    else if (platformlist.selected === true && grouplist.visible === false){ //(grouplist.selected === false)
+                        platformlist.visible = true;
+                        platformlist.height = appWindow.height * (parseFloat(designs.SystemsListRatio)/100);
+                    }
+                    else {
+                        platformlist.visible = false;
+                        platformlist.height = 0;
+                    }
+                }
+                else{
+                    platformlist.visible = false;
+                    platformlist.height = 0;
+                }
+                //console.log("platformlist.height : ",platformlist.height);
+                //console.log("platformlist.visible : ",platformlist.visible);
+            }
+
             enabled: visible
             currentIndex: -1
             focus: false
@@ -1156,8 +1213,8 @@ FocusScope {
 
             property int savedIndex: currentCollectionIndex
             onFocusChanged: {
-   	        //console.log("onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
-		//console.log("onFocusChanged - focus : ",focus);
+                //console.log("onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("onFocusChanged - focus : ",focus);
                 if (focus){
                     if(savedIndex < platformlist.count)
                         currentIndex = currentCollectionIndex;
@@ -1174,7 +1231,7 @@ FocusScope {
 
             Component.onCompleted:{
    	        //console.log("onCompleted - currentCollectionIndex : ",currentCollectionIndex);
-		//console.log("onCompleted - currentIndex : ",currentIndex);
+            //console.log("onCompleted - currentIndex : ",currentIndex);
 	    	currentIndex = currentCollectionIndex;
                 positionViewAtIndex(currentCollectionIndex, ListView.End)
             }
@@ -1401,6 +1458,22 @@ FocusScope {
                         event.accepted = true;
                         currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
                         softwareScreen();
+                    }
+                    // Cancel (only when Groups are activated)
+                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                            currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                            console.log("SystemsGroupDisplay: ", settings.SystemsGroupDisplay);
+                            if(settings.SystemsGroupDisplay === "same slot") {
+                                platformlist.height = 0;
+                                platformlist.visible = false;
+                            }
+                            mainList.currentIndex = grouplist.ObjectModel.index;
+                            //to force update of display if needed
+                            grouplist.selected = false;
+                            grouplist.selected = true;
+                        }
                     }
                 }
             }
@@ -2096,8 +2169,9 @@ FocusScope {
             if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
             if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
             if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2;
-            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select system list in this case
+            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select systems list in this case
             if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
+            if(designs.InitialPosition === "Systems list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2; //to select groups list in this case
             if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
             //if you add new component, please put existing index/order before to change position at this place
             mainList.currentIndex = storedHomePrimaryIndex;
