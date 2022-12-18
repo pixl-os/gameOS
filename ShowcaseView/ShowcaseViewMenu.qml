@@ -782,8 +782,8 @@ FocusScope {
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: (designs.GroupsListPosition !== "No" && settings.GroupSystemsByType !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
-            visible: (designs.GroupsListPosition !== "No" && settings.GroupSystemsByType !== "No") ? true : false
+            height: (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
+            visible: (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No") ? true : false
             enabled: visible
             currentIndex: -1
             focus: false
@@ -868,7 +868,7 @@ FocusScope {
                 filters:[
                     //to search i fany collection exists for this type of system
                     ExpressionFilter {
-                        enabled: settings.GroupSystemsByType !== "No"
+                        enabled: settings.SystemsGroupDisplay !== "No"
                         expression:{
                             //to avoid to check collections if undefined
                             if(model.shortName === 'undefined') return false;
@@ -896,7 +896,7 @@ FocusScope {
                 id: groupSelected
                 sourceModel: api.collections
                 delayed: true //to avoid loop binding
-                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.GroupSystemsByType !== "No"}
+                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.SystemsGroupDisplay !== "No"}
                 ]
                 sorters:[RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; enabled: true},
                          RoleSorter { roleName: settings.SortSystemsSecondlyBy; sortOrder: Qt.AscendingOrder; enabled: settings.SortSystemsBy !== settings.SortSystemsSecondlyBy}
@@ -2095,8 +2095,8 @@ FocusScope {
             //to manage focus
             if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
             if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
-            if(designs.InitialPosition === "Groups list" && settings.GroupSystemsByType !== "No" ) storedHomePrimaryIndex = 2;
-            if(designs.InitialPosition === "Groups list" && settings.GroupSystemsByType === "No" ) storedHomePrimaryIndex = 3; //to select system list in this case
+            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2;
+            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select system list in this case
             if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
             if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
             //if you add new component, please put existing index/order before to change position at this place

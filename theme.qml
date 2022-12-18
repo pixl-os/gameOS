@@ -166,7 +166,7 @@ FocusScope {
             ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
             DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
             ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "10",
-            GroupSystemsByType:            api.memory.has("Group systems by type") ? api.memory.get("Group systems by type") : "No",
+            SystemsGroupDisplay:            api.memory.has("Systems group display") ? api.memory.get("Systems group display") : "No",
             SortSystemsBy:                 api.memory.has("Sort systems by") ? api.memory.get("Sort systems by") : "manufacturer",
             SortSystemsSecondlyBy:         api.memory.has("Sort systems secondly by") ? api.memory.get("Sort systems secondly by") : "releasedate",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",

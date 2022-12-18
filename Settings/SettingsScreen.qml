@@ -333,10 +333,10 @@ FocusScope {
     ListModel {
         id: showcaseSettingsModel
         ListElement {
-            settingName: "Group systems by type"
-            setting: "No,Yes"
-            settingNameDisplay: qsTr("Group systems by type")
-            settingDisplay: qsTr("No,Yes")
+            settingName: "Systems group display"
+            setting: "No,same slot,2 slots"
+            settingNameDisplay: qsTr("Systems group display")
+            settingDisplay: qsTr("No,same slot,2 slots")
         }
         ListElement {
             settingName: "Sort systems by"
