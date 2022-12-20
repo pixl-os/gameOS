@@ -2228,14 +2228,44 @@ FocusScope {
     property int counter: 0
     Timer {
         id: helpBarTimer
-        interval: 1000 // Run the timer every seconds
+        interval: 500 // Run the timer every seconds
         repeat: true
         running: true
         triggeredOnStart: true
         onTriggered: {
-            //to have a solution to add netplay dynamicly
-            if(api.internal.recalbox.getBoolParameter("global.netplay") && (gridviewHelpModel.count < 4)) gridviewHelpModel.append({name:"Netplay",button:"netplay"});
-            else if(!api.internal.recalbox.getBoolParameter("global.netplay") && gridviewHelpModel.count >= 4) gridviewHelpModel.remove(3);
+            //for netplay help button
+            var found = false
+            var netplay = api.internal.recalbox.getBoolParameter("global.netplay") === true ? true : false;
+            var item;
+            //loop to find netplay
+            for(var i = 0;i < gridviewHelpModel.count;i++){
+                item = gridviewHelpModel.get(i);
+                if(item.button === "netplay"){
+                    if(netplay === false){
+                        gridviewHelpModel.remove(i);
+                    }
+                    found = true;
+                }
+            }
+            if(found === false && netplay === true){
+                gridviewHelpModel.append({name:qsTr("Netplay"),button:"netplay"});
+            }
+            //for back help button
+            found = false
+            var back = (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay === "same slot" && platformlist.selected === true && platformlist.visible === true && platformlist.focus === true) ? true : false
+            //loop to find back
+            for(var j=0;j < gridviewHelpModel.count;j++){
+                item = gridviewHelpModel.get(j);
+                if(item.button === "cancel"){
+                    if(back === false){
+                        gridviewHelpModel.remove(j);
+                    }
+                    found = true;
+                }
+            }
+            if(found === false && back === true){
+                gridviewHelpModel.append({name:qsTr("Group"),button:"cancel"});
+            }
         }
     }
 
