@@ -1385,8 +1385,14 @@ FocusScope {
                     text: {
                         if(modelData.name === "Screenshots")
                             return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("screenshots") + api.tr : " " + qsTr("screenshot") + api.tr));
-                        else
-                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                        else{
+                            //display release date if sorted by that
+                            if(settings.SortSystemsBy === "releasedate" || settings.SortSystemsSecondlyBy === "releasedate" ){
+                                return (modelData.releasedate  + " - " + modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+
+                            }
+                            else return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                        }
                     }
                     color: theme.text
                     font {
