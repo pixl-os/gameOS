@@ -1470,7 +1470,7 @@ FocusScope {
                         event.accepted = true;
                         if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
                             currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
-                            console.log("SystemsGroupDisplay: ", settings.SystemsGroupDisplay);
+                            //console.log("SystemsGroupDisplay: ", settings.SystemsGroupDisplay);
                             if(settings.SystemsGroupDisplay === "same slot") {
                                 platformlist.height = 0;
                                 platformlist.visible = false;

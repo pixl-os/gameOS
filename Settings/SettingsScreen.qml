@@ -946,11 +946,14 @@ FocusScope {
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
                 //console.log("previousScreen();");
-                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
-                else previousScreen();
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
         }
-
     }
 
     Rectangle {
@@ -1104,11 +1107,14 @@ FocusScope {
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
                 //console.log("previousScreen();");
-                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
-                else previousScreen();
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
         }
-
     }
 
 	
@@ -1269,8 +1275,12 @@ FocusScope {
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
                 //console.log("previousScreen();");
-                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
-                else previousScreen();
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
 			
 			// Create a 'new' collection
@@ -1691,13 +1701,21 @@ FocusScope {
         function onAccept() {
             //reset settings changed flag
             settingsChanged = false;
-            //reload theme
-            pegasusReloadTheme();
+            //console.log("typeof(pegasusReloadTheme)",typeof(pegasusReloadTheme));
+            if(typeof(pegasusReloadTheme) !== "undefined"){ //check if pegasus contains new function or not
+                //reload theme - need pegsus 0.1.1 or upper
+                pegasusReloadTheme();
+            }
+            else{
+                //simply come back to previous page for the moment
+                //need to do F5 with pegasus 0.1.0
+                previousScreen();
+            }
         }
         function onCancel() {
             //reset settings changed flag
             settingsChanged = false;
-            //come backl to previous page
+            //come back to previous page
             previousScreen();
         }
     }
