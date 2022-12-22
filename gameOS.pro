@@ -16,6 +16,7 @@ TRANSLATIONS += \
 lupdate_only {
 SOURCES += \
 Dialogs/GenericOkCancelDialog.qml \
+Dialogs/GenericYesNoDialog.qml \
 Dialogs/Shade.qml \
 GameDetails/Button.qml \
 GameDetails/GameView.qml \

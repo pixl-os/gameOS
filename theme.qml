@@ -31,10 +31,12 @@ FocusScope {
 
     //DEBUG property
     property bool detailed_debug: false
+
     property bool viewIsLoading: true
     property string viewLoadingText: qsTr("Loading") + "..." + api.tr
     property bool gameToLaunched: false
-    
+    property bool settingsChanged: false
+
     //Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {
         id: spinnerloader

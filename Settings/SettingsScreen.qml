@@ -945,7 +945,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
+                else previousScreen();
             }
         }
 
@@ -1101,7 +1103,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
+                else previousScreen();
             }
         }
 
@@ -1264,7 +1268,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                if(settingsChanged) settingsChangedDialogBoxLoader.focus = true;
+                else previousScreen();
             }
 			
 			// Create a 'new' collection
@@ -1374,15 +1380,25 @@ FocusScope {
 					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
+                        var previousIndex = api.memory.get(fullSettingName + 'Index');
 						api.memory.set(fullSettingName + 'Index', savedIndex);
 						//console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
 						api.memory.set(fullSettingName, settingList[savedIndex]);
 						//console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                        if(previousIndex !== savedIndex){
+                            //console.log("settingsChanged !");
+                            settingsChanged = true;
+                        }
 					}
 					else
 					{
+                        var previousValue = api.memory.get(fullSettingName);
 						//console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
 						api.memory.set(fullSettingName, settingtextfield.text);
+                        if(previousValue !== settingtextfield.text){
+                            //console.log("settingsChanged !");
+                            settingsChanged = true;
+                        }
 					}
                 }
 
@@ -1653,4 +1669,37 @@ FocusScope {
 			collectionslist.focus = true;
 		}
     }	
+
+    //Dialog box to propose to reload theme if settingsChanged
+    Component {
+        id: settingsChangedDialogBox
+        GenericYesNoDialog
+        {
+            focus: true
+            title: qsTr("Settings changed") + api.tr
+            message: qsTr("Do you want to reload theme to well apply the change ? (Adviced)") + api.tr
+        }
+    }
+    Loader {
+        id: settingsChangedDialogBoxLoader
+        anchors.fill: parent
+        sourceComponent: settingsChangedDialogBox
+        active: true
+    }
+    Connections {
+        target: settingsChangedDialogBoxLoader.item
+        function onAccept() {
+            //reset settings changed flag
+            settingsChanged = false;
+            //reload theme
+            pegasusReloadTheme();
+        }
+        function onCancel() {
+            //reset settings changed flag
+            settingsChanged = false;
+            //come backl to previous page
+            previousScreen();
+        }
+    }
+
 }
