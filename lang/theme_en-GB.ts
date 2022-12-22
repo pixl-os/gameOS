@@ -118,6 +118,17 @@
     </message>
 </context>
 <context>
+    <name>GenericYesNoDialog</name>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GridViewMenu</name>
     <message>
         <source>Back</source>
@@ -682,10 +693,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Group systems by type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sort systems by</source>
         <translation type="unfinished"></translation>
     </message>
@@ -699,6 +706,22 @@
     </message>
     <message>
         <source>release date,name,manufacturer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Systems group display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No,same slot,2 slots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -794,6 +817,14 @@
     </message>
     <message>
         <source>Virtual systems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

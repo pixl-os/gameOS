@@ -118,6 +118,17 @@
     </message>
 </context>
 <context>
+    <name>GenericYesNoDialog</name>
+    <message>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+</context>
+<context>
     <name>GridViewMenu</name>
     <message>
         <source>Back</source>
@@ -683,7 +694,7 @@
     </message>
     <message>
         <source>Group systems by type</source>
-        <translation>Systèmes groupés par type</translation>
+        <translation type="vanished">Systèmes groupés par type</translation>
     </message>
     <message>
         <source>Sort systems by</source>
@@ -700,6 +711,22 @@
     <message>
         <source>release date,name,manufacturer</source>
         <translation>date de sortie,nom,fabricant</translation>
+    </message>
+    <message>
+        <source>Systems group display</source>
+        <translation>Affichage groupe de systèmes</translation>
+    </message>
+    <message>
+        <source>No,same slot,2 slots</source>
+        <translation>Non,même emplacement,2 emplacements</translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation>Configurations changées</translation>
+    </message>
+    <message>
+        <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
+        <translation>Voulez vous recharger le thème pour bien appliquer le changement ? (Conseillé)</translation>
     </message>
 </context>
 <context>
@@ -795,6 +822,14 @@
     <message>
         <source>Virtual systems</source>
         <translation>Systèmes virtuels</translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation>Jeu Réseau</translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation>Groupe</translation>
     </message>
 </context>
 <context>
