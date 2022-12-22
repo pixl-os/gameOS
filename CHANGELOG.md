@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file (focus on ch
 	- Adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
 	- Sorting systems by name, release date or manufacturer
 	- Add a second sorting by name, release date or manufacturer criteria
+	- 2 ways to display groups using one or 2 slots on screen
+	- Dynamic help to know how to pass from systems to group when we one slot
+	- Display of 'release date' under systems logo when sorting use it.
+	- Propose now to reload theme itself when settings changed
+
+- Translations: 
+	- done for new menus/helps/dialogbox
 
 ## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
