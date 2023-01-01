@@ -219,12 +219,13 @@ FocusScope {
             game.assets.manualList.forEach(v => mediaList.push(v));
             game.assets.marqueeList.forEach(v => mediaList.push(v));
             game.assets.bezelList.forEach(v => mediaList.push(v));
-            game.assets.backgroundList.forEach(v => mediaList.push(v));
-            game.assets.boxBackList.forEach(v => mediaList.push(v));
+            game.assets.cartridgeList.forEach(v => mediaList.push(v));
             game.assets.boxFrontList.forEach(v => mediaList.push(v));
+            game.assets.boxBackList.forEach(v => mediaList.push(v));
             game.assets.boxFullList.forEach(v => mediaList.push(v));
             game.assets.boxSpineList.forEach(v => mediaList.push(v));
             game.assets.logoList.forEach(v => mediaList.push(v));
+            game.assets.backgroundList.forEach(v => mediaList.push(v));
             game.assets.titlescreenList.forEach(v => mediaList.push(v));
             game.assets.mapsList.forEach(v => mediaList.push(v));
             game.assets.musicList.forEach(v => mediaList.push(v));
