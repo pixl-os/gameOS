@@ -390,10 +390,16 @@ function fanArt(data) {
     if (data.assets.boxFront.includes("/header.jpg")) 
       return steamHero(data);
     else {
-      /*if (data.assets.marquee != "")
-        return data.assets.marquee;*/
-      if (data.assets.background !== "")
-        return data.assets.background;
+      if (data.assets.background !== ""){
+          let returnValue = data.assets.background;
+          if (data.assets.screenshot !== ""){
+              //to avoid to propose screenshot if it is the first background found
+              data.assets.backgroundList.forEach(function(v){
+                  //console.log("v : ",v);
+                  if(v !== data.assets.screenshot) returnValue=v;})
+          }
+          return returnValue;
+      }
       else if (data.assets.screenshot !== "")
         return data.assets.screenshot;
     }
@@ -407,8 +413,16 @@ function favorite(data) {
     else {
       if (data.assets.marquee !== "")
         return data.assets.marquee;
-      if (data.assets.background !== "")
-        return data.assets.background;
+      if (data.assets.background !== ""){
+          let returnValue = data.assets.background;
+          if (data.assets.screenshot !== ""){
+              //to avoid to propose screenshot if it is the first background found
+              data.assets.backgroundList.forEach(function(v){
+                  //console.log("v : ",v);
+                  if(v !== data.assets.screenshot) returnValue=v;})
+          }
+          return returnValue;
+      }
       else if (data.assets.screenshot !== "")
         return data.assets.screenshot;
     }
