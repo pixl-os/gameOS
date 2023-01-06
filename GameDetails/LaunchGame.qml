@@ -161,7 +161,7 @@ FocusScope {
     }
 
     // Input handling
-    Keys.onPressed: {
+    Keys.onReleased: {
 	    // Back
 	    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
 	        event.accepted = true;
