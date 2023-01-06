@@ -37,8 +37,8 @@ FocusScope {
 
     // Pull in our custom lists and define
     ListAllGames    { id: listNone;        max: 0 }
-    ListAllGames    { id: listAllGames;    max: settings.ShowcaseColumns }
-    ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
+    ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
+    ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
 
 	//Repeater to manage loading of lists dynamically and without limits in the future
 	property int nbLoaderReady: 0
