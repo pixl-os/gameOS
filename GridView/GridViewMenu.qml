@@ -217,8 +217,8 @@ FocusScope {
         Keys.onDownPressed: {
             sfxNav.play();
             gamegrid.focus = true;
-            if((gamegrid.currentIndex < gamegrid.count) && (gamegrid.currentIndex >= 0)){
-                //do nothing
+            if(storedCollectionGameIndex < gamegrid.count){
+                gamegrid.currentIndex = storedCollectionGameIndex;
             } else gamegrid.currentIndex = 0; //set index
         }
     }
@@ -354,6 +354,7 @@ FocusScope {
                 sfxNav.play();
                 if (currentIndex < numColumns) {
                     headercontainer.focus = true;
+                    storedCollectionGameIndex = gamegrid.currentIndex;
                     gamegrid.currentIndex = -1;
                 } else {
                     moveCurrentIndexUp();
@@ -366,13 +367,14 @@ FocusScope {
     }
 
     Keys.onReleased: {
+        //console.log("GridViewMenu Keys.onReleased");
         // Guide
         if (api.keys.isGuide(event) && !event.isAutoRepeat) {
             hotkeyPressed = false;
             event.accepted = true;
         }
         //to ignore keys if hotkey still pressed
-        if(hotkeyPressed) return;
+        if(hotkeyPressed === true) return;
         // Scroll Down - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
@@ -406,8 +408,9 @@ FocusScope {
     property int minimum: 0
 
     Keys.onPressed: {
+        //console.log("GridViewMenu Keys.onPressed");
         //to ignore keys if hotkey still pressed
-        if(hotkeyPressed) return;
+        if(hotkeyPressed === true) return;
         // Guide
         if (api.keys.isGuide(event) && !event.isAutoRepeat) {
             hotkeyPressed = true;
@@ -428,8 +431,11 @@ FocusScope {
         if (api.keys.isCancel(event) && !event.isAutoRepeat) {
             event.accepted = true;
             if (gamegrid.focus) {
+                storedCollectionGameIndex = gamegrid.currentIndex;
                 previousScreen();
             } else {
+                //what provide focus on back ?!
+                gamegrid.currentIndex = storedCollectionGameIndex;
                 gamegrid.focus = true;
             }
             return;
@@ -437,8 +443,13 @@ FocusScope {
         // Details
         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            sfxToggle.play();
-            headercontainer.focus = true;
+            if(gamegrid.currentIndex !== -1){
+                sfxToggle.play();
+                gamegrid.focus = false;
+                headercontainer.focus = true;
+                storedCollectionGameIndex = gamegrid.currentIndex;
+                gamegrid.currentIndex = -1;
+            }
             return;
         }
 

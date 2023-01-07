@@ -185,22 +185,44 @@ FocusScope {
                     }
                 }
 
-                Keys.onReleased:{ 
+                Keys.onReleased:{
+                    // Back
+                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                        if(!searchInput.focus){
+                            event.accepted = false;
+                            return;
+                        }
+                    }
 					event.accepted = virtualKeyboardOnReleased(event);
 					//to reset demo if needed
 					if (event.accepted) resetDemo();
 				}
 
                 Keys.onPressed: {
+                    /*console.log("-----Before update-----");
+                    console.log("event.accepted : ", event.accepted);
+                    console.log("searchInput.focus : ", searchInput.focus);
+                    console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    console.log("searchbar.selected : ",searchbar.selected);
+                    console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
+                    console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
+                    console.log("root.focus : ", root.focus);*/
+                    // Back
+                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                        if(!searchInput.focus){
+                            event.accepted = false;
+                            return;
+                        }
+                    }
                     event.accepted, searchInput.focus, searchInput.searchActive = virtualKeyboardOnPressed(event,searchInput,searchInput.searchActive);
-                    //console.log("-----After update-----");
-                    //console.log("event.accepted : ", event.accepted);
-                    //console.log("searchInput.focus : ", searchInput.focus);
-                    //console.log("searchInput.searchActive : ",searchInput.searchActive);
-                    //console.log("searchbar.selected : ",searchbar.selected);
-                    //console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
-                    //console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
-                    //console.log("root.focus : ", root.focus);
+                    /*console.log("-----After update-----");
+                    console.log("event.accepted : ", event.accepted);
+                    console.log("searchInput.focus : ", searchInput.focus);
+                    console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    console.log("searchbar.selected : ",searchbar.selected);
+                    console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
+                    console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
+                    console.log("root.focus : ", root.focus);*/
                 }
 
             }
