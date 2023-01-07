@@ -1213,17 +1213,17 @@ FocusScope {
 
             property int savedIndex: currentCollectionIndex
             onFocusChanged: {
-                //console.log("onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
-                //console.log("onFocusChanged - focus : ",focus);
+                //console.log("ShowcaseViewMenu::onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("ShowcaseViewMenu::onFocusChanged - focus : ",focus);
                 if (focus){
-                    if(savedIndex < platformlist.count)
-                        currentIndex = currentCollectionIndex;
+                    if(savedIndex < platformlist.count){
+                        currentIndex = savedIndex;
+                    }
                     else
                         currentIndex = 0;
                 }
                 else {
                     savedIndex = currentIndex;
-                    currentCollectionIndex = savedIndex;
                     currentIndex = -1;
                     if(designs.SystemMusicSource !== "No") playMusic.stop();
                 }
@@ -2165,7 +2165,6 @@ FocusScope {
         preferredHighlightEnd: parent.height - (helpMargin * 2)
         snapMode: ListView.SnapOneItem
         keyNavigationWraps: true
-        currentIndex: storedHomePrimaryIndex
 
         cacheBuffer: 1000
         footer: Item { height: helpMargin }

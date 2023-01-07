@@ -194,25 +194,32 @@ FocusScope {
     }
 
     // Collections
-    property int currentGroupIndex: 0
-    property var currentGroup : api.collections
-    property int currentCollectionIndex: 0
-    property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex)
+    property int currentGroupIndex
+    property var currentGroup
+    property int currentCollectionIndex
+    property int currentGameIndex
+    property var currentCollection
     property var currentGame
 
     // Stored variables for page navigation
-    property int storedHomePrimaryIndex: 0
-    property int storedHomeSecondaryIndex: 0
-    property int storedCollectionIndex: 0
-    property int storedCollectionGameIndex: 0
+    property int storedHomePrimaryIndex
+    property int storedHomeSecondaryIndex
+    property int storedCollectionIndex
+    property int storedCollectionGameIndex
 
     //global property
     property bool videoToStop: false
 
     // Reset the stored game index when changing collections
-    onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
-    onCurrentGroupIndexChanged: currentCollectionIndex = 0
+    onCurrentCollectionIndexChanged: {
+        storedCollectionGameIndex = 0
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
+    }
+    onCurrentGroupIndexChanged: {
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
+    }
 
     // Filtering options
     property bool showFavs: false
@@ -221,7 +228,8 @@ FocusScope {
     property int sortByIndex: 0
     property int orderBy: Qt.AscendingOrder
     property string searchTerm: ""
-    property bool steam: currentCollection.name === "Steam"
+    property bool steam: typeof(currentCollection) !== 'undefined' ? currentCollection.name === "Steam" : false
+
     function steamExists() {
         for (i = 0; i < api.collections.count; i++) {
             if (api.collections.get(i).name === "Steam") {
@@ -341,13 +349,18 @@ FocusScope {
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
         currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollection           = api.memory.get('savedCollection');
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
         storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
         storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
         currentCollectionIndex      = api.memory.get('storedCollectionIndex');
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
         storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
-
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
         currentCollection           = api.collections.get(currentCollectionIndex);
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
         currentGame                 = api.allGames.get(api.memory.get('savedGame'));
+        //console.log("currentGame.title  : ",currentGame.title);
         root.state                  = api.memory.get('savedState');
 
         // Remove these from memory so as to not clog it up
