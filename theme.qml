@@ -269,7 +269,6 @@ FocusScope {
         interval: 500
         onTriggered: {
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
-            //if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ // || !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
               launchGameScreen();
             }
             else{
@@ -309,7 +308,7 @@ FocusScope {
                 launchGameTimer.start();
             }
         } else {
-            console.log("launchGame(game) with game is null");
+            //console.log("launchGame(game) with game is null");
             //if pegasus.multiwindows is no activated
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
               launchGameScreen();
@@ -328,7 +327,9 @@ FocusScope {
     function saveCurrentState(game) {
         api.memory.set('savedState', root.state);
         api.memory.set('savedCollection', currentCollection);
+    	//console.log("lastState  : ",JSON.stringify(lastState));
         api.memory.set('lastState', JSON.stringify(lastState));
+	//console.log("lastGame  : ",JSON.stringify(lastGame));
         api.memory.set('lastGame', JSON.stringify(lastGame));
         api.memory.set('storedHomePrimaryIndex', storedHomePrimaryIndex);
         api.memory.set('storedHomeSecondaryIndex', storedHomeSecondaryIndex);
@@ -346,7 +347,10 @@ FocusScope {
     property bool fromGame: api.memory.has('To Game');
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
+	//console.log("lastState  : ",JSON.stringify(lastState));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
+	//console.log("lastGame  : ",JSON.stringify(lastGame));
+        
         currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollection           = api.memory.get('savedCollection');
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
@@ -549,7 +553,9 @@ FocusScope {
 
     function showcaseScreen() {
         sfxAccept.play();
+	//console.log("gameDetails(showcaseScreen) - lastState (before push) : ",JSON.stringify(lastState));
         lastState.push(state);
+	//console.log("gameDetails(showcaseScreen) - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "showcasescreen";
     }
 
@@ -558,10 +564,16 @@ FocusScope {
         //if (game !== null) console.log("gameDetails - game.title:", game.title);
         //else console.log("gameDetails - game.title:", "null");
         
+	//console.log("gameDetails - lastState : ",JSON.stringify(lastState));
         // As long as there is a state history, save the last game
         if (lastState.length != 0){
-            //console.log("gameDetails - currentGame.title:", currentGame.title);
-            lastGame.push(currentGame);
+            if (typeof(currentGame) !== "undefined") {
+	            //console.log("gameDetails - currentGame.title:", currentGame.title);
+		    //console.log("gameDetails - currentGame:", JSON.stringify(currentGame));
+		    //console.log("gameDetails - lastGame (before push) : ",JSON.stringify(lastGame));
+		    lastGame.push(currentGame);
+		    //console.log("gameDetails - lastGame (after push) : ",JSON.stringify(lastGame));
+		}
         }
 
         // Push the new game
@@ -571,7 +583,7 @@ FocusScope {
         }
         
         // Save the state before pushing the new one
-        //console.log("Previous State:", state);
+    	//console.log("gameDetails - Previous State:", state);
         lastState.push(state);
         root.state = "gameviewscreen";
     }
@@ -586,7 +598,9 @@ FocusScope {
         sfxAccept.play();
         lastState.push(state);
         root.state = "launchgamescreen";
-        launchGameTimerBis.start();
+	if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+            launchGameTimerBis.start();
+	}
     }
 
     function previousScreen() {
