@@ -1158,12 +1158,14 @@ FocusScope {
         ListView {
             id: platformlist
 
+            model: groupSelected //Utils.reorderCollection(api.collections);
+
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: 0
-            visible: false
+            height: (settings.SystemsGroupDisplay === "2 slots") ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
+            visible: (settings.SystemsGroupDisplay === "2 slots") ? true : false
 
             onSelectedChanged: {
                 //console.log("platformlist.onSelectedChanged : ", selected);
@@ -1235,8 +1237,6 @@ FocusScope {
 	    	currentIndex = currentCollectionIndex;
                 positionViewAtIndex(currentCollectionIndex, ListView.End)
             }
-
-            model: groupSelected //Utils.reorderCollection(api.collections);
 
             delegate: Rectangle {
                 id:rectangleLogo
