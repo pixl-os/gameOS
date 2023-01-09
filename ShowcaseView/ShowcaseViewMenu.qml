@@ -1865,6 +1865,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -1897,6 +1898,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -1929,6 +1931,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -1961,6 +1964,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -1993,6 +1997,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -2025,6 +2030,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -2057,6 +2063,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -2089,6 +2096,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -2121,6 +2129,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
@@ -2153,6 +2162,7 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
