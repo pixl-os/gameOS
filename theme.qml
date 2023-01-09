@@ -329,9 +329,11 @@ FocusScope {
         api.memory.set('savedCollection', currentCollection);
     	//console.log("lastState  : ",JSON.stringify(lastState));
         api.memory.set('lastState', JSON.stringify(lastState));
-	//console.log("lastGame  : ",JSON.stringify(lastGame));
+        //console.log("lastGame  : ",JSON.stringify(lastGame));
         api.memory.set('lastGame', JSON.stringify(lastGame));
+        //console.log("storedHomePrimaryIndex saved  : ",storedHomePrimaryIndex)
         api.memory.set('storedHomePrimaryIndex', storedHomePrimaryIndex);
+        //console.log("storedHomeSecondaryIndex  saved : ",storedHomeSecondaryIndex)
         api.memory.set('storedHomeSecondaryIndex', storedHomeSecondaryIndex);
         api.memory.set('storedGroupIndex',currentGroupIndex);
         api.memory.set('storedCollectionIndex', currentCollectionIndex);
@@ -347,15 +349,17 @@ FocusScope {
     property bool fromGame: api.memory.has('To Game');
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
-	//console.log("lastState  : ",JSON.stringify(lastState));
+        //console.log("lastState  : ",JSON.stringify(lastState));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
-	//console.log("lastGame  : ",JSON.stringify(lastGame));
+        //console.log("lastGame  : ",JSON.stringify(lastGame));
         
         currentGroupIndex           = api.memory.get('storedGroupIndex');
         currentCollection           = api.memory.get('savedCollection');
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
         storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
+        //console.log("storedHomePrimaryIndex restored : ",storedHomePrimaryIndex)
         storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
+        //console.log("storedHomeSecondaryIndex restored : ",storedHomeSecondaryIndex)
         currentCollectionIndex      = api.memory.get('storedCollectionIndex');
         //console.log("currentCollectionIndex : ",currentCollectionIndex)
         storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
