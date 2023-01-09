@@ -638,7 +638,7 @@ FocusScope {
             id: featuredlist
 
             property bool selected : ListView.isCurrentItem
-            //focus: selected
+            focus: selected
             width: appWindow.width
 
             height: visible ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
@@ -655,7 +655,7 @@ FocusScope {
             highlightMoveVelocity: -1
             snapMode: ListView.SnapOneItem
             keyNavigationWraps: true
-            currentIndex: (storedHomePrimaryIndex == 0) ? storedHomeSecondaryIndex : 0
+            currentIndex: 0
             Component.onCompleted: {
                 positionViewAtIndex(currentIndex, ListView.Visible)
             }
@@ -754,7 +754,8 @@ FocusScope {
                 running: (settings.ShowcaseChangeFavoriteDisplayAutomatically !== "No") ? true : false
                 triggeredOnStart: false
 				onTriggered: {
-					if (featuredlist.count >= 2) featuredlist.incrementCurrentIndex();
+                    //change favorites only if several and showcaseViewMenu at front
+                    if (featuredlist.count >= 2 && root.activeFocus === true) featuredlist.incrementCurrentIndex();
 				}
 			}	
 
@@ -766,9 +767,15 @@ FocusScope {
 	                // Accept
 	                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
 	                    event.accepted = true;
-	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
-	                    if (!ftue)
+                        if (!ftue){
+                            storedHomeSecondaryIndex = featuredlist.currentIndex; // not used today for this case
+                            if(designs.FavoritesBannerPosition === designs.VideoBannerPosition){
+                                //in case of same position, we ahve to move by adding 1 for favorites
+                                storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition)+1;
+                            }
+                            else storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition);
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
+                        }
                     }
 				}
             }
@@ -2170,14 +2177,16 @@ FocusScope {
         footer: Item { height: helpMargin }
 
         Component.onCompleted:{
-            //to manage focus
-            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
-            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
-            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2;
-            if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select systems list in this case
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
-            if(designs.InitialPosition === "Systems list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2; //to select groups list in this case
-            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
+            if((storedHomePrimaryIndex === 0) && (storedHomeSecondaryIndex === 0) && (lastState.length === 0)){
+                //to manage focus and selection for first time
+                if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
+                if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
+                if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2;
+                if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select systems list in this case
+                if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
+                if(designs.InitialPosition === "Systems list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2; //to select groups list in this case
+                if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
+            }
             //if you add new component, please put existing index/order before to change position at this place
             mainList.currentIndex = storedHomePrimaryIndex;
         }
