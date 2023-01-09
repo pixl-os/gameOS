@@ -1690,7 +1690,7 @@ FocusScope {
                                 //process path/url for system/region selected if needed
                                 pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
                                 //process path/url for screenscraper parameters if needed
-                                source = pmainModel.rocessPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
                                 //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
                                 //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
