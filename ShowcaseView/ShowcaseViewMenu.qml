@@ -843,7 +843,7 @@ FocusScope {
                 //console.log("grouplist.visible : ",grouplist.visible);
             }
             onFocusChanged: {
-                //console.log("focus : ",focus);
+                //console.log("grouplist::onFocusChanged : ",focus);
                 if (focus)
                     currentIndex = savedIndex;
                 else {
@@ -854,9 +854,10 @@ FocusScope {
             }
 
             Component.onCompleted: {
-                currentIndex = currentGroupIndex;
+                //console.log("grouplist::Component.onCompleted - currentIndex (before) : ",currentIndex);
+                currentIndex = savedIndex;
+                //console.log("grouplist::Component.onCompleted - currentIndex (after) : ",currentIndex);
                 positionViewAtIndex(currentIndex, ListView.End);
-
             }
 
             //to adapt for groups / not visible by defaults
@@ -930,19 +931,6 @@ FocusScope {
             }
 
             model: groupsDisplayed
-
-            //FILTERING collections to display by group & SORTERING collections to sort by name, releasedate or manufacturer
-            SortFilterProxyModel {
-                id: groupSelected
-                sourceModel: api.collections
-                delayed: true //to avoid loop binding
-                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.SystemsGroupDisplay !== "No"}
-                ]
-                sorters:[RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; enabled: true},
-                         RoleSorter { roleName: settings.SortSystemsSecondlyBy; sortOrder: Qt.AscendingOrder; enabled: settings.SortSystemsBy !== settings.SortSystemsSecondlyBy}
-                ]
-            }
-
 
             delegate: Rectangle {
                 id:rectangleGroupLogo
@@ -1178,21 +1166,34 @@ FocusScope {
         ListView {
             id: platformlist
 
-            model: groupSelected //Utils.reorderCollection(api.collections);
+            //FILTERING collections to display by group & SORTERING collections to sort by name, releasedate or manufacturer
+            SortFilterProxyModel {
+                id: groupSelected
+                sourceModel: api.collections
+                delayed: true //to avoid loop binding
+                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.SystemsGroupDisplay !== "No"}
+                ]
+                sorters:[RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; enabled: true},
+                         RoleSorter { roleName: settings.SortSystemsSecondlyBy; sortOrder: Qt.AscendingOrder; enabled: settings.SortSystemsBy !== settings.SortSystemsSecondlyBy}
+                ]
+            }
+
+            model: groupSelected
 
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: (settings.SystemsGroupDisplay === "2 slots") ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
-            visible: (settings.SystemsGroupDisplay === "2 slots") ? true : false
+            height: (settings.SystemsGroupDisplay !== "same slot") ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
+            visible: (settings.SystemsGroupDisplay !== "same slot") ? true : false
 
             onSelectedChanged: {
-                //console.log("platformlist.onSelectedChanged : ", selected);
-                //console.log("settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
-                //console.log("grouplist.visible : ",grouplist.visible);
-                //console.log("grouplist.selected : ",grouplist.selected);
-                //console.log("grouplist.height : ",grouplist.height);
+                //console.log("platformlist::onSelectedChanged : ", selected);
+                //console.log("platformlist::onSelectedChanged - currentIndex: ", currentIndex);
+                //console.log("platformlist::onSelectedChanged - settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
+                //console.log("platformlist::onSelectedChanged - grouplist.visible : ",grouplist.visible);
+                //console.log("platformlist::onSelectedChanged - grouplist.selected : ",grouplist.selected);
+                //console.log("platformlist::onSelectedChanged - grouplist.height : ",grouplist.height);
                 if(designs.SystemsListPosition !== "No"){
                     if (settings.SystemsGroupDisplay !== "same slot"){
                         platformlist.visible = true;
@@ -1211,13 +1212,16 @@ FocusScope {
                     platformlist.visible = false;
                     platformlist.height = 0;
                 }
-                //console.log("platformlist.height : ",platformlist.height);
-                //console.log("platformlist.visible : ",platformlist.visible);
+                //console.log("platformlist::onSelectedChanged - platformlist.height : ",platformlist.height);
+                //console.log("platformlist::onSelectedChanged - platformlist.visible : ",platformlist.visible);
             }
 
+            focus: (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  true : false
+
             enabled: visible
-            currentIndex: -1
-            focus: false
+
+            //ok without group but with sorting, need additional fix for groups due to loading of platformlist in parralel of grouplist
+            property int savedIndex : (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  storedHomeSecondaryIndex : 0
 
             anchors {
                 left: parent.left;
@@ -1232,17 +1236,33 @@ FocusScope {
             highlightMoveDuration: 100
             keyNavigationWraps: true
 
+            onActiveFocusChanged: {
+                //console.log("platformlist::onActiveFocusChanged : ",activeFocus);
+                //console.log("platformlist::onActiveFocusChanged - currentIndex: ",platformlist.currentIndex);
+                //console.log("platformlist::onActiveFocusChanged - savedIndex: ",platformlist.savedIndex);
+                //console.log("platformlist::onActiveFocusChanged - storedHomeSecondaryIndex: ",storedHomeSecondaryIndex);
 
-            property int savedIndex: currentCollectionIndex
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(platformlist.currentIndex !== platformlist.savedIndex){
+                    if(platformlist.savedIndex === storedHomeSecondaryIndex){
+                        platformlist.currentIndex = storedHomeSecondaryIndex;
+                    }
+                }
+
+            }
+
             onFocusChanged: {
-                //console.log("ShowcaseViewMenu::onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
-                //console.log("ShowcaseViewMenu::onFocusChanged - focus : ",focus);
+                //console.log("platformlist::onFocusChanged - focus : ",focus);
+                //console.log("platformlist::onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("platformlist::onFocusChanged - savedIndex : ",savedIndex);
                 if (focus){
                     if(savedIndex < platformlist.count){
                         currentIndex = savedIndex;
                     }
-                    else
+                    else{
                         currentIndex = 0;
+                        savedIndex = 0;
+                    }
                 }
                 else {
                     savedIndex = currentIndex;
@@ -1252,10 +1272,19 @@ FocusScope {
             }
 
             Component.onCompleted:{
-   	        //console.log("onCompleted - currentCollectionIndex : ",currentCollectionIndex);
-            //console.log("onCompleted - currentIndex : ",currentIndex);
-	    	currentIndex = currentCollectionIndex;
-                positionViewAtIndex(currentCollectionIndex, ListView.End)
+                //console.log("platformlist::Component.onCompleted - grouplist.currentIndex (before) : ",grouplist.currentIndex);
+                //console.log("platformlist::Component.onCompleted - platformlist.ObjectModel.index : ",platformlist.ObjectModel.index);
+                //console.log("platformlist::Component.onCompleted - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+                //console.log("platformlist::Component.onCompleted - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+                //console.log("platformlist::Component.onCompleted - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("platformlist::Component.onCompleted - savedIndex (before): ",savedIndex);
+                savedIndex = (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  storedHomeSecondaryIndex : 0
+                //console.log("platformlist::Component.onCompleted - savedIndex (after): ",savedIndex);
+                //console.log("platformlist::Component.onCompleted - currentIndex (before): ",currentIndex);
+                currentIndex = savedIndex;
+                //console.log("platformlist::Component.onCompleted - currentIndex (before): ",currentIndex);
+                positionViewAtIndex(currentIndex, ListView.End)
+
             }
 
             delegate: Rectangle {
@@ -1286,7 +1315,11 @@ FocusScope {
 
 
                 onSelectedChanged: {
-                    //console.log("selected : ",selected)
+                    //console.log("platformlist::delegate onSelectedChanged : ",selected)
+                    //console.log("platformlist::delegate onSelectedChanged index : ",index)
+                    //console.log("platformlist::delegate onSelectedChanged - currentIndex: ",platformlist.currentIndex);
+                    //console.log("platformlist::delegate onSelectedChanged - grouplist.currentIndex (after) : ",grouplist.currentIndex);
+
                     if(selected && (designs.SystemMusicSource !== "No")){
                         if(activeFocus && focus){
                            if (modelData.shortName !=="imageviewer") playMusic.play();
@@ -1301,7 +1334,8 @@ FocusScope {
                 }
 
                 onActiveFocusChanged: {
-                    //console.log("Focus changed to " + focus)
+                    //console.log("platformlist::delegate onActiveFocusChanged : ",activeFocus);
+                    //console.log("platformlist::delegate onActiveFocusChanged - currentIndex: ",platformlist.currentIndex);
                     //console.log("Active Focus changed to " + activeFocus)
                     if(selected && (designs.SystemMusicSource !== "No")){
                         if(activeFocus && focus){
@@ -1463,7 +1497,11 @@ FocusScope {
                     onClicked: {
                         if (selected)
                         {
+                            //to have the direct access to collection if needed for other views
                             currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                            //to keep position in menu after game launching
+                            storedHomeSecondaryIndex = platformlist.currentIndex;
+                            storedHomePrimaryIndex = platformlist.ObjectModel.index;
                             softwareScreen();
                         } else {
                             mainList.currentIndex = platformlist.ObjectModel.index;
@@ -1482,14 +1520,24 @@ FocusScope {
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
+                        //to have the direct access to collection if needed for other views
                         currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                        //console.log("platformlist::Keys.onPressed - platformlist.currentIndex : ",platformlist.currentIndex);
+                        //console.log("platformlist::Keys.onPressed - currentCollectionIndex : ",currentCollectionIndex);
+                        //to keep position in menu after game launching
+                        storedHomeSecondaryIndex = platformlist.currentIndex;
+                        storedHomePrimaryIndex = platformlist.ObjectModel.index;
+                        //console.log("platformlist::Keys.onPressed - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+                        //console.log("platformlist::Keys.onPressed - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
                         softwareScreen();
                     }
                     // Cancel (only when Groups are activated)
                     if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                         event.accepted = true;
                         if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                            //to have the direct access to collection if needed
                             currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                            savedIndex = currentCollectionIndex;
                             //console.log("SystemsGroupDisplay: ", settings.SystemsGroupDisplay);
                             if(settings.SystemsGroupDisplay === "same slot") {
                                 platformlist.height = 0;
