@@ -788,8 +788,10 @@ FocusScope {
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             width: appWindow.width
-            height: 0
-            visible: false
+
+            height: (settings.SystemsGroupDisplay !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
+            visible: (settings.SystemsGroupDisplay !== "No") ? true : false
+
             enabled: visible
             currentIndex: -1
             focus: false
@@ -813,6 +815,10 @@ FocusScope {
                 //console.log("settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
                 //console.log("platformlist.visible : ",platformlist.visible);
                 //console.log("platformlist.selected : ",platformlist.selected);
+                //console.log("platformlist.currentIndex : ",platformlist.currentIndex);
+                //console.log("platformlist.savedIndex : ",platformlist.savedIndex);
+                //console.log("grouplist.currentIndex : ",grouplist.currentIndex);
+                //console.log("grouplist.savedIndex : ",grouplist.savedIndex);
                 if(grouplist.selected === true || platformlist.selected === true){
                     if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
                         if (settings.SystemsGroupDisplay !== "same slot"){
@@ -970,7 +976,14 @@ FocusScope {
                 }
 
                 onSelectedChanged: {
-                    //console.log("selected : ",selected)
+                    //console.log("Delegate::onSelectedChanged : ",selected)
+
+                    //reset index saved if selected changed during browsing in groups
+                    if(selected && grouplist.selected){
+                        platformlist.currentIndex = 0;
+                        platformlist.savedIndex = 0;
+                    }
+
                     if(selected && (designs.GroupMusicSource !== "No")){
                         if(activeFocus && focus){
                            playGroupMusic.play();
