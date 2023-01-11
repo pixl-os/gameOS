@@ -789,8 +789,8 @@ FocusScope {
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: (settings.SystemsGroupDisplay !== "No") ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
-            visible: (settings.SystemsGroupDisplay !== "No") ? true : false
+            visible: ((settings.SystemsGroupDisplay === "No") || (storedHomePrimaryIndex === platformlist.ObjectModel.index && (settings.SystemsGroupDisplay === "same slot"))) ? false : true
+            height: visible ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
 
             enabled: visible
             currentIndex: -1
