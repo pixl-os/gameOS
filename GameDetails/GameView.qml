@@ -1315,8 +1315,9 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + 75) : header.height
-            bottom: parent.bottom; bottomMargin: vpx(150)
+            top: parent.top
+            topMargin: content.currentIndex === 0 ? (details.height + header.height) + vpx(root.height * (parseFloat("8%")/100)) : header.height
+            bottom: parent.bottom; bottomMargin: + vpx(root.height * (parseFloat("6%")/100))
         }
         model: extrasModel
         focus: true
