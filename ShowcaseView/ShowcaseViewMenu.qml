@@ -1930,6 +1930,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//second list
@@ -1963,6 +1995,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//third list
@@ -1996,6 +2060,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//fourth list
@@ -2029,6 +2125,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//fifth list
@@ -2062,6 +2190,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//sixth list
@@ -2095,6 +2255,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//seventh list
@@ -2128,6 +2320,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//eighth list
@@ -2161,6 +2385,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//nineth list
@@ -2194,6 +2450,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 		//tenth list
@@ -2227,6 +2515,38 @@ FocusScope {
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(currentList.currentIndex !== currentList.savedIndex){
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
