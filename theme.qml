@@ -210,13 +210,17 @@ FocusScope {
     //global property
     property bool videoToStop: false
 
+    // Handle loading settings when returning from a game
+    property bool fromGame: api.memory.has('To Game');
+    property string state;
+    property var lastState: []
+    property var lastGame: [] //lastGame is used only for 'title' tracability now, working by Index is better in QML
+    property var lastGameIndex: []
+    property var gameToLaunch
+
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: {
         storedCollectionGameIndex = 0
-        //console.log("currentCollectionIndex : ",currentCollectionIndex)
-        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
-    }
-    onCurrentGroupIndexChanged: {
         //console.log("currentCollectionIndex : ",currentCollectionIndex)
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
     }
@@ -257,8 +261,6 @@ FocusScope {
         else
             orderBy = Qt.AscendingOrder;
     }
-
-    property var gameToLaunch
     
     //Timer to launch video with delay in case of embedded gameView
     Timer {
@@ -331,6 +333,8 @@ FocusScope {
         api.memory.set('lastState', JSON.stringify(lastState));
         //console.log("lastGame  : ",JSON.stringify(lastGame));
         api.memory.set('lastGame', JSON.stringify(lastGame));
+        api.memory.set('lastGameIndex', JSON.stringify(lastGameIndex));
+
         //console.log("storedHomePrimaryIndex saved  : ",storedHomePrimaryIndex)
         api.memory.set('storedHomePrimaryIndex', storedHomePrimaryIndex);
         //console.log("storedHomeSecondaryIndex  saved : ",storedHomeSecondaryIndex)
@@ -340,17 +344,17 @@ FocusScope {
         api.memory.set('storedCollectionGameIndex', storedCollectionGameIndex);
 
         const savedGameIndex = api.allGames.toVarArray().findIndex(g => g === game);
-        api.memory.set('savedGame', savedGameIndex);
+        api.memory.set('savedGameIndex', savedGameIndex);
 
         api.memory.set('To Game', 'True');
     }
 
-    // Handle loading settings when returning from a game
-    property bool fromGame: api.memory.has('To Game');
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
         //console.log("lastState  : ",JSON.stringify(lastState));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
+        lastGameIndex               = JSON.parse(api.memory.get('lastGameIndex'));
+
         //console.log("lastGame  : ",JSON.stringify(lastGame));
         
         currentGroupIndex           = api.memory.get('storedGroupIndex');
@@ -367,16 +371,17 @@ FocusScope {
         currentCollection           = api.collections.get(currentCollectionIndex);
         //console.log("currentCollectionIndex : ",currentCollectionIndex)
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
-        currentGame                 = api.allGames.get(api.memory.get('savedGame'));
+        currentGame                 = api.allGames.get(api.memory.get('savedGameIndex'));
         //console.log("currentGame.title  : ",currentGame.title);
         root.state                  = api.memory.get('savedState');
 
         // Remove these from memory so as to not clog it up
         api.memory.unset('savedState');
-        api.memory.unset('savedGame');
+        api.memory.unset('savedGameIndex');
         api.memory.unset('savedCollection');
         api.memory.unset('lastState');
         api.memory.unset('lastGame');
+        api.memory.unset('lastGameIndex');
         api.memory.unset('storedHomePrimaryIndex');
         api.memory.unset('storedHomeSecondaryIndex');
         api.memory.unset('storedCollectionIndex');
@@ -538,13 +543,11 @@ FocusScope {
         }
     ]
 
-    property var lastState: []
-    property var lastGame: []
-
     // Screen switching functions
     function softwareScreen() {
         sfxAccept.play();
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         searchTerm = "";
         switch(settings.PlatformView) {
         case "Grid":
@@ -557,9 +560,10 @@ FocusScope {
 
     function showcaseScreen() {
         sfxAccept.play();
-	//console.log("gameDetails(showcaseScreen) - lastState (before push) : ",JSON.stringify(lastState));
+        //console.log("gameDetails(showcaseScreen) - lastState (before push) : ",JSON.stringify(lastState));
         lastState.push(state);
-	//console.log("gameDetails(showcaseScreen) - lastState (after push) : ",JSON.stringify(lastState));
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
+        //console.log("gameDetails(showcaseScreen) - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "showcasescreen";
     }
 
@@ -573,11 +577,14 @@ FocusScope {
         if (lastState.length != 0){
             if (typeof(currentGame) !== "undefined") {
 	            //console.log("gameDetails - currentGame.title:", currentGame.title);
-		    //console.log("gameDetails - currentGame:", JSON.stringify(currentGame));
-		    //console.log("gameDetails - lastGame (before push) : ",JSON.stringify(lastGame));
-		    lastGame.push(currentGame);
-		    //console.log("gameDetails - lastGame (after push) : ",JSON.stringify(lastGame));
-		}
+                //console.log("gameDetails - currentGame:", JSON.stringify(currentGame));
+                //console.log("gameDetails - lastGame (before push) : ",JSON.stringify(lastGame));
+                lastGame.push(currentGame.title);
+                //console.log("gameDetails - lastGame 'titles' (after push) : ",JSON.stringify(lastGame));
+                const curentGameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame);
+                lastGameIndex.push(curentGameIndex);
+                //console.log("gameDetails - lastGameIndex (after push) : ",JSON.stringify(lastGameIndex));
+            }
         }
 
         // Push the new game
@@ -587,24 +594,26 @@ FocusScope {
         }
         
         // Save the state before pushing the new one
-    	//console.log("gameDetails - Previous State:", state);
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "gameviewscreen";
     }
 
     function settingsScreen() {
         sfxAccept.play();
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "settingsscreen";
     }
 
     function launchGameScreen() {
         sfxAccept.play();
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "launchgamescreen";
-	if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
-            launchGameTimerBis.start();
-	}
+        if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                launchGameTimerBis.start();
+        }
     }
 
     function previousScreen() {
@@ -619,20 +628,28 @@ FocusScope {
         }
         
         state = lastState[lastState.length - 1];
+        //console.log("gameDetails - current state : ",state);
         lastState.pop();
+        //console.log("gameDetails - lastState (after pop) : ",JSON.stringify(lastState));
+
     }
 
     function popLastGame() {
         if (lastGame.length) {
-            currentGame = lastGame[lastGame.length-1];
+            //New method to get game from lastGameIndex table
+            currentGame = api.allGames.get(lastGameIndex[lastGameIndex.length-1]);
+            //console.log("gameDetails - popLastGame - currentGame : ",currentGame.title);
             lastGame.pop();
+            //console.log("gameDetails - lastGame 'titles' (after pop) : ",JSON.stringify(lastGame));
+            lastGameIndex.pop();
+            //console.log("gameDetails - lastGameIndex (after pop) : ",JSON.stringify(lastGameIndex));
         }
     }
 
     // Set default state to the platform screen
     Component.onCompleted: {
         root.state = "showcasescreen";
-
+        //console.log("gameDetails - lastState (initial) : ",JSON.stringify(lastState));
         if (fromGame)
             returnedFromGame();
     }
