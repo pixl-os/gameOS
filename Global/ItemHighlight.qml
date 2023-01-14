@@ -99,9 +99,10 @@ Item {
 
             anchors.fill: parent
             source: {
-						var video_path;
-						if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
-						else video_path = ""
+                        var video_path = "";
+                        if((game !== null) && (typeof(game) !== "undefined")){
+                            if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
+                        }
 						if(detailed_debug) console.log("video_path: ",video_path);
 						return video_path;
 					}
