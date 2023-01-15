@@ -1397,29 +1397,6 @@ FocusScope {
         }
         //to ignore keys if hotkey still pressed
         if(hotkeyPressed === true) return;
-
-        // Back -> finally need to manage back in some case :-(
-        if (api.keys.isCancel(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            //to let video to run if needed
-            videoToStop = false;
-            if(embedded){
-                if (retroachievementsOpacity === 1) {
-                    detailsOpacity = 1;
-                    retroachievementsOpacity = 0;
-                    achievements.selected = false;
-                    content.focus = true;
-                }
-                root.focus = false;
-                root.parent.focus = true;
-            }
-            else{
-                if (mediaScreen.visible)
-                    closeMedia();
-                else
-                    previousScreen();
-            }
-        }
     }
     // Input handling
     Keys.onPressed: {
