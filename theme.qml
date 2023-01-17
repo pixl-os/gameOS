@@ -342,6 +342,8 @@ FocusScope {
         api.memory.set('storedGroupIndex',currentGroupIndex);
         api.memory.set('storedCollectionIndex', currentCollectionIndex);
         api.memory.set('storedCollectionGameIndex', storedCollectionGameIndex);
+        //to save search from grid or vertical list if needed
+        api.memory.set('searchTerm', searchTerm);
 
         const savedGameIndex = api.allGames.toVarArray().findIndex(g => g === game);
         api.memory.set('savedGameIndex', savedGameIndex);
@@ -375,6 +377,9 @@ FocusScope {
         //console.log("currentGame.title  : ",currentGame.title);
         root.state                  = api.memory.get('savedState');
 
+        //to restore search from grid or vertical list if needed
+        searchTerm = api.memory.get('searchTerm');
+
         // Remove these from memory so as to not clog it up
         api.memory.unset('savedState');
         api.memory.unset('savedGameIndex');
@@ -386,6 +391,7 @@ FocusScope {
         api.memory.unset('storedHomeSecondaryIndex');
         api.memory.unset('storedCollectionIndex');
         api.memory.unset('storedCollectionGameIndex');
+        api.memory.unset('searchTerm');
 
         // Remove this one so we only have it when we come back from the game and not at Pegasus launch
         api.memory.unset('To Game');
