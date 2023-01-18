@@ -46,8 +46,10 @@ Item {
 
     SortFilterProxyModel {
         id: gamesFiltered
-
-        sourceModel: api.allGames
+        sourceModel: {
+            if(settingsUnderProgress) return null;
+            else return api.allGames;
+        }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
     }
 

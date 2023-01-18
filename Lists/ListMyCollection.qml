@@ -79,6 +79,12 @@ Item {
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
+            if(settingsUnderProgress) return null;
+            //check if any cache memory exist with this name of collection
+            if(true){
+                cacheFound = true;
+                return null;
+            }
 			if (system !== ""){
 				for (var i = 0; i < api.collections.count; i++) {
 					//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
@@ -91,7 +97,6 @@ Item {
 			//if not found
 			return api.allGames;
 		}
-	
         filters: [
 			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
 			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,

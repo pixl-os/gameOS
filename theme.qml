@@ -218,6 +218,9 @@ FocusScope {
     property var lastGameIndex: []
     property var gameToLaunch
 
+    //to know if SettingsView is opened
+    property bool settingsUnderProgress: false
+
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: {
         storedCollectionGameIndex = 0

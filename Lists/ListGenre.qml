@@ -30,7 +30,10 @@ Item {
     SortFilterProxyModel {
         id: genreGames
         delayed: true
-        sourceModel: api.allGames
+        sourceModel: {
+            if(settingsUnderProgress) return null;
+            else return api.allGames;
+        }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }
         filters:[RegExpFilter{ roleName: "genre"; pattern: "^" + genre + "$"; caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  },
                  RegExpFilter { roleName: "hash"; pattern: Utils.regExpForHashFiltering(); caseSensitivity: Qt.CaseInsensitive; enabled: root.enabled  }, // USE HASH to avoid consecutive same games on different regions

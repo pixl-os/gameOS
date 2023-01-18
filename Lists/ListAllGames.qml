@@ -26,8 +26,10 @@ Item {
 
     SortFilterProxyModel {
         id: gamesFiltered
-
-        sourceModel: api.allGames
+        sourceModel: {
+            if(settingsUnderProgress) return null;
+            else return api.allGames;
+        }
         filters: IndexFilter { maximumIndex: max - 1 }
     }
 
