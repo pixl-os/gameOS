@@ -221,6 +221,7 @@ FocusScope {
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: {
         storedCollectionGameIndex = 0
+        searchTerm = "";
         //console.log("currentCollectionIndex : ",currentCollectionIndex)
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
     }
@@ -554,7 +555,6 @@ FocusScope {
         sfxAccept.play();
         lastState.push(state);
         //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
-        searchTerm = "";
         switch(settings.PlatformView) {
         case "Grid":
             root.state = "softwaregridscreen";

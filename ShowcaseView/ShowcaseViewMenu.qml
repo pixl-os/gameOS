@@ -970,6 +970,7 @@ FocusScope {
                     if(selected && grouplist.selected){
                         platformlist.currentIndex = 0;
                         platformlist.savedIndex = 0;
+                        searchTerm = "";
                     }
 
                     if(selected && (designs.GroupMusicSource !== "No")){
@@ -1513,8 +1514,8 @@ FocusScope {
             }
 
             // List specific input
-            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
-            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex();}
+            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex();}
             Keys.onPressed: {
                 if (!viewIsLoading){
                     // Accept
