@@ -3,16 +3,36 @@ All notable changes to this project will be documented in this file (focus on ch
 
 ## [pixL-master] - 202a-mm-dd - v1.21
 - new features:
-	- Add management of systems group activable in theme's general settings
-	- Adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
-	- Sorting systems by name, release date or manufacturer
-	- Add a second sorting by name, release date or manufacturer criteria
+	- add management of systems group activable in theme's general settings
+	- adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
+	- sorting systems by name, release date or manufacturer
+	- add a second sorting by name, release date or manufacturer criteria
 	- 2 ways to display groups using one or 2 slots on screen
-	- Dynamic help to know how to pass from systems to group when we one slot
-	- Display of 'release date' under systems logo when sorting use it.
-	- Propose now to reload theme itself when settings changed
+	- dynamic help to know how to pass from systems to group when we one slot
+	- display of 'release date' under systems logo when sorting use it.
+	- propose now to reload theme itself when settings changed
+	- remove limit on favorite displayed in banner
 
-- Translations: 
+- fixes:
+	- improve back button usage in gameview and launchgame view
+	- improve behavior with header and grid selection
+	- improve collections selection after gameplay session
+	- add cartridge media and improve orders
+	- avoid display several times same assets from lists
+	- control backgrounds list content to propose always fanart before screenshot as background asset
+	- improve game launching
+	- game exit on initial one in case of favorite launch from banner
+	- typo on Details Hardware Picture 
+	- save position on collection to well come back when we exit from game
+	- manage better margin between menu and details/retroachievements parts
+	- select game in collection from currentGame
+	- change way to manage currentGame using index and not object that we can't well save in JSON format
+	- manage more cases with collections
+	- avoid error when game is not yet set for highlight object
+	- save/restore searchTerm to be able to restore it after game session
+	- reset searchTerm when we change system or group
+
+- translations: 
 	- done for new menus/helps/dialogbox
 
 ## [pixL-master] - 2022-11-18 - v1.20 
