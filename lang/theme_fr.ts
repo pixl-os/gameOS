@@ -118,6 +118,17 @@
     </message>
 </context>
 <context>
+    <name>GenericYesNoDialog</name>
+    <message>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+</context>
+<context>
     <name>GridViewMenu</name>
     <message>
         <source>Back</source>
@@ -681,6 +692,42 @@
         <source>Grid,Vertical List</source>
         <translation>Grille,Liste Verticale</translation>
     </message>
+    <message>
+        <source>Group systems by type</source>
+        <translation type="vanished">Systèmes groupés par type</translation>
+    </message>
+    <message>
+        <source>Sort systems by</source>
+        <translation>Systèmes triés par</translation>
+    </message>
+    <message>
+        <source>manufacturer,release date,name</source>
+        <translation>fabricant,date de sortie,nom</translation>
+    </message>
+    <message>
+        <source>Sort systems secondly by</source>
+        <translation>Systèmes triés deuxièmement par</translation>
+    </message>
+    <message>
+        <source>release date,name,manufacturer</source>
+        <translation>date de sortie,nom,fabricant</translation>
+    </message>
+    <message>
+        <source>Systems group display</source>
+        <translation>Affichage groupe de systèmes</translation>
+    </message>
+    <message>
+        <source>No,same slot,2 slots</source>
+        <translation>Non,même emplacement,2 emplacements</translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation>Configurations changées</translation>
+    </message>
+    <message>
+        <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
+        <translation>Voulez vous recharger le thème pour bien appliquer le changement ? (Conseillé)</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -719,6 +766,70 @@
     <message>
         <source>Try adding some favorite games</source>
         <translation>Essai de rajouter tes jeux favoris</translation>
+    </message>
+    <message>
+        <source>Arcade system</source>
+        <translation>Système arcade</translation>
+    </message>
+    <message>
+        <source>Arcade systems</source>
+        <translation>Systèmes arcade</translation>
+    </message>
+    <message>
+        <source>Home console</source>
+        <translation>Console de salon</translation>
+    </message>
+    <message>
+        <source>Home consoles</source>
+        <translation>Consoles de salon</translation>
+    </message>
+    <message>
+        <source>Handheld console</source>
+        <translation>Console portable</translation>
+    </message>
+    <message>
+        <source>Handheld consoles</source>
+        <translation>Consoles portables</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation>Ordinateur</translation>
+    </message>
+    <message>
+        <source>Computers</source>
+        <translation>Ordinateurs</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Portage de jeu</translation>
+    </message>
+    <message>
+        <source>Ports</source>
+        <translation>Portages de jeux</translation>
+    </message>
+    <message>
+        <source>Engine</source>
+        <translation>Moteur de jeu</translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation>Moteurs de jeux</translation>
+    </message>
+    <message>
+        <source>Virtual system</source>
+        <translation>Système virtuel</translation>
+    </message>
+    <message>
+        <source>Virtual systems</source>
+        <translation>Systèmes virtuels</translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation>Jeu Réseau</translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation>Groupe</translation>
     </message>
 </context>
 <context>

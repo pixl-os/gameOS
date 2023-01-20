@@ -31,10 +31,12 @@ FocusScope {
 
     //DEBUG property
     property bool detailed_debug: false
+
     property bool viewIsLoading: true
     property string viewLoadingText: qsTr("Loading") + "..." + api.tr
     property bool gameToLaunched: false
-    
+    property bool settingsChanged: false
+
     //Spinner Loader for all views loading... (principally for main menu for the moment)
     Loader {
         id: spinnerloader
@@ -96,28 +98,38 @@ FocusScope {
             VideoBannerPathExpression:     api.memory.has("Video Banner path expression") ? api.memory.get("Video Banner path expression") : "",
             FavoritesBannerPosition:       api.memory.has("Favorites Banner screen position") ? api.memory.get("Favorites Banner screen position") : "0",
             FavoritesBannerRatio:          api.memory.has("Favorites Banner screen ratio") ? api.memory.get("Favorites Banner screen ratio") : "50%",
-            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "2",
-            SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "20%",
+            SystemsListPosition:           api.memory.has("Systems list screen position") ? api.memory.get("Systems list screen position") : "3",
+            SystemsListRatio:              api.memory.has("Systems list screen ratio") ? api.memory.get("Systems list screen ratio") : "15%",
             NbSystemLogos:                 api.memory.has("Number of System logos visible") ? api.memory.get("Number of System logos visible") : "6",
             SystemsListBackground:         api.memory.has("Systems list background source") ? api.memory.get("Systems list background source") : "No",
             SystemsListBackgroundPathExpression:         api.memory.has("Systems list background path expression") ? api.memory.get("Systems list background path expression") : "",
-            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "60%",
+            SystemLogoRatio:               api.memory.has("System logo ratio") ? api.memory.get("System logo ratio") : "80%",
             SystemLogoSource:              api.memory.has("System logo source") ? api.memory.get("System logo source") : "Default",
-            SystemLogoPathExpression:         api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
+            SystemLogoPathExpression:      api.memory.has("System logo path expression") ? api.memory.get("System logo path expression") : "",
             SystemMusicSource:             api.memory.has("System music source") ? api.memory.get("System music source") : "No",
-            SystemMusicPathExpression:         api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
-            SystemDetailsPosition:       api.memory.has("System Details screen position") ? api.memory.get("System Details screen position") : "No",
-            SystemDetailsRatio:          api.memory.has("System Details screen ratio") ? api.memory.get("System Details screen ratio") : "30%",
-            SystemDetailsBackground:         api.memory.has("System Details background source") ? api.memory.get("System Details background source") : "No",
+            SystemMusicPathExpression:     api.memory.has("System music path expression") ? api.memory.get("System music path expression") : "",
+            SystemDetailsPosition:         api.memory.has("System Details screen position") ? api.memory.get("System Details screen position") : "No",
+            SystemDetailsRatio:            api.memory.has("System Details screen ratio") ? api.memory.get("System Details screen ratio") : "30%",
+            SystemDetailsBackground:       api.memory.has("System Details background source") ? api.memory.get("System Details background source") : "No",
             SystemDetailsBackgroundPathExpression:         api.memory.has("System Details background path expression") ? api.memory.get("System Details background path expression") : "",
-            SystemDetailsVideo:         api.memory.has("System Details video source") ? api.memory.get("System Details video source") : "No",
+            SystemDetailsVideo:            api.memory.has("System Details video source") ? api.memory.get("System Details video source") : "No",
             SystemDetailsVideoPathExpression:         api.memory.has("System Details video path expression") ? api.memory.get("System Details video path expression") : "",
             SystemDetailsHardware:         api.memory.has("System Details hardware source") ? api.memory.get("System Details hardware source") : "No",
             SystemDetailsHardwarePathExpression:         api.memory.has("System Details hardware path expression") ? api.memory.get("System Details hardware path expression") : "",
-            SystemDetailsController:         api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
+            SystemDetailsController:       api.memory.has("System Details controller source") ? api.memory.get("System Details controller source") : "No",
             SystemDetailsControllerPathExpression:         api.memory.has("System Details controller path expression") ? api.memory.get("System Details controller path expression") : "",
             ThemeLogoSource:               api.memory.has("Theme logo source") ? api.memory.get("Theme logo source") : "Default",
-            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100"
+            ThemeLogoWidth:                api.memory.has("Theme logo width") ? api.memory.get("Theme logo width") : "100",
+            GroupsListPosition:            api.memory.has("Groups list screen position") ? api.memory.get("Groups list screen position") : "2",
+            GroupsListRatio:               api.memory.has("Groups list screen ratio") ? api.memory.get("Groups list screen ratio") : "15%",
+            NbGroupLogos:                  api.memory.has("Number of group logos visible") ? api.memory.get("Number of group logos visible") : "5",
+            GroupsListBackground:          api.memory.has("Groups list background source") ? api.memory.get("Groups list background source") : "No",
+            GroupsListBackgroundPathExpression:         api.memory.has("Groups list background path expression") ? api.memory.get("Groups list background path expression") : "",
+            GroupLogoRatio:                api.memory.has("Group logo ratio") ? api.memory.get("Group logo ratio") : "90%",
+            GroupLogoSource:               api.memory.has("Group logo source") ? api.memory.get("Group logo source") : "Default",
+            GroupLogoPathExpression:       api.memory.has("Group logo path expression") ? api.memory.get("Group logo path expression") : "",
+            GroupMusicSource:              api.memory.has("Group music source") ? api.memory.get("Group music source") : "No",
+            GroupMusicPathExpression:      api.memory.has("Group music path expression") ? api.memory.get("Group music path expression") : ""
         }
     }
 
@@ -126,7 +138,7 @@ FocusScope {
         return {
             PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
             GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
-            GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "3",
+            GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5",
             GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
             AllowGameBackgroundOverlay:    api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No",
             GameLogo:                      api.memory.has("Game Logo") ? api.memory.get("Game Logo") : "Show",
@@ -141,21 +153,24 @@ FocusScope {
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
             HelpButtonsStyle:              api.memory.has("Help buttons style") ? api.memory.get("Help buttons style") : "Gamepad",
-            HideClock:                      api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
+            HideClock:                     api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
             ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
             SystemLogoStyle:               api.memory.has("System Logo Style") ? api.memory.get("System Logo Style") : "Color",
             MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
             AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
             AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
-            AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "No",
-            AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "No",
+            AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "Yes",
+            AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "Yes",
             OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
             ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
             ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
             DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
-            ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "15",
+            ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "10",
+            SystemsGroupDisplay:            api.memory.has("Systems group display") ? api.memory.get("Systems group display") : "No",
+            SortSystemsBy:                 api.memory.has("Sort systems by") ? api.memory.get("Sort systems by") : "manufacturer",
+            SortSystemsSecondlyBy:         api.memory.has("Sort systems secondly by") ? api.memory.get("Sort systems secondly by") : "releasedate",
             //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
             ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
@@ -171,7 +186,7 @@ FocusScope {
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
             TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
             ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
-            ShowPlayStats:                   api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
+            ShowPlayStats:                 api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
             DemoTriggeringDelay:           api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
             DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
             PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
@@ -179,22 +194,37 @@ FocusScope {
     }
 
     // Collections
-    property int currentCollectionIndex: 0
-    property int currentGameIndex: 0
-    property var currentCollection: api.collections.get(currentCollectionIndex)
+    property int currentGroupIndex
+    property var currentGroup
+    property int currentCollectionIndex
+    property int currentGameIndex
+    property var currentCollection
     property var currentGame
 
     // Stored variables for page navigation
-    property int storedHomePrimaryIndex: 0
-    property int storedHomeSecondaryIndex: 0
-    property int storedCollectionIndex: 0
-    property int storedCollectionGameIndex: 0
+    property int storedHomePrimaryIndex
+    property int storedHomeSecondaryIndex
+    property int storedCollectionIndex
+    property int storedCollectionGameIndex
 
     //global property
     property bool videoToStop: false
 
+    // Handle loading settings when returning from a game
+    property bool fromGame: api.memory.has('To Game');
+    property string state;
+    property var lastState: []
+    property var lastGame: [] //lastGame is used only for 'title' tracability now, working by Index is better in QML
+    property var lastGameIndex: []
+    property var gameToLaunch
+
     // Reset the stored game index when changing collections
-    onCurrentCollectionIndexChanged: storedCollectionGameIndex = 0
+    onCurrentCollectionIndexChanged: {
+        storedCollectionGameIndex = 0
+        searchTerm = "";
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
+    }
 
     // Filtering options
     property bool showFavs: false
@@ -203,7 +233,8 @@ FocusScope {
     property int sortByIndex: 0
     property int orderBy: Qt.AscendingOrder
     property string searchTerm: ""
-    property bool steam: currentCollection.name === "Steam"
+    property bool steam: typeof(currentCollection) !== 'undefined' ? currentCollection.name === "Steam" : false
+
     function steamExists() {
         for (i = 0; i < api.collections.count; i++) {
             if (api.collections.get(i).name === "Steam") {
@@ -231,8 +262,6 @@ FocusScope {
         else
             orderBy = Qt.AscendingOrder;
     }
-
-    property var gameToLaunch
     
     //Timer to launch video with delay in case of embedded gameView
     Timer {
@@ -243,7 +272,6 @@ FocusScope {
         interval: 500
         onTriggered: {
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
-            //if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows")){ // || !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
               launchGameScreen();
             }
             else{
@@ -283,7 +311,7 @@ FocusScope {
                 launchGameTimer.start();
             }
         } else {
-            console.log("launchGame(game) with game is null");
+            //console.log("launchGame(game) with game is null");
             //if pegasus.multiwindows is no activated
             if(!api.internal.recalbox.getBoolParameter("pegasus.multiwindows") && !api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
               launchGameScreen();
@@ -301,43 +329,70 @@ FocusScope {
     // Save current states for returning from game
     function saveCurrentState(game) {
         api.memory.set('savedState', root.state);
-        api.memory.set('savedCollection', currentCollectionIndex);
+        api.memory.set('savedCollection', currentCollection);
+    	//console.log("lastState  : ",JSON.stringify(lastState));
         api.memory.set('lastState', JSON.stringify(lastState));
+        //console.log("lastGame  : ",JSON.stringify(lastGame));
         api.memory.set('lastGame', JSON.stringify(lastGame));
+        api.memory.set('lastGameIndex', JSON.stringify(lastGameIndex));
+
+        //console.log("storedHomePrimaryIndex saved  : ",storedHomePrimaryIndex)
         api.memory.set('storedHomePrimaryIndex', storedHomePrimaryIndex);
+        //console.log("storedHomeSecondaryIndex  saved : ",storedHomeSecondaryIndex)
         api.memory.set('storedHomeSecondaryIndex', storedHomeSecondaryIndex);
+        api.memory.set('storedGroupIndex',currentGroupIndex);
         api.memory.set('storedCollectionIndex', currentCollectionIndex);
         api.memory.set('storedCollectionGameIndex', storedCollectionGameIndex);
+        //to save search from grid or vertical list if needed
+        api.memory.set('searchTerm', searchTerm);
 
         const savedGameIndex = api.allGames.toVarArray().findIndex(g => g === game);
-        api.memory.set('savedGame', savedGameIndex);
+        api.memory.set('savedGameIndex', savedGameIndex);
 
         api.memory.set('To Game', 'True');
     }
 
-    // Handle loading settings when returning from a game
-    property bool fromGame: api.memory.has('To Game');
     function returnedFromGame() {
         lastState                   = JSON.parse(api.memory.get('lastState'));
+        //console.log("lastState  : ",JSON.stringify(lastState));
         lastGame                    = JSON.parse(api.memory.get('lastGame'));
-        currentCollectionIndex      = api.memory.get('savedCollection');
-        storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
-        storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
-        currentCollectionIndex      = api.memory.get('storedCollectionIndex');
-        storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
+        lastGameIndex               = JSON.parse(api.memory.get('lastGameIndex'));
 
-        currentGame                 = api.allGames.get(api.memory.get('savedGame'));
+        //console.log("lastGame  : ",JSON.stringify(lastGame));
+        
+        currentGroupIndex           = api.memory.get('storedGroupIndex');
+        currentCollection           = api.memory.get('savedCollection');
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
+        storedHomePrimaryIndex      = api.memory.get('storedHomePrimaryIndex');
+        //console.log("storedHomePrimaryIndex restored : ",storedHomePrimaryIndex)
+        storedHomeSecondaryIndex    = api.memory.get('storedHomeSecondaryIndex');
+        //console.log("storedHomeSecondaryIndex restored : ",storedHomeSecondaryIndex)
+        currentCollectionIndex      = api.memory.get('storedCollectionIndex');
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        storedCollectionGameIndex   = api.memory.get('storedCollectionGameIndex');
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        currentCollection           = api.collections.get(currentCollectionIndex);
+        //console.log("currentCollectionIndex : ",currentCollectionIndex)
+        //console.log("currentCollection.shortName  : ",currentCollection.shortName)
+        currentGame                 = api.allGames.get(api.memory.get('savedGameIndex'));
+        //console.log("currentGame.title  : ",currentGame.title);
         root.state                  = api.memory.get('savedState');
+
+        //to restore search from grid or vertical list if needed
+        searchTerm = api.memory.get('searchTerm');
 
         // Remove these from memory so as to not clog it up
         api.memory.unset('savedState');
-        api.memory.unset('savedGame');
+        api.memory.unset('savedGameIndex');
+        api.memory.unset('savedCollection');
         api.memory.unset('lastState');
         api.memory.unset('lastGame');
+        api.memory.unset('lastGameIndex');
         api.memory.unset('storedHomePrimaryIndex');
         api.memory.unset('storedHomeSecondaryIndex');
         api.memory.unset('storedCollectionIndex');
         api.memory.unset('storedCollectionGameIndex');
+        api.memory.unset('searchTerm');
 
         // Remove this one so we only have it when we come back from the game and not at Pegasus launch
         api.memory.unset('To Game');
@@ -495,14 +550,11 @@ FocusScope {
         }
     ]
 
-    property var lastState: []
-    property var lastGame: []
-
     // Screen switching functions
     function softwareScreen() {
         sfxAccept.play();
         lastState.push(state);
-        searchTerm = "";
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         switch(settings.PlatformView) {
         case "Grid":
             root.state = "softwaregridscreen";
@@ -514,7 +566,10 @@ FocusScope {
 
     function showcaseScreen() {
         sfxAccept.play();
+        //console.log("gameDetails(showcaseScreen) - lastState (before push) : ",JSON.stringify(lastState));
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
+        //console.log("gameDetails(showcaseScreen) - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "showcasescreen";
     }
 
@@ -523,10 +578,19 @@ FocusScope {
         //if (game !== null) console.log("gameDetails - game.title:", game.title);
         //else console.log("gameDetails - game.title:", "null");
         
+	//console.log("gameDetails - lastState : ",JSON.stringify(lastState));
         // As long as there is a state history, save the last game
         if (lastState.length != 0){
-            //console.log("gameDetails - currentGame.title:", currentGame.title);
-            lastGame.push(currentGame);
+            if (typeof(currentGame) !== "undefined") {
+	            //console.log("gameDetails - currentGame.title:", currentGame.title);
+                //console.log("gameDetails - currentGame:", JSON.stringify(currentGame));
+                //console.log("gameDetails - lastGame (before push) : ",JSON.stringify(lastGame));
+                lastGame.push(currentGame.title);
+                //console.log("gameDetails - lastGame 'titles' (after push) : ",JSON.stringify(lastGame));
+                const curentGameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame);
+                lastGameIndex.push(curentGameIndex);
+                //console.log("gameDetails - lastGameIndex (after push) : ",JSON.stringify(lastGameIndex));
+            }
         }
 
         // Push the new game
@@ -536,22 +600,26 @@ FocusScope {
         }
         
         // Save the state before pushing the new one
-        //console.log("Previous State:", state);
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "gameviewscreen";
     }
 
     function settingsScreen() {
         sfxAccept.play();
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "settingsscreen";
     }
 
     function launchGameScreen() {
         sfxAccept.play();
         lastState.push(state);
+        //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "launchgamescreen";
-        launchGameTimerBis.start();
+        if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
+                launchGameTimerBis.start();
+        }
     }
 
     function previousScreen() {
@@ -566,20 +634,28 @@ FocusScope {
         }
         
         state = lastState[lastState.length - 1];
+        //console.log("gameDetails - current state : ",state);
         lastState.pop();
+        //console.log("gameDetails - lastState (after pop) : ",JSON.stringify(lastState));
+
     }
 
     function popLastGame() {
         if (lastGame.length) {
-            currentGame = lastGame[lastGame.length-1];
+            //New method to get game from lastGameIndex table
+            currentGame = api.allGames.get(lastGameIndex[lastGameIndex.length-1]);
+            //console.log("gameDetails - popLastGame - currentGame : ",currentGame.title);
             lastGame.pop();
+            //console.log("gameDetails - lastGame 'titles' (after pop) : ",JSON.stringify(lastGame));
+            lastGameIndex.pop();
+            //console.log("gameDetails - lastGameIndex (after pop) : ",JSON.stringify(lastGameIndex));
         }
     }
 
     // Set default state to the platform screen
     Component.onCompleted: {
         root.state = "showcasescreen";
-
+        //console.log("gameDetails - lastState (initial) : ",JSON.stringify(lastState));
         if (fromGame)
             returnedFromGame();
     }

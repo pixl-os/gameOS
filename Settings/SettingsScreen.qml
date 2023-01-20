@@ -28,7 +28,7 @@ FocusScope {
         id: designsModel
         ListElement {
             settingName: "Initial Focus on"
-            setting: "Systems list,Video Banner,Favorites Banner,System Details"
+            setting: "Systems list,Groups list,Video Banner,Favorites Banner,System Details"
         }
         ListElement {
             settingName: "Video Banner screen position"
@@ -60,11 +60,11 @@ FocusScope {
         }
         ListElement {
             settingName: "Systems list screen position"
-            setting: "2,3,No,0,1"
+            setting: "3,No,0,1,2"
         }
         ListElement {
             settingName: "Systems list screen ratio"
-            setting: "20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%"
+            setting: "15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%"
         }
         ListElement {
             settingName: "Systems list background source"
@@ -80,7 +80,7 @@ FocusScope {
         }
         ListElement {
             settingName: "System logo ratio"
-            setting: "60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%"
+            setting: "80%,85%,90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%"
         }
         ListElement {
             settingName: "System logo source"
@@ -166,6 +166,46 @@ FocusScope {
             setting: "In home page, In a dedicated system, Both"
         }*/
 
+        ListElement {
+            settingName: "Groups list screen position"
+            setting: "2,3,No,0,1"
+        }
+        ListElement {
+            settingName: "Groups list screen ratio"
+            setting: "15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%,90%,95%,100%,5%,10%"
+        }
+        ListElement {
+            settingName: "Groups list background source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Groups list background path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Number of group logos visible"
+            setting: "5,6,7,8,9,10,1,2,3,4"
+        }
+        ListElement {
+            settingName: "Group logo ratio"
+            setting: "90%,95%,100%,5%,10%,15%,20%,25%,30%,35%,40%,45%,50%,55%,60%,65%,70%,75%,80%,85%"
+        }
+        ListElement {
+            settingName: "Group logo source"
+            setting: "Default,Custom,No"
+        }
+        ListElement {
+            settingName: "Group logo path expression"
+            setting: "to edit"
+        }
+        ListElement {
+            settingName: "Group music source"
+            setting: "No,Custom"
+        }
+        ListElement {
+            settingName: "Group music path expression"
+            setting: "to edit"
+        }
     }
 
     property var designerPage: {
@@ -293,8 +333,26 @@ FocusScope {
     ListModel {
         id: showcaseSettingsModel
         ListElement {
+            settingName: "Systems group display"
+            setting: "No,same slot,2 slots"
+            settingNameDisplay: qsTr("Systems group display")
+            settingDisplay: qsTr("No,same slot,2 slots")
+        }
+        ListElement {
+            settingName: "Sort systems by"
+            setting: "manufacturer,releasedate,name"
+            settingNameDisplay: qsTr("Sort systems by")
+            settingDisplay: qsTr("manufacturer,release date,name")
+        }	
+        ListElement {
+            settingName: "Sort systems secondly by"
+            setting: "releasedate,name,manufacturer"
+            settingNameDisplay: qsTr("Sort systems secondly by")
+            settingDisplay: qsTr("release date,name,manufacturer")
+        }
+        ListElement {
             settingName: "Number of games showcased"
-            setting: "15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,1,2,3,4,5,6,7,8,9,10,11,12,13,14"
+            setting: "10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,1,2,3,4,5,6,7,8,9"
             settingNameDisplay: qsTr("Number of games showcased")
 
         }
@@ -393,7 +451,7 @@ FocusScope {
 
         ListElement {
             settingName: "Number of columns"
-            setting: "3,4,5,6,7,8"
+            setting: "5,6,7,8,3,4"
             settingNameDisplay: qsTr("Number of columns")
         }
     }
@@ -470,9 +528,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Video preview audio"
-            setting: "No,Yes"
+            setting: "Yes,No"
             settingNameDisplay: qsTr("Video preview audio")
-            settingDisplay: qsTr("No,Yes")
+            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Randomize Background"
@@ -887,10 +945,15 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
         }
-
     }
 
     Rectangle {
@@ -1043,10 +1106,15 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
         }
-
     }
 
 	
@@ -1206,7 +1274,13 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                previousScreen();
+                //console.log("previousScreen();");
+                //propose display of dialog box only with pegasus upper than 0.1.0
+                if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                else{
+                    settingsChanged = false;
+                    previousScreen();
+                }
             }
 			
 			// Create a 'new' collection
@@ -1316,15 +1390,25 @@ FocusScope {
 					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
+                        var previousIndex = api.memory.get(fullSettingName + 'Index');
 						api.memory.set(fullSettingName + 'Index', savedIndex);
 						//console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
 						api.memory.set(fullSettingName, settingList[savedIndex]);
 						//console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                        if(previousIndex !== savedIndex){
+                            //console.log("settingsChanged !");
+                            settingsChanged = true;
+                        }
 					}
 					else
 					{
+                        var previousValue = api.memory.get(fullSettingName);
 						//console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
 						api.memory.set(fullSettingName, settingtextfield.text);
+                        if(previousValue !== settingtextfield.text){
+                            //console.log("settingsChanged !");
+                            settingsChanged = true;
+                        }
 					}
                 }
 
@@ -1595,4 +1679,45 @@ FocusScope {
 			collectionslist.focus = true;
 		}
     }	
+
+    //Dialog box to propose to reload theme if settingsChanged
+    Component {
+        id: settingsChangedDialogBox
+        GenericYesNoDialog
+        {
+            focus: true
+            title: qsTr("Settings changed") + api.tr
+            message: qsTr("Do you want to reload theme to well apply the change ? (Adviced)") + api.tr
+        }
+    }
+    Loader {
+        id: settingsChangedDialogBoxLoader
+        anchors.fill: parent
+        sourceComponent: settingsChangedDialogBox
+        active: true
+    }
+    Connections {
+        target: settingsChangedDialogBoxLoader.item
+        function onAccept() {
+            //reset settings changed flag
+            settingsChanged = false;
+            //console.log("typeof(pegasusReloadTheme)",typeof(pegasusReloadTheme));
+            if(typeof(pegasusReloadTheme) !== "undefined"){ //check if pegasus contains new function or not
+                //reload theme - need pegsus 0.1.1 or upper
+                pegasusReloadTheme();
+            }
+            else{
+                //simply come back to previous page for the moment
+                //need to do F5 with pegasus 0.1.0
+                previousScreen();
+            }
+        }
+        function onCancel() {
+            //reset settings changed flag
+            settingsChanged = false;
+            //come back to previous page
+            previousScreen();
+        }
+    }
+
 }

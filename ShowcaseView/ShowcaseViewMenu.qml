@@ -37,8 +37,8 @@ FocusScope {
 
     // Pull in our custom lists and define
     ListAllGames    { id: listNone;        max: 0 }
-    ListAllGames    { id: listAllGames;    max: settings.ShowcaseColumns }
-    ListFavorites   { id: listFavorites;   max: settings.ShowcaseColumns }
+    ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
+    ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
 
 	//Repeater to manage loading of lists dynamically and without limits in the future
 	property int nbLoaderReady: 0
@@ -524,10 +524,12 @@ FocusScope {
             if(designs.VideoBannerPosition !== "No") findObjectAndMove(ftueContainer,parseInt(designs.VideoBannerPosition));
             //set position of Favorites Banner (id: featuredlist)
             if(designs.FavoritesBannerPosition !== "No") findObjectAndMove(featuredlist,parseInt(designs.FavoritesBannerPosition));
+            //set position of Groups List (id: grouplist)
+            if(designs.GroupsListPosition !== "No") findObjectAndMove(grouplist,parseInt(designs.GroupsListPosition));
             //set position of Systems List (id: platformlist)
             if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
             //set position of System Details (id: detailedlist)
-            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));
+            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));        
         }
 
         //ftueContainer
@@ -636,7 +638,7 @@ FocusScope {
             id: featuredlist
 
             property bool selected : ListView.isCurrentItem
-            //focus: selected
+            focus: selected
             width: appWindow.width
 
             height: visible ? appWindow.height * (parseFloat(designs.FavoritesBannerRatio)/100) : 0
@@ -653,7 +655,7 @@ FocusScope {
             highlightMoveVelocity: -1
             snapMode: ListView.SnapOneItem
             keyNavigationWraps: true
-            currentIndex: (storedHomePrimaryIndex == 0) ? storedHomeSecondaryIndex : 0
+            currentIndex: 0
             Component.onCompleted: {
                 positionViewAtIndex(currentIndex, ListView.Visible)
             }
@@ -752,7 +754,8 @@ FocusScope {
                 running: (settings.ShowcaseChangeFavoriteDisplayAutomatically !== "No") ? true : false
                 triggeredOnStart: false
 				onTriggered: {
-					if (featuredlist.count >= 2) featuredlist.incrementCurrentIndex();
+                    //change favorites only if several and showcaseViewMenu at front
+                    if (featuredlist.count >= 2 && root.activeFocus === true) featuredlist.incrementCurrentIndex();
 				}
 			}	
 
@@ -764,25 +767,34 @@ FocusScope {
 	                // Accept
 	                if (api.keys.isAccept(event) && !event.isAutoRepeat) {
 	                    event.accepted = true;
-	                    storedHomeSecondaryIndex = featuredlist.currentIndex;
-	                    if (!ftue)
+                        if (!ftue){
+                            storedHomeSecondaryIndex = featuredlist.currentIndex; // not used today for this case
+                            if(designs.FavoritesBannerPosition === designs.VideoBannerPosition){
+                                //in case of same position, we ahve to move by adding 1 for favorites
+                                storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition)+1;
+                            }
+                            else storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition);
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
+                        }
                     }
 				}
             }
         }
 
-        // Collections list with systems
+        // List by group of systems
         ListView {
-            id: platformlist
+            id: grouplist
 
             property bool selected : ListView.isCurrentItem
             property int myIndex: ObjectModel.index
             width: appWindow.width
 
-            height: designs.SystemsListPosition !== "No" ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
-            visible: designs.SystemsListPosition !== "No" ? true : false
+            visible: ((settings.SystemsGroupDisplay === "No") || (storedHomePrimaryIndex === platformlist.ObjectModel.index && (settings.SystemsGroupDisplay === "same slot"))) ? false : true
+            height: visible ? appWindow.height * (parseFloat(designs.GroupsListRatio)/100) : 0
+
             enabled: visible
+            currentIndex: -1
+            focus: false
 
             anchors {
                 left: parent.left;
@@ -797,26 +809,488 @@ FocusScope {
             highlightMoveDuration: 100
             keyNavigationWraps: true
 
-            property int savedIndex: currentCollectionIndex
+            property int savedIndex: currentGroupIndex
+            onSelectedChanged: {
+                //console.log("grouplist.onSelectedChanged : ", grouplist.selected);
+                //console.log("settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
+                //console.log("platformlist.visible : ",platformlist.visible);
+                //console.log("platformlist.selected : ",platformlist.selected);
+                //console.log("platformlist.currentIndex : ",platformlist.currentIndex);
+                //console.log("platformlist.savedIndex : ",platformlist.savedIndex);
+                //console.log("grouplist.currentIndex : ",grouplist.currentIndex);
+                //console.log("grouplist.savedIndex : ",grouplist.savedIndex);
+                if(grouplist.selected === true || platformlist.selected === true){
+                    if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                        if (settings.SystemsGroupDisplay !== "same slot"){
+                            grouplist.visible = true;
+                            grouplist.height = appWindow.height * (parseFloat(designs.GroupsListRatio)/100)
+                        }
+                        else if (grouplist.selected === true && platformlist.visible === false) {
+                            grouplist.visible = true;
+                            grouplist.height = appWindow.height * (parseFloat(designs.GroupsListRatio)/100)
+                        }
+                        else {
+                            grouplist.visible = false;
+                            grouplist.height = 0;
+                        }
+                    }
+                    else{
+                        grouplist.visible = false;
+                        grouplist.height = 0;
+                    }
+                }
+                //console.log("grouplist.height : ",grouplist.height);
+                //console.log("grouplist.visible : ",grouplist.visible);
+            }
             onFocusChanged: {
+                //console.log("grouplist::onFocusChanged : ",focus);
                 if (focus)
                     currentIndex = savedIndex;
                 else {
                     savedIndex = currentIndex;
                     currentIndex = -1;
+                    if(designs.GroupMusicSource !== "No") playMusic.stop();
                 }
-                if(!focus){
+            }
+
+            Component.onCompleted: {
+                //console.log("grouplist::Component.onCompleted - currentIndex (before) : ",currentIndex);
+                currentIndex = savedIndex;
+                //console.log("grouplist::Component.onCompleted - currentIndex (after) : ",currentIndex);
+                positionViewAtIndex(currentIndex, ListView.End);
+            }
+
+            //to adapt for groups / not visible by defaults
+            ListModel{
+                id: typeOfSystems
+                ListElement {
+                    shortName : "arcade"
+                    name: qsTr("Arcade system")
+                    names: qsTr("Arcade systems")
+                }
+                ListElement {
+                    shortName : "console"
+                    name: qsTr("Home console")
+                    names: qsTr("Home consoles")
+                }
+                ListElement {
+                    shortName : "handheld"
+                    name: qsTr("Handheld console")
+                    names: qsTr("Handheld consoles")
+                }
+                ListElement {
+                    shortName : "computer"
+                    name: qsTr("Computer")
+                    names: qsTr("Computers")
+                    visible: false
+                }
+                ListElement {
+                    shortName : "port"
+                    name: qsTr("Port")
+                    names: qsTr("Ports")
+                }
+                ListElement {
+                    shortName : "engine"
+                    name: qsTr("Engine")
+                    names: qsTr("Engines")
+                }
+                ListElement {
+                    shortName : "virtual"
+                    name: qsTr("Virtual system")
+                    names: qsTr("Virtual systems")
+                }
+            }
+
+            //FILTERING for Group of systems to display (Display only group if not empty)
+            SortFilterProxyModel {
+                id: groupsDisplayed
+                sourceModel: typeOfSystems
+                delayed: true //to avoid loop binding
+                filters:[
+                    //to search i fany collection exists for this type of system
+                    ExpressionFilter {
+                        enabled: settings.SystemsGroupDisplay !== "No"
+                        expression:{
+                            //to avoid to check collections if undefined
+                            if(model.shortName === 'undefined') return false;
+                            //console.log("model.shortName : ",model.shortName);
+                            //console.log("api.collections.count: ",api.collections.count);
+                            for(var i = 0;i <= api.collections.count; i++)
+                            {
+                                if(api.collections.get(i) !== null){
+                                    if(api.collections.get(i).type === model.shortName){
+                                        //console.log("api.collections.get(i).type : ", api.collections.get(i).type)
+                                        return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                    }
+                ]
+            }
+
+            model: groupsDisplayed
+
+            delegate: Rectangle {
+                id:rectangleGroupLogo
+                property bool selected: ListView.isCurrentItem && grouplist.focus
+                width: grouplist.width / parseFloat(designs.NbGroupLogos)
+                height: grouplist.height
+                color: "transparent"
+                property string shortName: { //that's short name of group, not of collections !!!
+                    //console.log("typeOfSystems.get(ListView.currentIndex).shortName",typeOfSystems.get(ListView.currentIndex).shortName);
+                    //console.log("model.shortName", model.shortName);
+                    return model.shortName
+                }
+
+                Image {
+                    id: groupBackground
+                    visible: (designs.GroupsListBackground !== "No") ? true : false
+                    height: rectangleGroupLogo.height
+                    width: rectangleGroupLogo.width
+                    fillMode: Image.PreserveAspectCrop
+                    asynchronous: true
+                    smooth: true
+                    opacity: 1
+                    z:-1
+                    source:{
+                        if(designs.GroupsListBackground === "Custom"){
+                            // for {region} & {shortname} tags
+                            return mainModel.processPathExpression(designs.GroupsListBackgroundPathExpression, model)
+                        }
+                        else return "";
+                    }
+                }
+
+                onSelectedChanged: {
+                    //console.log("Delegate::onSelectedChanged : ",selected)
+
+                    //reset index saved if selected changed during browsing in groups
+                    if(selected && grouplist.selected){
+                        platformlist.currentIndex = 0;
+                        platformlist.savedIndex = 0;
+                        searchTerm = "";
+                    }
+
+                    if(selected && (designs.GroupMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           playGroupMusic.play();
+                        }
+                        else{
+                           playGroupMusic.stop();
+                        }
+                    }
+                    else{
+                        playGroupMusic.stop();
+                    }
+                }
+
+                onActiveFocusChanged: {
+                    //console.log("Focus changed to " + focus)
+                    //console.log("Active Focus changed to " + activeFocus)
+                    if(selected && (designs.GroupMusicSource !== "No")){
+                        if(activeFocus && focus){
+                           playGroupMusic.play();
+                        }
+                        else{
+                            playGroupMusic.stop();
+                        }
+                    }
+                    else{
+                        playGroupMusic.stop();
+                    }
+                }
+
+                Audio {
+                    id: playGroupMusic
+                    loops: Audio.Infinite
+                    source: {
+                        if (designs.GroupMusicSource === "Custom") {
+                            if (model.shortName !=="imageviewer"){
+                                return mainModel.processPathExpression(designs.GroupMusicPathExpression,model)
+                            }
+                            else return "";
+                        }
+                        else if(designs.GroupMusicSource !== "No") {
+                            return "";
+                        }
+                        else return "";
+                    }
+                }
+
+                Image {
+                    id: grouplogo
+                    height: parent.height * (parseFloat(designs.GroupLogoRatio)/100)
+                    width: parent.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: {
+                        if (designs.GroupLogoSource === "Custom"){
+                            // Able to manage {region} & {shortname} tags
+                            var result = mainModel.processPathExpression(designs.GroupLogoPathExpression,model)
+                            return result;
+                        }
+                        else if(designs.GroupLogoSource !== "No"){
+                            if(settings.SystemLogoStyle === "White")
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(model.shortName) + ".png";
+                            }
+                            else
+                            {
+                                return "../assets/images/logospng/" + Utils.processPlatformName(model.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                            }
+                        }
+                    }
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    opacity: selected ? 1 : (designs.NbGroupLogos === "1" ? 0.0 : 0.3)
+                    scale: selected ? 0.9 : 0.8
+                    Behavior on scale { NumberAnimation { duration: 100 } }
+                    onStatusChanged: {
+                        //Image.Null - no image has been set
+                        //Image.Ready - the image has been loaded
+                        //Image.Loading - the image is currently being loaded
+                        //Image.Error - an error occurred while loading the image
+                        //console.log('Loaded: onStatusChanged Image source', source);
+                        //console.log('Loaded: onStatusChanged Image status', status);
+                        //console.log('Loaded: onStatusChanged sourceSize =', sourceSize);
+                        //console.log('Loaded: onStatusChanged sourceSize.height =', sourceSize.height);
+                        if (status === Image.Ready) {
+                            //OK do nothing, loading ok, image exists
+                        }
+                        else if (status === Image.Error){
+                            //change source in case of error with custom logo
+                            if (designs.GroupLogoSource !== "Default"){
+                                //if custom logo, we are trying to load without region
+                                source = mainModel.processPathExpressionNoRegion(designs.GroupLogoPathExpression,model)
+                            }
+                        }
+                    }
+                }
+
+                Text {
+                    id: grouptitle
+                    text: {
+                        return (groupSelected.count + " " + ((groupSelected.count > 1) ? model.names + api.tr : model.name + api.tr));
+                    }
+                    color: theme.text
+                    font {
+                        family: subtitleFont.name
+                        pixelSize: vpx(12)
+                        bold: true
+                    }
+
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    anchors.top: grouplogo.bottom
+
+                    width: parent.width
+
+                    opacity: designs.NbGroupLogos === "1" ?  0.0 : 0.2
+                    visible: (settings.AlwaysShowTitles === "Yes") || selected
+                }
+
+                Text {
+                    id: groupname
+
+                    text: model.name
+                    anchors { fill: parent; margins: vpx(10) }
+                    color: theme.text
+                    opacity: selected ? 1 : 0.2
+                    Behavior on opacity { NumberAnimation { duration: 100 } }
+                    font.pixelSize: vpx(18)
+                    font.family: subtitleFont.name
+                    font.bold: true
+                    style: Text.Outline; styleColor: theme.main
+                    visible: grouplogo.status === Image.Error ? ((designs.NbGroupLogos === "1") ? selected : true) : false
+                    anchors.centerIn: parent
+                    elide: Text.ElideRight
+                    wrapMode: Text.WordWrap
+                    lineHeight: 0.8
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: { sfxNav.play(); mainList.currentIndex = grouplist.ObjectModel.index; grouplist.savedIndex = index; grouplist.currentIndex = index; }
+                    onExited: {}
+                    onClicked: {
+                        if (selected)
+                        {
+                            mainList.currentIndex = grouplist.ObjectModel.index + 1;
+                        } else {
+                            mainList.currentIndex = grouplist.ObjectModel.index;
+                        }
+                    }
+                }
+            }
+
+            // List specific input
+            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
+            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex(); savedIndex = grouplist.currentIndex; currentGroupIndex = savedIndex; currentCollectionIndex = 0;}
+            Keys.onDownPressed: { sfxNav.play();
+                                  if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                                      if(settings.SystemsGroupDisplay === "same slot") {
+                                          mainList.currentIndex = platformlist.ObjectModel.index + 2; //to avoid to select system list
+                                      }
+                                      else mainList.currentIndex = grouplist.ObjectModel.index + 1;
+                                  }
+            }
+            Keys.onPressed: {
+                if (!viewIsLoading){
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                            if(settings.SystemsGroupDisplay === "same slot") {
+                                grouplist.height = 0;
+                                grouplist.visible = false;
+                            }
+                            mainList.currentIndex = platformlist.ObjectModel.index;
+                            //to force update of display if needed
+                            platformlist.selected = false;
+                            platformlist.selected = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Collections list with systems
+        ListView {
+            id: platformlist
+
+            //FILTERING collections to display by group & SORTERING collections to sort by name, releasedate or manufacturer
+            SortFilterProxyModel {
+                id: groupSelected
+                sourceModel: api.collections
+                delayed: true //to avoid loop binding
+                filters:[ValueFilter { roleName: "type"; value: groupsDisplayed.get(grouplist.currentIndex !== -1 ? grouplist.currentIndex : grouplist.savedIndex).shortName; enabled: settings.SystemsGroupDisplay !== "No"}
+                ]
+                sorters:[RoleSorter { roleName: settings.SortSystemsBy; sortOrder: Qt.AscendingOrder; enabled: true},
+                         RoleSorter { roleName: settings.SortSystemsSecondlyBy; sortOrder: Qt.AscendingOrder; enabled: settings.SortSystemsBy !== settings.SortSystemsSecondlyBy}
+                ]
+            }
+
+            model: groupSelected
+
+            property bool selected : ListView.isCurrentItem
+            property int myIndex: ObjectModel.index
+            width: appWindow.width
+
+            height: (settings.SystemsGroupDisplay !== "same slot") ? appWindow.height * (parseFloat(designs.SystemsListRatio)/100) : 0
+            visible: (settings.SystemsGroupDisplay !== "same slot") ? true : false
+
+            onSelectedChanged: {
+                //console.log("platformlist::onSelectedChanged : ", selected);
+                //console.log("platformlist::onSelectedChanged - currentIndex: ", currentIndex);
+                //console.log("platformlist::onSelectedChanged - settings.SystemsGroupDisplay : ",settings.SystemsGroupDisplay);
+                //console.log("platformlist::onSelectedChanged - grouplist.visible : ",grouplist.visible);
+                //console.log("platformlist::onSelectedChanged - grouplist.selected : ",grouplist.selected);
+                //console.log("platformlist::onSelectedChanged - grouplist.height : ",grouplist.height);
+                if(designs.SystemsListPosition !== "No"){
+                    if (settings.SystemsGroupDisplay !== "same slot"){
+                        platformlist.visible = true;
+                        platformlist.height = appWindow.height * (parseFloat(designs.SystemsListRatio)/100);
+                    }
+                    else if (platformlist.selected === true && grouplist.visible === false){ //(grouplist.selected === false)
+                        platformlist.visible = true;
+                        platformlist.height = appWindow.height * (parseFloat(designs.SystemsListRatio)/100);
+                    }
+                    else {
+                        platformlist.visible = false;
+                        platformlist.height = 0;
+                    }
+                }
+                else{
+                    platformlist.visible = false;
+                    platformlist.height = 0;
+                }
+                //console.log("platformlist::onSelectedChanged - platformlist.height : ",platformlist.height);
+                //console.log("platformlist::onSelectedChanged - platformlist.visible : ",platformlist.visible);
+            }
+
+            focus: (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  true : false
+
+            enabled: visible
+
+            //ok without group but with sorting, need additional fix for groups due to loading of platformlist in parralel of grouplist
+            property int savedIndex : (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  storedHomeSecondaryIndex : 0
+
+            anchors {
+                left: parent.left;
+                right: parent.right;
+            }
+            spacing: vpx(12)
+            orientation: ListView.Horizontal
+            preferredHighlightBegin: vpx(0)
+            preferredHighlightEnd: parent.width - vpx(60)
+            highlightRangeMode: ListView.ApplyRange
+            snapMode: ListView.SnapOneItem
+            highlightMoveDuration: 100
+            keyNavigationWraps: true
+
+            onActiveFocusChanged: {
+                //console.log("platformlist::onActiveFocusChanged : ",activeFocus);
+                //console.log("platformlist::onActiveFocusChanged - currentIndex: ",platformlist.currentIndex);
+                //console.log("platformlist::onActiveFocusChanged - savedIndex: ",platformlist.savedIndex);
+                //console.log("platformlist::onActiveFocusChanged - storedHomeSecondaryIndex: ",storedHomeSecondaryIndex);
+
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if(platformlist.currentIndex !== platformlist.savedIndex){
+                    if(platformlist.savedIndex === storedHomeSecondaryIndex){
+                        platformlist.currentIndex = storedHomeSecondaryIndex;
+                    }
+                }
+
+            }
+
+            onFocusChanged: {
+                //console.log("platformlist::onFocusChanged - focus : ",focus);
+                //console.log("platformlist::onFocusChanged - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("platformlist::onFocusChanged - savedIndex : ",savedIndex);
+                if (focus){
+                    if(savedIndex < platformlist.count){
+                        currentIndex = savedIndex;
+                    }
+                    else{
+                        currentIndex = 0;
+                        savedIndex = 0;
+                    }
+                }
+                else {
+                    savedIndex = currentIndex;
+                    currentIndex = -1;
                     if(designs.SystemMusicSource !== "No") playMusic.stop();
                 }
             }
 
-            Component.onCompleted: positionViewAtIndex(savedIndex, ListView.End)
+            Component.onCompleted:{
+                //console.log("platformlist::Component.onCompleted - grouplist.currentIndex (before) : ",grouplist.currentIndex);
+                //console.log("platformlist::Component.onCompleted - platformlist.ObjectModel.index : ",platformlist.ObjectModel.index);
+                //console.log("platformlist::Component.onCompleted - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+                //console.log("platformlist::Component.onCompleted - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+                //console.log("platformlist::Component.onCompleted - currentCollectionIndex : ",currentCollectionIndex);
+                //console.log("platformlist::Component.onCompleted - savedIndex (before): ",savedIndex);
+                savedIndex = (storedHomePrimaryIndex === platformlist.ObjectModel.index) ?  storedHomeSecondaryIndex : 0
+                //console.log("platformlist::Component.onCompleted - savedIndex (after): ",savedIndex);
+                //console.log("platformlist::Component.onCompleted - currentIndex (before): ",currentIndex);
+                currentIndex = savedIndex;
+                //console.log("platformlist::Component.onCompleted - currentIndex (before): ",currentIndex);
+                positionViewAtIndex(currentIndex, ListView.End)
 
-            model: api.collections//Utils.reorderCollection(api.collections);
+            }
 
             delegate: Rectangle {
                 id:rectangleLogo
-                property bool selected: ListView.isCurrentItem
+                property bool selected: ListView.isCurrentItem && platformlist.focus
                 width: platformlist.width / parseFloat(designs.NbSystemLogos)
                 height: platformlist.height
                 color: "transparent"
@@ -842,7 +1316,11 @@ FocusScope {
 
 
                 onSelectedChanged: {
-                    //console.log("selected : ",selected)
+                    //console.log("platformlist::delegate onSelectedChanged : ",selected)
+                    //console.log("platformlist::delegate onSelectedChanged index : ",index)
+                    //console.log("platformlist::delegate onSelectedChanged - currentIndex: ",platformlist.currentIndex);
+                    //console.log("platformlist::delegate onSelectedChanged - grouplist.currentIndex (after) : ",grouplist.currentIndex);
+
                     if(selected && (designs.SystemMusicSource !== "No")){
                         if(activeFocus && focus){
                            if (modelData.shortName !=="imageviewer") playMusic.play();
@@ -857,7 +1335,8 @@ FocusScope {
                 }
 
                 onActiveFocusChanged: {
-                    //console.log("Focus changed to " + focus)
+                    //console.log("platformlist::delegate onActiveFocusChanged : ",activeFocus);
+                    //console.log("platformlist::delegate onActiveFocusChanged - currentIndex: ",platformlist.currentIndex);
                     //console.log("Active Focus changed to " + activeFocus)
                     if(selected && (designs.SystemMusicSource !== "No")){
                         if(activeFocus && focus){
@@ -911,7 +1390,7 @@ FocusScope {
                                 return "../assets/images/logospng/" + Utils.processPlatformName(modelData.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                             }
                         }
-                    }                      
+                    }
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
                     smooth: true
@@ -961,8 +1440,14 @@ FocusScope {
                     text: {
                         if(modelData.name === "Screenshots")
                             return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("screenshots") + api.tr : " " + qsTr("screenshot") + api.tr));
-                        else
-                            return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                        else{
+                            //display release date if sorted by that
+                            if(settings.SortSystemsBy === "releasedate" || settings.SortSystemsSecondlyBy === "releasedate" ){
+                                return (modelData.releasedate  + " - " + modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+
+                            }
+                            else return (modelData.games.count + ((modelData.games.count > 1) ? " " + qsTr("games") + api.tr : " " + qsTr("game") + api.tr));
+                        }
                     }
                     color: theme.text
                     font {
@@ -1013,7 +1498,11 @@ FocusScope {
                     onClicked: {
                         if (selected)
                         {
-                            currentCollectionIndex = index;
+                            //to have the direct access to collection if needed for other views
+                            currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                            //to keep position in menu after game launching
+                            storedHomeSecondaryIndex = platformlist.currentIndex;
+                            storedHomePrimaryIndex = platformlist.ObjectModel.index;
                             softwareScreen();
                         } else {
                             mainList.currentIndex = platformlist.ObjectModel.index;
@@ -1025,17 +1514,43 @@ FocusScope {
             }
 
             // List specific input
-            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
-            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex() }
+            Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex();}
+            Keys.onRightPressed: { sfxNav.play(); incrementCurrentIndex();}
             Keys.onPressed: {
-				if (!viewIsLoading){
-					// Accept
-					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
-						event.accepted = true;
-						currentCollectionIndex = platformlist.currentIndex;
-						softwareScreen();
-					}
-				}
+                if (!viewIsLoading){
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        //to have the direct access to collection if needed for other views
+                        currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                        //console.log("platformlist::Keys.onPressed - platformlist.currentIndex : ",platformlist.currentIndex);
+                        //console.log("platformlist::Keys.onPressed - currentCollectionIndex : ",currentCollectionIndex);
+                        //to keep position in menu after game launching
+                        storedHomeSecondaryIndex = platformlist.currentIndex;
+                        storedHomePrimaryIndex = platformlist.ObjectModel.index;
+                        //console.log("platformlist::Keys.onPressed - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+                        //console.log("platformlist::Keys.onPressed - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+                        softwareScreen();
+                    }
+                    // Cancel (only when Groups are activated)
+                    if (api.keys.isCancel(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        if(designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay !== "No"){
+                            //to have the direct access to collection if needed
+                            currentCollectionIndex = groupSelected.mapToSource(platformlist.currentIndex);
+                            savedIndex = currentCollectionIndex;
+                            //console.log("SystemsGroupDisplay: ", settings.SystemsGroupDisplay);
+                            if(settings.SystemsGroupDisplay === "same slot") {
+                                platformlist.height = 0;
+                                platformlist.visible = false;
+                            }
+                            mainList.currentIndex = grouplist.ObjectModel.index;
+                            //to force update of display if needed
+                            grouplist.selected = false;
+                            grouplist.selected = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -1237,7 +1752,7 @@ FocusScope {
                                 //process path/url for system/region selected if needed
                                 pathExpression = mainModel.processPathExpression(designs.SystemDetailsHardwarePathExpression, modelData);
                                 //process path/url for screenscraper parameters if needed
-                                source = pmainModel.rocessPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
+                                source = mainModel.processPathExpressionScreenScraper(pathExpression, modelData,regionIndexUsed);
                                 //still to study how to manage case modelData.screenScraperId ==="0" -> screenshots case
                                 //console.log("new tentative to download media from this url: ", "https://www.screenscraper.fr/image.php?plateformid=" + modelData.screenScraperId + "&media=photo&region=" + regionSSModel.get(regionIndexUsed).region + "&num=&version=&maxwidth=640&maxheight=");
                                 //change source in case of error
@@ -1412,9 +1927,46 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //if(typeof(currentGame) !== "undefined") console.log("list1 - onActiveFocusChanged - currentGame : ",currentGame.title);
+                //console.log("list1 - onActiveFocusChanged - currentList.savedIndex : ",currentList.savedIndex);
+                //console.log("list1 - onActiveFocusChanged - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+                //console.log("list1 - onActiveFocusChanged - currentList.ObjectModel.index : ",currentList.ObjectModel.index);
+                //console.log("list1 - onActiveFocusChanged - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                        //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//second list
@@ -1444,9 +1996,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//third list
@@ -1476,9 +2054,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//fourth list
@@ -1508,9 +2112,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//fifth list
@@ -1540,9 +2170,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//sixth list
@@ -1572,9 +2228,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//seventh list
@@ -1604,9 +2286,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//eighth list
@@ -1636,9 +2344,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//nineth list
@@ -1668,9 +2402,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
 
 		//tenth list
@@ -1700,9 +2460,35 @@ FocusScope {
             onActivateSelected: {
 				videoToStop = true;
 				storedHomeSecondaryIndex = currentIndex;
+                storedHomePrimaryIndex = currentList.ObjectModel.index;
 			}
             onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
             onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+            onActiveFocusChanged: {
+                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                    if(typeof(currentGame) !== "undefined"){
+                        //check if same rom file or not
+                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                            //In this case, we are searching the game in collection to an other Index
+                            for(var i = 0;i < collection.search.games.count ;i++){
+                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                    currentList.savedIndex = i;
+                                    currentList.currentIndex = i;
+                                    //and reset the stored index
+                                    storedHomeSecondaryIndex = -1;
+                                    return;
+                               }
+                            }
+                            //if currentGame is not in the list, we have to come back to zero in this case
+                            currentList.savedIndex = 0;
+                            currentList.currentIndex = 0;
+                            //and reset the stored index
+                            storedHomeSecondaryIndex = -1;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1719,17 +2505,21 @@ FocusScope {
         preferredHighlightEnd: parent.height - (helpMargin * 2)
         snapMode: ListView.SnapOneItem
         keyNavigationWraps: true
-        currentIndex: storedHomePrimaryIndex
 
         cacheBuffer: 1000
         footer: Item { height: helpMargin }
 
         Component.onCompleted:{
-            //to manage focus
-            if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
-            if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
-            if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 2;
-            if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 3;
+            if((storedHomePrimaryIndex === 0) && (storedHomeSecondaryIndex === 0) && (lastState.length === 0)){
+                //to manage focus and selection for first time
+                if(designs.InitialPosition === "Video Banner") storedHomePrimaryIndex = 0;
+                if(designs.InitialPosition === "Favorites Banner") storedHomePrimaryIndex = 1;
+                if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2;
+                if(designs.InitialPosition === "Groups list" && settings.SystemsGroupDisplay === "No" ) storedHomePrimaryIndex = 3; //to select systems list in this case
+                if(designs.InitialPosition === "Systems list") storedHomePrimaryIndex = 3;
+                if(designs.InitialPosition === "Systems list" && settings.SystemsGroupDisplay !== "No" ) storedHomePrimaryIndex = 2; //to select groups list in this case
+                if(designs.InitialPosition === "System Details") storedHomePrimaryIndex = 4;
+            }
             //if you add new component, please put existing index/order before to change position at this place
             mainList.currentIndex = storedHomePrimaryIndex;
         }
@@ -1785,14 +2575,44 @@ FocusScope {
     property int counter: 0
     Timer {
         id: helpBarTimer
-        interval: 1000 // Run the timer every seconds
+        interval: 500 // Run the timer every seconds
         repeat: true
         running: true
         triggeredOnStart: true
         onTriggered: {
-            //to have a solution to add netplay dynamicly
-            if(api.internal.recalbox.getBoolParameter("global.netplay") && (gridviewHelpModel.count < 4)) gridviewHelpModel.append({name:"Netplay",button:"netplay"});
-            else if(!api.internal.recalbox.getBoolParameter("global.netplay") && gridviewHelpModel.count >= 4) gridviewHelpModel.remove(3);
+            //for netplay help button
+            var found = false
+            var netplay = api.internal.recalbox.getBoolParameter("global.netplay") === true ? true : false;
+            var item;
+            //loop to find netplay
+            for(var i = 0;i < gridviewHelpModel.count;i++){
+                item = gridviewHelpModel.get(i);
+                if(item.button === "netplay"){
+                    if(netplay === false){
+                        gridviewHelpModel.remove(i);
+                    }
+                    found = true;
+                }
+            }
+            if(found === false && netplay === true){
+                gridviewHelpModel.append({name:qsTr("Netplay"),button:"netplay"});
+            }
+            //for back help button
+            found = false
+            var back = (designs.GroupsListPosition !== "No" && settings.SystemsGroupDisplay === "same slot" && platformlist.selected === true && platformlist.visible === true && platformlist.focus === true) ? true : false
+            //loop to find back
+            for(var j=0;j < gridviewHelpModel.count;j++){
+                item = gridviewHelpModel.get(j);
+                if(item.button === "cancel"){
+                    if(back === false){
+                        gridviewHelpModel.remove(j);
+                    }
+                    found = true;
+                }
+            }
+            if(found === false && back === true){
+                gridviewHelpModel.append({name:qsTr("Group"),button:"cancel"});
+            }
         }
     }
 

@@ -16,6 +16,7 @@ TRANSLATIONS += \
 lupdate_only {
 SOURCES += \
 Dialogs/GenericOkCancelDialog.qml \
+Dialogs/GenericYesNoDialog.qml \
 Dialogs/Shade.qml \
 GameDetails/Button.qml \
 GameDetails/GameView.qml \
@@ -261,6 +262,11 @@ DISTFILES += \
     assets/images/logospng/apple2gs_carbon.png \
     assets/images/logospng/apple2gs_color.png \
     assets/images/logospng/apple2gs_steel.png \
+    assets/images/logospng/arcade.png \
+    assets/images/logospng/arcade_black.png \
+    assets/images/logospng/arcade_carbon.png \
+    assets/images/logospng/arcade_color.png \
+    assets/images/logospng/arcade_steel.png \
     assets/images/logospng/atari2600.png \
     assets/images/logospng/atari2600_black.png \
     assets/images/logospng/atari2600_carbon.png \
@@ -315,6 +321,16 @@ DISTFILES += \
     assets/images/logospng/colecovision_carbon.png \
     assets/images/logospng/colecovision_color.png \
     assets/images/logospng/colecovision_steel.png \
+    assets/images/logospng/computer.png \
+    assets/images/logospng/computer_black.png \
+    assets/images/logospng/computer_carbon.png \
+    assets/images/logospng/computer_color.png \
+    assets/images/logospng/computer_steel.png \
+    assets/images/logospng/console.png \
+    assets/images/logospng/console_black.png \
+    assets/images/logospng/console_carbon.png \
+    assets/images/logospng/console_color.png \
+    assets/images/logospng/console_steel.png \
     assets/images/logospng/daphne.png \
     assets/images/logospng/daphne_black.png \
     assets/images/logospng/daphne_carbon.png \
@@ -338,6 +354,11 @@ DISTFILES += \
     assets/images/logospng/easyrpg_carbon.png \
     assets/images/logospng/easyrpg_color.png \
     assets/images/logospng/easyrpg_steel.png \
+    assets/images/logospng/engine.png \
+    assets/images/logospng/engine_black.png \
+    assets/images/logospng/engine_carbon.png \
+    assets/images/logospng/engine_color.png \
+    assets/images/logospng/engine_steel.png \
     assets/images/logospng/fbneo.png \
     assets/images/logospng/fbneo_black.png \
     assets/images/logospng/fbneo_color.png \
@@ -381,6 +402,11 @@ DISTFILES += \
     assets/images/logospng/gx4000_carbon.png \
     assets/images/logospng/gx4000_color.png \
     assets/images/logospng/gx4000_steel.png \
+    assets/images/logospng/handheld.png \
+    assets/images/logospng/handheld_black.png \
+    assets/images/logospng/handheld_color.png \
+    assets/images/logospng/handheld_steel.png \
+    assets/images/logospng/handlheld_carbon.png \
     assets/images/logospng/imageviewer.png \
     assets/images/logospng/imageviewer_black.png \
     assets/images/logospng/imageviewer_carbon.png \
@@ -685,6 +711,11 @@ DISTFILES += \
     assets/images/logospng/videopacplus_carbon.png \
     assets/images/logospng/videopacplus_color.png \
     assets/images/logospng/videopacplus_steel.png \
+    assets/images/logospng/virtual.png \
+    assets/images/logospng/virtual_black.png \
+    assets/images/logospng/virtual_carbon.png \
+    assets/images/logospng/virtual_color.png \
+    assets/images/logospng/virtual_steel.png \
     assets/images/logospng/virtualboy.png \
     assets/images/logospng/virtualboy_black.png \
     assets/images/logospng/virtualboy_carbon.png \

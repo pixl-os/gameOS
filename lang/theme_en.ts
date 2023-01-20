@@ -118,6 +118,17 @@
     </message>
 </context>
 <context>
+    <name>GenericYesNoDialog</name>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GridViewMenu</name>
     <message>
         <source>Back</source>
@@ -681,6 +692,38 @@
         <source>Grid,Vertical List</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Sort systems by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>manufacturer,release date,name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort systems secondly by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>release date,name,manufacturer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Systems group display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No,same slot,2 slots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
@@ -718,6 +761,70 @@
     </message>
     <message>
         <source>Try adding some favorite games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arcade system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arcade systems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home consoles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handheld console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handheld consoles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Virtual systems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -210,24 +210,33 @@ FocusScope {
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
     ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10; enabled: embedded ? false : true }
 
+    //function used by mediaArray() to add only new assets in mediaList
+    function addNewAssetOnly(asset,mediaList){
+        asset.forEach(function(v){
+            const found = mediaList.indexOf(v);
+            if(found === -1) mediaList.push(v);
+        });
+    }
+
     // Combine the video and the screenshot arrays into one
     function mediaArray() {
         let mediaList = [];
         //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
         if (game) {
-            game.assets.videoList.forEach(v => mediaList.push(v));
-            game.assets.manualList.forEach(v => mediaList.push(v));
-            game.assets.marqueeList.forEach(v => mediaList.push(v));
-            game.assets.bezelList.forEach(v => mediaList.push(v));
-            game.assets.backgroundList.forEach(v => mediaList.push(v));
-            game.assets.boxBackList.forEach(v => mediaList.push(v));
-            game.assets.boxFrontList.forEach(v => mediaList.push(v));
-            game.assets.boxFullList.forEach(v => mediaList.push(v));
-            game.assets.boxSpineList.forEach(v => mediaList.push(v));
-            game.assets.logoList.forEach(v => mediaList.push(v));
-            game.assets.titlescreenList.forEach(v => mediaList.push(v));
-            game.assets.mapsList.forEach(v => mediaList.push(v));
-            game.assets.musicList.forEach(v => mediaList.push(v));
+            addNewAssetOnly(game.assets.videoList,mediaList);
+            addNewAssetOnly(game.assets.manualList,mediaList);
+            addNewAssetOnly(game.assets.marqueeList,mediaList);
+            addNewAssetOnly(game.assets.bezelList,mediaList);
+            addNewAssetOnly(game.assets.cartridgeList,mediaList);
+            addNewAssetOnly(game.assets.boxFrontList,mediaList);
+            addNewAssetOnly(game.assets.boxBackList,mediaList);
+            addNewAssetOnly(game.assets.boxFullList,mediaList);
+            addNewAssetOnly(game.assets.boxSpineList,mediaList);
+            addNewAssetOnly(game.assets.logoList,mediaList);
+            addNewAssetOnly(game.assets.backgroundList,mediaList);
+            addNewAssetOnly(game.assets.titlescreenList,mediaList);
+            addNewAssetOnly(game.assets.mapsList,mediaList);
+            addNewAssetOnly(game.assets.musicList,mediaList);
         }
         return mediaList;
     }
@@ -1306,8 +1315,9 @@ FocusScope {
         anchors {
             left: parent.left; leftMargin: vpx(70)
             right: parent.right
-            top: parent.top; topMargin: content.currentIndex === 0 ? vpx(450 + 75) : header.height
-            bottom: parent.bottom; bottomMargin: vpx(150)
+            top: parent.top
+            topMargin: content.currentIndex === 0 ? (details.height + header.height) + vpx(root.height * (parseFloat("8%")/100)) : header.height
+            bottom: parent.bottom; bottomMargin: + vpx(root.height * (parseFloat("6%")/100))
         }
         model: extrasModel
         focus: true
@@ -1378,6 +1388,7 @@ FocusScope {
         onClose: closeMedia();
     }
     Keys.onReleased: {
+        //console.log("Keys.onReleased::hotkeyPressed : ", hotkeyPressed);
         // Guide
         if (api.keys.isGuide(event) && !event.isAutoRepeat) {
             hotkeyPressed = false;
@@ -1385,12 +1396,13 @@ FocusScope {
             return;
         }
         //to ignore keys if hotkey still pressed
-        if(hotkeyPressed) return;
+        if(hotkeyPressed === true) return;
     }
     // Input handling
     Keys.onPressed: {
         //console.log("api.launchedgame : ",api.launchedgame);
         //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+        //console.log("Keys.onPressed::hotkeyPressed : ", hotkeyPressed);
         if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
             //console.log("api.launchedgame.path : ",api.launchedgame.path);
             event.accepted = true;
@@ -1398,7 +1410,7 @@ FocusScope {
             return;
         }
         //to ignore keys if hotkey still pressed
-        if(hotkeyPressed) return;
+        if(hotkeyPressed === true) return;
         // Guide
         if (api.keys.isGuide(event) && !event.isAutoRepeat) {
             hotkeyPressed = true;
