@@ -701,11 +701,6 @@ FocusScope {
     }
 
 	Component.onCompleted: {
-
-        //to fix that we are in settings
-        //console.log("SettingsScreeen Component.onCompleted");
-        settingsUnderProgress = true;
-
         if(api.internal.recalbox.getBoolParameter("theme.designer")) settingsList.model = designerArr[pagelist.currentIndex].listmodel;
         else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
 
@@ -855,9 +850,6 @@ FocusScope {
                     //propose display of dialog box only with pegasus upper than 0.1.0
                     if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                     else{
-                        //reset settings changed flags
-                        settingsChanged = false;
-                        settingsUnderProgress = false;
                         previousScreen();
                     }
                 }
@@ -959,9 +951,6 @@ FocusScope {
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    //reset settings changed flags
-                    settingsChanged = false;
-                    settingsUnderProgress = false;
                     previousScreen();
                 }
             }
@@ -1008,9 +997,6 @@ FocusScope {
                     //propose display of dialog box only with pegasus upper than 0.1.0
                     if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                     else{
-                        //reset settings changed flags
-                        settingsChanged = false;
-                        settingsUnderProgress = false;
                         previousScreen();
                     }
                 }
@@ -1128,9 +1114,6 @@ FocusScope {
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    //reset settings changed flags
-                    settingsChanged = false;
-                    settingsUnderProgress = false;
                     previousScreen();
                 }
             }
@@ -1297,9 +1280,6 @@ FocusScope {
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    //reset settings changed flags
-                    settingsChanged = false;
-                    settingsUnderProgress = false;
                     previousScreen();
                 }
             }
@@ -1720,9 +1700,6 @@ FocusScope {
     Connections {
         target: settingsChangedDialogBoxLoader.item
         function onAccept() {
-            //reset settings changed flags
-            settingsChanged = false;
-            settingsUnderProgress = false;
             //console.log("typeof(pegasusReloadTheme)",typeof(pegasusReloadTheme));
             if(typeof(pegasusReloadTheme) !== "undefined"){ //check if pegasus contains new function or not
                 //reload theme - need pegsus 0.1.1 or upper
@@ -1735,9 +1712,6 @@ FocusScope {
             }
         }
         function onCancel() {
-            //reset settings changed flags
-            settingsChanged = false;
-            settingsUnderProgress = false;
             //come back to previous page
             previousScreen();
         }

@@ -32,7 +32,7 @@ Item {
         id: publisherGames
         delayed: true
         sourceModel: {
-            if(settingsUnderProgress) return null;
+            if(settingsChanged) return null;
             else return api.allGames;
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }

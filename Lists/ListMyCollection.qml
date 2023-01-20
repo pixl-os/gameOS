@@ -9,10 +9,13 @@ import SortFilterProxyModel 0.2
 Item {
     id: root
 
+    property bool cacheFound: false
+
     readonly property var games: gamesMyCollection
 	property int max: gamesMyCollection.count;
     function currentGame(index) {
-		return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
+        if(gamesMyCollection.sourceModel !== null) return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
+        else return null;
 	}	
 
 	//name of the collection
@@ -79,9 +82,9 @@ Item {
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-            if(settingsUnderProgress) return null;
+            if(settingsChanged) return null;
             //check if any cache memory exist with this name of collection
-            if(true){
+            if(false){
                 cacheFound = true;
                 return null;
             }
@@ -109,8 +112,10 @@ Item {
 			RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
 			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
 			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
-		//sorters are slow that why it is deactivated for the moment
-        //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
+            //sorters are slow that why it is deactivated for the moment
+            //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
+            //sorters: RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: true}
+            sorters: RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: true}
     }
 
     property var collection: {

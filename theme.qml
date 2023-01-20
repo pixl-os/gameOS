@@ -218,9 +218,6 @@ FocusScope {
     property var lastGameIndex: []
     property var gameToLaunch
 
-    //to know if SettingsView is opened
-    property bool settingsUnderProgress: false
-
     // Reset the stored game index when changing collections
     onCurrentCollectionIndexChanged: {
         storedCollectionGameIndex = 0
@@ -627,7 +624,10 @@ FocusScope {
 
     function previousScreen() {
         sfxBack.play();
-    
+
+        //reset here settings flag in all cases
+        settingsChanged = false;
+
         if (state === lastState[lastState.length-1])
         {    
             popLastGame();

@@ -62,15 +62,15 @@ FocusScope {
 				Loader.Loading - the QML source is currently being loaded
 				Loader.Error - an error occurred while loading the QML source
 				*/
-				if (listLoader.status === Loader.Loading) {
-					if(!listLoader.measuring){
+                if (listLoader.status === Loader.Loading && !settingsChanged) {
+                    if(!listLoader.measuring){
                         viewLoadingText = qsTr("Loading Collection") + " " + (index + 1) + " ...";
 						console.time("listLoader - Collection " + (index + 1));
 						listLoader.measuring = true;
 					}
 				}
 
-				if (listLoader.status === Loader.Ready) {
+                if (listLoader.status === Loader.Ready && !settingsChanged) {
 					nbLoaderReady = nbLoaderReady + 1;
 					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
 					//console.log("listLoader.listType: ",listType);
@@ -97,7 +97,7 @@ FocusScope {
 						if (listType.includes("None")||(listType === "")||(listType === null)) listLoader.item.max = 0;
 						else listLoader.item.max = settings.ShowcaseColumns;
 					}
-					
+
 					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
@@ -106,7 +106,7 @@ FocusScope {
 					}
 				}
 			}
-			active: true;
+            active: true;
 		}
     }	
 

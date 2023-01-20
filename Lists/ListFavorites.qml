@@ -27,8 +27,8 @@ Item {
     SortFilterProxyModel {
         id: lastplayedFavorites
         sourceModel: {
-            if(settingsUnderProgress) return null;
-            return api.allGames;
+            if(settingsChanged) return null;
+            else return api.allGames;
         }
         filters: ValueFilter { roleName: "favorite"; value: true }
         sorters: RoleSorter { roleName: "lastPlayed"; sortOrder: Qt.DescendingOrder; }
