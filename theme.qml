@@ -624,7 +624,10 @@ FocusScope {
 
     function previousScreen() {
         sfxBack.play();
-    
+
+        //reset here settings flag in all cases
+        settingsChanged = false;
+
         if (state === lastState[lastState.length-1])
         {    
             popLastGame();

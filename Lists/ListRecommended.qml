@@ -32,7 +32,10 @@ Item {
     //FILTERING
     SortFilterProxyModel {
         id: gamesRecommended
-        sourceModel: api.allGames
+        sourceModel: {
+            if(settingsChanged) return null;
+            else return api.allGames;
+        }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
         filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },
             //RFU (not necessary finally): RegExpFilter { roleName: "title"; pattern: "^" + generateRandomLetter()  + "|" + "^" + generateRandomLetter()+ "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter() + "|" + "^" + generateRandomLetter(); caseSensitivity: Qt.CaseInsensitive; },

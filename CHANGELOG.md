@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 202a-mm-dd - v1.21
+## [pixL-master] - 2023-01-21 - v1.21
 - new features:
 	- add management of systems group activable in theme's general settings
 	- adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file (focus on ch
 	- display of 'release date' under systems logo when sorting use it.
 	- propose now to reload theme itself when settings changed
 	- remove limit on favorite displayed in banner
+	- 'My Collections' feature: 
+		- add internal new flag to avoid process all List of Collectiions during change of settings
+		- add filtering on several  systems as planned initially
 
 - fixes:
 	- improve back button usage in gameview and launchgame view
@@ -31,7 +34,8 @@ All notable changes to this project will be documented in this file (focus on ch
 	- avoid error when game is not yet set for highlight object
 	- save/restore searchTerm to be able to restore it after game session
 	- reset searchTerm when we change system or group
-
+	- avoid loading of collections during settings browsing
+	
 - translations: 
 	- done for new menus/helps/dialogbox
 

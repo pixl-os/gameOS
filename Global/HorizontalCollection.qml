@@ -86,7 +86,7 @@ FocusScope {
         currentIndex: focus ? savedIndex : -1
         Component.onCompleted: positionViewAtIndex(savedIndex, ListView.Visible)
 
-        model: typeof(search) !== "undefined" ? search.games : api.allGames
+        model: (typeof(search) !== "undefined" && search !== null) ? search.games : api.allGames
         delegate: DynamicGridItem {
             selected: ListView.isCurrentItem && collectionList.focus
             width: itemWidth

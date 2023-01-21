@@ -701,7 +701,6 @@ FocusScope {
     }
 
 	Component.onCompleted: {
-
         if(api.internal.recalbox.getBoolParameter("theme.designer")) settingsList.model = designerArr[pagelist.currentIndex].listmodel;
         else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
 
@@ -848,7 +847,11 @@ FocusScope {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    previousScreen();
+                    //propose display of dialog box only with pegasus upper than 0.1.0
+                    if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                    else{
+                        previousScreen();
+                    }
                 }
             }
         }
@@ -945,11 +948,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                //console.log("previousScreen();");
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    settingsChanged = false;
                     previousScreen();
                 }
             }
@@ -993,7 +994,11 @@ FocusScope {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    previousScreen();
+                    //propose display of dialog box only with pegasus upper than 0.1.0
+                    if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
+                    else{
+                        previousScreen();
+                    }
                 }
             }
         }
@@ -1106,11 +1111,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                //console.log("previousScreen();");
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    settingsChanged = false;
                     previousScreen();
                 }
             }
@@ -1274,11 +1277,9 @@ FocusScope {
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                 event.accepted = true;
-                //console.log("previousScreen();");
                 //propose display of dialog box only with pegasus upper than 0.1.0
                 if(settingsChanged && typeof(pegasusReloadTheme) !== "undefined") settingsChangedDialogBoxLoader.focus = true;
                 else{
-                    settingsChanged = false;
                     previousScreen();
                 }
             }
@@ -1699,8 +1700,6 @@ FocusScope {
     Connections {
         target: settingsChangedDialogBoxLoader.item
         function onAccept() {
-            //reset settings changed flag
-            settingsChanged = false;
             //console.log("typeof(pegasusReloadTheme)",typeof(pegasusReloadTheme));
             if(typeof(pegasusReloadTheme) !== "undefined"){ //check if pegasus contains new function or not
                 //reload theme - need pegsus 0.1.1 or upper
@@ -1713,8 +1712,6 @@ FocusScope {
             }
         }
         function onCancel() {
-            //reset settings changed flag
-            settingsChanged = false;
             //come back to previous page
             previousScreen();
         }

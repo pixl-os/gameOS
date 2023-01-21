@@ -9,10 +9,13 @@ import SortFilterProxyModel 0.2
 Item {
     id: root
 
+    property bool cacheFound: false
+
     readonly property var games: gamesMyCollection
 	property int max: gamesMyCollection.count;
     function currentGame(index) {
-		return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
+        if(gamesMyCollection.sourceModel !== null) return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
+        else return null;
 	}	
 
 	//name of the collection
@@ -79,20 +82,11 @@ Item {
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-			if (system !== ""){
-				for (var i = 0; i < api.collections.count; i++) {
-					//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
-					if (api.collections.get(i).shortName === system) {
-						//console.log("system: ",system);
-						return api.collections.get(i).games
-					}
-				}
-			}
-			//if not found
-			return api.allGames;
-		}
-	
+            if(settingsChanged) return null;
+            else return api.allGames;
+        }
         filters: [
+            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter} ,
 			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
 			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
 			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
@@ -104,8 +98,10 @@ Item {
 			RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
 			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
 			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
-		//sorters are slow that why it is deactivated for the moment
-        //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
+            //sorters are slow that why it is deactivated for the moment
+            //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
+            //sorters: RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: true}
+            sorters: RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: true}
     }
 
     property var collection: {
