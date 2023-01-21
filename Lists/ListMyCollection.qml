@@ -83,24 +83,10 @@ Item {
         id: gamesMyCollection
         sourceModel:{
             if(settingsChanged) return null;
-            //check if any cache memory exist with this name of collection
-            if(false){
-                cacheFound = true;
-                return null;
-            }
-			if (system !== ""){
-				for (var i = 0; i < api.collections.count; i++) {
-					//console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
-					if (api.collections.get(i).shortName === system) {
-						//console.log("system: ",system);
-						return api.collections.get(i).games
-					}
-				}
-			}
-			//if not found
-			return api.allGames;
-		}
+            else return api.allGames;
+        }
         filters: [
+            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter} ,
 			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
 			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
 			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
