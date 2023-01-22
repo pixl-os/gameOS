@@ -35,7 +35,8 @@ All notable changes to this project will be documented in this file (focus on ch
 	- save/restore searchTerm to be able to restore it after game session
 	- reset searchTerm when we change system or group
 	- avoid loading of collections during settings browsing
-	
+	- fix way to select type of collections by default + keep 3 collections only by default
+
 - translations: 
 	- done for new menus/helps/dialogbox
 
