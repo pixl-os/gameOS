@@ -36,7 +36,7 @@ FocusScope {
     property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
 
     // Pull in our custom lists and define
-    ListAllGames    { id: listNone;        max: 0 }
+    ListNone    { id: listNone;        max: 0 }
     ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
     ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
 
@@ -237,7 +237,7 @@ FocusScope {
 				qmlFileToUse = "../Lists/ListMyCollection.qml";
 				break;
 			case "None":
-				qmlFileToUse = "../Lists/ListAllGames.qml";
+                qmlFileToUse = "../Lists/ListNone.qml";
 				break;
 			default:
 				qmlFileToUse = "";
