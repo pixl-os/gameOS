@@ -63,9 +63,12 @@ Item {
 	//	"sega"
 	
     property string system: ""
-    property bool systemToFilter: (system === "") ? false : true
+    property bool systemToFilter: ((system === "") || !system.includes("|")) ? false : true
+
 	//example of system:
-	//	"nes|snes"
+    //	"nes|snes|gw"
+    //if only one word, the filter will be not activated
+    //we prefer to select collection in this case from sourceModel to improve performance of filtering/sorting
 	
     property string filename: ""
     property bool filenameToFilter: (filename === "") ? false : true
@@ -83,7 +86,18 @@ Item {
         id: gamesMyCollection
         sourceModel:{
             if(settingsChanged) return null;
-            else return api.allGames;
+            //check if any cache memory exist with this name of collection
+            if ((system !== "") && !systemToFilter){
+                for (var i = 0; i < api.collections.count; i++) {
+                    //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
+                    if (api.collections.get(i).shortName === system) {
+                        console.log("system: ",system);
+                        return api.collections.get(i).games
+                    }
+                }
+            }
+            //if not found or empty or systems should be filetr by regexx
+            return api.allGames;
         }
         filters: [
             RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter} ,
