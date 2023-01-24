@@ -72,7 +72,7 @@ FocusScope {
 
                 if (listLoader.status === Loader.Ready && !settingsChanged) {
 					nbLoaderReady = nbLoaderReady + 1;
-					let listType = api.memory.has("Collection " + (index + 1)) ? api.memory.get("Collection " + (index + 1)) : "";
+					let listType = getListTypeFromIndex((index + 1));
 					//console.log("listLoader.listType: ",listType);
                     viewLoadingText = qsTr("Loading Collection") + " " + (index + 1) + " - " + listType + " ...";
 					if(listType.includes("My Collection") &&  (api.memory.get(listType + " - Collection name") !== null) &&
@@ -97,7 +97,7 @@ FocusScope {
 						if (listType.includes("None")||(listType === "")||(listType === null)) listLoader.item.max = 0;
 						else listLoader.item.max = settings.ShowcaseColumns;
 					}
-
+					//console.log("listLoader.item.max : ",listLoader.item.max);
 					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
@@ -155,11 +155,11 @@ FocusScope {
 			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "None";
 			//console.log("api.memory.get('Collection ' + index) = ",api.memory.get("Collection " + index));
 		}
-		if ((listType === "")||(typeof(listType) === undefined)) listType = "None";
+		if ((listType === "")||(typeof(listType) === "undefined")) listType = "None";
 		
 		if (api.memory.has(listType + " - Collection name") && (listType !== "None")){
 			var value = api.memory.get(listType + " - Collection name");
-			listType  = ((value === "") || (value === null)) ? "None" : listType;
+			listType  = ((value === "") || (value === null) ||(typeof(listType) === "undefined")) ? "None" : listType;
 		}
 		//console.log("listType: ",listType);
 		//To manage types using index in collections type as "My Coleltions 1", "My Collections 2", etc...
