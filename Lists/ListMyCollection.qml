@@ -9,14 +9,37 @@ import SortFilterProxyModel 0.2
 Item {
     id: root
 
-    property bool cacheFound: false
+    readonly property var games: {
+        //check if cache exists for this collection with by name of the collection
+        //to do
 
-    readonly property var games: gamesMyCollection
-	property int max: gamesMyCollection.count;
+
+        //else
+        return gamesMyCollection;
+    }
+    property int max: gamesMyCollection.count;
     function currentGame(index) {
         if(gamesMyCollection.sourceModel !== null) return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
         else return null;
 	}	
+
+    property var gamesIndexes: []
+
+    function hasCache(){
+        return api.memory.has(collectionName)
+    }
+
+    function restoreFromCache(){
+        gamesIndexes = JSON.parse(api.memory.get(collectionName));
+    }
+
+    function saveToCache(){
+        for(var i=0; i < gamesMyCollection.count ;i++){
+            const gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(index));
+            gamesIndexes.push(gameIndex);
+        }
+        api.memory.set(collectionName, JSON.stringify(gamesIndexes));
+    }
 
 	//name of the collection
     property string collectionName: ""
