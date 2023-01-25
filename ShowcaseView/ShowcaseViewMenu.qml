@@ -155,18 +155,12 @@ FocusScope {
 			listType = api.memory.has("Collection " + index) ? api.memory.get("Collection " + index) : "None";
 			//console.log("api.memory.get('Collection ' + index) = ",api.memory.get("Collection " + index));
 		}
-		if ((listType === "")||(typeof(listType) === "undefined")) listType = "None";
-		
-		if (api.memory.has(listType + " - Collection name") && (listType !== "None")){
+        if ((listType === "")||(typeof(listType) === "undefined")) listType = "None";
+        else if(api.memory.has(listType + " - Collection name")){
 			var value = api.memory.get(listType + " - Collection name");
-			listType  = ((value === "") || (value === null) ||(typeof(listType) === "undefined")) ? "None" : listType;
+            listType  = ((value === "")||(value === null)||(typeof(value) === "undefined")) ? "None" : listType;
 		}
-		//console.log("listType: ",listType);
-		//To manage types using index in collections type as "My Coleltions 1", "My Collections 2", etc...
-		if(listType.includes("My Collection"))
-		{
-			listType = "My Collection";
-		}
+        //console.log("listType: ",listType);
 		return listType;
 	}
 
@@ -210,7 +204,11 @@ FocusScope {
 	{
 		let qmlFileToUse;
 		let listType = getListTypeFromIndex(index);
-
+        //to remove index of My Collection if needed
+        if(listType.includes("My Collection"))
+        {
+            listType = "My Collection";
+        }
 		switch (listType) {
 			case "AllGames":
 				qmlFileToUse = "../Lists/ListAllGames.qml";
@@ -250,15 +248,13 @@ FocusScope {
 	//Function to set Collection Details from index in the main list of horizontal collection
     function setCollectionFromIndex(index) //index from 1 to... 5 for the moment (due to constraint to hardcode :-( )
 	{
-		var collectionType = getListTypeFromIndex(index);		
-		var collectionThumbnail = getThumbnailFromIndex(index);	
 		
         var collection = {
             enabled: true,
         };
 
         var width = root.width - globalMargin * 2;
-
+        var collectionThumbnail = getThumbnailFromIndex(index);
         switch (collectionThumbnail) {
         case "Square":
             collection.itemWidth = (width / 6.0);
@@ -275,21 +271,21 @@ FocusScope {
             break;
 
         }
-
         collection.height = collection.itemHeight + vpx(40) + globalMargin
 
+        var collectionType = getListTypeFromIndex(index);
         switch (collectionType) {
         case "None":
             collection.enabled = false;
             collection.height = 0;
             collection.search = listNone;
+            collection.title = "";
             break;
-		default:
-			collection.search = repeater.itemAt(index-1).item;
+		default:            
+            collection.search = repeater.itemAt(index-1).item;
+            collection.title = collection.search.collection.name;
             break;
         }
-
-        collection.title = collection.search.collection.name;
 		
 		//To change in the future : but for the moment it's blocked to 10 collections on main page
 		switch (index) {
