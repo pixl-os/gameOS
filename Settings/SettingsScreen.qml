@@ -454,6 +454,12 @@ FocusScope {
             setting: "5,6,7,8,3,4"
             settingNameDisplay: qsTr("Number of columns")
         }
+        ListElement {
+            settingName: "System Header Logo with pink gradient effect"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("System Header Logo with pink gradient effect")
+            settingDisplay: qsTr("No,Yes")
+        }
     }
 
     property var gridPage: {
@@ -501,6 +507,12 @@ FocusScope {
             setting: "Left,Right"
             settingNameDisplay: qsTr("System Logo position")
             settingDisplay: qsTr("Left,Right")
+        }
+        ListElement {
+            settingName: "System Logo with pink gradient effect"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("System Logo with pink gradient effect")
+            settingDisplay: qsTr("No,Yes")
         }
         ListElement {
             settingName: "Default to full details"

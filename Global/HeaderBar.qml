@@ -35,7 +35,14 @@ FocusScope {
 
         Image {
             id: platformlogo
+            Image {
+                id: logobg
 
+                anchors.fill: platformlogo
+                source: "../assets/images/gradient.png"
+                asynchronous: true
+                visible: false
+            }
             anchors {
                 top: parent.top; topMargin: vpx(10)
                 bottom: parent.bottom; bottomMargin: vpx(10)
@@ -57,18 +64,26 @@ FocusScope {
             smooth: true
             asynchronous: true
 
-            Image{
-                id: alphaLogo
-                anchors.top: parent.top
-                anchors.right: parent.right
-                width: parent.width/2
-                height: parent.height/2
-
-                //to alert when system is in beta
-                source: "../assets/images/beta.png";
-                //for the moment, just check if first core for this system still low
-                visible: currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false
+            OpacityMask {
+                anchors.fill: logobg
+                source: logobg
+                maskSource: platformlogo
+                visible: settings.SystemHeaderLogoGradientEffect === "Yes" ? true : false
             }
+        }
+
+        //beta logo
+        Image{
+            id: betaLogo
+            anchors.top: platformlogo.top
+            anchors.right: platformlogo.right
+            width: platformlogo.width/2
+            height: platformlogo.height/2
+
+            //to alert when system is in beta
+            source: "../assets/images/beta.png";
+            //for the moment, just check if first core for this system still low
+            visible: currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false
         }
 
         // Platform title

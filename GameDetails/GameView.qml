@@ -809,15 +809,15 @@ FocusScope {
         }
         height: vpx(75)
 
-//        // Platform logo
-//        Image {
-//            id: logobg
+        // Platform logo
+        Image {
+            id: logobg
 
-//            anchors.fill: platformlogo
-//            source: "../assets/images/gradient.png"
-//            asynchronous: true
-//            visible: false
-//        }
+            anchors.fill: platformlogo
+            source: "../assets/images/gradient.png"
+            asynchronous: true
+            visible: false
+        }
 
         Image {
             id: platformlogo
@@ -845,17 +845,18 @@ FocusScope {
                     return "../assets/images/logospng/" + Utils.processPlatformName(game.collections.get(0).shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
                 }
             }
-//            sourceSize: vpx(25)
+            // sourceSize: vpx(25)
             smooth: true
             visible: ((settings.SystemLogo === "Show") || ((settings.SystemLogo === "Show if no overlay") && (overlay_exists !== true))) ? true : false
             asynchronous: true
         }
 
-//        OpacityMask {
-//            anchors.fill: logobg
-//            source: logobg
-//            maskSource: platformlogo
-//        }
+        OpacityMask {
+            anchors.fill: logobg
+            source: logobg
+            maskSource: platformlogo
+            visible: settings.SystemLogoGradientEffect === "Yes" ? true : false
+        }
 
         // Mouse/touch functionality
         MouseArea {

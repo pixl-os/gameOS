@@ -728,6 +728,14 @@
         <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
         <translation>Voulez vous recharger le thème pour bien appliquer le changement ? (Conseillé)</translation>
     </message>
+    <message>
+        <source>System Header Logo with pink gradient effect</source>
+        <translation>Effet 'gradiant' rose sur le logo du système de l'entête</translation>
+    </message>
+    <message>
+        <source>System Logo with pink gradient effect</source>
+        <translation>Effet 'gradiant' rose sur le logo du système</translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
