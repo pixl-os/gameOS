@@ -724,6 +724,14 @@
         <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>System Header Logo with pink gradient effect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System Logo with pink gradient effect</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ShowcaseViewMenu</name>
