@@ -91,6 +91,8 @@ FocusScope {
 						listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
 						listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
 						listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
+                        //tip mandatory to avoid issue of multi-loading of collections
+                        listLoader.item.readyForSearch = true;
 					}
 					else
 					{
@@ -101,6 +103,12 @@ FocusScope {
 					setCollectionFromIndex((index+1));
 					console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;
+                    //save to cache if my collection
+                    if(listType.includes("My Collection")){
+                        //listLoader.item.resetCache();
+                        //listLoader.item.saveToCache();
+                    }
+
 					if (nbLoaderReady >= repeater.count) {
 						viewIsLoading = false;
 					}

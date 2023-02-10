@@ -9,14 +9,7 @@ import SortFilterProxyModel 0.2
 Item {
     id: root
 
-    readonly property var games: {
-        //check if cache exists for this collection with by name of the collection
-        //to do
-
-
-        //else
-        return gamesMyCollection;
-    }
+    readonly property var games: gamesMyCollection;
     property int max: gamesMyCollection.count;
     function currentGame(index) {
         if(gamesMyCollection.sourceModel !== null) return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
@@ -24,21 +17,41 @@ Item {
 	}	
 
     property var gamesIndexes: []
+    property var gamesFromCache: []
 
     function hasCache(){
         return api.memory.has(collectionName)
     }
 
+    function resetCache(){
+        if(hasCache()) api.memory.unset(collectionName);
+    }
+
     function restoreFromCache(){
-        gamesIndexes = JSON.parse(api.memory.get(collectionName));
+        if(hasCache()){
+            gamesIndexes = JSON.parse(api.memory.get(collectionName));
+            for (var i = 0; i < gamesIndexes.length; i++) {
+                //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
+                gamesFromCache.push(api.allGames.get(gamesIndexes[i]));
+            }
+        }
+        //do nothing if no cache
     }
 
     function saveToCache(){
+        resetCache();
         for(var i=0; i < gamesMyCollection.count ;i++){
             const gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(index));
             gamesIndexes.push(gameIndex);
         }
+        console.log("save to cache");
         api.memory.set(collectionName, JSON.stringify(gamesIndexes));
+    }
+
+    property bool completed : false
+    Component.onCompleted: {
+        console.log("MyCollection Componenet.onCompleted");
+        completed = true;
     }
 
 	//name of the collection
@@ -104,22 +117,32 @@ Item {
 	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
     property bool toExclude: (exclusion === "") ? false : true
 	
+    //flag to authorize search !
+    property bool readyForSearch : false
+
     //FILTERING
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-            if(settingsChanged) return null;
+            if(settingsChanged || (readyForSearch === false)) return null;
             //check if any cache memory exist with this name of collection
+//            if(hasCache()){
+//                //create collection from cache if exists
+//                restoreFromCache();
+//                console.log("gamesMyCollection restored From Cache");
+//                return gamesFromCache;
+//            }
             if ((system !== "") && !systemToFilter){
                 for (var i = 0; i < api.collections.count; i++) {
                     //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
                     if (api.collections.get(i).shortName === system) {
-                        console.log("system: ",system);
+                        console.log("gamesMyCollection from one system only: ",system);
                         return api.collections.get(i).games
                     }
                 }
             }
-            //if not found or empty or systems should be filetr by regexx
+            //if not found or empty or systems should be filetr by regex
+            console.log("gamesMyCollection from allGames");
             return api.allGames;
         }
         filters: [
