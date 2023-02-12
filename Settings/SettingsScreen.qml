@@ -1400,6 +1400,7 @@ FocusScope {
 				}
 
                 function saveSetting() {
+                    var cacheName;
 					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
@@ -1411,6 +1412,13 @@ FocusScope {
                         if(previousIndex !== savedIndex){
                             //console.log("settingsChanged !");
                             settingsChanged = true;
+                            //check if collection parameter changed / delete cache in this case
+                            if(fullSettingName.includes("My Collection")){
+                                cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
+                                console.log(cacheName);
+                                console.log("cache unset: ",cacheName);
+                                api.memory.unset(cacheName);
+                            }
                         }
 					}
 					else
@@ -1421,8 +1429,15 @@ FocusScope {
                         if(previousValue !== settingtextfield.text){
                             //console.log("settingsChanged !");
                             settingsChanged = true;
+                            //check if collection parameter changed / delete cache in this case
+                            if(fullSettingName.includes("My Collection")){
+                                cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
+                                console.log("cache unset: ",cacheName);
+                                api.memory.unset(cacheName);
+                            }
                         }
 					}
+
                 }
 
                 function nextSetting() {

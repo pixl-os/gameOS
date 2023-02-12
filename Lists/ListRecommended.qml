@@ -34,7 +34,10 @@ Item {
         id: gamesRecommended
         sourceModel: {
             if(settingsChanged) return null;
-            else return api.allGames;
+            else {
+                //console.log("gamesRecommended from allGames");
+                return api.allGames;
+            }
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
         filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },

@@ -16,44 +16,64 @@ Item {
         else return null;
 	}	
 
-    property var gamesIndexes: []
-    property var gamesFromCache: []
+    property bool hasCache : false
+    property bool cacheCheckDone: false
+    //function to check if cache was present before to launch collection creation
+    //by this way we could avoid reload of collction not yet in cache
+    function hasCacheInitially(){
+        //to check only one time and initialy, to avoid disturb when we check after saving of cache for example
+        if(cacheCheckDone === false){
+            cacheCheckDone = true;
+            hasCache =  api.memory.has(collectionRef + " - cache");
+        }
+        if(hasCache) console.log(collectionRef,"has cache initially");
+        return hasCache;
 
-    function hasCache(){
-        return api.memory.has(collectionName)
     }
 
     function resetCache(){
-        if(hasCache()) api.memory.unset(collectionName);
+        if(api.memory.has(collectionRef + " - cache")) {
+            console.log(collectionRef,"cache reset");
+            api.memory.unset(collectionRef + " - cache");
+            hasCache = false;
+        }
     }
 
+    property var gamesIndexes: []
     function restoreFromCache(){
-        if(hasCache()){
-            gamesIndexes = JSON.parse(api.memory.get(collectionName));
-            for (var i = 0; i < gamesIndexes.length; i++) {
-                //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
-                gamesFromCache.push(api.allGames.get(gamesIndexes[i]));
-            }
+        if(api.memory.has(collectionRef + " - cache")){
+            gamesIndexes = JSON.parse(api.memory.get(collectionRef + " - cache"));
+            console.log(collectionRef,"restored from cache");
+            //console.log("gamesIndexes.length : ",gamesIndexes.length);
+            //console.log("gamesIndexes : ",gamesIndexes);
         }
         //do nothing if no cache
     }
 
+    property bool savedToCache : false
     function saveToCache(){
-        resetCache();
+        //reset just before
+        gamesIndexes = [];
         for(var i=0; i < gamesMyCollection.count ;i++){
-            const gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(index));
+            const gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(i));
             gamesIndexes.push(gameIndex);
         }
-        console.log("save to cache");
-        api.memory.set(collectionName, JSON.stringify(gamesIndexes));
+        console.log(collectionRef,"saved to cache");
+        savedToCache = true; //to avoid reload when we save !!!
+        //console.log("gamesIndexes : ",gamesIndexes);
+        //console.log("gamesIndexes.sort() : ",gamesIndexes.sort());
+        //sort indexes before to save in cache to restore quickly later and without sorting impacts
+        api.memory.set(collectionRef + " - cache", JSON.stringify(gamesIndexes.sort()));
     }
 
     property bool completed : false
     Component.onCompleted: {
-        console.log("MyCollection Componenet.onCompleted");
+        //console.log("MyCollection Componenet.onCompleted");
         completed = true;
     }
 
+    //reference of the collection as "My Collection 1, My Collection 2, etc..."
+    property string collectionRef: ""
 	//name of the collection
     property string collectionName: ""
 	
@@ -124,40 +144,38 @@ Item {
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-            if(settingsChanged || (readyForSearch === false)) return null;
-            //check if any cache memory exist with this name of collection
-//            if(hasCache()){
-//                //create collection from cache if exists
-//                restoreFromCache();
-//                console.log("gamesMyCollection restored From Cache");
-//                return gamesFromCache;
-//            }
-            if ((system !== "") && !systemToFilter){
+            if(settingsChanged || (readyForSearch === false) || !completed) return null;
+            if ((system !== "") && !systemToFilter && !hasCache){
                 for (var i = 0; i < api.collections.count; i++) {
                     //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
                     if (api.collections.get(i).shortName === system) {
-                        console.log("gamesMyCollection from one system only: ",system);
+                        console.log(collectionRef," search from one system only: ",system);
                         return api.collections.get(i).games
                     }
                 }
             }
             //if not found or empty or systems should be filetr by regex
-            console.log("gamesMyCollection from allGames");
+            console.log(collectionRef," search from allGames");
             return api.allGames;
         }
         filters: [
-            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter} ,
-			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
-			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
-			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
-			RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter},
-			RangeFilter { roleName: "players"; minimumValue: minimumNb_players ; maximumValue: maximumNb_players; enabled: nb_playersToFilter},
-			RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter},
-			RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter},
-			RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter},
-			RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
-			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
-			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
+            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter && !hasCache} ,
+            ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind && !hasCache},
+            RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter && !hasCache} ,
+            RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter && !hasCache},
+            RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter && !hasCache},
+            RangeFilter { roleName: "players"; minimumValue: minimumNb_players ; maximumValue: maximumNb_players; enabled: nb_playersToFilter && !hasCache},
+            RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter && !hasCache},
+            RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter && !hasCache},
+            RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter && !hasCache},
+            RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter && !hasCache},
+            RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude && !hasCache},
+            ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter && !hasCache},
+            //ExpressionFilter { expression: model.index <= 10; enabled: !!hasCache}
+            //IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: !!hasCache}
+            IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: hasCache}
+
+            ]
             //sorters are slow that why it is deactivated for the moment
             //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
             //sorters: RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: true}
