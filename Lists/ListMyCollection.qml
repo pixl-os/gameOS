@@ -54,16 +54,24 @@ Item {
     function saveToCache(){
         //reset just before
         gamesIndexes = [];
+        var gameIndex;
         for(var i=0; i < gamesMyCollection.count ;i++){
-            const gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(i));
+            if((system !== "") && !systemToFilter){ //use a specific system
+                gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(i));
+                //console.log("api.allGames.toVarArray().findIndex(g => g === currentGame(i)) : ", gameIndex);
+            }
+            else{ 
+                gameIndex = gamesMyCollection.mapToSource(i);
+                //console.log("gamesMyCollection.mapToSource(i) : ",gameIndex);
+            }
             gamesIndexes.push(gameIndex);
         }
         console.log(collectionRef,"saved to cache");
         savedToCache = true; //to avoid reload when we save !!!
         //console.log("gamesIndexes : ",gamesIndexes);
-        //console.log("gamesIndexes.sort() : ",gamesIndexes.sort());
+        //console.log("gamesIndexes.sort() : ",gamesIndexes.sort((a, b) => a - b));
         //sort indexes before to save in cache to restore quickly later and without sorting impacts
-        api.memory.set(collectionRef + " - cache", JSON.stringify(gamesIndexes.sort()));
+        api.memory.set(collectionRef + " - cache", JSON.stringify(gamesIndexes.sort((a, b) => a - b)));
     }
 
     property bool completed : false
