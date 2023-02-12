@@ -54,6 +54,7 @@ FocusScope {
 			source: getListSourceFromIndex(index + 1) // get qml file to load from index of "settings.ShowcaseCollectionX"
 			asynchronous: true
 			property bool measuring: false
+            property string cacheActivation: "No" //Yes or no
 			onStatusChanged:{
 				/*
 				Available status:
@@ -71,7 +72,8 @@ FocusScope {
 				}
 
                 if (listLoader.status === Loader.Ready && !settingsChanged) {
-					nbLoaderReady = nbLoaderReady + 1;
+                    nbLoaderReady = nbLoaderReady + 1;
+
 					let listType = getListTypeFromIndex((index + 1));
 					//console.log("listLoader.listType: ",listType);
                     viewLoadingText = qsTr("Loading Collection") + " " + (index + 1) + " - " + listType + " ...";
@@ -82,9 +84,12 @@ FocusScope {
                         //need to set a ref to manage "cache"
                         listLoader.item.collectionRef = listType;
                         listLoader.item.collectionName = api.memory.has(listType + " - Collection name") ? api.memory.get(listType + " - Collection name") : "";
-                        //listLoader.item.resetCache(); //for test purpose - to do after collectionName initialization
-                        if(listLoader.item.hasCacheInitially() === true) listLoader.item.restoreFromCache();
+                        cacheActivation = api.memory.has(listType + " - Cache Activation") ? api.memory.get(listType + " - Cache Activation") : "No";
+                        if(cacheActivation === "No") listLoader.item.resetCache(); //for test purpose - to do after collectionName initialization
+                        if((cacheActivation === "Yes") && (listLoader.item.hasCacheInitially() === true)) listLoader.item.restoreFromCache();
                         else{
+                            listLoader.item.system = api.memory.has(listType + " - System") ? api.memory.get(listType + " - System") : "";
+                            listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
                             listLoader.item.filter = api.memory.has(listType + " - Name filter") ? api.memory.get(listType + " - Name filter") : "";
                             listLoader.item.region = api.memory.has(listType + " - Region/Country filter") ? api.memory.get(listType + " - Region/Country filter") : "";
                             listLoader.item.nb_players = api.memory.has(listType + " - Nb players") ? api.memory.get(listType + " - Nb players") : "1+";
@@ -92,12 +97,10 @@ FocusScope {
                             listLoader.item.genre = api.memory.has(listType + " - Genre filter") ? api.memory.get(listType + " - Genre filter") : "";
                             listLoader.item.publisher = api.memory.has(listType + " - Publisher filter") ? api.memory.get(listType + " - Publisher filter") : "";
                             listLoader.item.developer = api.memory.has(listType + " - Developer filter") ? api.memory.get(listType + " - Developer filter") : "";
-                            listLoader.item.system = api.memory.has(listType + " - System") ? api.memory.get(listType + " - System") : "";
                             listLoader.item.filename = api.memory.has(listType + " - File name filter") ? api.memory.get(listType + " - File name filter") : "";
                             listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
                             listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
                             listLoader.item.fileExclusion = api.memory.has(listType + " - File Exclusion filter") ? api.memory.get(listType + " - File Exclusion filter") : "";
-                            listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
                         }
                         //tip mandatory to avoid issue of multi-loading of collections
                         listLoader.item.readyForSearch = true;
@@ -111,7 +114,7 @@ FocusScope {
 					setCollectionFromIndex((index+1));
                     if(listType.includes("My Collection")){
                         //save to cache if my collection
-                        if(listLoader.item.hasCache === false) listLoader.item.saveToCache();
+                        if((listLoader.item.hasCache === false) && (cacheActivation === "Yes")) listLoader.item.saveToCache();
                     }
                     console.timeEnd("listLoader - Collection " + (index + 1));
 					listLoader.measuring = false;

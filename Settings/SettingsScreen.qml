@@ -708,6 +708,12 @@ FocusScope {
             setting: "to edit"
             settingNameDisplay: qsTr("File Exclusion filter")
         }
+        ListElement {
+            settingName: "Cache Activation"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Cache Activation")
+            settingDisplay: qsTr("No,Yes")
+        }
     }
 
     property var myCollections: {
