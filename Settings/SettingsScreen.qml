@@ -703,6 +703,11 @@ FocusScope {
             setting: "to edit"
             settingNameDisplay: qsTr("Exclusion filter")
         }
+        ListElement {
+            settingName: "File Exclusion filter"
+            setting: "to edit"
+            settingNameDisplay: qsTr("File Exclusion filter")
+        }
     }
 
     property var myCollections: {

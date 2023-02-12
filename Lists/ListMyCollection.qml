@@ -144,7 +144,12 @@ Item {
 	//example of exclusion:
 	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
     property bool toExclude: (exclusion === "") ? false : true
-	
+
+    property string fileExclusion: ""
+    //example of fileExclusion:
+    //".zip|pcb"
+    property bool fileToExclude: (fileExclusion === "") ? false : true
+
     //flag to authorize search !
     property bool readyForSearch : false
 
@@ -178,6 +183,7 @@ Item {
             RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter && !hasCache},
             RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter && !hasCache},
             RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude && !hasCache},
+            RegExpFilter { roleName: "path"; pattern: fileExclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: fileToExclude && !hasCache},
             ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter && !hasCache},
             //ExpressionFilter { expression: model.index <= 10; enabled: !!hasCache}
             //IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: !!hasCache}

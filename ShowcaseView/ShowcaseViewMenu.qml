@@ -96,6 +96,7 @@ FocusScope {
                             listLoader.item.filename = api.memory.has(listType + " - File name filter") ? api.memory.get(listType + " - File name filter") : "";
                             listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
                             listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
+                            listLoader.item.fileExclusion = api.memory.has(listType + " - File Exclusion filter") ? api.memory.get(listType + " - File Exclusion filter") : "";
                             listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
                         }
                         //tip mandatory to avoid issue of multi-loading of collections
