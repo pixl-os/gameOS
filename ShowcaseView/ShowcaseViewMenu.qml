@@ -88,7 +88,8 @@ FocusScope {
                         if(cacheActivation === "No") listLoader.item.resetCache(); //for test purpose - to do after collectionName initialization
                         if((cacheActivation === "Yes") && (listLoader.item.hasCacheInitially() === true)) listLoader.item.restoreFromCache();
                         else{
-                            listLoader.item.system = api.memory.has(listType + " - System") ? api.memory.get(listType + " - System") : "";
+                            listLoader.item.system = api.memory.has(listType + " - System filter") ? api.memory.get(listType + " - System filter") : "";
+                            listLoader.item.manufacturer = api.memory.has(listType + " - System Manufacturer filter") ? api.memory.get(listType + " - System Manufacturer filter") : "";
                             listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
                             listLoader.item.filter = api.memory.has(listType + " - Name filter") ? api.memory.get(listType + " - Name filter") : "";
                             listLoader.item.region = api.memory.has(listType + " - Region/Country filter") ? api.memory.get(listType + " - Region/Country filter") : "";
@@ -99,7 +100,7 @@ FocusScope {
                             listLoader.item.developer = api.memory.has(listType + " - Developer filter") ? api.memory.get(listType + " - Developer filter") : "";
                             listLoader.item.filename = api.memory.has(listType + " - File name filter") ? api.memory.get(listType + " - File name filter") : "";
                             listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
-                            listLoader.item.exclusion = api.memory.has(listType + " - Exclusion filter") ? api.memory.get(listType + " - Exclusion filter") : "";
+                            listLoader.item.exclusion = api.memory.has(listType + " - Name Exclusion filter") ? api.memory.get(listType + " - Name Exclusion filter") : "";
                             listLoader.item.fileExclusion = api.memory.has(listType + " - File Exclusion filter") ? api.memory.get(listType + " - File Exclusion filter") : "";
                         }
                         //tip mandatory to avoid issue of multi-loading of collections

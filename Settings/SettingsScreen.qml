@@ -684,9 +684,14 @@ FocusScope {
             settingNameDisplay: qsTr("Developer filter")
         }
         ListElement {
-            settingName: "System"
+            settingName: "System filter"
             setting: "to edit"
-            settingNameDisplay: qsTr("System")
+            settingNameDisplay: qsTr("System filter")
+        }
+        ListElement {
+            settingName: "System Manufacturer filter"
+            setting: "to edit"
+            settingNameDisplay: qsTr("System Manufacturer filter")
         }
         ListElement {
             settingName: "File name filter"
@@ -699,9 +704,9 @@ FocusScope {
             settingNameDisplay: qsTr("Release year filter")
         }
         ListElement {
-            settingName: "Exclusion filter"
+            settingName: "Name Exclusion filter"
             setting: "to edit"
-            settingNameDisplay: qsTr("Exclusion filter")
+            settingNameDisplay: qsTr("Name Exclusion filter")
         }
         ListElement {
             settingName: "File Exclusion filter"

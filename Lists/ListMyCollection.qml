@@ -126,14 +126,23 @@ Item {
 	//example of developer:
 	//	"sega"
 	
-    property string system: ""
-    property bool systemToFilter: ((system === "") || !system.includes("|")) ? false : true
+    //to check if regex or not
+    function onlyLettersAndNumbers(str) {
+      return /^[A-Za-z0-9]*$/.test(str);
+    }
 
+    property string system: ""
+    property bool systemToFilter: ((system === "") || onlyLettersAndNumbers(system)) ? false : true
 	//example of system:
     //	"nes|snes|gw"
     //if only one word, the filter will be not activated
     //we prefer to select collection in this case from sourceModel to improve performance of filtering/sorting
 	
+    property string manufacturer: ""
+    property bool manufacturerToFilter: (manufacturer === "") ? false : true
+    //example of manufacturer:
+    //	"nintendo"
+
     property string filename: ""
     property bool filenameToFilter: (filename === "") ? false : true
 	
@@ -158,6 +167,9 @@ Item {
         id: gamesMyCollection
         sourceModel:{
             if(settingsChanged || (readyForSearch === false) || !completed) return null;
+            //console.log("system :",system);
+            //console.log("systemToFilter :",systemToFilter);
+            //console.log("hasCache :",hasCache);
             if ((system !== "") && !systemToFilter && !hasCache){
                 for (var i = 0; i < api.collections.count; i++) {
                     //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
@@ -173,6 +185,7 @@ Item {
         }
         filters: [
             RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter && !hasCache} ,
+            RegExpFilter { roleName: "systemManufacturer"; pattern: manufacturer; caseSensitivity: Qt.CaseInsensitive;enabled: manufacturerToFilter && !hasCache} ,
             ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind && !hasCache},
             RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter && !hasCache} ,
             RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter && !hasCache},
@@ -185,8 +198,6 @@ Item {
             RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude && !hasCache},
             RegExpFilter { roleName: "path"; pattern: fileExclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: fileToExclude && !hasCache},
             ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter && !hasCache},
-            //ExpressionFilter { expression: model.index <= 10; enabled: !!hasCache}
-            //IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: !!hasCache}
             IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: hasCache}
 
             ]
