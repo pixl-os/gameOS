@@ -159,6 +159,14 @@ Item {
     //".zip|pcb"
     property bool fileToExclude: (fileExclusion === "") ? false : true
 
+    property string sorting: ""
+    //if sorting = "default", no sorters will be activated
+    property bool sortByName: (sorting === "name") ? true : false
+    property bool sortByReleaseDate: (sorting === "releasedate") ? true : false
+    property bool sortBySystem: (sorting === "system") ? true : false
+    property bool sortByManufacturer: (sorting === "manufacturer") ? true : false
+    property bool sortByRating: (sorting === "rating") ? true : false
+
     //flag to authorize search !
     property bool readyForSearch : false
 
@@ -201,10 +209,16 @@ Item {
             IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: hasCache}
 
             ]
-            //sorters are slow that why it is deactivated for the moment
-            //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-            //sorters: RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: true}
-            sorters: RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: true}
+
+            //sorters could be slow
+            sorters: [
+                RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: sortByName},
+                RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: sortByRating},
+                RoleSorter { roleName: "systemShortName"; sortOrder: Qt.AscendingOrder; enabled: sortBySystem},
+                RoleSorter { roleName: "systemManufacturer"; sortOrder: Qt.AscendingOrder; enabled: sortByManufacturer},
+                RoleSorter { roleName: "releaseMonth"; sortOrder: Qt.AscendingOrder; enabled: sortByReleaseDate},
+                RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: sortByReleaseDate}
+            ]
     }
 
     property var collection: {

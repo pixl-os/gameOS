@@ -714,6 +714,12 @@ FocusScope {
             settingNameDisplay: qsTr("File Exclusion filter")
         }
         ListElement {
+            settingName: "Sort games by"
+            setting: "default,name,releasedate,system,manufacturer,rating"
+            settingNameDisplay: qsTr("Sort games by")
+            settingDisplay: qsTr("default,name,release date,system,manufacturer,rating")
+        }
+        ListElement {
             settingName: "Cache Activation"
             setting: "No,Yes"
             settingNameDisplay: qsTr("Cache Activation")

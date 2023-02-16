@@ -102,6 +102,7 @@ FocusScope {
                             listLoader.item.release = api.memory.has(listType + " - Release year filter") ? api.memory.get(listType + " - Release year filter") : "";
                             listLoader.item.exclusion = api.memory.has(listType + " - Name Exclusion filter") ? api.memory.get(listType + " - Name Exclusion filter") : "";
                             listLoader.item.fileExclusion = api.memory.has(listType + " - File Exclusion filter") ? api.memory.get(listType + " - File Exclusion filter") : "";
+                            listLoader.item.sorting = api.memory.has(listType + " - Sort games by") ? api.memory.get(listType + " - Sort games by") : "default";
                         }
                         //tip mandatory to avoid issue of multi-loading of collections
                         listLoader.item.readyForSearch = true;
