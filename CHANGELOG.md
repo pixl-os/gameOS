@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- Add new logos for system Switch
 	- Add new logos for system Philips CDI
 	- Add new logos for system Megaduck
+	- add the 5 types of logo requested by this theme for new 'psvita' system
 
 ## [pixL-master] - 2023-01-21 - v1.21
 - new features:
