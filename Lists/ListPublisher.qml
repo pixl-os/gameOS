@@ -26,13 +26,13 @@ Item {
     property int max: publisherGames.count
     property bool enabled: true
 
-    property string publisher: "Nintendo"
+    property string publisher: ""
 
     SortFilterProxyModel {
         id: publisherGames
         delayed: true
         sourceModel: {
-            if(settingsChanged) return null;
+            if(settingsChanged || (root.publisher === "")) return null;
             else return api.allGames;
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }

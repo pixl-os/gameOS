@@ -21,7 +21,6 @@ import "../Lists"
 FocusScope {
     id: root
 
-    property var collectionData
     property int itemWidth: vpx(150)
     property int itemHeight: itemWidth*1.5
     property alias currentIndex: collectionList.currentIndex
@@ -39,7 +38,7 @@ FocusScope {
     Text {
         id: collectiontitle
 
-        text: collectionData.name
+        text: ""
         font.family: subtitleFont.name
         font.pixelSize: vpx(18)
         font.bold: true
@@ -86,7 +85,7 @@ FocusScope {
         currentIndex: focus ? savedIndex : -1
         Component.onCompleted: positionViewAtIndex(savedIndex, ListView.Visible)
 
-        model: (typeof(search) !== "undefined" && search !== null) ? search.games : api.allGames
+        model: (typeof(search) !== "undefined" && search !== null) ? search.games : 0
         delegate: DynamicGridItem {
             selected: ListView.isCurrentItem && collectionList.focus
             width: itemWidth

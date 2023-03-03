@@ -364,9 +364,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 1"
-            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites"
+            setting: "Recently Played,Most Played,Recommended,None,Favorites"
             settingNameDisplay: qsTr("Collection 1")
-            settingDisplay: qsTr("Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites")
+            settingDisplay: qsTr("Recently Played,Most Played,Recommended,None,Favorites")
         }
         ListElement {
             settingName: "Collection 1 - Thumbnail"
@@ -376,9 +376,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 2"
-            setting: "Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played"
+            setting: "Most Played,Recommended,None,Favorites,Recently Played"
             settingNameDisplay: qsTr("Collection 2")
-            settingDisplay: qsTr("Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played")
+            settingDisplay: qsTr("Most Played,Recommended,None,Favorites,Recently Played")
         }
         ListElement {
             settingName: "Collection 2 - Thumbnail"
@@ -388,9 +388,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 3"
-            setting: "Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended"
+            setting: "Recommended,None,Favorites,Recently Played,Most Played"
             settingNameDisplay: qsTr("Collection 3")
-            settingDisplay: qsTr("Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended")
+            settingDisplay: qsTr("Recommended,None,Favorites,Recently Played,Most Played")
         }
         ListElement {
             settingName: "Collection 3 - Thumbnail"
@@ -400,9 +400,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 4"
-            setting: "Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher"
+            setting: "None,Favorites,Recently Played,Most Played,Recommended"
             settingNameDisplay: qsTr("Collection 4")
-            settingDisplay: qsTr("Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher")
+            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended")
         }
         ListElement {
             settingName: "Collection 4 - Thumbnail"
@@ -412,9 +412,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 5"
-            setting: "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"
+            setting: "None,Favorites,Recently Played,Most Played,Recommended"
             settingNameDisplay: qsTr("Collection 5")
-            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre")
+            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended")
         }
         ListElement {
             settingName: "Collection 5 - Thumbnail"
@@ -752,9 +752,9 @@ FocusScope {
 		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
 		for(var i = 1; i <= nb_collections; ++i) {
             showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),
-                                          "setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre",
+                                          "setting": "None,Favorites,Recently Played,Most Played,Recommended",
                                           "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount),
-                                          "settingDisplay": qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre") + api.tr});
+                                          "settingDisplay": qsTr("None,Favorites,Recently Played,Most Played,Recommended") + api.tr});
             showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail",
                                           "setting": "Wide,Tall,Square",
                                           "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount) + " - " + qsTr("Thumbnail"),

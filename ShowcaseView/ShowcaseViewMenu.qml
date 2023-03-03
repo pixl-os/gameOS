@@ -32,12 +32,8 @@ import "../utils.js" as Utils
 FocusScope {
     id: root
 
-    //property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
-    //property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
-
     // Pull in our custom lists and define
     ListNone    { id: listNone;        max: 0 }
-    //ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
     ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
 
 	//Repeater to manage loading of lists dynamically and without limits in the future
@@ -245,12 +241,6 @@ FocusScope {
 				break;
 			case "Recommended":
 				qmlFileToUse = "../Lists/ListRecommended.qml";
-				break;
-			case "Top by Publisher":
-				qmlFileToUse = "../Lists/ListPublisher.qml";
-				break;
-			case "Top by Genre":
-				qmlFileToUse = "../Lists/ListGenre.qml";
 				break;
 			case "My Collection":
 				qmlFileToUse = "../Lists/ListMyCollection.qml";

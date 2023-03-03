@@ -31,7 +31,7 @@ Item {
         id: genreGames
         delayed: true
         sourceModel: {
-            if(settingsChanged) return null;
+            if(settingsChanged || (root.genre === "")) return null;
             else return api.allGames;
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }
