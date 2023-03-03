@@ -16,9 +16,9 @@
 
 // Updated to add collections management by BozoTheGeek: 24/08/2021
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 import "../Dialogs"
 
 FocusScope {

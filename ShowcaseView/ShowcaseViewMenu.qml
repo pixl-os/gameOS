@@ -18,12 +18,12 @@
 // Updated by Bozo the Geek for 'collections' features 26/08/2021
 //
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import SortFilterProxyModel 0.2
-import QtGraphicalEffects 1.12
+import QtGraphicalEffects 1.15
 import QtMultimedia 5.15
-import QtQml.Models 2.12
+import QtQml.Models 2.15
 import "../Global"
 import "../GridView"
 import "../Lists"
@@ -32,12 +32,12 @@ import "../utils.js" as Utils
 FocusScope {
     id: root
 
-    property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
-    property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
+    //property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
+    //property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
 
     // Pull in our custom lists and define
     ListNone    { id: listNone;        max: 0 }
-    ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
+    //ListAllGames    { id: listAllGames;    } //no limit in allgames now - better to limit in collection itself
     ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
 
 	//Repeater to manage loading of lists dynamically and without limits in the future
@@ -597,18 +597,22 @@ FocusScope {
 
                 anchors.fill: parent
                 source: {
-                    if(designs.VideoBannerSource === "Default"){
-                        return "../assets/video/ftue.mp4"
-                    }
-                    else{
-                        //unique url or path, no variable data for the moment
-                        return designs.VideoBannerPathExpression;
-                    }
+					if(ftue){
+						if(designs.VideoBannerSource === "Default"){
+							return "../assets/video/ftue.mp4"
+						}
+						else{
+							//unique url or path, no variable data for the moment
+							return designs.VideoBannerPathExpression;
+						}
+					}
+					//solution to set to nothing to avoid memory leak if no video necessary
+					else return "";
                 }
                 fillMode: VideoOutput.PreserveAspectCrop
                 muted: true
                 loops: MediaPlayer.Infinite
-                autoPlay: true
+                autoPlay: ftue //avoid to autoplay if no video should be display
 
                 OpacityAnimator {
                     target: videocomponent

@@ -16,8 +16,8 @@
 
 //restored and adapted by BozoTheGeek 31/07/2022
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import "qrc:/qmlutils" as PegasusUtils
 import "../Global"
 import "../GameDetails"
