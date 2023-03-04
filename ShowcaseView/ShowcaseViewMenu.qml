@@ -80,7 +80,10 @@ FocusScope {
                         listLoader.item.collectionName = api.memory.has(listType + " - Collection name") ? api.memory.get(listType + " - Collection name") : "";
                         cacheActivation = api.memory.has(listType + " - Cache Activation") ? api.memory.get(listType + " - Cache Activation") : "No";
                         if(cacheActivation === "No") listLoader.item.resetCache(); //for test purpose - to do after collectionName initialization
-                        if((cacheActivation === "Yes") && (listLoader.item.hasCacheInitially() === true)) listLoader.item.restoreFromCache();
+                        if((cacheActivation === "Yes") && (listLoader.item.hasCacheInitially() === true)){
+                            listLoader.item.sorting = api.memory.has(listType + " - Sort games by") ? api.memory.get(listType + " - Sort games by") : "default";
+                            listLoader.item.restoreFromCache();
+                        }
                         else{
                             listLoader.item.system = api.memory.has(listType + " - System filter") ? api.memory.get(listType + " - System filter") : "";
                             listLoader.item.manufacturer = api.memory.has(listType + " - System Manufacturer filter") ? api.memory.get(listType + " - System Manufacturer filter") : "";
