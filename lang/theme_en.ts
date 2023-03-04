@@ -232,6 +232,13 @@
     </message>
 </context>
 <context>
+    <name>ListNone</name>
+    <message>
+        <source>All games</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ListPublisher</name>
     <message>
         <source>Top Games by</source>
@@ -377,10 +384,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Collection 1 - Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,10 +393,6 @@
     </message>
     <message>
         <source>Collection 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -409,10 +408,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Collection 3 - Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
@@ -421,19 +416,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Collection 4 - Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Collection 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -601,19 +588,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File name filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Release year filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exclusion filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -730,6 +709,50 @@
     </message>
     <message>
         <source>System Logo with pink gradient effect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recently Played,Most Played,Recommended,None,Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Most Played,Recommended,None,Favorites,Recently Played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recommended,None,Favorites,Recently Played,Most Played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System Manufacturer filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name Exclusion filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Exclusion filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort games by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>default,name,release date,system,manufacturer,rating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cache Activation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

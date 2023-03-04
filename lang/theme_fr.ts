@@ -232,6 +232,13 @@
     </message>
 </context>
 <context>
+    <name>ListNone</name>
+    <message>
+        <source>All games</source>
+        <translation>Tous les jeux</translation>
+    </message>
+</context>
+<context>
     <name>ListPublisher</name>
     <message>
         <source>Top Games by</source>
@@ -382,7 +389,7 @@
     </message>
     <message>
         <source>Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites</source>
-        <translation>Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris</translation>
+        <translation type="vanished">Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris</translation>
     </message>
     <message>
         <source>Collection 1 - Thumbnail</source>
@@ -398,7 +405,7 @@
     </message>
     <message>
         <source>Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played</source>
-        <translation>Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment</translation>
+        <translation type="vanished">Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment</translation>
     </message>
     <message>
         <source>Collection 2 - Thumbnail</source>
@@ -414,7 +421,7 @@
     </message>
     <message>
         <source>Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended</source>
-        <translation>Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés</translation>
+        <translation type="vanished">Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés</translation>
     </message>
     <message>
         <source>Collection 3 - Thumbnail</source>
@@ -426,7 +433,7 @@
     </message>
     <message>
         <source>Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher</source>
-        <translation>Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur</translation>
+        <translation type="vanished">Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur</translation>
     </message>
     <message>
         <source>Collection 4 - Thumbnail</source>
@@ -438,7 +445,7 @@
     </message>
     <message>
         <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
-        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
+        <translation type="vanished">Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
     </message>
     <message>
         <source>Collection 5 - Thumbnail</source>
@@ -606,11 +613,11 @@
     </message>
     <message>
         <source>System</source>
-        <translation>Filtre par système</translation>
+        <translation type="vanished">Filtre par système</translation>
     </message>
     <message>
         <source>File name filter</source>
-        <translation>Filtre par nom de fihcier</translation>
+        <translation>Filtre par nom de fichier</translation>
     </message>
     <message>
         <source>Release year filter</source>
@@ -618,7 +625,7 @@
     </message>
     <message>
         <source>Exclusion filter</source>
-        <translation>Filtre pour exclure</translation>
+        <translation type="vanished">Filtre pour exclure</translation>
     </message>
     <message>
         <source>My Collections</source>
@@ -730,11 +737,55 @@
     </message>
     <message>
         <source>System Header Logo with pink gradient effect</source>
-        <translation>Effet 'gradiant' rose sur le logo du système de l'entête</translation>
+        <translation>Effet &apos;gradiant&apos; rose sur le logo du système de l&apos;entête</translation>
     </message>
     <message>
         <source>System Logo with pink gradient effect</source>
-        <translation>Effet 'gradiant' rose sur le logo du système</translation>
+        <translation>Effet &apos;gradiant&apos; rose sur le logo du système</translation>
+    </message>
+    <message>
+        <source>Recently Played,Most Played,Recommended,None,Favorites</source>
+        <translation>Joués récemment,Les plus joués,Recommendés,Non,Favoris</translation>
+    </message>
+    <message>
+        <source>Most Played,Recommended,None,Favorites,Recently Played</source>
+        <translation>Les plus joués,Recommendés,Non,Favoris,Joués récemment</translation>
+    </message>
+    <message>
+        <source>Recommended,None,Favorites,Recently Played,Most Played</source>
+        <translation>Recommendés,Non,Favoris,Joués récemment,Les plus joués</translation>
+    </message>
+    <message>
+        <source>None,Favorites,Recently Played,Most Played,Recommended</source>
+        <translation>Non,Favoris,Joués récemment,Les plus joués,Recommendés</translation>
+    </message>
+    <message>
+        <source>System filter</source>
+        <translation>Filtre par système</translation>
+    </message>
+    <message>
+        <source>System Manufacturer filter</source>
+        <translation>Filtre par fabricant de système</translation>
+    </message>
+    <message>
+        <source>Name Exclusion filter</source>
+        <translation>Filtre par nom exclu</translation>
+    </message>
+    <message>
+        <source>File Exclusion filter</source>
+        <translation>Filtre par fichier exclu</translation>
+    </message>
+    <message>
+        <source>Sort games by</source>
+        <translation>Tri des jeux par</translation>
+    </message>
+    <message>
+        <source>default,name,release date,system,manufacturer,rating</source>
+        <translation>defaut,nom,date de sortie,système,fabricant du système,note</translation>
+    </message>
+    <message>
+        <source>Cache Activation</source>
+        <translation>Activation du cache</translation>
     </message>
 </context>
 <context>
