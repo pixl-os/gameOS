@@ -3,7 +3,22 @@ All notable changes to this project will be documented in this file (focus on ch
 
 ## [pixL-master] - 2023-MM-DD - v1.2X
 - new features:
-	- Restore gradient effect on system logos for gameView/grid/verticalList using parameters #[49]
+	- restore gradient effect on system logos for gameView/grid/verticalList using parameters #[49]
+- improvements:
+	- 'my Collections':
+		- improve usage of filtering by disabling if only one system requested
+		- create empty collection to load quickly the empty ones
+		- fix about list type without index that generate issues
+		- add "cache" feature for My Collections including optimization
+		- add possibility to exclude on file path
+		- add parameter in My Collection to activate 'cache' usage
+		- add System Manufacturer filtering + improve System filtering also
+		- add sorting by default, name, release date, system, manufacturer and rating
+		- update 'import' versions + video fix to avoid memory leaks for showCaseViewMenu
+		- remove top genre/publisher buggy for showCaseViewMenu
+		- dynamic collections loading for showcaseViewMenu / best memory management
+		- fix sorting also when we use cache for collection
+		- new translation fr due to change in settings + one fix
 
 ## [pixL-master] - 2023-01-21 - v1.21
 - new features:
