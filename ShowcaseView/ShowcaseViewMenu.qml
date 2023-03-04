@@ -119,7 +119,24 @@ FocusScope {
 
 
 					if (nbLoaderReady >= repeater.count) {
-						viewIsLoading = false;
+                        for(var i=1;i<=repeater.count;i++){
+                            //load dynamic collection here
+                            //var collectionCreated = getCollectionFromIndex(i);
+                            //console.log("collectionCreated ",i," : ",collectionCreated);
+                            //console.log("getListTypeFromIndex(i) : ",getListTypeFromIndex(i));
+                            if(getListTypeFromIndex(i) !== "None"){
+                                var component = Qt.createComponent("ShowcaseViewCollection.qml");
+                                if(component.status === Component.Ready){
+                                    mainModel.append(component.createObject(parent,{
+                                                                                collection : getCollectionFromIndex(i),
+                                                                                selected : ListView.isCurrentItem,
+                                                                                objectModelIndex : mainModel.count
+                                                                            }));
+                                    //console.log("init ShowcaseViewCollection " + i);
+                                }
+                            }
+                        }
+                        viewIsLoading = false;
 					}
 				}
 			}
@@ -300,39 +317,66 @@ FocusScope {
 		
 		//To change in the future : but for the moment it's blocked to 10 collections on main page
 		switch (index) {
-		case 1:
-			collection1  = collection;
-		break;
-		case 2:
-			collection2  = collection;
-		break;
-		case 3:
-			collection3  = collection;
-		break;
-		case 4:
-			collection4  = collection;
-		break;
-		case 5:
-			collection5  = collection;
-		break;
-		case 6:
-			collection6  = collection;
-		break;
-		case 7:
-			collection7  = collection;
-		break;
-		case 8:
-			collection8  = collection;
-		break;
-		case 9:
-			collection9  = collection;
-		break;
-		case 10:
-			collection10  = collection;
-		break;
+            case 1:
+                collection1  = collection;
+            break;
+            case 2:
+                collection2  = collection;
+            break;
+            case 3:
+                collection3  = collection;
+            break;
+            case 4:
+                collection4  = collection;
+            break;
+            case 5:
+                collection5  = collection;
+            break;
+            case 6:
+                collection6  = collection;
+            break;
+            case 7:
+                collection7  = collection;
+            break;
+            case 8:
+                collection8  = collection;
+            break;
+            case 9:
+                collection9  = collection;
+            break;
+            case 10:
+                collection10  = collection;
+            break;
 		}
 
     }
+
+    //Function to get collection from index to help automatic creation of ShowcaseViewCollection
+    function getCollectionFromIndex(index){
+        switch (index) {
+            case 1:
+                return collection1;
+            case 2:
+                return collection2;
+            case 3:
+                return collection3;
+            case 4:
+                return collection4;
+            case 5:
+                return collection5;
+            case 6:
+                return collection6;
+            case 7:
+                return collection7;
+            case 8:
+                return collection8;
+            case 9:
+                return collection9;
+            case 10:
+                return collection10;
+        }
+    }
+
 
     property bool ftue: featuredCollection.games.count === 0
 
@@ -485,46 +529,44 @@ FocusScope {
         }
     }
 
+    function findObjectAndMove(object,newPosition){
+        for(var i = 0; i < mainModel.count; i++){
+            if(mainModel.get(i) === object){ //need to move it
+               //console.log("findObjectAndMove : ","move ",i," to ",newPosition);
+               mainModel.move(i, newPosition , 1);
+               return; //to exit immediately from function
+            }
+        }
+    }
+
+    function processPathExpression(pathExpression,systemSelected){
+        pathExpression = pathExpression.replace("{region}",settings.PreferedRegion);
+        pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+        return pathExpression
+    }
+
+    function processPathExpressionNoRegion(pathExpression,systemSelected){
+        //to put region part as empty
+        pathExpression = pathExpression.replace("{region}","");
+        //to replace // by / if region is a directory
+        pathExpression = pathExpression.replace("//","/");
+        pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
+        return pathExpression
+    }
+
+
+    function processPathExpressionScreenScraper(pathExpression,systemSelected,regionIndexUsed){
+        pathExpression = pathExpression.replace("{screenscraper_region}",regionSSModel.get(regionIndexUsed).region);
+        pathExpression = pathExpression.replace("{screenscraper_id}",systemSelected.screenScraperId);
+        return pathExpression
+    }
+
 
     // Using an object model to build the main list using other lists
     ObjectModel {
         id: mainModel
 
         property var regionSSIndex : getInitialRegionIndex();
-
-        function findObjectAndMove(object,newPosition){
-            for(var i = 0; i < mainModel.count; i++){
-                if(mainModel.get(i) === object){ //need to move it
-                   //console.log("findObjectAndMove : ","move ",i," to ",newPosition);
-                   mainModel.move(i, newPosition , 1);
-                   return; //to exit immediately from function
-                }
-            }
-        }
-
-        function processPathExpression(pathExpression,systemSelected){
-            pathExpression = pathExpression.replace("{region}",settings.PreferedRegion);
-            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
-            return pathExpression
-        }
-
-        function processPathExpressionNoRegion(pathExpression,systemSelected){
-            //to put region part as empty
-            pathExpression = pathExpression.replace("{region}","");
-            //to replace // by / if region is a directory
-            pathExpression = pathExpression.replace("//","/");
-            pathExpression = pathExpression.replace("{shortname}",Utils.processPlatformName(systemSelected.shortName));
-            return pathExpression
-        }
-
-
-        function processPathExpressionScreenScraper(pathExpression,systemSelected,regionIndexUsed){
-            pathExpression = pathExpression.replace("{screenscraper_region}",regionSSModel.get(regionIndexUsed).region);
-            pathExpression = pathExpression.replace("{screenscraper_id}",systemSelected.screenScraperId);
-            return pathExpression
-        }
-
-
 
         Component.onCompleted: {
             //set position of Video Banner (id: ftueContainer)
@@ -536,7 +578,116 @@ FocusScope {
             //set position of Systems List (id: platformlist)
             if(designs.SystemsListPosition !== "No") findObjectAndMove(platformlist,parseInt(designs.SystemsListPosition));
             //set position of System Details (id: detailedlist)
-            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));        
+            if(designs.SystemDetailsPosition !== "No") findObjectAndMove(detailedlist,parseInt(designs.SystemDetailsPosition));
+
+//            var component = Qt.createComponent("ShowcaseViewCollection.qml");
+//            if(component.status === Component.Ready){
+//               /* var newobject = component.createObject(mainModel,{
+//                                                           collection : collection2,
+//                                                           selected : ListView.isCurrentItem,
+//                                                           objectModelIndex : mainModel.count });*/
+
+//                mainModel.append(component.createObject(parent,{
+//                                                            collection : collection2,
+//                                                            selected : ListView.isCurrentItem,
+//                                                            objectModelIndex : mainModel.count
+//                                                        }));
+//                //console.log("before init");
+//                //mainModel.get(mainModel.count - 1).collection = collection2;
+//                //mainModel.get(mainModel.count - 1).selected = ListView.isCurrentItem;
+//                //mainModel.get(mainModel.count - 1).objectModelIndex = mainModel.count;
+//                console.log("afterinit");
+
+//            }
+
+            /*const newobject = Qt.createQmlObject('
+                ShowcaseViewCollection {
+                        id: list2
+                }
+                ',mainModel,"showcaseViewCollectionSnippet");
+            newobject.selected = ListView.isCurrentItem
+            newobject.currentList = list2
+            newobject.collection = collection2
+            newobject.objectModelIndex = list2.ObjectModel.index*/
+
+
+//            const newobject = Qt.createQmlObject('
+//        import QtQuick 2.15
+//        import "../Global"
+
+//        HorizontalCollection {
+//                id: list1
+//                property bool selected: ListView.isCurrentItem
+//                property var currentList: list1
+//                property var collection: collection1
+
+//                enabled: collection.enabled
+//                visible: collection.enabled
+
+//                height: collection.height
+
+//                itemWidth: collection.itemWidth
+//                itemHeight: collection.itemHeight
+
+//                title: {
+//                    //console.log("collection.title:",collection.title);
+//                    return collection.title;
+//                }
+//                search: collection.search
+
+//                focus: selected
+//                width: root.width - globalMargin * 2
+//                x: globalMargin - vpx(8)
+
+//                savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+
+//                onActivateSelected: {
+//                    videoToStop = true;
+//                    storedHomeSecondaryIndex = currentIndex;
+//                    storedHomePrimaryIndex = currentList.ObjectModel.index;
+//                }
+//                onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+//                onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+//                onActiveFocusChanged: {
+//                    //if(typeof(currentGame) !== "undefined") console.log("list1 - onActiveFocusChanged - currentGame : ",currentGame.title);
+//                    //console.log("list1 - onActiveFocusChanged - currentList.savedIndex : ",currentList.savedIndex);
+//                    //console.log("list1 - onActiveFocusChanged - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+//                    //console.log("list1 - onActiveFocusChanged - currentList.ObjectModel.index : ",currentList.ObjectModel.index);
+//                    //console.log("list1 - onActiveFocusChanged - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+
+//                    //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+//                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+//                        if(typeof(currentGame) !== "undefined"){
+//                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+//                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+//                            //check if same rom file or not
+//                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+//                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+//                                //In this case, we are searching the game in collection to an other Index
+//                                for(var i = 0;i < collection.search.games.count ;i++){
+//                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+//                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+//                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+//                                        currentList.savedIndex = i;
+//                                        currentList.currentIndex = i;
+//                                        //and reset the stored index
+//                                        storedHomeSecondaryIndex = -1;
+//                                        return;
+//                                   }
+//                                }
+//                                //if currentGame is not in the list, we have to come back to zero in this case
+//                                currentList.savedIndex = 0;
+//                                currentList.currentIndex = 0;
+//                                //and reset the stored index
+//                                storedHomeSecondaryIndex = -1;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
+//            ', mainModel, "dynamicsnippet")
+//            //mainModel.append(newobject)
         }
 
         //ftueContainer
@@ -1908,78 +2059,86 @@ FocusScope {
             }
         }
 
-        //first list
+//        ShowcaseViewCollection {
+//                id: list1
+//                selected: ListView.isCurrentItem
+//                currentList: list1
+//                collection: collection1
+//                objectModelIndex: list1.ObjectModel.index
+//        }
+
+        /*
         HorizontalCollection {
-            id: list1
-            property bool selected: ListView.isCurrentItem
-            property var currentList: list1
-            property var collection: collection1
+                id: list1
+                property bool selected: ListView.isCurrentItem
+                property var currentList: list1
+                property var collection: collection1
 
-            enabled: collection.enabled
-            visible: collection.enabled
+                enabled: collection.enabled
+                visible: collection.enabled
 
-            height: collection.height
+                height: collection.height
 
-            itemWidth: collection.itemWidth
-            itemHeight: collection.itemHeight
+                itemWidth: collection.itemWidth
+                itemHeight: collection.itemHeight
 
-            title: {
-				//console.log("collection.title:",collection.title);
-				return collection.title;
-			}
-            search: collection.search
+                title: {
+                    //console.log("collection.title:",collection.title);
+                    return collection.title;
+                }
+                search: collection.search
 
-            focus: selected
-            width: root.width - globalMargin * 2
-            x: globalMargin - vpx(8)
+                focus: selected
+                width: root.width - globalMargin * 2
+                x: globalMargin - vpx(8)
 
-            savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
+                savedIndex: (storedHomePrimaryIndex === currentList.ObjectModel.index) ? storedHomeSecondaryIndex : 0
 
-            onActivateSelected: {
-				videoToStop = true;
-				storedHomeSecondaryIndex = currentIndex;
-                storedHomePrimaryIndex = currentList.ObjectModel.index;
-			}
-            onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
-            onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
-            onActiveFocusChanged: {
-                //if(typeof(currentGame) !== "undefined") console.log("list1 - onActiveFocusChanged - currentGame : ",currentGame.title);
-                //console.log("list1 - onActiveFocusChanged - currentList.savedIndex : ",currentList.savedIndex);
-                //console.log("list1 - onActiveFocusChanged - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
-                //console.log("list1 - onActiveFocusChanged - currentList.ObjectModel.index : ",currentList.ObjectModel.index);
-                //console.log("list1 - onActiveFocusChanged - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
+                onActivateSelected: {
+                    videoToStop = true;
+                    storedHomeSecondaryIndex = currentIndex;
+                    storedHomePrimaryIndex = currentList.ObjectModel.index;
+                }
+                onActivate: { if (!selected) { mainList.currentIndex = currentList.ObjectModel.index; } }
+                onListHighlighted: { sfxNav.play(); mainList.currentIndex = currentList.ObjectModel.index; }
+                onActiveFocusChanged: {
+                    //if(typeof(currentGame) !== "undefined") console.log("list1 - onActiveFocusChanged - currentGame : ",currentGame.title);
+                    //console.log("list1 - onActiveFocusChanged - currentList.savedIndex : ",currentList.savedIndex);
+                    //console.log("list1 - onActiveFocusChanged - storedHomeSecondaryIndex : ",storedHomeSecondaryIndex);
+                    //console.log("list1 - onActiveFocusChanged - currentList.ObjectModel.index : ",currentList.ObjectModel.index);
+                    //console.log("list1 - onActiveFocusChanged - storedHomePrimaryIndex : ",storedHomePrimaryIndex);
 
-                //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
-                if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
-                    if(typeof(currentGame) !== "undefined"){
-                        //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
-                        //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
-                        //check if same rom file or not
-                        if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
-                            //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
-                            //In this case, we are searching the game in collection to an other Index
-                            for(var i = 0;i < collection.search.games.count ;i++){
-                                //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
-                                if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
-                                    //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
-                                    currentList.savedIndex = i;
-                                    currentList.currentIndex = i;
-                                    //and reset the stored index
-                                    storedHomeSecondaryIndex = -1;
-                                    return;
-                               }
+                    //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
+                    if((currentList.savedIndex === storedHomeSecondaryIndex) && (currentList.ObjectModel.index === storedHomePrimaryIndex)){
+                        if(typeof(currentGame) !== "undefined"){
+                            //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
+                            //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
+                            //check if same rom file or not
+                            if(currentGame.files.get(0).path !== collection.search.currentGame(currentList.currentIndex).files.get(0).path){
+                                //console.log("list1 - not equal - collection.search.games.count : ", collection.search.games.count);
+                                //In this case, we are searching the game in collection to an other Index
+                                for(var i = 0;i < collection.search.games.count ;i++){
+                                    //console.log("list1 - foundGame : ",collection.search.currentGame(i).files.get(0).path);
+                                    if(collection.search.currentGame(i).files.get(0).path === currentGame.files.get(0).path){
+                                        //console.log("list1 - matchedGame : ",collection.search.currentGame(i).files.get(0).path);
+                                        currentList.savedIndex = i;
+                                        currentList.currentIndex = i;
+                                        //and reset the stored index
+                                        storedHomeSecondaryIndex = -1;
+                                        return;
+                                   }
+                                }
+                                //if currentGame is not in the list, we have to come back to zero in this case
+                                currentList.savedIndex = 0;
+                                currentList.currentIndex = 0;
+                                //and reset the stored index
+                                storedHomeSecondaryIndex = -1;
                             }
-                            //if currentGame is not in the list, we have to come back to zero in this case
-                            currentList.savedIndex = 0;
-                            currentList.currentIndex = 0;
-                            //and reset the stored index
-                            storedHomeSecondaryIndex = -1;
                         }
                     }
                 }
             }
-        }
-
+/*
 		//second list
         HorizontalCollection {
             id: list2
@@ -2095,6 +2254,7 @@ FocusScope {
                 }
             }
         }
+
 
 		//fourth list
         HorizontalCollection {
@@ -2501,6 +2661,7 @@ FocusScope {
                 }
             }
         }
+  */
     }
 
 	//mainList
