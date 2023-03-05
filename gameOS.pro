@@ -44,10 +44,12 @@ Lists/ListMyCollection.qml \
 Lists/ListPublisher.qml \
 Lists/ListRecommended.qml \
 Lists/ListTopGames.qml \
+Lists/ListNone.qml \
 Search/Search.qml \
 Search/SearchGameByModel.qml \
 Settings/SettingsScreen.qml \
 ShowcaseView/ShowcaseViewMenu.qml \
+ShowcaseView/ShowcaseViewCollection.qml \
 VerticalList/SoftwareListMenu.qml \
 theme.qml
 }

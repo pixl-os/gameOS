@@ -3,7 +3,7 @@
 // created by Bozo the Geek 26/12/2021 for PixL
 //
 
-import QtQuick 2.12
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {

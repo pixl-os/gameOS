@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import "../Lists"
 
 FocusScope {
     id: root
 
-    property var collectionData
     property int itemWidth: vpx(150)
     property int itemHeight: itemWidth*1.5
     property alias currentIndex: collectionList.currentIndex
@@ -39,7 +38,7 @@ FocusScope {
     Text {
         id: collectiontitle
 
-        text: collectionData.name
+        text: ""
         font.family: subtitleFont.name
         font.pixelSize: vpx(18)
         font.bold: true
@@ -86,7 +85,7 @@ FocusScope {
         currentIndex: focus ? savedIndex : -1
         Component.onCompleted: positionViewAtIndex(savedIndex, ListView.Visible)
 
-        model: (typeof(search) !== "undefined" && search !== null) ? search.games : api.allGames
+        model: (typeof(search) !== "undefined" && search !== null) ? search.games : 0
         delegate: DynamicGridItem {
             selected: ListView.isCurrentItem && collectionList.focus
             width: itemWidth

@@ -17,7 +17,7 @@
 // updated by Bozo the Geek / 30/04/2021 for recalbox integration/performance
 //
 
-import QtQuick 2.12
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
@@ -34,7 +34,10 @@ Item {
         id: gamesRecommended
         sourceModel: {
             if(settingsChanged) return null;
-            else return api.allGames;
+            else {
+                //console.log("gamesRecommended from allGames");
+                return api.allGames;
+            }
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
         filters:[RegExpFilter { roleName: "rating"; pattern: Utils.regExpForRatingFiltering(); caseSensitivity: Qt.CaseInsensitive; },

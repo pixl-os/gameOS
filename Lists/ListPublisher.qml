@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import QtQuick 2.12
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 import "../utils.js" as Utils
 
@@ -26,13 +26,13 @@ Item {
     property int max: publisherGames.count
     property bool enabled: true
 
-    property string publisher: "Nintendo"
+    property string publisher: ""
 
     SortFilterProxyModel {
         id: publisherGames
         delayed: true
         sourceModel: {
-            if(settingsChanged) return null;
+            if(settingsChanged || (root.publisher === "")) return null;
             else return api.allGames;
         }
         sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: root.enabled }

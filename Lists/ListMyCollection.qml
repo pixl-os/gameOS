@@ -3,21 +3,85 @@
 // created by Bozo the Geek / 18/08/2021 for PixL
 //
 
-import QtQuick 2.12
+import QtQuick 2.15
 import SortFilterProxyModel 0.2
 
 Item {
     id: root
 
-    property bool cacheFound: false
-
-    readonly property var games: gamesMyCollection
-	property int max: gamesMyCollection.count;
+    readonly property var games: gamesMyCollection;
+    property int max: gamesMyCollection.count;
     function currentGame(index) {
         if(gamesMyCollection.sourceModel !== null) return gamesMyCollection.sourceModel.get(gamesMyCollection.mapToSource(index));
         else return null;
 	}	
 
+    property bool hasCache : false
+    property bool cacheCheckDone: false
+    //function to check if cache was present before to launch collection creation
+    //by this way we could avoid reload of collction not yet in cache
+    function hasCacheInitially(){
+        //to check only one time and initialy, to avoid disturb when we check after saving of cache for example
+        if(cacheCheckDone === false){
+            cacheCheckDone = true;
+            hasCache =  api.memory.has(collectionRef + " - cache");
+        }
+        if(hasCache) console.log(collectionRef,"has cache initially");
+        return hasCache;
+
+    }
+
+    function resetCache(){
+        if(api.memory.has(collectionRef + " - cache")) {
+            console.log(collectionRef,"cache reset");
+            api.memory.unset(collectionRef + " - cache");
+            hasCache = false;
+        }
+    }
+
+    property var gamesIndexes: []
+    function restoreFromCache(){
+        if(api.memory.has(collectionRef + " - cache")){
+            gamesIndexes = JSON.parse(api.memory.get(collectionRef + " - cache"));
+            console.log(collectionRef,"restored from cache");
+            //console.log("gamesIndexes.length : ",gamesIndexes.length);
+            //console.log("gamesIndexes : ",gamesIndexes);
+        }
+        //do nothing if no cache
+    }
+
+    property bool savedToCache : false
+    function saveToCache(){
+        //reset just before
+        gamesIndexes = [];
+        var gameIndex;
+        for(var i=0; i < gamesMyCollection.count ;i++){
+            if((system !== "") && !systemToFilter){ //use a specific system
+                gameIndex = api.allGames.toVarArray().findIndex(g => g === currentGame(i));
+                //console.log("api.allGames.toVarArray().findIndex(g => g === currentGame(i)) : ", gameIndex);
+            }
+            else{ 
+                gameIndex = gamesMyCollection.mapToSource(i);
+                //console.log("gamesMyCollection.mapToSource(i) : ",gameIndex);
+            }
+            gamesIndexes.push(gameIndex);
+        }
+        console.log(collectionRef,"saved to cache");
+        savedToCache = true; //to avoid reload when we save !!!
+        //console.log("gamesIndexes : ",gamesIndexes);
+        //console.log("gamesIndexes.sort() : ",gamesIndexes.sort((a, b) => a - b));
+        //sort indexes before to save in cache to restore quickly later and without sorting impacts
+        api.memory.set(collectionRef + " - cache", JSON.stringify(gamesIndexes.sort((a, b) => a - b)));
+    }
+
+    property bool completed : false
+    Component.onCompleted: {
+        //console.log("MyCollection Componenet.onCompleted");
+        completed = true;
+    }
+
+    //reference of the collection as "My Collection 1, My Collection 2, etc..."
+    property string collectionRef: ""
 	//name of the collection
     property string collectionName: ""
 	
@@ -62,11 +126,23 @@ Item {
 	//example of developer:
 	//	"sega"
 	
+    //to check if regex or not
+    function onlyLettersAndNumbers(str) {
+      return /^[A-Za-z0-9]*$/.test(str);
+    }
+
     property string system: ""
-    property bool systemToFilter: (system === "") ? false : true
+    property bool systemToFilter: ((system === "") || onlyLettersAndNumbers(system)) ? false : true
 	//example of system:
-	//	"nes|snes"
+    //	"nes|snes|gw"
+    //if only one word, the filter will be not activated
+    //we prefer to select collection in this case from sourceModel to improve performance of filtering/sorting
 	
+    property string manufacturer: ""
+    property bool manufacturerToFilter: (manufacturer === "") ? false : true
+    //example of manufacturer:
+    //	"nintendo"
+
     property string filename: ""
     property bool filenameToFilter: (filename === "") ? false : true
 	
@@ -77,31 +153,72 @@ Item {
 	//example of exclusion:
 	//"beta|virtual console|proto|rev|sega channel|classic collection|unl"
     property bool toExclude: (exclusion === "") ? false : true
-	
+
+    property string fileExclusion: ""
+    //example of fileExclusion:
+    //".zip|pcb"
+    property bool fileToExclude: (fileExclusion === "") ? false : true
+
+    property string sorting: ""
+    //if sorting = "default", no sorters will be activated
+    property bool sortByName: (sorting === "name") ? true : false
+    property bool sortByReleaseDate: (sorting === "releasedate") ? true : false
+    property bool sortBySystem: (sorting === "system") ? true : false
+    property bool sortByManufacturer: (sorting === "manufacturer") ? true : false
+    property bool sortByRating: (sorting === "rating") ? true : false
+
+    //flag to authorize search !
+    property bool readyForSearch : false
+
     //FILTERING
     SortFilterProxyModel {
         id: gamesMyCollection
         sourceModel:{
-            if(settingsChanged) return null;
-            else return api.allGames;
+            if(settingsChanged || (readyForSearch === false) || !completed) return null;
+            //console.log("system :",system);
+            //console.log("systemToFilter :",systemToFilter);
+            //console.log("hasCache :",hasCache);
+            if ((system !== "") && !systemToFilter && !hasCache){
+                for (var i = 0; i < api.collections.count; i++) {
+                    //console.log("api.collections.get(i).shortName: ",api.collections.get(i).shortName);
+                    if (api.collections.get(i).shortName === system) {
+                        console.log(collectionRef," search from one system only: ",system);
+                        return api.collections.get(i).games
+                    }
+                }
+            }
+            //if not found or empty or systems should be filetr by regex
+            console.log(collectionRef," search from allGames");
+            return api.allGames;
         }
         filters: [
-            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter} ,
-			ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind},
-			RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter} ,
-			RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter},
-			RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter},
-			RangeFilter { roleName: "players"; minimumValue: minimumNb_players ; maximumValue: maximumNb_players; enabled: nb_playersToFilter},
-			RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter},
-			RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter},
-			RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter},
-			RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter},
-			RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude},
-			ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter}        ]
-            //sorters are slow that why it is deactivated for the moment
-            //sorters: RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; }
-            //sorters: RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: true}
-            sorters: RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: true}
+            RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter && !hasCache} ,
+            RegExpFilter { roleName: "systemManufacturer"; pattern: manufacturer; caseSensitivity: Qt.CaseInsensitive;enabled: manufacturerToFilter && !hasCache} ,
+            ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind && !hasCache},
+            RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter && !hasCache} ,
+            RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter && !hasCache},
+            RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter && !hasCache},
+            RangeFilter { roleName: "players"; minimumValue: minimumNb_players ; maximumValue: maximumNb_players; enabled: nb_playersToFilter && !hasCache},
+            RegExpFilter { roleName: "publisher"; pattern: publisher ; caseSensitivity: Qt.CaseInsensitive; enabled: publisherToFilter && !hasCache},
+            RegExpFilter { roleName: "developer"; pattern: developer ; caseSensitivity: Qt.CaseInsensitive; enabled: developerToFilter && !hasCache},
+            RegExpFilter { roleName: "path"; pattern: filename ; caseSensitivity: Qt.CaseInsensitive; enabled: filenameToFilter && !hasCache},
+            RegExpFilter { roleName: "releaseYear"; pattern: release ; caseSensitivity: Qt.CaseInsensitive; enabled: releaseToFilter && !hasCache},
+            RegExpFilter { roleName: "title"; pattern: exclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: toExclude && !hasCache},
+            RegExpFilter { roleName: "path"; pattern: fileExclusion ; caseSensitivity: Qt.CaseInsensitive; inverted: true; enabled: fileToExclude && !hasCache},
+            ExpressionFilter { expression: parseFloat(model.rating) >= minimumRating; enabled: ratingToFilter && !hasCache},
+            IndexFilter { minimumIndex: gamesIndexes[0]; maximumIndex: gamesIndexes[gamesIndexes.length-1]; arrayIndex: gamesIndexes; enabled: hasCache}
+
+            ]
+
+            //sorters could be slow
+            sorters: [
+                RoleSorter { roleName: "title"; sortOrder: Qt.AscendingOrder; enabled: sortByName},
+                RoleSorter { roleName: "rating"; sortOrder: Qt.DescendingOrder; enabled: sortByRating},
+                RoleSorter { roleName: "systemShortName"; sortOrder: Qt.AscendingOrder; enabled: sortBySystem},
+                RoleSorter { roleName: "systemManufacturer"; sortOrder: Qt.AscendingOrder; enabled: sortByManufacturer},
+                RoleSorter { roleName: "releaseMonth"; sortOrder: Qt.AscendingOrder; enabled: sortByReleaseDate},
+                RoleSorter { roleName: "releaseYear"; sortOrder: Qt.AscendingOrder; enabled: sortByReleaseDate}
+            ]
     }
 
     property var collection: {

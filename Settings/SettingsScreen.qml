@@ -16,9 +16,9 @@
 
 // Updated to add collections management by BozoTheGeek: 24/08/2021
 
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 import "../Dialogs"
 
 FocusScope {
@@ -364,9 +364,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 1"
-            setting: "Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites"
+            setting: "Recently Played,Most Played,Recommended,None,Favorites"
             settingNameDisplay: qsTr("Collection 1")
-            settingDisplay: qsTr("Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites")
+            settingDisplay: qsTr("Recently Played,Most Played,Recommended,None,Favorites")
         }
         ListElement {
             settingName: "Collection 1 - Thumbnail"
@@ -376,9 +376,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 2"
-            setting: "Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played"
+            setting: "Most Played,Recommended,None,Favorites,Recently Played"
             settingNameDisplay: qsTr("Collection 2")
-            settingDisplay: qsTr("Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played")
+            settingDisplay: qsTr("Most Played,Recommended,None,Favorites,Recently Played")
         }
         ListElement {
             settingName: "Collection 2 - Thumbnail"
@@ -388,9 +388,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 3"
-            setting: "Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended"
+            setting: "Recommended,None,Favorites,Recently Played,Most Played"
             settingNameDisplay: qsTr("Collection 3")
-            settingDisplay: qsTr("Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended")
+            settingDisplay: qsTr("Recommended,None,Favorites,Recently Played,Most Played")
         }
         ListElement {
             settingName: "Collection 3 - Thumbnail"
@@ -400,9 +400,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 4"
-            setting: "Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher"
+            setting: "None,Favorites,Recently Played,Most Played,Recommended"
             settingNameDisplay: qsTr("Collection 4")
-            settingDisplay: qsTr("Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher")
+            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended")
         }
         ListElement {
             settingName: "Collection 4 - Thumbnail"
@@ -412,9 +412,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Collection 5"
-            setting: "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre"
+            setting: "None,Favorites,Recently Played,Most Played,Recommended"
             settingNameDisplay: qsTr("Collection 5")
-            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre")
+            settingDisplay: qsTr("None,Favorites,Recently Played,Most Played,Recommended")
         }
         ListElement {
             settingName: "Collection 5 - Thumbnail"
@@ -684,9 +684,14 @@ FocusScope {
             settingNameDisplay: qsTr("Developer filter")
         }
         ListElement {
-            settingName: "System"
+            settingName: "System filter"
             setting: "to edit"
-            settingNameDisplay: qsTr("System")
+            settingNameDisplay: qsTr("System filter")
+        }
+        ListElement {
+            settingName: "System Manufacturer filter"
+            setting: "to edit"
+            settingNameDisplay: qsTr("System Manufacturer filter")
         }
         ListElement {
             settingName: "File name filter"
@@ -699,9 +704,26 @@ FocusScope {
             settingNameDisplay: qsTr("Release year filter")
         }
         ListElement {
-            settingName: "Exclusion filter"
+            settingName: "Name Exclusion filter"
             setting: "to edit"
-            settingNameDisplay: qsTr("Exclusion filter")
+            settingNameDisplay: qsTr("Name Exclusion filter")
+        }
+        ListElement {
+            settingName: "File Exclusion filter"
+            setting: "to edit"
+            settingNameDisplay: qsTr("File Exclusion filter")
+        }
+        ListElement {
+            settingName: "Sort games by"
+            setting: "default,name,releasedate,system,manufacturer,rating"
+            settingNameDisplay: qsTr("Sort games by")
+            settingDisplay: qsTr("default,name,release date,system,manufacturer,rating")
+        }
+        ListElement {
+            settingName: "Cache Activation"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Cache Activation")
+            settingDisplay: qsTr("No,Yes")
         }
     }
 
@@ -730,9 +752,9 @@ FocusScope {
 		//add collections to initial 5 ones - we kept initial one to propose default configuration for users
 		for(var i = 1; i <= nb_collections; ++i) {
             showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount),
-                                          "setting": "None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre",
+                                          "setting": "None,Favorites,Recently Played,Most Played,Recommended",
                                           "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount),
-                                          "settingDisplay": qsTr("None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre") + api.tr});
+                                          "settingDisplay": qsTr("None,Favorites,Recently Played,Most Played,Recommended") + api.tr});
             showcaseSettingsModel.append({"settingName": "Collection " + (i+initialCount) + " - Thumbnail",
                                           "setting": "Wide,Tall,Square",
                                           "settingNameDisplay": qsTr("Collection") + " " + api.tr + (i+initialCount) + " - " + qsTr("Thumbnail"),
@@ -1400,6 +1422,7 @@ FocusScope {
 				}
 
                 function saveSetting() {
+                    var cacheName;
 					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
@@ -1411,6 +1434,13 @@ FocusScope {
                         if(previousIndex !== savedIndex){
                             //console.log("settingsChanged !");
                             settingsChanged = true;
+                            //check if collection parameter changed / delete cache in this case
+                            if(fullSettingName.includes("My Collection")){
+                                cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
+                                console.log(cacheName);
+                                console.log("cache unset: ",cacheName);
+                                api.memory.unset(cacheName);
+                            }
                         }
 					}
 					else
@@ -1421,8 +1451,15 @@ FocusScope {
                         if(previousValue !== settingtextfield.text){
                             //console.log("settingsChanged !");
                             settingsChanged = true;
+                            //check if collection parameter changed / delete cache in this case
+                            if(fullSettingName.includes("My Collection")){
+                                cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
+                                console.log("cache unset: ",cacheName);
+                                api.memory.unset(cacheName);
+                            }
                         }
 					}
+
                 }
 
                 function nextSetting() {
