@@ -19,6 +19,10 @@ All notable changes to this project will be documented in this file (focus on ch
 		- dynamic collections loading for showcaseViewMenu / best memory management
 		- fix sorting also when we use cache for collection
 		- new translation fr due to change in settings + one fix
+- logo:
+	- Add new logos for system Switch
+	- Add new logos for system Philips CDI
+	- Add new logos for system Megaduck
 
 ## [pixL-master] - 2023-01-21 - v1.21
 - new features:
