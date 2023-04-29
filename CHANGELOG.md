@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-MM-DD - v1.2X
+## [pixL-master] - 2023-04-29 - v1.22
 - new features:
 	- restore gradient effect on system logos for gameView/grid/verticalList using parameters #[49]
 - improvements:
