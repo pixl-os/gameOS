@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2023-MM-DD - v1.2X
 - logo:
 	- Add new sega model 2 system logos
+	- Add new Nintendo Wii U system logos
 - overlay:
 	- Feature to keep possibility to find overlays without decorations in his .cfg name
 	- Improvement to manage several types of overlays with custom, 720p and 1080p resolutions
