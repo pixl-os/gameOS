@@ -87,6 +87,8 @@ FocusScope {
         var path = game.files.get(0).path;
         var word = path.split('/');
         var game_filename = word[word.length-1];
+        var extension = game_filename.split('.');
+        var game_fileextension = extension[extension.length-1];
         //console.log("getOverlaysParameters() - game_filename : ", game_filename);
         //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
@@ -98,6 +100,15 @@ FocusScope {
 
         //check if custom overlays exists
         overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+        if(overlay_exists !== true){
+            //if not found, we retry if exist any without decoration using () or []
+            var result = game_filename.split("("); // we search first ( to remove decoration using it
+            var result2 = result[0].split("["); // we search first [ to remove decoration using it
+            game_filename = result2[0].trim(); //we use trim() to remove space at the begin and end of the string
+            game_filename = game_filename + "." + game_fileextension // we add extension in this case also as done usually
+            overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+        }
+
         if(overlay_exists !== true){
             //check if system overlays exists
             overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");

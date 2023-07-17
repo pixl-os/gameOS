@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2023-MM-DD - v1.2X
 - logo:
 	- Add new sega model 2 system logos
+- overlay:
+	- Feature to keep possibility to find overlays without decorations in his .cfg name
 
 ## [pixL-master] - 2023-04-29 - v1.22
 - new features:
