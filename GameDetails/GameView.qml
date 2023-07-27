@@ -68,6 +68,8 @@ FocusScope {
     property int custom_viewport_y: 0
     property int custom_viewport_width: 0
     property int custom_viewport_height: 0
+    property int video_fullscreen_x: 0
+    property int video_fullscreen_y: 0
     property string overlay_cfg_filename_fullpath: ""
     property string overlay_png_filename_fullpath: ""
     property string input_overlay_cfg_filename_fullpath: ""
@@ -147,21 +149,9 @@ FocusScope {
                 custom_viewport_width = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_width\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 custom_viewport_height = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"custom_viewport_height\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
 
-                //check if overlay 1080p or 720p (no other size supported for the moment
-                var is1080pOverlay = false;
-                //it's just a tips, no info to know really execpt to check image size
-                if((custom_viewport_height > 720) || (custom_viewport_width > 1280)){
-                    is1080pOverlay = true
-                }
-
-                //variables
-                let initialOverlayRatio;
-                let overlayNewWidth;
-                let OverlayWidthRatio;
-
-                //calculate initial ratio of image
-                let initialImageRatio = custom_viewport_width / custom_viewport_height;
-                //console.log("initialImageRatio : ",initialImageRatio);
+                //optional: check if fullscreen expected details are set
+                video_fullscreen_x = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_x\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
+                video_fullscreen_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
 
                 //size of root
                 //console.log("root.width : ", root.width);
@@ -172,10 +162,35 @@ FocusScope {
                 //console.log("custom_viewport_height : ", custom_viewport_height);
                 //console.log("custom_viewport_width : ", custom_viewport_width);
 
-                if(is1080pOverlay === true){
+                //variables
+                let initialOverlayRatio;
+                let overlayNewWidth;
+                let OverlayWidthRatio;
+
+                //calculate initial ratio of image
+                let initialImageRatio = custom_viewport_width / custom_viewport_height;
+                //console.log("initialImageRatio : ",initialImageRatio);
+
+                //for full screen size available in overlays .cfg files
+                if((video_fullscreen_x > 1) && (video_fullscreen_y > 1)){
+                    //initial ratio overlay in custom (but could be 1080p ou 720p if set like this)
+                    initialOverlayRatio = video_fullscreen_x / video_fullscreen_y;
+                    //console.log("Custom initialOverlayRatio : ",initialOverlayRatio);
+                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                    //we start by height and y
+                    custom_viewport_y = custom_viewport_y * (root.height/video_fullscreen_y);
+                    custom_viewport_height = custom_viewport_height * (root.height/video_fullscreen_y);
+                    //x is more complex to recalculate
+                    //need to calculate the new size of overlay display (include cut)
+                    overlayNewWidth = root.height * initialOverlayRatio;
+                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                    OverlayWidthRatio = overlayNewWidth / video_fullscreen_x;
+                }
+                //it's just a tips when we have no info to know really expected image size
+                else if((custom_viewport_height > 720) || (custom_viewport_width > 1280)){
                     //initial ratio overlay in 1080p
                     initialOverlayRatio = 1920 / 1080;
-                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
                     //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
                     //we start by height and y
                     custom_viewport_y = custom_viewport_y * (root.height/1080);
@@ -187,9 +202,9 @@ FocusScope {
                     OverlayWidthRatio = overlayNewWidth / 1920;
                 }
                 else{
-                    //initial ratio overlay in 720p
+                    //initial ratio overlay in 720p (estimated) in this case
                     initialOverlayRatio = 1280 / 720;
-                    //console.log("initialOverlayRatio : ",initialOverlayRatio);
+                    //console.log("720p initialOverlayRatio : ",initialOverlayRatio);
                     //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
                     //we start by height and y
                     custom_viewport_y = custom_viewport_y * (root.height/720);

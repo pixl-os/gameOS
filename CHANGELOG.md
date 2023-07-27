@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- Add new sega model 2 system logos
 - overlay:
 	- Feature to keep possibility to find overlays without decorations in his .cfg name
+	- Improvement to manage several types of overlays with custom, 720p and 1080p resolutions
 
 ## [pixL-master] - 2023-04-29 - v1.22
 - new features:
