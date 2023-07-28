@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file (focus on ch
 
 ## [pixL-master] - 2023-MM-DD - v1.2X
 - logo:
+	- add the 5 types of logo requested by this theme for new namcom system 2x6
+
+## [pixL-master] - 2023-MM-DD - v1.2X
+- logo:
 	- Add new sega model 2 system logos
 	- Add new Nintendo Wii U system logos
 - overlay:
