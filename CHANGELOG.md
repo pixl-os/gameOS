@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-MM-DD - v1.2X
+## [pixL-master] - 2023-07-28 - v1.23
 - logo:
 	- Add new sega model 2 system logos
 	- Add new Nintendo Wii U system logos
