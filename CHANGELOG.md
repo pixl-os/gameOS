@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - 2023-0X-XX - v1.24
+- fix:
+	- fix banner video launching when no favorite exists
+
 ## [pixL-master] - 2023-07-28 - v1.23
 - logo:
 	- Add new sega model 2 system logos
