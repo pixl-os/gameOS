@@ -646,23 +646,37 @@ FocusScope {
 
                 anchors.fill: parent
                 source: {
-					if(ftue){
-						if(designs.VideoBannerSource === "Default"){
-							return "../assets/video/ftue.mp4"
+						if(ftue){
+							//console.log("ftue source : ", ftue)
+							if(designs.VideoBannerSource === "Default"){
+								//console.log("start video ../assets/video/ftue.mp4")
+								return "../assets/video/ftue.mp4"
+							}
+							else{
+								//unique url or path, no variable data for the moment
+								return designs.VideoBannerPathExpression;
+							}
 						}
-						else{
-							//unique url or path, no variable data for the moment
-							return designs.VideoBannerPathExpression;
+						//solution to set to nothing to avoid memory leak if no video necessary
+						else {
+							//console.log("ftue : ", ftue)
+							return "";
 						}
-					}
-					//solution to set to nothing to avoid memory leak if no video necessary
-					else return "";
                 }
                 fillMode: VideoOutput.PreserveAspectCrop
                 muted: true
                 loops: MediaPlayer.Infinite
-                autoPlay: ftue //avoid to autoplay if no video should be display
-
+                autoPlay: {
+					//console.log("ftue autoPlay : ", ftue)
+					if(ftue === true){
+						 videocomponent.play(); //force to play video
+						 return true;
+					}
+					else{
+						videocomponent.stop(); //force to stop video
+						return false; //avoid to autoplay if no video should be display
+					}
+				}
                 OpacityAnimator {
                     target: videocomponent
                     from: 0;
