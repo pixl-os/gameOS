@@ -830,7 +830,7 @@ FocusScope {
                 }
             }
 
-			// Timer to show the video
+			// Timer to animate banner with favorites
 			Timer {
 				id: favoriteAutomaticChangeTimer
 				interval: 10000 //every 10s
@@ -842,6 +842,24 @@ FocusScope {
                     if (featuredlist.count >= 2 && root.activeFocus === true) featuredlist.incrementCurrentIndex();
 				}
 			}	
+
+			// Timer to check when favorites are changed that currentIndex is in the good range
+			Timer {
+				id: checkCurrentIndexTimer
+				interval: 1 //every second
+				repeat: true
+                running: true
+                triggeredOnStart: true
+				onTriggered: {
+                    //check currentIndex is out of range (could be the case when we remove a favorite and come back to featuredList directly)
+					if (featuredlist.count <= featuredlist.currentIndex)
+					{
+						//set currentIndex on last one
+						featuredlist.currentIndex = featuredlist.count -1
+						//console.log("currentIndex = featuredlist.count -1");
+					}
+				}
+			}
 
 			// List specific input
             Keys.onLeftPressed: { sfxNav.play(); decrementCurrentIndex() }
@@ -858,6 +876,9 @@ FocusScope {
                                 storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition)+1;
                             }
                             else storedHomePrimaryIndex = parseInt(designs.FavoritesBannerPosition);
+                            //TO DO: improve case when nothing selected because a favorite just removed already just before
+                            //and come back to this list
+                            //SOLUTION: may be do a timer for that at the end to correct a missing index ?!
 	                        gameDetails(featuredCollection.currentGame(currentIndex));
                         }
                     }
