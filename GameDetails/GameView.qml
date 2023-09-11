@@ -286,7 +286,7 @@ FocusScope {
             root.getOverlaysParameters();
         }
         else{
-            //to be sure to stop video in all cases -> improve really perfrmance of scrolling !!!
+            //to be sure to stop video in all cases -> improve really performance of scrolling !!!
             videoPreviewLoader.sourceComponent = undefined;
             videoDelay.stop();
             fadescreenshot.stop();
@@ -411,10 +411,16 @@ FocusScope {
         running: false
         triggeredOnStart: false
         repeat: false
-        interval: 1000
+        interval: 2000 // wait 2 seconds before to launch the video (important when embedded in vertical list)
         onTriggered: {
             //console.log("videoEmbeddedLaunch.onTriggered");
             if (embedded) {
+                //launch initialization of retroachievements
+                //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
+                game.initRetroAchievements();
+                //init overlays parameters
+                root.getOverlaysParameters();
+                //launch video
                 toggleVideo(true);
             }
         }
