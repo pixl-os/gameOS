@@ -73,6 +73,7 @@ FocusScope {
     property string overlay_cfg_filename_fullpath: ""
     property string overlay_png_filename_fullpath: ""
     property string input_overlay_cfg_filename_fullpath: ""
+    property string video_ratio: ""
 
     property string overlaySource:{
        if(settings.OverlaysSource === "Default"){
@@ -481,20 +482,26 @@ FocusScope {
                 source: {
                         if(videoExists){
                             //console.log("video path:",game.assets.videos[0]);
+                            //check also ratio of video if needed to display with overlay
+                            if((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)){
+                                // example of command to check: ffprobe -hide_banner daytona2.mp4 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}'
+                                console.log("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
+                                video_ratio = api.internal.system.run("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
+                            }
                             return game.assets.videos[0];
                         }
                         else return "";
                 }
-
-                height: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
-                width: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+                /*we will resize the video only if it's not 16/9 ratio (to manage 4/3 & Tate mode)*/
+                height: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+                width: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
                 anchors.top: {
                     if(custom_viewport_y !== 0) return  parent.top;
                 }
                 anchors.left: {
                     if(custom_viewport_x !== 0) return  parent.left;
                 }
-                anchors.leftMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
+                anchors.leftMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)  && (video_ratio !== "16:9")) ? custom_viewport_x : 0
                 anchors.topMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
                 anchors.horizontalCenter:{
                     if(custom_viewport_x === 0) return  parent.horizontalCenter;
@@ -503,7 +510,7 @@ FocusScope {
                     if(custom_viewport_y === 0) return parent.verticalCenter;
                 }
 
-                fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
+                fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? VideoOutput.Stretch : VideoOutput.PreserveAspectCrop
                 muted: settings.AllowVideoPreviewAudio === "No"
                 loops: MediaPlayer.Infinite
                 autoPlay: true
