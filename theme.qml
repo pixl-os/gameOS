@@ -722,7 +722,7 @@ FocusScope {
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent
-        sourceComponent: gameview
+        sourceComponent: currentGame.collections.get(0).shortName === "imageviewer" ? screenshotview : gameview
         asynchronous: true
     }
 
@@ -779,6 +779,15 @@ FocusScope {
         }
     }
 
+    Component {
+        id: screenshotview
+
+        ScreenshotView {
+            focus: true
+            game: currentGame
+        }
+    }
+	
     //property, timers & functions to manage a demo mode in gameOS theme ;-)
     property bool demoLaunched: false
     
