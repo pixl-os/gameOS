@@ -238,7 +238,7 @@ FocusScope {
     // Header
     Item {
         id: header
-
+	visible: !embedded
         anchors {
             left: parent.left;
             right: parent.right
