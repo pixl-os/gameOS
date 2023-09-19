@@ -708,7 +708,7 @@ FocusScope {
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent
-        sourceComponent: listview
+        sourceComponent: (api.collections.get(currentCollectionIndex).shortName === "imageviewer") ? screenshotlistview : listview
         asynchronous: true
     }
 
@@ -768,6 +768,12 @@ FocusScope {
         id: listview
 
         SoftwareListMenu { focus: true }
+    }
+
+    Component {
+        id: screenshotlistview
+
+        ScreenshotListMenu { focus: true }
     }
 
     Component {
