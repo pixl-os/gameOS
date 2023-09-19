@@ -695,7 +695,7 @@ FocusScope {
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent
-        sourceComponent: gridview
+        sourceComponent: (api.collections.get(currentCollectionIndex).shortName === "imageviewer") ? screenshotgridview : gridview
         asynchronous: true
     }
 
@@ -762,6 +762,12 @@ FocusScope {
         id: gridview
 
         GridViewMenu { focus: true }
+    }
+
+    Component {
+        id: screenshotgridview
+
+        ScreenshotGridViewMenu { focus: true }
     }
 
     Component {
