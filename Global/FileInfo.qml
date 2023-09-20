@@ -70,7 +70,7 @@ Item {
             font.family: subtitleFont.name
             font.bold: true
             color: theme.accent
-			visible: (settings.ShowFilename === "Yes") ? true : false
+            visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
         Text {
@@ -81,17 +81,17 @@ Item {
             anchors { left: filenametitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: {
-				if (gameData){
-					var path = gameData.files.get(0).path;
-					var word = path.split('/');
-					return word[word.length-1];
-				}
-				else return "";
-			}
+                if (gameData){
+                    var path = gameData.files.get(0).path;
+                    var word = path.split('/');
+                    return word[word.length-1];
+                }
+                else return "";
+            }
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
-			visible: (settings.ShowFilename === "Yes") ? true : false
+            visible: (settings.ShowFilename === "Yes") ? true : false
         }
 
         Rectangle {
@@ -130,27 +130,27 @@ Item {
             anchors { left: filesizetitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
             text: {
-				if (gameData){
-					console.log("cmd : ", "timeout 1 stat -t '" + gameData.files.get(0).path + "' | awk '{print $2}' | tr -d '\\n' | tr -d '\\r'");
-					var size = api.internal.system.run("timeout 1 stat -t '" + gameData.files.get(0).path + "' | awk '{print $2}' | tr -d '\\n' | tr -d '\\r'");
-					// calculate unit of size
-					let unit;
-					if (size < 1024) {
-						unit = qsTr("bytes") + api.tr;
-					} else if (size < 1024*1024) {
-						size /= 1024;
-						unit = qsTr("KB") + api.tr;
-					} else if (size < 1024*1024*1024) {
-						size /= 1024*1024;
-						unit = qsTr("MB") + api.tr;
-					} else {
-						size /= 1024*1024*1024;
-						unit = qsTr("GB") + api.tr;
-					}
-					size = size.toFixed(2);
-					return size + " " + unit;
-				}
-				else return ""
+                if (gameData){
+                    //console.log("cmd : ", "timeout 1 stat -t '" + gameData.files.get(0).path + "' | awk '{print $2}' | tr -d '\\n' | tr -d '\\r'");
+                    var size = api.internal.system.run("timeout 1 stat -t '" + gameData.files.get(0).path + "' | awk '{print $2}' | tr -d '\\n' | tr -d '\\r'");
+                    // calculate unit of size
+                    let unit;
+                    if (size < 1024) {
+                        unit = qsTr("bytes") + api.tr;
+                    } else if (size < 1024*1024) {
+                        size /= 1024;
+                        unit = qsTr("KB") + api.tr;
+                    } else if (size < 1024*1024*1024) {
+                        size /= 1024*1024;
+                        unit = qsTr("MB") + api.tr;
+                    } else {
+                        size /= 1024*1024*1024;
+                        unit = qsTr("GB") + api.tr;
+                    }
+                    size = size.toFixed(2);
+                    return size + " " + unit;
+                }
+                else return ""
             }
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name

@@ -1,5 +1,6 @@
 // gameOS theme
 // created by BozoTheGeek 11/09/2023 to manage "screenshots" in this theme
+
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
@@ -39,38 +40,11 @@ FocusScope {
         });
     }
 
-/*     // Combine the video and the screenshot arrays into one
-    function mediaArray() {
-        let mediaList = [];
-        //To add other assets as visible in media list if possible (verify to avoid dooblons display also)
-        if (game) {
-            addNewAssetOnly(game.assets.videoList,mediaList);
-            addNewAssetOnly(game.assets.manualList,mediaList);
-            addNewAssetOnly(game.assets.marqueeList,mediaList);
-            addNewAssetOnly(game.assets.bezelList,mediaList);
-            addNewAssetOnly(game.assets.cartridgeList,mediaList);
-            addNewAssetOnly(game.assets.boxFrontList,mediaList);
-            addNewAssetOnly(game.assets.boxBackList,mediaList);
-            addNewAssetOnly(game.assets.boxFullList,mediaList);
-            addNewAssetOnly(game.assets.boxSpineList,mediaList);
-            addNewAssetOnly(game.assets.logoList,mediaList);
-            addNewAssetOnly(game.assets.backgroundList,mediaList);
-            addNewAssetOnly(game.assets.titlescreenList,mediaList);
-            addNewAssetOnly(game.assets.mapsList,mediaList);
-            addNewAssetOnly(game.assets.musicList,mediaList);
-        }
-        return mediaList;
-    } */
-
     // Reset the screen to default state
     function reset(){
         content.currentIndex = 0;
         menu.currentIndex = 0;
-        //media.savedIndex = 0;
-        //list1.savedIndex = 0;
-        //list2.savedIndex = 0;
         screenshot.opacity = 1;
-        //mediaScreen.opacity = 0;
         if(!embedded){
         }
         else{
@@ -213,17 +187,6 @@ FocusScope {
             }
             height: (parent.height * (parseFloat("70%")/100)) - header.height //vpx(450)
 
-/*             Image {
-                id: boxart
-
-                source: Utils.boxArt(game);
-                width: embedded ? (parent.width * (parseFloat("25%")/100)) : (parent.width * (parseFloat("30%")/100))
-                height: parent.height * (parseFloat("95%")/100)
-                fillMode: Image.PreserveAspectFit
-                asynchronous: true
-                smooth: true
-            } */
-
             FileInfo {
                 id: info
                 anchors {
@@ -338,140 +301,6 @@ FocusScope {
     ObjectModel {
         id: menuModel
 
-/*         Button {
-            id: button1
-
-            text: qsTr("Launch viewer") + api.tr
-            height: parent.height
-            selected: (demoLaunched !== true) && ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
-            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
-            property var launchedGame: api.launchedgame
-            property var selectedGame : game
-            property bool canLoadSpinner: (appWindow.activeFocusItem !== null) ? true : false
-
-            //Done to avoid spinner running during gaming ;-)
-            onCanLoadSpinnerChanged:{
-                if (launchedGame) {
-                    if (api.launchedgame.path === game.path){
-                        //if can't Load Spinner
-                        if(!canLoadSpinner){
-                            //stop  animation (existing or not)
-                            iconRotation.stop();
-                        }
-                        else {
-                            //restart or start animation
-                            icon = "../assets/images/loading.png";
-                            //start animation without end
-                            iconRotation.loops = Animation.Infinite;
-                            iconRotation.start();
-                        }
-                    }
-                }
-            }
-
-            onSelectedGameChanged: {
-                //console.log("onSelectedGameChanged");
-                if (launchedGame) {
-                    if (api.launchedgame.path === game.path){
-                        icon = "../assets/images/loading.png";
-                        //start animation without end
-                        iconRotation.loops = Animation.Infinite;
-                        iconRotation.start();
-                    }
-                    else{
-                        //if animation is running
-                        if(iconRotation.running === true){
-                            //stop existing animation
-                            iconRotation.stop();
-                            //limit to one cycle
-                            iconRotation.loops = 1;
-                            //restart animation
-                            iconRotation.start();
-                        }
-                        else icon = "../assets/images/icon_play.svg";
-                    }
-                }
-                else icon = "../assets/images/icon_play.svg";
-            }
-            iconRotation.onStarted: {
-                    //console.log("iconRotation.onStarted");
-                    icon = "../assets/images/loading.png";
-            }
-
-            iconRotation.onFinished:{
-                    //console.log("iconRotation.onFinished");
-                    //if finish and during the last cycle
-                    if (iconRotation.loops === 1) icon = "../assets/images/icon_play.svg";
-            }
-
-            onLaunchedGameChanged: {
-                //if game is launched
-                if(launchedGame){
-                    //if launched game is the selected game of gameview
-                    if((launchedGame.path === selectedGame.path) && (!iconRotation.running)){
-                        //start animation without end
-                        iconRotation.loops = Animation.Infinite;
-                        iconRotation.start();
-                    }
-                    else{
-                        //if animation is running
-                        if(iconRotation.running === true){
-                            //stop existing animation
-                            iconRotation.stop();
-                            //limit to one cycle
-                            iconRotation.loops = 30;
-                            //restart animation
-                            iconRotation.start();
-                        }
-                    }
-                }
-                else{
-                    //if animation is running
-                    if(iconRotation.running === true){
-                        //stop existing animation
-                        iconRotation.stop();
-                        //limit to one cycle
-                        iconRotation.loops = 1;
-                        //restart animation
-                        iconRotation.start();
-                    }
-                }
-            }
-            
-            Timer {
-                id: launchGameDelay
-                running: false
-                triggeredOnStart: false
-                repeat: false
-                interval: 500
-                onTriggered: {
-                    launchGame(game);
-                }
-            }
-
-            onActivated:
-                if (selected) {
-                    //if game not already launched
-                    if(!launchedGame){
-                        sfxAccept.play();
-                        if(api.internal.recalbox.getBoolParameter("pegasus.multiwindows") || api.internal.recalbox.getBoolParameter("pegasus.theme.keeploaded")){
-                            //to launch animation at launch
-                            icon = "../assets/images/loading.png";
-                            //start animation without end
-                            iconRotation.loops = 30;
-                            iconRotation.start();
-                        }
-                        //force gameToLaunched flag also in this case
-                        gameToLaunched = true;
-                        launchGameDelay.start();
-                    }
-                }
-                else {
-                    sfxNav.play();
-                    menu.currentIndex = ObjectModel.index;
-                }
-        }
- */
         Button {
             id: button2
 
@@ -502,12 +331,6 @@ FocusScope {
                     //to let video to run if needed
                     videoToStop = false;
                     if(embedded) {
-/*                         if (retroachievementsOpacity === 1) {
-                            detailsOpacity = 1;
-                            retroachievementsOpacity = 0;
-                            achievements.selected = false;
-                            content.focus = true;
-                        } */
                         root.focus = false;
                         root.parent.focus = true;
                     }
@@ -531,9 +354,9 @@ FocusScope {
             visible: (demoLaunched !== true)
             property bool selected: root.focus
             focus: selected
-			width: root.width
+            width: root.width
             height: vpx(root.height * (parseFloat("9%")/100))
-			model: menuModel
+            model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
             keyNavigationWraps: true
@@ -549,12 +372,6 @@ FocusScope {
                                     //if embedded and if we do left to come back to list
                                     if (root.embedded ? !root.parent.focus : false){
                                         if(currentIndex === 0){
-                                            // if (retroachievementsOpacity === 1) {
-                                                // detailsOpacity = 1;
-                                                // retroachievementsOpacity = 0;
-                                                // achievements.selected = false;
-                                                // content.focus = true;
-                                            // }
                                             root.focus = false;
                                             root.parent.focus = true;
                                         }
@@ -570,11 +387,6 @@ FocusScope {
                                     //console.log("api.launchedgame : ",api.launchedgame);
                                     //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
                                     //console.log("gameToLaunched : ", gameToLaunched)
-/*                                     if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
-                                        //console.log("Block Keys.onRightPressed on ListView(menu) of GameView");
-                                        return;
-                                    } */
                                     //console.log("Menu - Keys.onLeftPressed");
                                     sfxNav.play(); 
                                     do{    
@@ -629,18 +441,6 @@ FocusScope {
         }
     }
 
-/*     MediaView {
-        id: mediaScreen
-
-        anchors.fill: parent
-        Behavior on opacity { NumberAnimation { duration: 100 } }
-		opacity: 0
-        visible: opacity !== 0
-
-        mediaModel: mediaArray();
-        mediaIndex: media.currentIndex !== -1 ? media.currentIndex : 0
-        onClose: closeMedia();
-    } */
     Keys.onReleased: {
         //console.log("Keys.onReleased::hotkeyPressed : ", hotkeyPressed);
         // Guide
@@ -657,12 +457,6 @@ FocusScope {
         //console.log("api.launchedgame : ",api.launchedgame);
         //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
         //console.log("Keys.onPressed::hotkeyPressed : ", hotkeyPressed);
-/*         if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-            //console.log("api.launchedgame.path : ",api.launchedgame.path);
-            event.accepted = true;
-            //console.log("Block Keys.onPressed on GameView");
-            return;
-        } */
         //to ignore keys if hotkey still pressed
         if(hotkeyPressed === true) return;
         // Guide
@@ -677,43 +471,13 @@ FocusScope {
             //to let video to run if needed
             videoToStop = false;
             if(embedded){
-/*                 if (retroachievementsOpacity === 1) {
-                    detailsOpacity = 1;
-                    retroachievementsOpacity = 0;
-                    achievements.selected = false;
-                    content.focus = true;
-                } */
                 root.focus = false;
                 root.parent.focus = true;
             }
             else{
-/*                 if (mediaScreen.visible)
-                    closeMedia();
-                else */
                 previousScreen();
             }
         }
-/*         // Toggle Favorite
-        if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            sfxAccept.play();
-            game.favorite = !game.favorite;
-        } */
-
-        // Launch Netplay
-/*         if (api.keys.isFilters(event) && !event.isAutoRepeat) {
-            event.accepted = true;
-            sfxToggle.play();
-            if(readyForNeplay){
-                //to force focus & reload dialog
-                netplayRoomDialog.focus = false;
-                netplayRoomDialog.active = false;
-                netplayRoomDialog.game = game; //set game
-                netplayRoomDialog.active = true;
-                netplayRoomDialog.focus = true;
-            }
-        }
- */
         if(!embedded){
         // Next game
         if (api.keys.isNextPage(event) && !event.isAutoRepeat && !global.guideButtonPressed) {

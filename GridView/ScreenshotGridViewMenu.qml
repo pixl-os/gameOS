@@ -1,18 +1,5 @@
 // gameOS theme
-// Copyright (C) 2018-2020 Seth Powell
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// created by BozoTheGeek 11/09/2023 to manage "screenshots" in this theme
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
@@ -209,7 +196,7 @@ FocusScope {
         color: theme.main
         z: 5
 
-        HeaderBar {
+        ScreenshotHeaderBar {
             id: headercontainer
 
             anchors.fill: parent
@@ -247,7 +234,6 @@ FocusScope {
                     return cellWidth * settings.WideRatio;
                 }
             }
-            property var sourceThumbnail: showBoxes ? "BoxArtGridItem.qml" : "../Global/DynamicGridItem.qml"
 
             Component.onCompleted: {
                 currentIndex = storedCollectionGameIndex;
@@ -263,7 +249,7 @@ FocusScope {
                 bottom: parent.bottom; bottomMargin: helpMargin + vpx(40)
             }
             cellWidth: width / numColumns
-            cellHeight: ((showBoxes) ? cellWidth * cellHeightRatio : savedCellHeight) + titleMargin
+            cellHeight: savedCellHeight + titleMargin
             preferredHighlightBegin: vpx(0)
             preferredHighlightEnd: gamegrid.height - helpMargin - vpx(40)
             highlightRangeMode: GridView.ApplyRange
@@ -274,42 +260,12 @@ FocusScope {
             displayMarginEnd: cellHeight * 2
 
             model: list.games
-            delegate: (showBoxes) ? boxartdelegate : dynamicDelegate
-
-            Component {
-                id: boxartdelegate
-
-                BoxArtGridItem {
-                    selected: GridView.isCurrentItem && root.focus
-                    gameData: modelData
-
-                    width:      GridView.view.cellWidth
-                    height:     GridView.view.cellHeight - titleMargin
-                    
-                    onActivate: {
-                        if (selected)
-                            gameActivated();
-                        else
-                            gamegrid.currentIndex = index;
-                    }
-                    onHighlighted: {
-                        gamegrid.currentIndex = index;
-                    }
-                    Keys.onPressed: {
-                        // Toggle favorite
-                        if (api.keys.isDetails(event) && !event.isAutoRepeat) {
-                            event.accepted = true;
-                            sfxToggle.play();
-                            modelData.favorite = !modelData.favorite;
-                        }
-                    }
-                }
-            }
+            delegate: dynamicDelegate
 
             Component {
                 id: dynamicDelegate
 
-                DynamicGridItem {
+                ScreenshotDynamicGridItem {
                     id: dynamicdelegatecontainer
 
                     selected: GridView.isCurrentItem && root.focus
@@ -453,56 +409,21 @@ FocusScope {
             return;
         }
 
-        // Random Game math here for best refresh
-        var randomGame = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-
         // Scroll Up - use R1 now
         if (api.keys.isNextPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            lastR1PressedTimestamp = Date.now();
-            //console.log("lastR1PressedTimestamp : ", lastR1PressedTimestamp);
-            if(lastL1PressedTimestamp !== 0 && ((lastR1PressedTimestamp - lastL1PressedTimestamp) <= 100)){
-                //press L1+R1 detected
-                //console.log("press L1+R1 detected");
-                //launch action here
-                gamegrid.currentIndex = randomGame
-                sfxToggle.play();
-                gameActivated();
-                //console.log("ramdom game selected");
-                //reset timestamps
-                lastR1PressedTimestamp = 0;
-                lastL1PressedTimestamp = 0;
-            }
-            else{
-                //launch potential navigation to next letter using timer now
-                nextLetterDirection = +1
-                navigateToNextLetterTimer.start();
-            }
+            //launch potential navigation to next letter using timer now
+            nextLetterDirection = +1
+            navigateToNextLetterTimer.start();
             return;
         }
 
         // Scroll Down - use L1 now
         if (api.keys.isPrevPage(event) && !event.isAutoRepeat) {
             event.accepted = true;
-            lastL1PressedTimestamp = Date.now();
-            //console.log("lastL1PressedTimestamp : ", lastL1PressedTimestamp);
-            if(lastR1PressedTimestamp !== 0 && ((lastL1PressedTimestamp - lastR1PressedTimestamp) <= 100)){
-                //press L1+R1 detected
-                //console.log("press L1+R1 detected");
-                //launch action here
-                gamegrid.currentIndex = randomGame
-                sfxToggle.play();
-                gameActivated();
-                //console.log("ramdom game selected");
-                //reset timestamps
-                lastR1PressedTimestamp = 0;
-                lastL1PressedTimestamp = 0;
-            }
-            else{
-                //launch potential navigation to previous letter using timer now
-                nextLetterDirection = -1
-                navigateToNextLetterTimer.start();
-            }
+            //launch potential navigation to previous letter using timer now
+            nextLetterDirection = -1
+            navigateToNextLetterTimer.start();
             return;
         }
         // Next collection - R2 now
@@ -554,20 +475,12 @@ FocusScope {
             button: "cancel"
         }
         ListElement {
-            name: qsTr("Toggle favorite")
-            button: "details"
-        }
-        ListElement {
             name: qsTr("Filters/Search")
             button: "filters"
         }
         ListElement {
             name: qsTr("View details")
             button: "accept"
-        }
-        ListElement {
-          name: qsTr("random game (L1+R1)")
-          button: "random"
         }
     }
 
