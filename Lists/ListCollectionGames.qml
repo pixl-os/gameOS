@@ -32,7 +32,9 @@ Item {
         filters: [
             ValueFilter { roleName: "favorite"; value: true; enabled: showFavs },
             RegExpFilter { roleName: "title"; pattern: searchTerm; caseSensitivity: Qt.CaseInsensitive; enabled: searchTerm != "" },
-            IndexFilter { maximumIndex: max - 1; enabled: max }
+            RegExpFilter { roleName: "title"; pattern: regionSSModel.get(collectionRegionIndex).regex; caseSensitivity: Qt.CaseInsensitive; enabled: collectionRegionIndex != -1 },
+            RegExpFilter { roleName: "title"; pattern: languageSSModel.get(collectionLanguageIndex).regex; caseSensitivity: Qt.CaseInsensitive; enabled: collectionLanguageIndex != -1 },
+			IndexFilter { maximumIndex: max - 1; enabled: max }
         ]
         sorters: [
             RoleSorter { roleName: sortByFilter[sortByIndex]; sortOrder: orderBy }

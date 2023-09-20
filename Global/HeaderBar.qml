@@ -125,16 +125,16 @@ FocusScope {
 
                 property bool selected: (buttonbar.currentIndex === 0) && root.focus
                 onSelectedChanged:{
-					//console.log("onSelectedChanged");
-					//console.log("searchbar.selected :",searchbar.selected); 
-					//console.log("searchInput.searchActive : ",searchInput.searchActive);
-					//console.log("searchInput.focus : ",searchInput.focus);
+                    //console.log("onSelectedChanged");
+                    //console.log("searchbar.selected :",searchbar.selected); 
+                    //console.log("searchInput.searchActive : ",searchInput.searchActive);
+                    //console.log("searchInput.focus : ",searchInput.focus);
                     if (!searchbar.selected && searchInput.searchActive) searchInput.searchActive = !searchInput.searchActive;
-					if(searchbar.selected) {
-						searchbar.focus = true;
-						searchInput.cursorVisible = false;
-					}
-				}
+                    if(searchbar.selected) {
+                        searchbar.focus = true;
+                        searchInput.cursorVisible = false;
+                    }
+                }
 
                 width: (searchInput.searchActive || searchTerm != "") ? vpx(250) : height
                 height: vpx(40)
@@ -167,7 +167,7 @@ FocusScope {
 
                 TextInput {
                     id: searchInput
-					property bool searchActive: false
+                    property bool searchActive: false
                     anchors {
                         left: searchicon.right; leftMargin: vpx(10)
                         top: parent.top; bottom: parent.bottom
@@ -208,10 +208,10 @@ FocusScope {
                             return;
                         }
                     }
-					event.accepted = virtualKeyboardOnReleased(event);
-					//to reset demo if needed
-					if (event.accepted) resetDemo();
-				}
+                    event.accepted = virtualKeyboardOnReleased(event);
+                    //to reset demo if needed
+                    if (event.accepted) resetDemo();
+                }
 
                 Keys.onPressed: {
                     /*console.log("-----Before update-----");
@@ -332,7 +332,7 @@ FocusScope {
                     visible: filterbutton.selected
                 }
 
-                // Filter title
+                // Filter title for Favorites
                 Text {
                     id: filtertitle
 
@@ -353,6 +353,83 @@ FocusScope {
                     }
                 }
             }
+
+            // Regions menu
+            Item {
+                id: regionbutton
+
+                property bool selected: ListView.isCurrentItem && root.focus
+                width: filtertitleregion.contentWidth + vpx(30)
+                height: searchbar.height
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    radius: height/2
+                    color: theme.accent
+                    visible: regionbutton.selected
+                }
+
+                // Filter title by Region
+                Text {
+                    id: filtertitleregion
+
+                    text: collectionRegionIndex === -1 ? qsTr("All regions") + api.tr : regionSSModel.get(collectionRegionIndex).displayedName
+
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(18)
+                    anchors.centerIn: parent
+                    elide: Text.ElideRight
+                }
+
+                Keys.onPressed: {
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        changeRegions();
+                    }
+                }
+            }
+
+            // Languages menu
+            Item {
+                id: languagebutton
+
+                property bool selected: ListView.isCurrentItem && root.focus
+                width: filtertitlelanguage.contentWidth + vpx(30)
+                height: searchbar.height
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    radius: height/2
+                    color: theme.accent
+                    visible: languagebutton.selected
+                }
+
+                // Filter title by Language
+                Text {
+                    id: filtertitlelanguage
+
+                    text: collectionLanguageIndex === -1 ? qsTr("All languages") + api.tr : languageSSModel.get(collectionLanguageIndex).displayedName
+
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(18)
+                    anchors.centerIn: parent
+                    elide: Text.ElideRight
+                }
+
+                Keys.onPressed: {
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        changeLanguages();
+                    }
+                }
+            }
+
         }
 
         // Buttons
