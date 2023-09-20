@@ -228,6 +228,28 @@ FocusScope {
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
     }
 
+    //ScreenScraper regions 
+    // Warning: it's without the tips to put "wor" in dooblons -> to resolve later if needed for ShowcaseViewMenu if bug confirmed)
+    ListModel {
+        id: regionSSModel
+        ListElement { region: "wor"; regex: "\\(.*world.*\\)|\\[.*world.*\\]"; displayedName: qsTr("World")}
+        ListElement { region: "us"; regex: "\\(.*usa.*\\)|\\[.*usa.*\\]"; displayedName: qsTr("USA")}
+        ListElement { region: "eu"; regex: "\\(.*europe.*\\)|\\[.*europe.*\\]"; displayedName: qsTr("Europe")}
+        ListElement { region: "jp"; regex: "\\(.*japan.*\\)|\\[.*japan.*\\]"; displayedName: qsTr("Japan")}
+    }
+
+    //ScreenScraper language
+    ListModel {
+        id: languageSSModel
+        ListElement { region: "fr"; regex: "\\(.*,fr|fr,|fr\\)"; displayedName: qsTr("French")}
+        ListElement { region: "en"; regex: "\\(.*,en|en,|en\\)"; displayedName: qsTr("English")}
+        ListElement { region: "jp"; regex: "\\(.*,jp|jp,|jp\\)"; displayedName: qsTr("Japanese")}
+        ListElement { region: "de"; regex: "\\(.*,de|de,|de\\)"; displayedName: qsTr("German")}
+        ListElement { region: "es"; regex: "\\(.*,es|es,|es\\)"; displayedName: qsTr("Spanish")}
+        ListElement { region: "it"; regex: "\\(.*,it|it,|it\\)"; displayedName: qsTr("Italian")}
+        ListElement { region: "pt"; regex: "\\(.*,pt|pt,|pt\\)"; displayedName: qsTr("Portuguese")}
+    }
+
     // Filtering options
     property bool showFavs: false
     property var sortByFilter: ["title", "lastPlayed", "playCount", "rating"]
@@ -236,6 +258,8 @@ FocusScope {
     property int orderBy: Qt.AscendingOrder
     property string searchTerm: ""
     property bool steam: typeof(currentCollection) !== 'undefined' ? currentCollection.name === "Steam" : false
+    property int collectionRegionIndex: -1 //corresponding to "All Regions"
+    property int collectionLanguageIndex: -1 //corresponding to "All Languages"
 
     function steamExists() {
         for (i = 0; i < api.collections.count; i++) {
@@ -249,6 +273,22 @@ FocusScope {
     // Functions for switching currently active collection
     function toggleFavs() {
         showFavs = !showFavs;
+    }
+
+    // Functions for change regions in currently active collection
+    function changeRegions(){
+        if(collectionRegionIndex < (regionSSModel.count -1)){
+            collectionRegionIndex = collectionRegionIndex + 1;
+        }
+        else collectionRegionIndex = -1;
+    }
+
+    // Functions for change languages in currently active collection
+    function changeLanguages(){
+        if(collectionLanguageIndex < (languageSSModel.count -1)){
+            collectionLanguageIndex = collectionLanguageIndex + 1;
+        }
+        else collectionLanguageIndex = -1;
     }
 
     function cycleSort() {
@@ -584,7 +624,7 @@ FocusScope {
         // As long as there is a state history, save the last game
         if (lastState.length != 0){
             if (typeof(currentGame) !== "undefined") {
-	            //console.log("gameDetails - currentGame.title:", currentGame.title);
+                //console.log("gameDetails - currentGame.title:", currentGame.title);
                 //console.log("gameDetails - currentGame:", JSON.stringify(currentGame));
                 //console.log("gameDetails - lastGame (before push) : ",JSON.stringify(lastGame));
                 lastGame.push(currentGame.title);

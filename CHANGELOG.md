@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2023-0X-XX - v1.24
 - new features:
 	- management of "screenshots" specifically to be able to display it in this theme
+	- add filters for languages and regions from grid/list (using info from game title, depending scraps)
 
 - fixes:
 	- fix banner video launching when no favorite exists

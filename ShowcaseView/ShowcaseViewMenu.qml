@@ -407,17 +407,6 @@ FocusScope {
 
     anchors.fill: parent
 
-    //ScreenScraper regions
-    ListModel {
-        id: regionSSModel
-        ListElement { region: "us" }
-        ListElement { region: "wor"}
-        ListElement { region: "eu" }
-        ListElement { region: "wor"}
-        ListElement { region: "jp"}
-        ListElement { region: "wor"}
-    }
-
     function getInitialRegionIndex(){
         for(var i = 0; i < regionSSModel.count; i++){
             if(settings.PreferedRegion === regionSSModel.get(i).region){
