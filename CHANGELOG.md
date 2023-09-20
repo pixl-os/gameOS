@@ -2,8 +2,15 @@
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
 ## [pixL-master] - 2023-0X-XX - v1.24
-- fix:
+- new features:
+	- management of "screenshots" specifically to be able to display it in this theme
+
+- fixes:
 	- fix banner video launching when no favorite exists
+	- fix overlays usage in "embedded" mode used in vertical list
+	- fix scrapped video using overlay with 16/9 ratio/black bars
+	- fix to avoid to zoom video in case of "game & watch" system for preview video
+	- fix to avoid to display system logo for embedded views in vertical lists
 
 ## [pixL-master] - 2023-07-28 - v1.23
 - logo:
