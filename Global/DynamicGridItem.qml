@@ -92,6 +92,11 @@ Item {
         }
     }
 
+    Component.onCompleted: {
+        console.log("Component.onCompleted: gameData.checkRAHashLibrary();")
+        gameData.checkRAHashLibrary();
+    }
+
     // NOTE: Fade out the bg so there is a smooth transition into the video
     Timer {
         id: fadescreenshot
@@ -243,6 +248,26 @@ Item {
         }
     }
 
+    Rectangle {
+        id: raicon
+
+        anchors {
+            right: parent.right; rightMargin: vpx(10);
+            top: gameData.favorite ? favicon.bottom : parent.top;
+            topMargin: gameData.favorite ? vpx(5) : vpx(10)
+        }
+        width: parent.width / 12
+        height: width
+        radius: width/2
+        color: theme.accent
+        visible: (gameData.RaGameID !== 0) ? true : false
+        Image {
+            source: "../assets/images/icon_cup.svg"
+            asynchronous: true
+            anchors.fill: parent
+            anchors.margins: parent.width / 6
+        }
+    }
     Loader {
         id: spinnerloader
 
