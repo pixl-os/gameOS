@@ -61,6 +61,11 @@ Item {
     signal activate()
     signal highlighted()
 
+    Component.onCompleted: {
+        console.log("Component.onCompleted: gameData.checkRetroAchievements();")
+        gameData.checkRetroAchievements();
+    }
+
     Item
     {
         id: container
@@ -95,6 +100,26 @@ Item {
                 visible: gameData.favorite
                 Image {
                     source: "../assets/images/favicon.svg"
+                    asynchronous: true
+                    anchors.fill: parent
+                    anchors.margins: vpx(4)
+                }
+            }
+            Rectangle {
+                id: raicon
+
+                anchors {
+                    right: parent.right; rightMargin: vpx(7);
+                    top: gameData.favorite ? favicon.bottom : parent.top;
+                    topMargin: gameData.favorite ? vpx(4) : vpx(7)
+                }
+                width: vpx(20)
+                height: width
+                radius: width/2
+                color: theme.accent
+                visible: (gameData.RaGameID !== 0) ? true : false
+                Image {
+                    source: "../assets/images/icon_cup.svg"
                     asynchronous: true
                     anchors.fill: parent
                     anchors.margins: vpx(4)
