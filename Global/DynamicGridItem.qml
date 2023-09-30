@@ -93,8 +93,8 @@ Item {
     }
 
     Component.onCompleted: {
-        console.log("Component.onCompleted: gameData.checkRAHashLibrary();")
-        gameData.checkRAHashLibrary();
+        console.log("Component.onCompleted: gameData.checkRetroAchievements();")
+        gameData.checkRetroAchievements();
     }
 
     // NOTE: Fade out the bg so there is a smooth transition into the video
