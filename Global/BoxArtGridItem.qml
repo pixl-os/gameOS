@@ -63,7 +63,14 @@ Item {
 
     Component.onCompleted: {
         console.log("Component.onCompleted: gameData.checkRetroAchievements();")
-        gameData.checkRetroAchievements();
+        if (gameData){
+            var path = gameData.files.get(0).path;
+            var word = path.split('/');
+            console.log("collection : " + gameData.collections.get(0).shortName)
+            console.log("game : " + gameData.title)
+            console.log("rom : " + word[word.length-1])
+            //gameData.checkRetroAchievements();
+        }
     }
 
     Item
@@ -117,7 +124,7 @@ Item {
                 height: width
                 radius: width/2
                 color: theme.accent
-                visible: (gameData.RaGameID !== 0) ? true : false
+                visible: (gameData.RaGameID > 0) ? true : false
                 Image {
                     source: "../assets/images/icon_cup.svg"
                     asynchronous: true
