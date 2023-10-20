@@ -25,9 +25,11 @@ Item {
         var str = gameData.assets.boxFront.split("header");
         return str[0];
     }
+
     function steamBoxArt(gameData) {
         return steamAppID(gameData) + '/library_600x900_2x.jpg';
     }
+
     function boxArt(data) {
         if (data !== null) {
             if (data.assets.boxFront.includes("/header.jpg"))
@@ -62,17 +64,13 @@ Item {
     signal highlighted()
 
     Component.onCompleted: {
-        console.log("Component.onCompleted: gameData.checkRetroAchievements();")
-        if (gameData){
-            var path = gameData.files.get(0).path;
-            var word = path.split('/');
-            console.log("collection : " + gameData.collections.get(0).shortName)
-            console.log("game : " + gameData.title)
-            console.log("rom : " + word[word.length-1])
-            //gameData.checkRetroAchievements();
-        }
+        //console.log("BoxArtGridIem root Completed")
     }
-
+    
+    Component.onDestruction: {
+        //console.log("BoxArtGridIem root Destroyed")
+    }
+    
     Item
     {
         id: container
@@ -83,21 +81,55 @@ Item {
 
         Image {
             id: screenshot
+
             anchors.fill: parent
             anchors.margins: vpx(2)
-
             asynchronous: true
             source: boxArt(gameData)
             sourceSize { width: root.width; height: root.height }
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-
+            property bool isDestroyed 
+            onStatusChanged:{
+                if (screenshot.status == Image.Ready && gameData){
+                    ra_timer.restart();
+                    isDestroyed = false;
+                }
+            }
+            Component.onCompleted: {
+                //console.log("BoxArtGridIem screenshot Completed")
+            }
+            Component.onDestruction: {
+                //console.log("BoxArtGridIem screenshot Destroyed")
+                isDestroyed = true;
+            }
+            // NOTE: Fade out the bg so there is a smooth transition into the video
+            Timer {
+                id: ra_timer
+                interval: 1000
+                running: false
+                triggeredOnStart: false
+                repeat: false
+                onTriggered: {
+                    //console.log("parent.isDestroyed : ", parent.isDestroyed);
+                     if (gameData){
+                        /*var path = gameData.files.get(0).path;
+                        var word = path.split('/');
+                        console.log("collection : " + gameData.collections.get(0).shortName)
+                        console.log("game : " + gameData.title)
+                        console.log("rom : " + word[word.length-1])*/
+                        if(!screenshot.isDestroyed){
+                            gameData.checkRetroAchievements();
+                        }
+                    }
+                }
+            }
             Rectangle {
                 id: favicon
 
                 anchors {
-                    right: parent.right; rightMargin: vpx(7);
+                    left: parent.left; leftMargin: vpx(7);
                     top: parent.top; topMargin: vpx(7)
                 }
                 width: vpx(20)
@@ -116,7 +148,7 @@ Item {
                 id: raicon
 
                 anchors {
-                    right: parent.right; rightMargin: vpx(7);
+                    left: parent.left; leftMargin: vpx(7);
                     top: gameData.favorite ? favicon.bottom : parent.top;
                     topMargin: gameData.favorite ? vpx(4) : vpx(7)
                 }
