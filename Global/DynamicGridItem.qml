@@ -19,7 +19,7 @@ import QtGraphicalEffects 1.15
 
 Item {
     id: root
-    
+
     // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
     function steamAppID (gameData) {
         var str = gameData.assets.boxFront.split("header");
@@ -29,7 +29,6 @@ Item {
     function steamLogo(gameData) {
         return steamAppID(gameData) + "/logo.png"
     }
-
 
     function logo(data) {
         if (data !== null) {
@@ -93,17 +92,13 @@ Item {
     }
 
     Component.onCompleted: {
-        console.log("Component.onCompleted: gameData.checkRetroAchievements();")
-        if (gameData){
-            var path = gameData.files.get(0).path;
-            var word = path.split('/');
-            console.log("collection : " + gameData.collections.get(0).shortName)
-            console.log("game : " + gameData.title)
-            console.log("rom : " + word[word.length-1])
-            //gameData.checkRetroAchievements();
-        }
+        //console.log("DynamicGridIem root Completed")
     }
-
+    
+    Component.onDestruction: {
+        //console.log("DynamicGridIem root Destroyed")
+    }
+    
     // NOTE: Fade out the bg so there is a smooth transition into the video
     Timer {
         id: fadescreenshot
@@ -129,12 +124,47 @@ Item {
 
             anchors.fill: parent
             anchors.margins: vpx(2)
-            source: modelData ? modelData.assets.screenshots[0] || modelData.assets.background || "" : ""
-            fillMode: Image.PreserveAspectCrop
-            sourceSize: Qt.size(screenshot.width, screenshot.height)
-            smooth: false
             asynchronous: true
+            source: modelData ? modelData.assets.screenshots[0] || modelData.assets.background || "" : ""
+            sourceSize: Qt.size(screenshot.width, screenshot.height)
+            fillMode: Image.PreserveAspectCrop
+            smooth: false
             Behavior on opacity { NumberAnimation { duration: 200 } }
+            property bool isDestroyed 
+            onStatusChanged:{
+                if (screenshot.status == Image.Ready && gameData){
+                    ra_timer.restart();
+                    isDestroyed = false;
+                }
+            }
+            Component.onCompleted: {
+                //console.log("DynamicGridIem screenshot Completed")
+            }
+            Component.onDestruction: {
+                //console.log("DynamicGridIem screenshot Destroyed")
+                isDestroyed = true;
+            }
+            // NOTE: Fade out the bg so there is a smooth transition into the video
+            Timer {
+                id: ra_timer
+                interval: 1000
+                running: false
+                triggeredOnStart: false
+                repeat: false
+                onTriggered: {
+                    //console.log("parent.isDestroyed : ", parent.isDestroyed);
+                     if (gameData){
+                        /*var path = gameData.files.get(0).path;
+                        var word = path.split('/');
+                        console.log("collection : " + gameData.collections.get(0).shortName)
+                        console.log("game : " + gameData.title)
+                        console.log("rom : " + word[word.length-1])*/
+                        if(!screenshot.isDestroyed){
+                            gameData.checkRetroAchievements();
+                        }
+                    }
+                }
+            }
         }
 
         Image {
