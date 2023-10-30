@@ -777,7 +777,7 @@ FocusScope {
                 left: parent.left; leftMargin: (parent.width * (parseFloat("5%")/100))
                 right: parent.right; rightMargin: (parent.width * (parseFloat("5%")/100))
             }
-            height: vpx(parent.height * (parseFloat("70%")/100)) - header.height
+            height: (parent.height * (parseFloat("70%")/100)) - header.height
 
             GameAchievements {
             id: achievements
