@@ -425,6 +425,82 @@ FocusScope {
                         opacity: selected ? 1 : 0.2
                     }
                 }
+
+                Rectangle {
+                    id: favicon
+
+                    anchors {
+                        right: parent.right; rightMargin: vpx(parent.height*0.0666);
+                        top: parent.top; topMargin: vpx(parent.height*0.0666);
+                    }
+                    height: parent.height*0.4
+                    width: height
+                    radius: width/2
+                    color: theme.accent
+                    visible: modelData.favorite
+                    Image {
+                        source: "../assets/images/favicon.svg"
+                        asynchronous: true
+                        anchors.fill: parent
+                        anchors.margins: parent.width / 6
+                    }
+                }
+
+                Rectangle {
+                    id: raicon
+
+                    anchors {
+                        right: parent.right; rightMargin: vpx(parent.height*0.066);
+                        top: favicon.visible ? favicon.bottom : parent.top;
+                        topMargin: vpx(parent.height*0.066);
+                    }
+                    height: parent.height*0.4
+                    width: height
+                    radius: width/2
+                    color: theme.accent
+                    visible: (modelData.RaGameID > 0) ? true : false
+                    Image {
+                        source: "../assets/images/icon_cup.svg"
+                        asynchronous: true
+                        anchors.fill: parent
+                        anchors.margins: parent.width / 6
+                        property bool isDestroyed
+                        onStatusChanged:{
+                            if (Image.Ready && modelData){
+                                ra_timer.restart();
+                                isDestroyed = false;
+                            }
+                        }
+                        Component.onCompleted: {
+                            //console.log("SoftwareListMenu raicon Completed")
+                        }
+                        Component.onDestruction: {
+                            //console.log("SoftwareListMenu racon Destroyed")
+                            isDestroyed = true;
+                        }
+                        Timer {
+                            id: ra_timer
+                            interval: 1000
+                            running: false
+                            triggeredOnStart: false
+                            repeat: false
+                            onTriggered: {
+                                //console.log("parent.isDestroyed : ", parent.isDestroyed);
+                                 if (modelData){
+                                    /*var path = modelData.files.get(0).path;
+                                    var word = path.split('/');
+                                    console.log("collection : " + modelData.collections.get(0).shortName)
+                                    console.log("game : " + modelData.title)
+                                    console.log("rom : " + word[word.length-1])*/
+                                    if(!Image.isDestroyed){
+                                        modelData.checkRetroAchievements();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Mouse/touch functionality
                 MouseArea {
                     anchors.fill: parent
