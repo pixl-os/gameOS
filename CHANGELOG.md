@@ -1,10 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-0X-XX - v1.24
+## [pixL-master] - 2023-11-01 - v1.24
 - new features:
 	- management of "screenshots" specifically to be able to display it in this theme
 	- add filters for languages and regions from grid/list (using info from game title, depending scraps)
+	- using hash library to display cup icon in dynamic/boxart grid for retroachievements
+	- add calling of RA hash checking in lists after loading of media and avoid during scrolling
+	- add favorites/retroachievements icons management in vertical list
 
 - fixes:
 	- fix banner video launching when no favorite exists
