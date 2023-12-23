@@ -34,9 +34,6 @@ FocusScope {
 
     SnowFall{}
 
-    property string randoPub: (Utils.returnRandom(Utils.uniqueValuesArray('publisher')) || '')
-    property string randoGenre: (Utils.returnRandom(Utils.uniqueValuesArray('genreList'))[0] || '').toLowerCase()
-
     // Pull in our custom lists and define
     ListNone    { id: listNone;        max: 0 }
     ListFavorites   { id: listFavorites;   } //no limit in favory now - better to limit in collection itself
