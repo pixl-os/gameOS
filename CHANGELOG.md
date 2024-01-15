@@ -1,5 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
+## [pixL-master] - 2023-mm-dd - v1.xx
+- logo:
+	- Add new PS3 system logos
+	- Add new NAMCO357 system logos
+	- Add new SYS2x6 system logos
 
 ## [pixL-master] - 2024-02-03 - v1.25
 - new features:
