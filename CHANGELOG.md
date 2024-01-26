@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - 2023-XX-XX - v1.25
+- new features:
+	- management of icons/filters for lightgun games
+
 ## [pixL-master] - 2023-11-01 - v1.24
 - new features:
 	- management of "screenshots" specifically to be able to display it in this theme

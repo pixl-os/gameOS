@@ -336,7 +336,7 @@ FocusScope {
                 Text {
                     id: filtertitle
 
-                    text: (showFavs) ? qsTr("Favorites") + api.tr : qsTr("All games") + api.tr
+                    text: (showFavs) ? qsTr("Favorites") + api.tr : ((showLightgunGames) ? qsTr("Lightgun games") + api.tr : qsTr("All games") + api.tr)
 
                     color: theme.text
                     font.family: subtitleFont.name
@@ -349,7 +349,15 @@ FocusScope {
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
-                        toggleFavs();
+                        //to manage the three stats
+                        if(showFavs){
+                            showFavs = false;
+                            showLightgunGames = true;
+                        }
+                        else if(showLightgunGames){
+                            showLightgunGames = false;
+                        }
+                        else showFavs = true;
                     }
                 }
             }

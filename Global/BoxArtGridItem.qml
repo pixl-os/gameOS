@@ -129,10 +129,10 @@ Item {
                 id: favicon
 
                 anchors {
-                    left: parent.left; leftMargin: vpx(7);
-                    top: parent.top; topMargin: vpx(7)
+                    left: parent.left; leftMargin: vpx(4);
+                    top: parent.top; topMargin: visible ? vpx(4) : vpx(0);
                 }
-                width: vpx(20)
+                width: visible ? vpx(20) : vpx(0)
                 height: width
                 radius: width/2
                 color: theme.accent
@@ -148,17 +148,35 @@ Item {
                 id: raicon
 
                 anchors {
-                    left: parent.left; leftMargin: vpx(7);
-                    top: gameData.favorite ? favicon.bottom : parent.top;
-                    topMargin: gameData.favorite ? vpx(4) : vpx(7)
+                    left: parent.left; leftMargin: vpx(4);
+                    top: favicon.bottom; topMargin: visible ? vpx(4) : vpx(0);
                 }
-                width: vpx(20)
+                width: visible ? vpx(20) : vpx(0)
                 height: width
                 radius: width/2
                 color: theme.accent
                 visible: (gameData.RaGameID > 0) ? true : false
                 Image {
                     source: "../assets/images/icon_cup.svg"
+                    asynchronous: true
+                    anchors.fill: parent
+                    anchors.margins: vpx(4)
+                }
+            }
+            Rectangle {
+                id: lighgunicon
+
+                anchors {
+                    left: parent.left; leftMargin: vpx(4);
+                    top: raicon.bottom; topMargin: visible ? vpx(4) : vpx(0);
+                }
+                width: visible ? vpx(20) : vpx(0)
+                height: width
+                radius: width/2
+                color: theme.accent
+                visible: gameData.lightgungame
+                Image {
+                    source: "../assets/images/icon_zapper.svg"
                     asynchronous: true
                     anchors.fill: parent
                     anchors.margins: vpx(4)
