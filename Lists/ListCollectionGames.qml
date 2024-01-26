@@ -31,6 +31,7 @@ Item {
         sourceModel: collection.games
         filters: [
             ValueFilter { roleName: "favorite"; value: true; enabled: showFavs },
+            ValueFilter { roleName: "lightgungame"; value: true; enabled: showLightgunGames },
             RegExpFilter { roleName: "title"; pattern: searchTerm; caseSensitivity: Qt.CaseInsensitive; enabled: searchTerm != "" },
             RegExpFilter { roleName: "title"; pattern: regionSSModel.get(collectionRegionIndex).regex; caseSensitivity: Qt.CaseInsensitive; enabled: collectionRegionIndex != -1 },
             RegExpFilter { roleName: "title"; pattern: languageSSModel.get(collectionLanguageIndex).regex; caseSensitivity: Qt.CaseInsensitive; enabled: collectionLanguageIndex != -1 },

@@ -426,15 +426,19 @@ FocusScope {
                     }
                 }
 
+                //for icons, we propose to centralize margin and size
+                property int horizontal_margin: vpx(height*0.033); //vpx(height*0.0666);
+                property int vertical_margin: vpx(height*0.033); //vpx(height*0.0666);
+                property int icon_size: height*0.3; //height*0.4;
                 Rectangle {
                     id: favicon
 
                     anchors {
-                        right: parent.right; rightMargin: vpx(parent.height*0.0666);
-                        top: parent.top; topMargin: vpx(parent.height*0.0666);
+                        right: parent.right; rightMargin: horizontal_margin;
+                        top: parent.top; topMargin: visible ? vertical_margin : vpx(0);
                     }
-                    height: parent.height*0.4
-                    width: height
+                    width: visible ? icon_size : vpx(0)
+                    height: width
                     radius: width/2
                     color: theme.accent
                     visible: modelData.favorite
@@ -450,12 +454,11 @@ FocusScope {
                     id: raicon
 
                     anchors {
-                        right: parent.right; rightMargin: vpx(parent.height*0.066);
-                        top: favicon.visible ? favicon.bottom : parent.top;
-                        topMargin: vpx(parent.height*0.066);
+                        right: parent.right; rightMargin: horizontal_margin;
+                        top: favicon.bottom; topMargin: visible ? vertical_margin : vpx(0);
                     }
-                    height: parent.height*0.4
-                    width: height
+                    width: visible ? icon_size : vpx(0)
+                    height: width
                     radius: width/2
                     color: theme.accent
                     visible: (modelData.RaGameID > 0) ? true : false
@@ -498,6 +501,26 @@ FocusScope {
                                 }
                             }
                         }
+                    }
+                }
+
+                Rectangle {
+                    id: lighgunicon
+
+                    anchors {
+                        right: parent.right; rightMargin: horizontal_margin;
+                        top: raicon.bottom; topMargin: visible ? vertical_margin : vpx(0);
+                    }
+                    width: visible ? icon_size : vpx(0)
+                    height: width
+                    radius: width/2
+                    color: theme.accent
+                    visible: modelData.lightgungame
+                    Image {
+                        source: "../assets/images/icon_zapper.svg"
+                        asynchronous: true
+                        anchors.fill: parent
+                        anchors.margins: parent.width / 6
                     }
                 }
 

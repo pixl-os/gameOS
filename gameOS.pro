@@ -133,6 +133,7 @@ DISTFILES += \
     assets/images/icon_play.svg \
     assets/images/icon_unheart.svg \
     assets/images/icon_up.png \
+    assets/images/icon_zapper.svg \
     assets/images/keyboard/0.png \
     assets/images/keyboard/1.png \
     assets/images/keyboard/2.png \

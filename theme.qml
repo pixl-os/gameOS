@@ -252,6 +252,7 @@ FocusScope {
 
     // Filtering options
     property bool showFavs: false
+    property bool showLightgunGames: false
     property var sortByFilter: ["title", "lastPlayed", "playCount", "rating"]
     property var sortByFilterDisplay: [qsTr("title") + api.tr, qsTr("lastPlayed") + api.tr, qsTr("playCount") + api.tr, qsTr("rating") + api.tr]
     property int sortByIndex: 0
@@ -268,11 +269,6 @@ FocusScope {
             }
             return false;
         }
-    }
-
-    // Functions for switching currently active collection
-    function toggleFavs() {
-        showFavs = !showFavs;
     }
 
     // Functions for change regions in currently active collection

@@ -269,10 +269,10 @@ Item {
         id: favicon
 
         anchors {
-            right: parent.right; rightMargin: vpx(10);
-            top: parent.top; topMargin: vpx(10)
+            right: parent.right; rightMargin: vpx(5);
+            top: parent.top; topMargin: visible ? vpx(5) : vpx(0);
         }
-        width: parent.width / 12
+        width: visible ? parent.width / 12 : vpx(0)
         height: width
         radius: width/2
         color: theme.accent
@@ -289,11 +289,10 @@ Item {
         id: raicon
 
         anchors {
-            right: parent.right; rightMargin: vpx(10);
-            top: gameData.favorite ? favicon.bottom : parent.top;
-            topMargin: gameData.favorite ? vpx(5) : vpx(10)
+            right: parent.right; rightMargin: vpx(5);
+            top: favicon.bottom; topMargin: visible ? vpx(5) : vpx(0);
         }
-        width: parent.width / 12
+        width: visible ? parent.width / 12 : vpx(0)
         height: width
         radius: width/2
         color: theme.accent
@@ -305,6 +304,27 @@ Item {
             anchors.margins: parent.width / 6
         }
     }
+
+    Rectangle {
+        id: lighgunicon
+
+        anchors {
+            right: parent.right; rightMargin: vpx(5);
+            top: raicon.bottom; topMargin: visible ? vpx(5) : vpx(0);
+        }
+        width: visible ? parent.width / 12 : vpx(0)
+        height: width
+        radius: width/2
+        color: theme.accent
+        visible: gameData.lightgungame
+        Image {
+            source: "../assets/images/icon_zapper.svg"
+            asynchronous: true
+            anchors.fill: parent
+            anchors.margins: parent.width / 6
+        }
+    }
+
     Loader {
         id: spinnerloader
 
