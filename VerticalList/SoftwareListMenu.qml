@@ -426,10 +426,11 @@ FocusScope {
                     }
                 }
 
-                //for icons, we propose to centralize margin and size
-                property int horizontal_margin: vpx(height*0.033); //vpx(height*0.0666);
-                property int vertical_margin: vpx(height*0.033); //vpx(height*0.0666);
-                property int icon_size: height*0.3; //height*0.4;
+                //for icons, we propose to centralize margin and size (calculated depending how many to display)
+                property int nb_icons_to_display:  Number(modelData.favorite) + Number(modelData.lightgungame) + Number(modelData.RaGameID > 0)
+                property int horizontal_margin: nb_icons_to_display <= 2 ? vpx(height*0.0666): vpx(height*0.0333);
+                property int vertical_margin: nb_icons_to_display <= 2 ? vpx(height*0.0666): vpx(height*0.0333);
+                property int icon_size: nb_icons_to_display <= 2 ? height*0.4 : height*0.3;
                 Rectangle {
                     id: favicon
 
