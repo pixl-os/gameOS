@@ -240,28 +240,44 @@ FocusScope {
     }
 
     //finally we will use a list of countries also to have best filters
+    //from https://datomatic.no-intro.org/stuff/The%20Official%20No-Intro%20Convention%20(20071030).pdf
+    //and for country code: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 
     ListModel {
         id: countrySSModel
         ListElement { region: "au"; regex: "\\(.*australia.*\\)|\\[.*australia.*\\]"; displayedName: qsTr("Australia")}
+        ListElement { region: "br"; regex: "\\(.*brazil.*\\)|\\[.*brazil.*\\]"; displayedName: qsTr("Brazil")}
         ListElement { region: "ca"; regex: "\\(.*canada.*\\)|\\[.*canada.*\\]"; displayedName: qsTr("Canada")}
         ListElement { region: "cn"; regex: "\\(.*china.*\\)|\\[.*china.*\\]"; displayedName: qsTr("China")}
         ListElement { region: "fr"; regex: "\\(.*france.*\\)|\\[.*france.*\\]"; displayedName: qsTr("France")}
         ListElement { region: "dd"; regex: "\\(.*germany.*\\)|\\[.*germany.*\\]"; displayedName: qsTr("Germany")}
+        ListElement { region: "hk"; regex: "\\(.*hong kong.*\\)|\\[.*hong kong.*\\]"; displayedName: qsTr("Hong Kong")}
         ListElement { region: "it"; regex: "\\(.*italy.*\\)|\\[.*italy.*\\]"; displayedName: qsTr("Italy")}
         ListElement { region: "jp"; regex: "\\(.*japan.*\\)|\\[.*japan.*\\]"; displayedName: qsTr("Japan")}
+        ListElement { region: "kr"; regex: "\\(.*korea.*\\)|\\[.*korea.*\\]"; displayedName: qsTr("Korea")}
+        ListElement { region: "nl"; regex: "\\(.*netherlands.*\\)|\\[.*netherlands.*\\]"; displayedName: qsTr("Netherlands")}
         ListElement { region: "es"; regex: "\\(.*spain.*\\)|\\[.*spain.*\\]"; displayedName: qsTr("Spain")}
+        ListElement { region: "se"; regex: "\\(.*sweden.*\\)|\\[.*sweden.*\\]"; displayedName: qsTr("Sweden")}
+        ListElement { region: "us"; regex: "\\(.*usa.*\\)|\\[.*usa.*\\]"; displayedName: qsTr("USA")}
     }
 
     //ScreenScraper language
     ListModel {
         id: languageSSModel
-        ListElement { region: "fr"; regex: "\\(.*,fr|fr,|fr\\)"; displayedName: qsTr("French")}
         ListElement { region: "en"; regex: "\\(.*,en|en,|en\\)"; displayedName: qsTr("English")}
-        ListElement { region: "jp"; regex: "\\(.*,jp|jp,|jp\\)"; displayedName: qsTr("Japanese")}
+        ListElement { region: "fr"; regex: "\\(.*,fr|fr,|fr\\)"; displayedName: qsTr("French")}
         ListElement { region: "de"; regex: "\\(.*,de|de,|de\\)"; displayedName: qsTr("German")}
         ListElement { region: "es"; regex: "\\(.*,es|es,|es\\)"; displayedName: qsTr("Spanish")}
         ListElement { region: "it"; regex: "\\(.*,it|it,|it\\)"; displayedName: qsTr("Italian")}
         ListElement { region: "pt"; regex: "\\(.*,pt|pt,|pt\\)"; displayedName: qsTr("Portuguese")}
+        ListElement { region: "ja"; regex: "\\(.*,jp|jp,|jp|,ja|ja,|ja\\)"; displayedName: qsTr("Japanese")}
+        ListElement { region: "zh"; regex: "\\(.*,zh|zh,|zh\\)"; displayedName: qsTr("Chinese")}
+        ListElement { region: "ko"; regex: "\\(.*,ko|ko,|ko\\)"; displayedName: qsTr("Korean")}
+        ListElement { region: "da"; regex: "\\(.*,da|da,|da\\)"; displayedName: qsTr("Danish")}
+        ListElement { region: "nl"; regex: "\\(.*,nl|nl,|nl\\)"; displayedName: qsTr("Dutch")}
+        ListElement { region: "fi"; regex: "\\(.*,fi|fi,|fi\\)"; displayedName: qsTr("Finish")}
+        ListElement { region: "no"; regex: "\\(.*,no|no,|no\\)"; displayedName: qsTr("Norwegian")}
+        ListElement { region: "pl"; regex: "\\(.*,pl|pl,|pl\\)"; displayedName: qsTr("Polish")}
+        ListElement { region: "sv"; regex: "\\(.*,sv|sv,|sv\\)"; displayedName: qsTr("Swedish")}
     }
 
     // Filtering options
