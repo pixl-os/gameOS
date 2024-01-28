@@ -236,6 +236,20 @@ FocusScope {
         ListElement { region: "us"; regex: "\\(.*usa.*\\)|\\[.*usa.*\\]"; displayedName: qsTr("USA")}
         ListElement { region: "eu"; regex: "\\(.*europe.*\\)|\\[.*europe.*\\]"; displayedName: qsTr("Europe")}
         ListElement { region: "jp"; regex: "\\(.*japan.*\\)|\\[.*japan.*\\]"; displayedName: qsTr("Japan")}
+        ListElement { region: "asia"; regex: "\\(.*asia.*\\)|\\[.*asia.*\\]"; displayedName: qsTr("Asia")}
+    }
+
+    //finally we will use a list of countries also to have best filters
+    ListModel {
+        id: countrySSModel
+        ListElement { region: "au"; regex: "\\(.*australia.*\\)|\\[.*australia.*\\]"; displayedName: qsTr("Australia")}
+        ListElement { region: "ca"; regex: "\\(.*canada.*\\)|\\[.*canada.*\\]"; displayedName: qsTr("Canada")}
+        ListElement { region: "cn"; regex: "\\(.*china.*\\)|\\[.*china.*\\]"; displayedName: qsTr("China")}
+        ListElement { region: "fr"; regex: "\\(.*france.*\\)|\\[.*france.*\\]"; displayedName: qsTr("France")}
+        ListElement { region: "dd"; regex: "\\(.*germany.*\\)|\\[.*germany.*\\]"; displayedName: qsTr("Germany")}
+        ListElement { region: "it"; regex: "\\(.*italy.*\\)|\\[.*italy.*\\]"; displayedName: qsTr("Italy")}
+        ListElement { region: "jp"; regex: "\\(.*japan.*\\)|\\[.*japan.*\\]"; displayedName: qsTr("Japan")}
+        ListElement { region: "es"; regex: "\\(.*spain.*\\)|\\[.*spain.*\\]"; displayedName: qsTr("Spain")}
     }
 
     //ScreenScraper language
@@ -259,6 +273,7 @@ FocusScope {
     property int orderBy: Qt.AscendingOrder
     property string searchTerm: ""
     property bool steam: typeof(currentCollection) !== 'undefined' ? currentCollection.name === "Steam" : false
+    property int collectionCountryIndex: -1 //corresponding to "All Country"
     property int collectionRegionIndex: -1 //corresponding to "All Regions"
     property int collectionLanguageIndex: -1 //corresponding to "All Languages"
 
@@ -269,6 +284,14 @@ FocusScope {
             }
             return false;
         }
+    }
+
+    // Functions for change countries in currently active collection
+    function changeCountries(){
+        if(collectionCountryIndex < (countrySSModel.count -1)){
+            collectionCountryIndex = collectionCountryIndex + 1;
+        }
+        else collectionCountryIndex = -1;
     }
 
     // Functions for change regions in currently active collection
