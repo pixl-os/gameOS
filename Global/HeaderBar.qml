@@ -362,6 +362,44 @@ FocusScope {
                 }
             }
 
+            // Country menu
+            Item {
+                id: countrybutton
+
+                property bool selected: ListView.isCurrentItem && root.focus
+                width: filtertitlecountry.contentWidth + vpx(30)
+                height: searchbar.height
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    radius: height/2
+                    color: theme.accent
+                    visible: countrybutton.selected
+                }
+
+                // Filter title by Region
+                Text {
+                    id: filtertitlecountry
+
+                    text: collectionCountryIndex === -1 ? qsTr("All countries") + api.tr : countrySSModel.get(collectionCountryIndex).displayedName
+
+                    color: theme.text
+                    font.family: subtitleFont.name
+                    font.pixelSize: vpx(18)
+                    anchors.centerIn: parent
+                    elide: Text.ElideRight
+                }
+
+                Keys.onPressed: {
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        changeCountries();
+                    }
+                }
+            }
+
             // Regions menu
             Item {
                 id: regionbutton
