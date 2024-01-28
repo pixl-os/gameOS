@@ -669,6 +669,12 @@ FocusScope {
             settingDisplay: qsTr("No,Yes")
         }
         ListElement {
+            settingName: "Lightgun"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Lightgun")
+            settingDisplay: qsTr("No,Yes")
+        }
+        ListElement {
             settingName: "Genre filter"
             setting: "to edit"
             settingNameDisplay: qsTr("Genre filter")

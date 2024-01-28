@@ -88,6 +88,7 @@ FocusScope {
                             listLoader.item.system = api.memory.has(listType + " - System filter") ? api.memory.get(listType + " - System filter") : "";
                             listLoader.item.manufacturer = api.memory.has(listType + " - System Manufacturer filter") ? api.memory.get(listType + " - System Manufacturer filter") : "";
                             listLoader.item.favorite = api.memory.has(listType + " - Favorite") ? api.memory.get(listType + " - Favorite") : "No";
+                            listLoader.item.lightgungame = api.memory.has(listType + " - Lightgun") ? api.memory.get(listType + " - Lightgun") : "No";
                             listLoader.item.filter = api.memory.has(listType + " - Name filter") ? api.memory.get(listType + " - Name filter") : "";
                             listLoader.item.region = api.memory.has(listType + " - Region/Country filter") ? api.memory.get(listType + " - Region/Country filter") : "";
                             listLoader.item.nb_players = api.memory.has(listType + " - Nb players") ? api.memory.get(listType + " - Nb players") : "1+";

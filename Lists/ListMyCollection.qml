@@ -88,7 +88,11 @@ Item {
 	//filter on favorite
     property string favorite: "No"
     property bool favoriteToFind: (favorite === "No") ? false : true
-		
+
+    //filter on lightgun game
+    property string lightgungame: "No"
+    property bool lightgungameToFind: (lightgungame === "No") ? false : true
+
 	//filter on "title"
     property string filter: ""
     property bool titleToFilter: (filter === "") ? false : true
@@ -195,6 +199,7 @@ Item {
             RegExpFilter { roleName: "systemShortName"; pattern: system; caseSensitivity: Qt.CaseInsensitive;enabled: systemToFilter && !hasCache} ,
             RegExpFilter { roleName: "systemManufacturer"; pattern: manufacturer; caseSensitivity: Qt.CaseInsensitive;enabled: manufacturerToFilter && !hasCache} ,
             ValueFilter { roleName: "favorite"; value: favoriteToFind ; enabled: favoriteToFind && !hasCache},
+            ValueFilter { roleName: "lightgungame"; value: lightgungameToFind ; enabled: lightgungameToFind && !hasCache},
             RegExpFilter { roleName: "title"; pattern: filter; caseSensitivity: Qt.CaseInsensitive;enabled: titleToFilter && !hasCache} ,
             RegExpFilter { roleName: "title"; pattern: region; caseSensitivity: Qt.CaseInsensitive; enabled: regionToFilter && !hasCache},
             RegExpFilter { roleName: "genre"; pattern: genre ; caseSensitivity: Qt.CaseInsensitive; enabled: genreToFilter && !hasCache},
