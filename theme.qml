@@ -797,7 +797,7 @@ FocusScope {
         Behavior on opacity { PropertyAnimation { duration: transitionTime } }
 
         anchors.fill: parent
-        sourceComponent: currentGame.collections.get(0).shortName === "imageviewer" ? screenshotview : gameview
+        sourceComponent: (typeof currentGame !== "undefined") ? (currentGame.collections.get(0).shortName === "imageviewer" ? screenshotview : gameview): gameview
         asynchronous: true
     }
 

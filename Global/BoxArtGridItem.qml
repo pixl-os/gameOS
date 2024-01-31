@@ -174,7 +174,7 @@ Item {
                 height: width
                 radius: width/2
                 color: theme.accent
-                visible: gameData.lightgungame
+                visible: typeof gameData.lightgungame !== "undefined" ? gameData.lightgungame : false;
                 Image {
                     source: "../assets/images/icon_zapper.svg"
                     asynchronous: true
