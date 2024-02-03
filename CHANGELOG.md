@@ -1,9 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-XX-XX - v1.25
+## [pixL-master] - 2024-02-03 - v1.25
 - new features:
 	- management of icons/filters for lightgun games
+	- dynamic icons size for vertical list depending of number of icons to display (heart for favorite, cup for ra and lightgun)
+	- add management of "lightgun" flag in "my colletions"
+	- start "country" filtering (with  + add "asia" as region
+	- add more countries (until 14) and languages (until 15) in filters for list/grid
+
+- fixes:
+	- fix some error cases when qml object is missing('undefined') from pegasus-frontend
 
 ## [pixL-master] - 2023-11-01 - v1.24
 - new features:
