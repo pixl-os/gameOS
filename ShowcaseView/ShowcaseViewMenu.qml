@@ -1222,6 +1222,7 @@ FocusScope {
                             mainList.currentIndex = grouplist.ObjectModel.index + 1;
                         } else {
                             mainList.currentIndex = grouplist.ObjectModel.index;
+                            grouplist.currentIndex = index;
                         }
                     }
                 }
