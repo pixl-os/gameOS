@@ -99,7 +99,7 @@ Item {
         }
 
         var i;
-        for (i = 0; buttonModel.length; i++) {
+        for (i = 0; i < buttonModel.length; i++) {
             if (buttonModel[i].name().includes("Gamepad")) {
                 var buttonValue = buttonModel[i].key.toString(16)
 				//console.log("buttonValue : ",buttonValue);
