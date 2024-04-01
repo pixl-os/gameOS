@@ -74,8 +74,8 @@ DISTFILES += \
     assets/fonts/OpenSans-Semibold.ttf \
     assets/fonts/SourceSansPro-Bold.ttf \
     assets/images/background.jpg \
-    assets/images/battery-dark.png \
-    assets/images/battery.png \
+    assets/images/battery-charging-white.svg \
+    assets/images/battery-empty-white.svg \    
     assets/images/beta.png \
     assets/images/borderimage.gif \
     assets/images/controller/0-arcade.png \
