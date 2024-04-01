@@ -502,18 +502,6 @@ FocusScope {
             return (api.device !== null && api.device.batteryPercent)
         }
 
-        BatteryIndicator {
-            id: battery_indicator
-            anchors.right: settingsicon.left
-            anchors.top: settingsicon.top
-            anchors.verticalCenter: settingsicon.verticalCenter
-            anchors.rightMargin: vpx(25)
-
-            opacity: 1
-            lightStyle: true
-            visible: showBattery
-        }
-
         Image {
             id: settingsicon
 
@@ -543,8 +531,19 @@ FocusScope {
             }
 
             anchors {
-                top: parent.top; bottom: parent.bottom
-                right: parent.right; rightMargin: vpx(25)
+                top: parent.top; bottom: parent.bottom;
+                right: {
+                    if (header.showBattery){
+                        return battery_indicator.left;
+                    }
+                    else return parent.right;
+                }
+                rightMargin: {
+                    if (header.showBattery){
+                        return vpx(5);
+                    }
+                    else return vpx(20);
+                }
             }
             color: "white"
             font.pixelSize: vpx(18)
@@ -552,6 +551,17 @@ FocusScope {
             horizontalAlignment: Text.Right
             verticalAlignment: Text.AlignVCenter
             visible: settings.HideClock === "No"
+        }
+
+        BatteryIndicator {
+            id: battery_indicator
+            anchors.right: parent.right
+            anchors.top: settingsicon.top
+            anchors.verticalCenter: sysTime.verticalCenter
+            anchors.rightMargin: vpx(15)
+            rotation: -90
+            opacity: 1
+            visible: header.showBattery
         }
 
     }
