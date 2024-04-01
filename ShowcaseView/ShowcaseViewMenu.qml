@@ -424,6 +424,14 @@ FocusScope {
         width: parent.width
         height: vpx(70)
         z: 10
+
+        property var showBattery : {
+            //console.log("api.device : ", api.device);
+            //console.log("showStatusInfo : ", showStatusInfo);
+            //console.log("api.device.batteryPercent : ", api.device.batteryPercent);
+            return (api.device !== null && api.device.batteryPercent)
+        }
+
         Image {
             id: logo
 
@@ -445,7 +453,8 @@ FocusScope {
             height: vpx(40)
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: (settings.HideClock === "No" ? sysTime.left : parent.right); rightMargin: vpx(10)
+                right: (settings.HideClock === "No" ? sysTime.left : (header.showBattery ? battery_indicator.left : parent.right))
+                rightMargin: vpx(10)
             }
             color: focus ? theme.accent : "white"
             radius: height/2
@@ -495,13 +504,6 @@ FocusScope {
             }
         }
 
-        property var showBattery : {
-            //console.log("api.device : ", api.device);
-            //console.log("showStatusInfo : ", showStatusInfo);
-            //console.log("api.device.batteryPercent : ", api.device.batteryPercent);
-            return (api.device !== null && api.device.batteryPercent)
-        }
-
         Image {
             id: settingsicon
 
@@ -540,7 +542,7 @@ FocusScope {
                 }
                 rightMargin: {
                     if (header.showBattery){
-                        return vpx(5);
+                        return settings.BatteryStyle === "Vertical" ? vpx(0) : vpx(8)
                     }
                     else return vpx(20);
                 }
@@ -558,11 +560,12 @@ FocusScope {
             anchors.right: parent.right
             anchors.top: settingsicon.top
             anchors.verticalCenter: sysTime.verticalCenter
-            anchors.rightMargin: vpx(15)
-            rotation: -90
+            anchors.rightMargin: settings.BatteryStyle === "Vertical" ? vpx(8) : vpx (10)
+            rotation: settings.BatteryStyle === "Vertical" ? -90 : 0
             opacity: 1
             visible: header.showBattery
         }
+
 
     }
 
