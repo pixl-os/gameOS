@@ -59,6 +59,7 @@ Item {
     // Processes the button and will display the correct art based on the button mappings set in Pegasus
     // Necessary as we can't use script in the ListModel
     function processButtonArt(button) {
+        //console.log("button name : ",button);
         var buttonModel;
         switch (button) {
         case "accept":
