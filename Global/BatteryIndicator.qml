@@ -3,31 +3,61 @@ import QtGraphicalEffects 1.12
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.15
 Item {
-    width: 26
-    height: 14
-
-    property bool lightStyle : false
-
+    width: vpx(32)
+    height: vpx(26)
     property var percent: {
-        api.device ? api.device.batteryPercent : 0
+        if(isDebugEnv() && false){
+            //to simulate 50%, 10%, etc...
+            return 0.6;
+        }
+        else{
+            return (api.device ? api.device.batteryPercent : 0);
+        }
+    }
+
+    property var charging: {
+        if(isDebugEnv() && false){
+            //to simulate charging or not.
+            return true
+        }
+        else{
+            return (api.device ? api.device.batteryCharging : false);
+        }
+    }
+    
+    Rectangle {
+        anchors.left: iconImage.left
+        anchors.leftMargin: vpx(1)
+        anchors.rightMargin: vpx(2)
+        anchors.top: iconImage.top
+        anchors.topMargin: vpx(6)
+        anchors.bottom: iconImage.bottom
+        anchors.bottomMargin: vpx(6)
+        anchors.verticalCenter: iconImage.verticalCenter
+        color: percent >= 0.50 ? "green" : (percent >= 0.30 ? "yellow" : ( percent > 0.10 ? "orange" : "red"))
+        width: Math.max(percent * (iconImage.width), 2) - (anchors.leftMargin + anchors.rightMargin)
     }
 
     Image {
         id: iconImage
-        source: lightStyle ? "../assets/images/battery.png" : "../assets/images/battery-dark.png"
+        width: parent.width - vpx(2)
+        height: parent.height - vpx(2)
+        fillMode: Image.Stretch
+        source: "../assets/images/battery-empty-white.svg"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+        visible:!charging
     }
-    
-    Rectangle {
-        anchors.leftMargin: 3
-        anchors.topMargin: 3
-        anchors.top: iconImage.top
-        anchors.left: iconImage.left
-        anchors.verticalCenter: iconImage.verticalCenter
-        color: lightStyle ? "#ffffff" : "#000000"
-        radius: 2
-        width: Math.max(percent * 17.6, 2)
-        height: 8
+
+    Image {
+        id: iconImageCharging
+        width: parent.width - vpx(2)
+        height: parent.height - vpx(2)
+        fillMode: Image.Stretch
+        source: "../assets/images/battery-charging-white.svg"
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible:charging
     }
+
 }
