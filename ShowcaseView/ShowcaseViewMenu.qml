@@ -495,6 +495,25 @@ FocusScope {
             }
         }
 
+        property var showBattery : {
+            //console.log("api.device : ", api.device);
+            //console.log("showStatusInfo : ", showStatusInfo);
+            //console.log("api.device.batteryPercent : ", api.device.batteryPercent);
+            return (api.device !== null && api.device.batteryPercent)
+        }
+
+        BatteryIndicator {
+            id: battery_indicator
+            anchors.right: settingsicon.left
+            anchors.top: settingsicon.top
+            anchors.verticalCenter: settingsicon.verticalCenter
+            anchors.rightMargin: vpx(25)
+
+            opacity: 1
+            lightStyle: true
+            visible: showBattery
+        }
+
         Image {
             id: settingsicon
 
@@ -534,6 +553,7 @@ FocusScope {
             verticalAlignment: Text.AlignVCenter
             visible: settings.HideClock === "No"
         }
+
     }
 
     function findObjectAndMove(object,newPosition){
