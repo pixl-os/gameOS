@@ -276,6 +276,12 @@ FocusScope {
             settingDisplay: qsTr("No,Yes")
         }
         ListElement {
+            settingName: "Battery Style"
+            setting: "Horizontal,Vertical"
+            settingNameDisplay: qsTr("Battery Style")
+            settingDisplay: qsTr("Horizontal,Vertical")
+        }
+        ListElement {
             settingName: "Color Layout"
             setting: "Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
             settingNameDisplay: qsTr("Color Layout")
