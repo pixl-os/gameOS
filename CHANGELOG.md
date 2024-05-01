@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file (focus on ch
 - features:
 	- feature to display now the battery level also if available (using .svg pictures)
 	- add parameter in settings to display battery level in horizontally (by default) or vertically
+	- add last french translation needed
 	
 - fixes:
 	- fix grouplist to change group logo from click

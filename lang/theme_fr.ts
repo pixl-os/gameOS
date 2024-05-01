@@ -173,6 +173,22 @@
         <source>All games</source>
         <translation>Tous les jeux</translation>
     </message>
+    <message>
+        <source>Lightgun games</source>
+        <translation>Jeux Lightgun</translation>
+    </message>
+    <message>
+        <source>All countries</source>
+        <translation>Tous les pays</translation>
+    </message>
+    <message>
+        <source>All regions</source>
+        <translation>Toutes les régions</translation>
+    </message>
+    <message>
+        <source>All languages</source>
+        <translation>Tous les langages</translation>
+    </message>
 </context>
 <context>
     <name>LaunchGame</name>
@@ -388,10 +404,6 @@
         <translation>Collection 1</translation>
     </message>
     <message>
-        <source>Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites</source>
-        <translation type="vanished">Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris</translation>
-    </message>
-    <message>
         <source>Collection 1 - Thumbnail</source>
         <translation>Collection 1 - Vignette</translation>
     </message>
@@ -402,10 +414,6 @@
     <message>
         <source>Collection 2</source>
         <translation>Collection 2</translation>
-    </message>
-    <message>
-        <source>Most Played,Recommended,Top by Publisher,Top by Genre,None,Favorites,Recently Played</source>
-        <translation type="vanished">Les plus joués,Recommendés,Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment</translation>
     </message>
     <message>
         <source>Collection 2 - Thumbnail</source>
@@ -420,10 +428,6 @@
         <translation>Collection 3</translation>
     </message>
     <message>
-        <source>Top by Publisher,Top by Genre,None,Favorites,Recently Played,Most Played,Recommended</source>
-        <translation type="vanished">Top par fournisseur,Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés</translation>
-    </message>
-    <message>
         <source>Collection 3 - Thumbnail</source>
         <translation>Collection 3 - Vignette</translation>
     </message>
@@ -432,20 +436,12 @@
         <translation>Collection 4</translation>
     </message>
     <message>
-        <source>Top by Genre,None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher</source>
-        <translation type="vanished">Top par Genre,Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur</translation>
-    </message>
-    <message>
         <source>Collection 4 - Thumbnail</source>
         <translation>Collection 4 - Vignette</translation>
     </message>
     <message>
         <source>Collection 5</source>
         <translation>Collection 5</translation>
-    </message>
-    <message>
-        <source>None,Favorites,Recently Played,Most Played,Recommended,Top by Publisher,Top by Genre</source>
-        <translation type="vanished">Non,Favoris,Joués récemment,Les plus joués,Recommendés,Top par fournisseur,Top par Genre</translation>
     </message>
     <message>
         <source>Collection 5 - Thumbnail</source>
@@ -612,20 +608,12 @@
         <translation>Filtre par Développeur</translation>
     </message>
     <message>
-        <source>System</source>
-        <translation type="vanished">Filtre par système</translation>
-    </message>
-    <message>
         <source>File name filter</source>
         <translation>Filtre par nom de fichier</translation>
     </message>
     <message>
         <source>Release year filter</source>
         <translation>Filtre par année de sortie</translation>
-    </message>
-    <message>
-        <source>Exclusion filter</source>
-        <translation type="vanished">Filtre pour exclure</translation>
     </message>
     <message>
         <source>My Collections</source>
@@ -698,10 +686,6 @@
     <message>
         <source>Grid,Vertical List</source>
         <translation>Grille,Liste Verticale</translation>
-    </message>
-    <message>
-        <source>Group systems by type</source>
-        <translation type="vanished">Systèmes groupés par type</translation>
     </message>
     <message>
         <source>Sort systems by</source>
@@ -786,6 +770,18 @@
     <message>
         <source>Cache Activation</source>
         <translation>Activation du cache</translation>
+    </message>
+    <message>
+        <source>Battery Style</source>
+        <translation>Style de la batterie</translation>
+    </message>
+    <message>
+        <source>Horizontal,Vertical</source>
+        <translation>Horizontale,Verticale</translation>
+    </message>
+    <message>
+        <source>Lightgun</source>
+        <translation>Lightgun</translation>
     </message>
 </context>
 <context>
@@ -935,6 +931,134 @@
     <message>
         <source>rating</source>
         <translation>note</translation>
+    </message>
+    <message>
+        <source>World</source>
+        <translation>Monde</translation>
+    </message>
+    <message>
+        <source>USA</source>
+        <translation>USA</translation>
+    </message>
+    <message>
+        <source>Europe</source>
+        <translation>Europe</translation>
+    </message>
+    <message>
+        <source>Japan</source>
+        <translation>Japon</translation>
+    </message>
+    <message>
+        <source>Asia</source>
+        <translation>Asie</translation>
+    </message>
+    <message>
+        <source>Australia</source>
+        <translation>Australie</translation>
+    </message>
+    <message>
+        <source>Brazil</source>
+        <translation>Brésil</translation>
+    </message>
+    <message>
+        <source>Canada</source>
+        <translation>Canada</translation>
+    </message>
+    <message>
+        <source>China</source>
+        <translation>Chine</translation>
+    </message>
+    <message>
+        <source>France</source>
+        <translation>France</translation>
+    </message>
+    <message>
+        <source>Germany</source>
+        <translation>Allemagne</translation>
+    </message>
+    <message>
+        <source>Hong Kong</source>
+        <translation>Hong Kong</translation>
+    </message>
+    <message>
+        <source>Italy</source>
+        <translation>Italie</translation>
+    </message>
+    <message>
+        <source>Korea</source>
+        <translation>Korée</translation>
+    </message>
+    <message>
+        <source>Netherlands</source>
+        <translation>Hollande</translation>
+    </message>
+    <message>
+        <source>Spain</source>
+        <translation>Espagne</translation>
+    </message>
+    <message>
+        <source>Sweden</source>
+        <translation>Suède</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation>Angleterre</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation>Français</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation>Allemand</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation>Espagnol</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation>Italien</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation>Portugais</translation>
+    </message>
+    <message>
+        <source>Japanese</source>
+        <translation>Japonais</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation>Chinois</translation>
+    </message>
+    <message>
+        <source>Korean</source>
+        <translation>Koréen</translation>
+    </message>
+    <message>
+        <source>Danish</source>
+        <translation>Danois</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation>Hollandais</translation>
+    </message>
+    <message>
+        <source>Finish</source>
+        <translation>Finlandais</translation>
+    </message>
+    <message>
+        <source>Norwegian</source>
+        <translation>Norvégien</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation>Polonais</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation>Suédois</translation>
     </message>
 </context>
 </TS>
