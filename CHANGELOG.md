@@ -1,10 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
-## [pixL-master] - 2023-mm-dd - v1.xx
+
+## [pixL-master] - 2023-05-01 - v1.26
 - logo:
 	- Add new PS3 system logos
 	- Add new NAMCO357 system logos
 	- Add new SYS2x6 system logos
+
+- features:
+	- feature to display now the battery level also if available (using .svg pictures)
+	- add parameter in settings to display battery level in horizontally (by default) or vertically
+	
+- fixes:
+	- fix grouplist to change group logo from click
+	- fix "helpbar" generation
+	- fix to manage better cases of multi-screens game videos
 
 ## [pixL-master] - 2024-02-03 - v1.25
 - new features:
