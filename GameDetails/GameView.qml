@@ -220,8 +220,36 @@ FocusScope {
                 custom_viewport_width = custom_viewport_height * initialImageRatio;
                 //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
                 custom_viewport_x = (custom_viewport_x * OverlayWidthRatio) - ((overlayNewWidth - root.width)/2);
-
+                //check if custom_viewport is not completely visible (case of 16/10 screen as steamdeck)
+                if(custom_viewport_x < 0){
+                    custom_viewport_x = 0
+                    custom_viewport_width = root.width
+                }
+                //check if custom_viewport is not completely visible (in tate case ?!)
+                if(custom_viewport_y < 0){
+                    custom_viewport_y = 0
+                    custom_viewport_height = root.height
+                }
+                //calculate video ratio for later
+                //example of command to check: ffprobe -hide_banner daytona2.mp4 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}'
+                //console.log("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
+                video_ratio = api.internal.system.run("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
+                //compare ratio of custom viewport and video itself
+                var video_ratio_width = parseInt(video_ratio.split(':')[0]);
+                var video_ratio_height = parseInt(video_ratio.split(':')[1]);
+                var vr_video = video_ratio_width / video_ratio_height
+                var vr_viewport = parseInt(custom_viewport_width) / parseInt(custom_viewport_height)
+                //check if ratio are too different
+                if(Math.abs(vr_viewport - vr_video) > 1){
+                    //certainly video has black band at top and bottom
+                    //we will try to zoom it (case of Warrior blade and without impact for Ninja warrior for example)
+                    //good on 16/9 but not perfect on 16/10 (still black area bt it's better and acceptable)
+                    custom_viewport_y = 0
+                    custom_viewport_height = root.height * Math.abs(vr_viewport - vr_video)
+                }
                 //value change
+                //console.log("vr_video : ", vr_video);
+                //console.log("vr_viewport : ", vr_viewport);
                 //console.log("custom_viewport_x : ", custom_viewport_x);
                 //console.log("custom_viewport_y : ", custom_viewport_y);
                 //console.log("custom_viewport_height : ", custom_viewport_height);
@@ -482,12 +510,6 @@ FocusScope {
                 source: {
                         if(videoExists){
                             //console.log("video path:",game.assets.videos[0]);
-                            //check also ratio of video if needed to display with overlay
-                            if((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)){
-                                // example of command to check: ffprobe -hide_banner daytona2.mp4 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}'
-                                console.log("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
-                                video_ratio = api.internal.system.run("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
-                            }
                             return game.assets.videos[0];
                         }
                         else return "";
@@ -841,7 +863,7 @@ FocusScope {
     // Header
     Item {
         id: header
-	visible: !embedded
+        visible: !embedded
         anchors {
             left: parent.left;
             right: parent.right
@@ -1205,9 +1227,9 @@ FocusScope {
             visible: (demoLaunched !== true)
             property bool selected: root.focus
             focus: selected
-			width: root.width
+            width: root.width
             height: vpx(root.height * (parseFloat("9%")/100))
-			model: menuModel
+            model: menuModel
             orientation: ListView.Horizontal
             spacing: vpx(10)
             keyNavigationWraps: true
@@ -1420,7 +1442,7 @@ FocusScope {
 
         anchors.fill: parent
         Behavior on opacity { NumberAnimation { duration: 100 } }
-		opacity: 0
+        opacity: 0
         visible: opacity !== 0
 
         mediaModel: mediaArray();
