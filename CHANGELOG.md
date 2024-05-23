@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file (focus on ch
 - logo:
 	- add missing color logos for port and engine ones (still to do for the others... steel, carbon, white and black)
 
+- sound:
+	- reduce size of .wav file sound effect to win in velocity during navigation
+
 ## [pixL-master] - 2023-05-01 - v1.26
 - logo:
 	- Add new PS3 system logos
