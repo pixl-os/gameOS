@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-XX-XX - v1.27
+## [pixL-master] - 2023-07-08 - v1.27
 - logo:
 	- add missing color logos for port and engine ones (still to do for the others... steel, carbon, white and black)
 
