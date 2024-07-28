@@ -281,9 +281,6 @@ function processPlatformName(platform) {
     case "microsoft xbox 360":
       return "xbox360";
       break;
-    case "nintendo switch":
-      return "switch";
-      break;
     default:
       return platform;
   }
