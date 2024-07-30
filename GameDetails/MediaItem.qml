@@ -54,8 +54,23 @@ Item {
 
             Text {
                 id: bubbletitle
-
-                text: isVideo ? qsTr("Video") + api.tr : (isManual ? qsTr("Manual") + api.tr : qsTr("Picture") + api.tr)
+                //since 30/07/2024 - get media directory names as title of Mediaitem
+                property string inputString: mediaItem
+                property string startDelimiter: "/media/"
+                property string endDelimiter: "/"
+                text: {
+                    //console.log(" inputString: ",  inputString);
+                    //console.log(" inputString.lenght: ",  inputString.length);
+                    var startIndex = inputString.indexOf(startDelimiter) + startDelimiter.length;
+                    //console.log("startIndex: ", startIndex);
+                    var inputString2 = inputString.substring(startIndex, inputString.lenght);
+                    //console.log(" inputString2: ",  inputString2);
+                    var endIndex = inputString2.indexOf(endDelimiter);
+                    //console.log("endIndex: ", endIndex);
+                    var extractedSubstring = inputString2.substring(0, endIndex);
+                    //console.log("Extracted substring:", extractedSubstring);
+                    return extractedSubstring;
+                }
                 color: theme.text
                 font {
                     family: subtitleFont.name
