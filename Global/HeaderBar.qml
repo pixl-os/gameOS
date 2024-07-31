@@ -476,6 +476,53 @@ FocusScope {
                 }
             }
 
+            // Platform Settings
+            Item {
+                id: platormsettings
+
+                property bool selected: ListView.isCurrentItem && root.focus
+                height: searchbar.height
+                width: height
+
+                onSelectedChanged:{
+                    //console.log("onSelectedChanged");
+                    if(platormsettings.selected) {
+                        platormsettings.focus = true;
+                    }
+                }
+
+                Rectangle
+                {
+                    anchors.fill: parent
+                    radius: height/2
+                    color: platormsettings.focus ? theme.accent : "white"
+                    visible: true //platormsettings.selected
+                    opacity: platormsettings.focus ? 1 : 0.2
+                }
+
+                Image {
+                    id: settingsicon
+
+                    width: height
+                    height: vpx(20)
+                    /*anchors {
+                        left: parent.left; leftMargin: vpx(11)
+                        top: parent.top; topMargin: vpx(10)
+                    }*/
+                    anchors.centerIn: platormsettings
+                    source: "../assets/images/settingsicon.svg"
+                    opacity: platormsettings.focus ? 0.8 : 0.5
+                    asynchronous: true
+                }
+
+                Keys.onPressed: {
+                    // Accept
+                    if (api.keys.isAccept(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        settingsScreen();
+                    }
+                }
+            }
         }
 
         // Buttons
