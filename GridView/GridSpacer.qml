@@ -20,17 +20,18 @@ Image {
     id: root
 
     property var games
-
+    // Load settings
+    property string choosenMedia: settings.GridThumbnail === "Choose Media" ? settings.GridThumbnailMedia : ""
     // This is a workaround that's necessary in order to accurately get the aspect ratio for the boxart
     // It grabs the first game and bases all the aspect ratios off that
     property var fakesource: {
         for (var i = 0; i < 40; i++)
         {
             var gamesource = currentCollection.games.get(i);
-            if (Utils.boxArt(gamesource) !== "")
+            if (Utils.boxArt(gamesource, choosenMedia) !== "")
             {
                 //console.log("Utils.boxArt(gamesource) : ", Utils.boxArt(gamesource))
-                return Utils.boxArt(gamesource);
+                return Utils.boxArt(gamesource, choosenMedia);
             }
         }
     }
