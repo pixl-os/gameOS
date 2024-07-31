@@ -154,7 +154,7 @@ FocusScope {
     ListCollectionGames { id: list; }
 
     // Load settings
-    property bool showBoxes: settings.GridThumbnail === "Box Art"
+    property bool showBoxes: (settings.GridThumbnail === "Box Art") || (settings.GridThumbnail === "Choose Media")
     property int numColumns: settings.GridColumns ? settings.GridColumns : 6
     property int titleMargin: settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0
 

@@ -450,14 +450,21 @@ FocusScope {
 
         ListElement {
             settingName: "Grid Thumbnail"
-            setting: "Wide,Tall,Square,Box Art"
+            setting: "Wide,Tall,Square,Box Art,Choose Media"
             settingNameDisplay: qsTr("Grid Thumbnail")
-            settingDisplay: qsTr("Wide,Tall,Square,Box Art")
+            settingDisplay: qsTr("Wide,Tall,Square,Box Art,Choose Media")
+        }
+
+        ListElement {
+            settingName: "Choosen Media (only if Grid Thumbnail is on 'Choose Media')"
+            setting: "boxFront,box3d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,logo,wheel,wheelcarbon,wheelsteel,fanart,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1"
+            settingNameDisplay: qsTr("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
+            settingDisplay: qsTr("boxFront,box3d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,logo,wheel,wheelcarbon,wheelsteel,fanart,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1")
         }
 
         ListElement {
             settingName: "Number of columns"
-            setting: "5,6,7,8,3,4"
+            setting: "5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,1,2,3,4"
             settingNameDisplay: qsTr("Number of columns")
         }
         ListElement {
