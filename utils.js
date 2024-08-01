@@ -358,6 +358,10 @@ function chooseMedia(data,asset) {
         if (data.assets.boxFront !== "")
           return data.assets.boxFront;
         break
+      case "box2d":
+        if (data.assets.box2d !== "")
+          return data.assets.box2d;
+        break
       case "box3d":
         if (data.assets.box3d !== "")
           return data.assets.box3d;
@@ -369,6 +373,10 @@ function chooseMedia(data,asset) {
       case "boxSpine":
         if (data.assets.boxSpine !== "")
           return data.assets.boxSpine;
+        break
+      case "boxFull":
+        if (data.assets.boxFull !== "")
+          return data.assets.boxFull;
         break
       case "cartridge":
         if (data.assets.cartridge !== "")
@@ -394,6 +402,10 @@ function chooseMedia(data,asset) {
         if (data.assets.wheelsteel !== "")
           return data.assets.wheelsteel;
         break
+      case "poster":
+        if (data.assets.poster !== "")
+          return data.assets.poster;
+        break
       case "fanart":
         if (data.assets.fanart !== "")
           return data.assets.fanart;
@@ -406,6 +418,18 @@ function chooseMedia(data,asset) {
         if (data.assets.bezel !== "")
           return data.assets.bezel;
         break
+      case "panel":
+        if (data.assets.panel !== "")
+          return data.assets.panel;
+        break
+      case "cabinetLeft":
+        if (data.assets.cabinetLeft !== "")
+          return data.assets.cabinetLeft;
+        break
+      case "cabinetRight":
+        if (data.assets.cabinetRight !== "")
+          return data.assets.cabinetRight;
+        break
       case "screenmarquee":
         if (data.assets.screenmarquee !== "")
           return data.assets.screenmarquee;
@@ -414,6 +438,14 @@ function chooseMedia(data,asset) {
         if (data.assets.screenmarqueesmall !== "")
           return data.assets.screenmarqueesmall;
         break
+      case "tile":
+        if (data.assets.tile !== "")
+          return data.assets.tile;
+        break
+      case "banner":
+        if (data.assets.banner !== "")
+          return data.assets.banner;
+        break
       case "steam":
         if (data.assets.steam !== "")
           return data.assets.steam;
@@ -421,6 +453,10 @@ function chooseMedia(data,asset) {
       case "background":
         if (data.assets.background !== "")
           return data.assets.background;
+        break
+      case "music":
+        if (data.assets.music !== "")
+          return data.assets.music;
         break
       case "image":
         if (data.assets.image !== "")
@@ -442,13 +478,29 @@ function chooseMedia(data,asset) {
         if (data.assets.titlescreen !== "")
           return data.assets.titlescreen;
         break
-      case "mix":
-        if (data.assets.mix !== "")
-          return data.assets.mix;
+      case "video":
+        if (data.assets.video !== "")
+          return data.assets.video;
+        break
+      case "videomix":
+        if (data.assets.videomix !== "")
+          return data.assets.videomix;
+        break
+      case "manual":
+        if (data.assets.manual !== "")
+          return data.assets.manual;
+        break
+      case "maps":
+        if (data.assets.maps !== "")
+          return data.assets.maps;
         break
       case "extra1":
         if (data.assets.extra1 !== "")
           return data.assets.extra1;
+        break
+      case "mix":
+        if (data.assets.mix !== "")
+          return data.assets.mix;
         break
       default:
           console.log("Unknown asset");
