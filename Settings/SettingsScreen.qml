@@ -327,6 +327,20 @@ FocusScope {
             settingNameDisplay: qsTr("Show loading details")
             settingDisplay: qsTr("No,Yes")
         }
+        ListElement {
+            settingName: "Platform page style"
+            setting: "Grid,Vertical List"
+            settingNameDisplay: qsTr("Platform page style")
+            settingDisplay: qsTr("Grid,Vertical List")
+            settingNeedReload: true
+        }
+        ListElement {
+            settingName: "System Header Logo with pink gradient effect"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("System Header Logo with pink gradient effect")
+            settingDisplay: qsTr("No,Yes")
+            settingNeedReload: false
+        }
     }
 
     property var advancedPage: {
@@ -442,13 +456,6 @@ FocusScope {
         id: gridSettingsModel
 
         ListElement {
-            settingName: "Platform page style"
-            setting: "Grid,Vertical List"
-            settingNameDisplay: qsTr("Platform page style")
-            settingDisplay: qsTr("Grid,Vertical List")
-        }
-
-        ListElement {
             settingName: "Grid Thumbnail"
             setting: "Wide,Tall,Square,Box Art,Choose Media"
             settingNameDisplay: qsTr("Grid Thumbnail")
@@ -466,12 +473,7 @@ FocusScope {
             settingName: "Number of columns"
             setting: "5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,1,2,3,4"
             settingNameDisplay: qsTr("Number of columns")
-        }
-        ListElement {
-            settingName: "System Header Logo with pink gradient effect"
-            setting: "No,Yes"
-            settingNameDisplay: qsTr("System Header Logo with pink gradient effect")
-            settingDisplay: qsTr("No,Yes")
+            settingNeedReload: false
         }
     }
 
