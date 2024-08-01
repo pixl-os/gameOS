@@ -138,7 +138,7 @@ FocusScope {
         return {
             PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
             GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
-            GridThumbnailMedia:            api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "boxFront", 
+            GridThumbnailMedia:            api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d",
             GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5",
             SystemHeaderLogoGradientEffect:    api.memory.has("System Header Logo with pink gradient effect") ? api.memory.get("System Header Logo with pink gradient effect") : "No",
             GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
