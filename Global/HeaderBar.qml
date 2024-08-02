@@ -67,6 +67,7 @@ FocusScope {
             OpacityMask {
                 anchors.fill: logobg
                 source: logobg
+                opacity: 0.9
                 maskSource: platformlogo
                 visible: settings.SystemHeaderLogoGradientEffect === "Yes" ? true : false
             }
