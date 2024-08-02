@@ -460,6 +460,7 @@ FocusScope {
             setting: "Wide,Tall,Square,Box Art,Choose Media"
             settingNameDisplay: qsTr("Grid Thumbnail")
             settingDisplay: qsTr("Wide,Tall,Square,Box Art,Choose Media")
+            settingNeedReload: false
         }
 
         ListElement {
@@ -467,6 +468,7 @@ FocusScope {
             setting: "box3d,box2d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1"
             settingNameDisplay: qsTr("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
             settingDisplay: qsTr("box3d,box2d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1")
+            settingNeedReload: false
         }
 
         ListElement {
@@ -633,8 +635,9 @@ FocusScope {
         }
     }
 
+    property string context: "global"
     property var designerArr: [designerPage]
-    property var settingsArr: [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage]
+    property var settingsArr: context === "global" ? [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : [gridPage, gamePage]
     property real itemheight: vpx(50)
     property var settingsCol: []
 
@@ -759,12 +762,15 @@ FocusScope {
         if(api.internal.recalbox.getBoolParameter("theme.designer")) settingsList.model = designerArr[pagelist.currentIndex].listmodel;
         else settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
 
-		//for 10 collections to display on showcase (main page)
-		//-> possibility to have more in the future for HomePage
-		//but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
-        addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
-		//generate My collection(s), no limit ;-)
-		initializeMyCollections();
+        //display collections settings only in global one and not by system/platform
+        if (context === "global") {
+            //for 10 collections to display on showcase (main page)
+            //-> possibility to have more in the future for HomePage
+            //but still to find a solution to manage HorizontalCollection dynamically in ShowcaseViewMenu.qml
+            addShowcaseSettingsModel(5);//set to 5 in addition of the 5 existing ones for the moment, to have 10 in total
+            //generate My collection(s), no limit ;-)
+            initializeMyCollections();
+        }
 	}
 
 	function addShowcaseSettingsModel(nb_collections)
@@ -982,7 +988,7 @@ FocusScope {
             {
                 pagelistdev.focus = false
                 pagelist.focus = true
-                //displayMyCollectionsHelp(true);
+                displayMyCollectionsHelp(false);
                 headertitle.opacity = 1
                 designertitle.opacity = 0.2
                 pagelist.currentIndex = 0;
@@ -1141,15 +1147,17 @@ FocusScope {
 			incrementCurrentIndex();
 			if (previousIndex == currentIndex)
 			{
-				pagelist.focus = false
-				collectionslist.focus = true
-				displayMyCollectionsHelp(true);
-				headertitleCollections.opacity = 1
-				headertitle.opacity = 0.2
-				collectionslist.currentIndex = 0;
-				if(collectionslist.count!=0) settingsList.model = myCollections.listmodel;
-				else settingsList.model = null;
-				
+                //to browse in collection only for global settings
+                if (context === "global"){
+                    pagelist.focus = false
+                    collectionslist.focus = true
+                    displayMyCollectionsHelp(true);
+                    headertitleCollections.opacity = 1
+                    headertitle.opacity = 0.2
+                    collectionslist.currentIndex = 0;
+                    if(collectionslist.count!=0) settingsList.model = myCollections.listmodel;
+                    else settingsList.model = null;
+                }
 			}
 			else 
 			{
@@ -1185,9 +1193,10 @@ FocusScope {
             //right: parent.right
         }
         height: vpx(75)
-		width: headertitleCollections.contentWidth
+        width: headertitleCollections.contentWidth
         color: theme.main
-
+        visible: context === "global" ? true : false
+        enabled: context === "global" ? true : false
         // Collections title
         Text {
             id: headertitleCollections
@@ -1204,7 +1213,7 @@ FocusScope {
             font.family: titleFont.name
             font.pixelSize: vpx(30)
             font.bold: true
-			opacity: 0.2
+            opacity: 0.2
             horizontalAlignment: Text.AlignHLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -1213,7 +1222,7 @@ FocusScope {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-					//TO DO // NO ACTION for the moment
+                    //TO DO // NO ACTION for the moment
                 }
             }
         }
@@ -1425,6 +1434,7 @@ FocusScope {
                 //new parameter to display with translation
                 property string fullSettingNameDisplay: (typeof(settingNameDisplay) !== "undefined") ? ((typeof(settingPrefixDisplay) !== "undefined") ? settingPrefixDisplay + settingNameDisplay : settingNameDisplay) : ""
                 property variant settingListDisplay: (setting !== "to edit") ? ((typeof(settingDisplay) !== "undefined") ? settingDisplay.split(',') : "") : ""
+                property bool needReload: (typeof(settingNeedReload) !== "undefined") ? settingNeedReload : true
 
                 property bool selected: ListView.isCurrentItem && settingsList.focus
 
@@ -1434,7 +1444,13 @@ FocusScope {
 					if (setting !== "to edit") 
 					{
 						//console.log(fullSettingName + "Index: ",api.memory.get(fullSettingName + 'Index'));
-						var value = api.memory.get(fullSettingName + 'Index') || 0;
+                        var value;
+                        if (context === "global"){
+                            value = api.memory.get(fullSettingName + 'Index') || 0;
+                        }
+                        else {
+                            value = api.memory.get(context + "_" + fullSettingName + 'Index') || 0;
+                        }
 						if (value < settingList.length) return value;
 						else return 0;
 					
@@ -1447,14 +1463,24 @@ FocusScope {
 					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
-                        var previousIndex = api.memory.get(fullSettingName + 'Index');
-						api.memory.set(fullSettingName + 'Index', savedIndex);
-						//console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
-						api.memory.set(fullSettingName, settingList[savedIndex]);
-						//console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                        var previousIndex;
+                        if (context === "global"){
+                            previousIndex = api.memory.get(fullSettingName + 'Index');
+                            api.memory.set(fullSettingName + 'Index', savedIndex);
+                            //console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
+                            api.memory.set(fullSettingName, settingList[savedIndex]);
+                            //console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                        }
+                        else {
+                            previousIndex = api.memory.get(context + "_" + fullSettingName + 'Index');
+                            api.memory.set(context + "_" + fullSettingName + 'Index', savedIndex);
+                            //console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
+                            api.memory.set(context + "_" + fullSettingName, settingList[savedIndex]);
+                            //console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                        }
                         if(previousIndex !== savedIndex){
                             //console.log("settingsChanged !");
-                            settingsChanged = true;
+                            if(needReload !== false) settingsChanged = true;
                             //check if collection parameter changed / delete cache in this case
                             if(fullSettingName.includes("My Collection")){
                                 cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
@@ -1466,12 +1492,21 @@ FocusScope {
 					}
 					else
 					{
-                        var previousValue = api.memory.get(fullSettingName);
-						//console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
-						api.memory.set(fullSettingName, settingtextfield.text);
+                        var previousValue;
+                        if (context === "global"){
+                            previousValue = api.memory.get(fullSettingName);
+                            //console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
+                            api.memory.set(fullSettingName, settingtextfield.text);
+                         }
+                        else{
+                            previousValue = api.memory.get(context + "_" + fullSettingName);
+                            //console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
+                            api.memory.set(context + "_" + fullSettingName, settingtextfield.text);
+                        }
+
                         if(previousValue !== settingtextfield.text){
                             //console.log("settingsChanged !");
-                            settingsChanged = true;
+                            if(needReload !== false) settingsChanged = true;
                             //check if collection parameter changed / delete cache in this case
                             if(fullSettingName.includes("My Collection")){
                                 cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
@@ -1528,7 +1563,15 @@ FocusScope {
 						{
 							//tips to refresh index (and to force update of text as not possible when we reuse the same listview as for collection)
                             //console.log("api.memory.get(" + fullSettingName + "'Index') : ",api.memory.get(fullSettingName + 'Index'));
-                            var indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
+
+                            var indexFromSettings;
+                            if(context === "global"){
+                                indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
+                            }
+                            else{
+                                indexFromSettings = (api.memory.get(context + "_" + fullSettingName + 'Index') || 0);
+                            }
+
 							//-----------------------------------------------------------------------
                             //console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
                             if(settingListDisplay !== ""){
@@ -1565,7 +1608,12 @@ FocusScope {
 						var value = "";
 						if (setting === "to edit") 
 						{
-							value = (api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "";
+                            if(context === "globale"){
+                                value = (api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "";
+                            }
+                            else{
+                                value = (api.memory.get(context + "_" + fullSettingName)) ? api.memory.get(context + "_" + fullSettingName) : "";
+                            }
 						}
 						return value;
 					}
@@ -1757,7 +1805,7 @@ FocusScope {
         GenericYesNoDialog
         {
             focus: true
-            title: qsTr("Settings changed") + api.tr
+            title: qsTr("Settings changed - need reload") + api.tr
             message: qsTr("Do you want to reload theme to well apply the change ? (Adviced)") + api.tr
         }
     }

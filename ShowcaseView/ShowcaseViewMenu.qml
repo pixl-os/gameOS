@@ -482,7 +482,7 @@ FocusScope {
 					// Accept
 					if (api.keys.isAccept(event) && !event.isAutoRepeat) {
 						event.accepted = true;
-						settingsScreen();
+                        settingsScreen("global");
 					}
 					// Back
 					if (api.keys.isCancel(event) && !event.isAutoRepeat) {
@@ -500,7 +500,7 @@ FocusScope {
                 hoverEnabled: settings.MouseHover === "Yes"
                 onEntered: settingsbutton.focus = true;
                 onExited: settingsbutton.focus = false;
-                onClicked: settingsScreen();
+                onClicked: settingsScreen("global");
             }
         }
 
@@ -2083,7 +2083,7 @@ FocusScope {
 	        // Settings
 	        if (api.keys.isFilters(event) && !event.isAutoRepeat) {
 	            event.accepted = true;
-	            settingsScreen();
+                settingsScreen("global");
 	        }
 		}
     }

@@ -34,6 +34,16 @@ FocusScope {
         }
     }
 
+    function reloadProperties(){
+        loadPlatformPageSettings();
+        showBoxes = (settings.GridThumbnail === "Box Art")
+        showChoosenMedia = (settings.GridThumbnail === "Choose Media");
+        if(showChoosenMedia) choosenMedia = settings.GridThumbnailMedia;
+        numColumns = settings.GridColumns ? settings.GridColumns : 6;
+        titleMargin = settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0;
+        gamegrid.sourceThumbnail = showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml");
+    }
+
     property var sortedGames: null;
     property bool isLeftTriggerPressed: false;
     property bool isRightTriggerPressed: false;
@@ -154,9 +164,11 @@ FocusScope {
     ListCollectionGames { id: list; }
 
     // Load settings
-    property bool showBoxes: (settings.GridThumbnail === "Box Art") || (settings.GridThumbnail === "Choose Media")
+    property bool showBoxes: settings.GridThumbnail === "Box Art"
+    property bool showChoosenMedia: settings.GridThumbnail === "Choose Media"
     property int numColumns: settings.GridColumns ? settings.GridColumns : 6
     property int titleMargin: settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0
+    property string choosenMedia: showChoosenMedia ? settings.GridThumbnailMedia : ""
 
     GridSpacer {
         id: fakebox
@@ -247,8 +259,7 @@ FocusScope {
                     return cellWidth * settings.WideRatio;
                 }
             }
-            property var sourceThumbnail: showBoxes ? "BoxArtGridItem.qml" : "../Global/DynamicGridItem.qml"
-
+            property var sourceThumbnail: showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml" )
             Component.onCompleted: {
                 currentIndex = storedCollectionGameIndex;
                 positionViewAtIndex(currentIndex, ListView.Visible);
@@ -263,7 +274,7 @@ FocusScope {
                 bottom: parent.bottom; bottomMargin: helpMargin + vpx(40)
             }
             cellWidth: width / numColumns
-            cellHeight: ((showBoxes) ? cellWidth * cellHeightRatio : savedCellHeight) + titleMargin
+            cellHeight: ((showBoxes || showChoosenMedia) ? cellWidth * cellHeightRatio : savedCellHeight) + titleMargin
             preferredHighlightBegin: vpx(0)
             preferredHighlightEnd: gamegrid.height - helpMargin - vpx(40)
             highlightRangeMode: GridView.ApplyRange
@@ -274,7 +285,7 @@ FocusScope {
             displayMarginEnd: cellHeight * 2
 
             model: list.games
-            delegate: (showBoxes) ? boxartdelegate : dynamicDelegate
+            delegate: (showBoxes) ? boxartdelegate : (showChoosenMedia ? choosenmediadelegate : dynamicDelegate)
 
             Component {
                 id: boxartdelegate
@@ -282,7 +293,36 @@ FocusScope {
                 BoxArtGridItem {
                     selected: GridView.isCurrentItem && root.focus
                     gameData: modelData
+                    width:      GridView.view.cellWidth
+                    height:     GridView.view.cellHeight - titleMargin
 
+                    onActivate: {
+                        if (selected)
+                            gameActivated();
+                        else
+                            gamegrid.currentIndex = index;
+                    }
+                    onHighlighted: {
+                        gamegrid.currentIndex = index;
+                    }
+                    Keys.onPressed: {
+                        // Toggle favorite
+                        if (api.keys.isDetails(event) && !event.isAutoRepeat) {
+                            event.accepted = true;
+                            sfxToggle.play();
+                            modelData.favorite = !modelData.favorite;
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: choosenmediadelegate
+
+                ChoosenMediaGridItem {
+                    selected: GridView.isCurrentItem && root.focus
+                    gameData: modelData
+                    choosenMedia: root.choosenMedia
                     width:      GridView.view.cellWidth
                     height:     GridView.view.cellHeight - titleMargin
                     
@@ -345,7 +385,7 @@ FocusScope {
                     height: gamegrid.cellHeight
                     game: list.currentGame(gamegrid.currentIndex)
                     selected: gamegrid.focus
-                    boxArt: showBoxes
+                    boxArt: showBoxes || showChoosenMedia
                 }
             }
 
@@ -516,11 +556,11 @@ FocusScope {
                 currentCollectionIndex++;
             else
                 currentCollectionIndex = 0;
-
             gamegrid.currentIndex = 0;
             sfxToggle.play();
             // Reset our cached sorted games
             sortedGames = null;
+            reloadProperties();
             return;
         }
         // Previous collection - use L2 now
@@ -535,12 +575,12 @@ FocusScope {
                 currentCollectionIndex--;
             else
                 currentCollectionIndex = api.collections.count-1;
-
             gamegrid.currentIndex = 0;
             sfxToggle.play();
 
             // Reset our cached sorted games
             sortedGames = null;
+            reloadProperties();
             return;
         }
     }
@@ -575,6 +615,7 @@ FocusScope {
         if (focus) {
             currentHelpbarModel = gridviewHelpModel;
             gamegrid.focus = true;
+            //console.log("GridViewMenu onFocusChanged");
         }
     }
 
@@ -582,8 +623,10 @@ FocusScope {
     {
         //console.log("onActiveFocusChanged : ", activeFocus);
         if (activeFocus){
-            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = ""; // to force reload for translation
             currentHelpbarModel = gridviewHelpModel;
+            //console.log("GridViewMenu onActiveFocusChanged");
+            reloadProperties();
         }
     }
 }

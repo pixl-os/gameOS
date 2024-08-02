@@ -31,15 +31,21 @@ Item {
     }
 
     function logo(data) {
-        if (data !== null) {
-            if (data.assets.boxFront.includes("header.jpg"))
-                return steamLogo(data);
-            else {
-                if (data.assets.logo !== "")
-                    return data.assets.logo;
-            }
+      if (data !== null) {
+        if (data.assets.boxFront.includes("/header.jpg"))
+          return steamLogo(data);
+        else {
+          if (data.assets.logo !== "")
+            return data.assets.logo;
+          else if (data.assets.wheel !== "")
+            return data.assets.wheel;
+          else if (data.assets.wheelcarbon !== "")
+            return data.assets.wheelcarbon;
+          else if (data.assets.wheelsteel !== "")
+            return data.assets.wheelsteel;
         }
-        return "";
+      }
+      return "";
     }
 
     signal activated
