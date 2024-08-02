@@ -197,6 +197,20 @@ FocusScope {
         }
     }
 
+    function loadPlatformPageSettings(){
+        //reset settings depending shortname if settings exists
+        var context = api.collections.get(currentCollectionIndex).shortName;
+        settings.GridThumbnail = api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : api.memory.get("Grid Thumbnail")
+        settings.GridThumbnailMedia = api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
+        settings.GridColumns = api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : api.memory.get("Number of columns")
+    }
+    function loadGameDetailsSettings(){
+        //reset settings depending shortname if settings exists
+        var context = api.collections.get(currentCollectionIndex).shortName;
+        //to do
+   }
+
+
     // Collections
     property int currentGroupIndex
     property var currentGroup
@@ -217,6 +231,7 @@ FocusScope {
     // Handle loading settings when returning from a game
     property bool fromGame: api.memory.has('To Game');
     property string state;
+    property string settingsContext; // equal to "global" or "{shortname}" (settings global or by system/platform finally)
     property var lastState: []
     property var lastGame: [] //lastGame is used only for 'title' tracability now, working by Index is better in QML
     property var lastGameIndex: []
@@ -634,6 +649,7 @@ FocusScope {
         sfxAccept.play();
         lastState.push(state);
         //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
+
         switch(settings.PlatformView) {
         case "Grid":
             root.state = "softwaregridscreen";
@@ -684,11 +700,12 @@ FocusScope {
         root.state = "gameviewscreen";
     }
 
-    function settingsScreen() {
+    function settingsScreen(context) {
         sfxAccept.play();
         lastState.push(state);
         //console.log("gameDetails - lastState (after push) : ",JSON.stringify(lastState));
         root.state = "settingsscreen";
+        root.settingsContext = context;
     }
 
     function launchGameScreen() {
@@ -960,7 +977,9 @@ FocusScope {
     Component {
         id: settingsview
 
-        SettingsScreen { focus: true }
+        SettingsScreen { focus: true
+                         context: root.settingsContext
+        }
     }
 
     

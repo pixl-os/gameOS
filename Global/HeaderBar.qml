@@ -479,7 +479,7 @@ FocusScope {
 
             // Platform Settings
             Item {
-                id: platormsettings
+                id: platformsettings
 
                 property bool selected: ListView.isCurrentItem && root.focus
                 height: searchbar.height
@@ -487,8 +487,8 @@ FocusScope {
 
                 onSelectedChanged:{
                     //console.log("onSelectedChanged");
-                    if(platormsettings.selected) {
-                        platormsettings.focus = true;
+                    if(platformsettings.selected) {
+                        platformsettings.focus = true;
                     }
                 }
 
@@ -496,9 +496,9 @@ FocusScope {
                 {
                     anchors.fill: parent
                     radius: height/2
-                    color: platormsettings.focus ? theme.accent : "white"
-                    visible: true //platormsettings.selected
-                    opacity: platormsettings.focus ? 1 : 0.2
+                    color: platformsettings.focus ? theme.accent : "white"
+                    visible: true
+                    opacity: platformsettings.focus ? 1 : 0.2
                 }
 
                 Image {
@@ -506,21 +506,26 @@ FocusScope {
 
                     width: height
                     height: vpx(20)
-                    /*anchors {
-                        left: parent.left; leftMargin: vpx(11)
-                        top: parent.top; topMargin: vpx(10)
-                    }*/
-                    anchors.centerIn: platormsettings
+                    anchors.centerIn: platformsettings
                     source: "../assets/images/settingsicon.svg"
-                    opacity: platormsettings.focus ? 0.8 : 0.5
+                    opacity: platformsettings.focus ? 0.8 : 0.5
                     asynchronous: true
+                }
+
+                // Mouse/touch functionality
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: settings.MouseHover === "Yes"
+                    onEntered: platformsettings.focus = true;
+                    onExited: platformsettings.focus = false;
+                    onClicked: settingsScreen(currentCollection.shortName);
                 }
 
                 Keys.onPressed: {
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
-                        settingsScreen();
+                        settingsScreen(currentCollection.shortName);
                     }
                 }
             }

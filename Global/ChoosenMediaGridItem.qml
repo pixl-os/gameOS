@@ -20,6 +20,9 @@ import QtGraphicalEffects 1.15
 Item {
     id: root
 
+    // Load settings
+    property alias choosenMedia: screenshot.choosenMedia
+
     // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
     function steamAppID (gameData) {
         var str = gameData.assets.boxFront.split("header");
@@ -30,8 +33,169 @@ Item {
         return steamAppID(gameData) + '/library_600x900_2x.jpg';
     }
 
-    function boxArt(data) {
+    function chooseMedia(data,asset) {
+      if (data !== null && (asset !== null || asset !== "")) {
+        switch (asset) {
+          case "boxFront":
+            if (data.assets.boxFront !== "")
+              return data.assets.boxFront;
+            break
+          case "box2d":
+            if (data.assets.box2d !== "")
+              return data.assets.box2d;
+            break
+          case "box3d":
+            if (data.assets.box3d !== "")
+              return data.assets.box3d;
+            break
+          case "boxBack":
+            if (data.assets.boxBack !== "")
+              return data.assets.boxBack;
+            break
+          case "boxSpine":
+            if (data.assets.boxSpine !== "")
+              return data.assets.boxSpine;
+            break
+          case "boxFull":
+            if (data.assets.boxFull !== "")
+              return data.assets.boxFull;
+            break
+          case "cartridge":
+            if (data.assets.cartridge !== "")
+              return data.assets.cartridge;
+            break
+          case "cartridgetexture":
+            if (data.assets.cartridgetexture !== "")
+              return data.assets.cartridgetexture;
+            break
+          case "logo":
+            if (data.assets.logo !== "")
+              return data.assets.logo;
+            break
+          case "wheel":
+            if (data.assets.wheel !== "")
+              return data.assets.wheel;
+            break
+          case "wheelcarbon":
+            if (data.assets.wheelcarbon !== "")
+              return data.assets.wheelcarbon;
+            break
+          case "wheelsteel":
+            if (data.assets.wheelsteel !== "")
+              return data.assets.wheelsteel;
+            break
+          case "poster":
+            if (data.assets.poster !== "")
+              return data.assets.poster;
+            break
+          case "fanart":
+            if (data.assets.fanart !== "")
+              return data.assets.fanart;
+            break
+          case "marquee":
+            if (data.assets.marquee !== "")
+              return data.assets.marquee;
+            break
+          case "bezel":
+            if (data.assets.bezel !== "")
+              return data.assets.bezel;
+            break
+          case "panel":
+            if (data.assets.panel !== "")
+              return data.assets.panel;
+            break
+          case "cabinetLeft":
+            if (data.assets.cabinetLeft !== "")
+              return data.assets.cabinetLeft;
+            break
+          case "cabinetRight":
+            if (data.assets.cabinetRight !== "")
+              return data.assets.cabinetRight;
+            break
+          case "screenmarquee":
+            if (data.assets.screenmarquee !== "")
+              return data.assets.screenmarquee;
+            break
+          case "screenmarqueesmall":
+            if (data.assets.screenmarqueesmall !== "")
+              return data.assets.screenmarqueesmall;
+            break
+          case "tile":
+            if (data.assets.tile !== "")
+              return data.assets.tile;
+            break
+          case "banner":
+            if (data.assets.banner !== "")
+              return data.assets.banner;
+            break
+          case "steam":
+            if (data.assets.steam !== "")
+              return data.assets.steam;
+            break
+          case "background":
+            if (data.assets.background !== "")
+              return data.assets.background;
+            break
+          case "music":
+            if (data.assets.music !== "")
+              return data.assets.music;
+            break
+          case "image":
+            if (data.assets.image !== "")
+              return data.assets.image;
+            break
+          case "screenshot":
+            if (data.assets.screenshot !== "")
+              return data.assets.screenshot;
+            break
+          case "screenshot_bis":
+            if (data.assets.screenshot_bis !== "")
+              return data.assets.screenshot_bis;
+            break
+          case "thumbnail":
+            if (data.assets.thumbnail !== "")
+              return data.assets.thumbnail;
+            break
+          case "titlescreen":
+            if (data.assets.titlescreen !== "")
+              return data.assets.titlescreen;
+            break
+          case "video":
+            if (data.assets.video !== "")
+              return data.assets.video;
+            break
+          case "videomix":
+            if (data.assets.videomix !== "")
+              return data.assets.videomix;
+            break
+          case "manual":
+            if (data.assets.manual !== "")
+              return data.assets.manual;
+            break
+          case "maps":
+            if (data.assets.maps !== "")
+              return data.assets.maps;
+            break
+          case "extra1":
+            if (data.assets.extra1 !== "")
+              return data.assets.extra1;
+            break
+          case "mix":
+            if (data.assets.mix !== "")
+              return data.assets.mix;
+            break
+          default:
+              console.log("Unknown asset");
+        }
+      }
+      return "";
+    }
+
+    function boxArt(data, media) {
       if (data !== null) {
+        if (media !== ""){
+          return chooseMedia(data,media);
+        }
         if (data.assets.boxFront.includes("/header.jpg")) 
           return steamBoxArt(data);
         else {
@@ -87,11 +251,12 @@ Item {
 
         Image {
             id: screenshot
+            property string choosenMedia: ""
 
             anchors.fill: parent
             anchors.margins: vpx(2)
             asynchronous: true
-            source: boxArt(gameData)
+            source: boxArt(gameData, choosenMedia)
             sourceSize { width: root.width; height: root.height }
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter

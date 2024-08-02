@@ -26,6 +26,7 @@ GameDetails/MediaView.qml \
 Global/BatteryIndicator.qml \
 Global/BoxArtGridItem.qml \
 Global/ButtonHelpBar.qml \
+Global/ChoosenMediaGridItem.qml \
 Global/DynamicGridItem.qml \
 Global/GameAchievements.qml \
 Global/GameInfo.qml \
