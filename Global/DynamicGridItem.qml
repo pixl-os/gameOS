@@ -57,7 +57,7 @@ Item {
 
 
     // In order to use the retropie icons here we need to do a little collection specific hack
-    property bool playVideo: gameData ? gameData.assets.videoList.length && (settings.AllowThumbVideo === "Yes") : ""
+    property bool playVideo: (settings.GridThumbnail !== "Box Art") && (settings.GridThumbnail !== "Choose Media") ? (gameData ? gameData.assets.videoList.length && (settings.AllowThumbVideo === "Yes") : false) : false
     scale: selected ? 1 : 0.95
     Behavior on scale { NumberAnimation { duration: 100 } }
     z: selected ? 10 : 1
