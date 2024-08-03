@@ -39,13 +39,19 @@ FocusScope {
         //to avoid to launch video during reload
         showBoxes = true;
         showChoosenMedia = true;
+        //reset delegate/component to force reload/re-caclcul of sizes and avoid display bug
+        gamegrid.sourceThumbnail = "";
+        gamegrid.delegate = null;
         loadPlatformPageSettings();
-        showBoxes = (settings.GridThumbnail === "Box Art")
+        showBoxes = (settings.GridThumbnail === "Box Art");
         showChoosenMedia = (settings.GridThumbnail === "Choose Media");
         if(showChoosenMedia) choosenMedia = settings.GridThumbnailMedia;
+        else choosenMedia = "";
+        gamegrid.sourceThumbnail = showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml");
+        gamegrid.delegate = (showBoxes) ? boxartdelegate : (showChoosenMedia ? choosenmediadelegate : dynamicDelegate);
+        fakebox.choosenMedia = choosenMedia;
         numColumns = settings.GridColumns ? settings.GridColumns : 6;
         titleMargin = settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0;
-        gamegrid.sourceThumbnail = showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml");
     }
 
     property var sortedGames: null;
@@ -176,7 +182,7 @@ FocusScope {
 
     GridSpacer {
         id: fakebox
-
+        choosenMedia: root.choosenMedia
         width: vpx(100); height: vpx(100)
         games: list.games
     }
@@ -259,8 +265,10 @@ FocusScope {
                     return cellWidth / settings.TallRatio;
                 } else if (settings.GridThumbnail === "Square") {
                     return cellWidth;
-                } else {
+                } else if (settings.GridThumbnail === "Wide") {
                     return cellWidth * settings.WideRatio;
+                } else {
+                    return cellWidth * cellHeightRatio;
                 }
             }
             property var sourceThumbnail: showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml" )
