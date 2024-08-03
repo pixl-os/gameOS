@@ -23,9 +23,10 @@ Item {
 
     property var game
     property bool selected
-    property bool boxArt
-    property bool playVideo: (settings.AllowThumbVideo === "Yes") && !boxArt
-	
+    property bool boxArt: true
+    property bool choosenMedia: true
+    property bool playVideo: game ? (game.assets.videoList.length && (settings.AllowThumbVideo === "Yes") && !boxArt && !choosenMedia) : false
+
     property bool validated: selected && (videoToStop || demoLaunched)
 	onValidatedChanged:
 	{
@@ -74,7 +75,7 @@ Item {
 
         interval: 600
         onTriggered: {
-            if (game && game.assets.videos.length) {
+            if (game && game.assets.videos.length && playVideo) {
                 videoPreviewLoader.sourceComponent = videoPreviewWrapper;
             }
         }

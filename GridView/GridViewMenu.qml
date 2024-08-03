@@ -35,6 +35,10 @@ FocusScope {
     }
 
     function reloadProperties(){
+        console.log("reloadProperties()");
+        //to avoid to launch video during reload
+        showBoxes = true;
+        showChoosenMedia = true;
         loadPlatformPageSettings();
         showBoxes = (settings.GridThumbnail === "Box Art")
         showChoosenMedia = (settings.GridThumbnail === "Choose Media");
@@ -385,7 +389,8 @@ FocusScope {
                     height: gamegrid.cellHeight
                     game: list.currentGame(gamegrid.currentIndex)
                     selected: gamegrid.focus
-                    boxArt: showBoxes || showChoosenMedia
+                    boxArt: showBoxes
+                    choosenMedia: showChoosenMedia
                 }
             }
 
