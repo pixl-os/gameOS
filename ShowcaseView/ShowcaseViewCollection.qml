@@ -44,7 +44,7 @@ HorizontalCollection {
 
         //FIX: to return to good index in list - seems a bug of list udpates during loading of models when we come back from game
         if((currentList.savedIndex === storedHomeSecondaryIndex) && (objectModelIndex === storedHomePrimaryIndex)){
-            if(typeof(currentGame) !== "undefined"){
+            if((typeof(currentGame) !== "undefined") && (currentGame !== null)){
                 //console.log("list1 - currentGame : ",currentGame.files.get(0).path);
                 //console.log("list1 - selectedGame : ",collection.search.currentGame(currentList.currentIndex).files.get(0).path);
                 //check if same rom file or not
