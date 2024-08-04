@@ -35,7 +35,7 @@ FocusScope {
     }
 
     function reloadProperties(){
-        console.log("reloadProperties()");
+        //console.log("reloadProperties()");
         //to avoid to launch video during reload
         showBoxes = true;
         showChoosenMedia = true;

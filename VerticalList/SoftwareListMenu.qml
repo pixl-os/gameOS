@@ -38,6 +38,11 @@ FocusScope {
         }
     }
 
+    function reloadProperties(){
+        //console.log("reloadProperties()");
+        loadPlatformPageSettings();
+    }
+
     property real itemheight: vpx(50)
     property int skipnum: 10
 
@@ -638,6 +643,7 @@ FocusScope {
             event.accepted = true;
             api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
             isRightTriggerPressed = false;
+            reloadProperties();
             return;
         }
         // Previous collection - L2 now
@@ -645,6 +651,7 @@ FocusScope {
             event.accepted = true;
             api.internal.system.run("sleep 0.2"); //ad sleep to avoid multievents
             isLeftTriggerPressed = false;
+            reloadProperties();
             return;
         }
     }
@@ -837,6 +844,7 @@ FocusScope {
         if (activeFocus){
             currentHelpbarModel = ""; // to force reload for transkation
             currentHelpbarModel = verticalListHelpModel;
+            reloadProperties();
         }
     }
 }

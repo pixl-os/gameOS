@@ -43,6 +43,12 @@ FocusScope {
     //clipping activated especially for embedded mode
     clip: embedded
 
+    function reloadProperties(){
+        //console.log("reloadProperties()");
+        loadGameDetailsSettings(game.collections.get(0).shortName);
+        canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
+    }
+
     onCanPlayVideoChanged:{
         //to force to stop video playing when we lost focus
        if(canPlayVideo === false) toggleVideo(false);
@@ -298,6 +304,7 @@ FocusScope {
 
     // Reset the screen to default state
     function reset(){
+        reloadProperties();
         content.currentIndex = 0;
         menu.currentIndex = 0;
         media.savedIndex = 0;
@@ -1649,6 +1656,7 @@ FocusScope {
     }
 
     Component.onCompleted: {
+        reloadProperties();
         //set currentGameIndex
         searchGameIndex.sourceModel = game.collections.get(0).games;
         searchGameIndex.filenameToFind = true; //force to search exact file name and not a filter using regex

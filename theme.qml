@@ -211,14 +211,35 @@ FocusScope {
     function loadPlatformPageSettings(){
         //reset settings depending shortname if settings exists
         var context = api.collections.get(currentCollectionIndex).shortName;
-        settings.GridThumbnail = api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : api.memory.get("Grid Thumbnail");
-        settings.GridThumbnailMedia = api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')");
-        settings.GridColumns = api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : api.memory.get("Number of columns");
+        //Platform Page Settings
+        settings.GridThumbnail =        api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : (api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art");
+        settings.GridThumbnailMedia =   api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : (api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d");
+        settings.GridColumns =          api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : (api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5");
     }
-    function loadGameDetailsSettings(){
+    function loadGameDetailsSettings(context){
         //reset settings depending shortname if settings exists
-        var context = api.collections.get(currentCollectionIndex).shortName;
-        //to do
+        if(context === "") context = api.collections.get(currentCollectionIndex).shortName;
+        console.log("loadGameDetailsSettings: ", context);
+
+        //Game Details Settings
+        settings.GameBackground =                api.memory.has(context + "_" + "Game Background") ? api.memory.get(context + "_" +"Game Background") : (api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot");
+        settings.AllowGameBackgroundOverlay =    api.memory.has(context + "_" + "Game Background overlay") ? api.memory.get(context + "_" +"Game Background overlay") : (api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No");
+        settings.GameLogo =                      api.memory.has(context + "_" + "Game Logo") ? api.memory.get(context + "_" +"Game Logo") : (api.memory.has("Game Logo") ? api.memory.get("Game Logo") : "Show");
+        settings.GameLogoPosition =              api.memory.has(context + "_" + "Game Logo position") ? api.memory.get(context + "_" +"Game Logo position") : (api.memory.has("Game Logo position") ? api.memory.get("Game Logo position") : "Left");
+        settings.SystemLogo =                    api.memory.has(context + "_" + "System Logo") ? api.memory.get(context + "_" +"System Logo") : (api.memory.has("System Logo") ? api.memory.get("System Logo") : "Show");
+        settings.SystemLogoPosition =            api.memory.has(context + "_" + "System Logo position") ? api.memory.get(context + "_" +"System Logo position") : (api.memory.has("System Logo position") ? api.memory.get("System Logo position") : "Left");
+        settings.SystemLogoGradientEffect =      api.memory.has(context + "_" + "System Logo with pink gradient effect") ? api.memory.get(context + "_" +"System Logo with pink gradient effect") : (api.memory.has("System Logo with pink gradient effect") ? api.memory.get("System Logo with pink gradient effect") : "No");
+        settings.DetailsDefault =                api.memory.has(context + "_" + "Default to full details") ? api.memory.get(context + "_" +"Default to full details") : (api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No");
+        settings.VideoPreview =                  api.memory.has(context + "_" + "Video preview") ? api.memory.get(context + "_" +"Video preview") : (api.memory.has("Video preview") ? api.memory.get("Video preview") : "Yes");
+        settings.AllowVideoPreviewAudio =        api.memory.has(context + "_" + "Video preview audio") ? api.memory.get(context + "_" +"Video preview audio") : (api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "Yes");
+        settings.AllowVideoPreviewOverlay =      api.memory.has(context + "_" + "Video preview overlay") ? api.memory.get(context + "_" +"Video preview overlay") : (api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "Yes");
+        settings.OverlaysSource =                api.memory.has(context + "_" + "Overlays source") ? api.memory.get(context + "_" +"Overlays source") : (api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default");
+        settings.GameRandomBackground =          api.memory.has(context + "_" + "Randomize Background") ? api.memory.get(context + "_" +"Randomize Background") : (api.memory.has("Randomize Background") ? api.memory.get("Randomize Background") : "No");
+        settings.GameBlurBackground =            api.memory.has(context + "_" + "Blur Background") ? api.memory.get(context + "_" +"Blur Background") : (api.memory.has("Blur Background") ? api.memory.get("Blur Background") : "No");
+        settings.ShowScanlines =                 api.memory.has(context + "_" + "Show scanlines") ? api.memory.get(context + "_" +"Show scanlines") : (api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes");
+        settings.ShowFilename=                   api.memory.has(context + "_" + "Show file name") ? api.memory.get(context + "_" +"Show file name") : (api.memory.has("Show file name") ? api.memory.get("Show file name") : "No");
+        settings.ShowFilehash =                  api.memory.has(context + "_" + "Show file hash") ? api.memory.get(context + "_" +"Show file hash") : (api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No");
+        settings.ShowPlayStats =                 api.memory.has(context + "_" + "Show play stats") ? api.memory.get(context + "_" +"Show play stats") : (api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No");
    }
 
 
