@@ -293,11 +293,23 @@ FocusScope {
             settingNameDisplay: qsTr("Color Background")
             settingDisplay: qsTr("Original,Black,Gray,Blue,Green,Red")
         }
-	ListElement {
+        ListElement {
         settingName: "System Logo Style"
         setting: "Color,Steel,Carbon,White,Black"
         settingNameDisplay: qsTr("System Logo Style")
         settingDisplay: qsTr("Color,Steel,Carbon,White,Black")
+        }
+        ListElement {
+            settingName: "Demo triggering delay (in minutes)"
+            setting: "Deactivated,1,2,3,4,5,10,20,30"
+            settingNameDisplay: qsTr("Demo triggering delay (in minutes)")
+            settingDisplay: qsTr("Deactivated,1,2,3,4,5,10,20,30")
+        }
+        ListElement {
+            settingName: "Demo show full details"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("Demo show full details")
+            settingDisplay: qsTr("No,Yes")
         }
     }
 
@@ -595,18 +607,6 @@ FocusScope {
             settingName: "Show play stats"
             setting: "No,Yes"
             settingNameDisplay: qsTr("Show play stats")
-            settingDisplay: qsTr("No,Yes")
-        }
-        ListElement {
-            settingName: "Demo triggering delay (in minutes)"
-            setting: "Deactivated,1,2,3,4,5,10,20,30"
-            settingNameDisplay: qsTr("Demo triggering delay (in minutes)")
-            settingDisplay: qsTr("Deactivated,1,2,3,4,5,10,20,30")
-        }
-        ListElement {
-            settingName: "Demo show full details"
-            setting: "No,Yes"
-            settingNameDisplay: qsTr("Demo show full details")
             settingDisplay: qsTr("No,Yes")
         }
     }
