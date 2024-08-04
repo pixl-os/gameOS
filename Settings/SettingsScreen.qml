@@ -1569,7 +1569,7 @@ FocusScope {
                                 indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
                             }
                             else{
-                                indexFromSettings = (api.memory.get(context + "_" + fullSettingName + 'Index') || 0);
+                                indexFromSettings = (api.memory.get(context + "_" + fullSettingName + 'Index') || (api.memory.get(fullSettingName + 'Index') || 0));
                             }
 
 							//-----------------------------------------------------------------------
@@ -1612,7 +1612,7 @@ FocusScope {
                                 value = (api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "";
                             }
                             else{
-                                value = (api.memory.get(context + "_" + fullSettingName)) ? api.memory.get(context + "_" + fullSettingName) : "";
+                                value = (api.memory.get(context + "_" + fullSettingName)) ? api.memory.get(context + "_" + fullSettingName) : ((api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "");
                             }
 						}
 						return value;
