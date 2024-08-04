@@ -118,6 +118,8 @@ FocusScope {
             ItemHighlight {
                 width: collectionList.cellWidth
                 height: collectionList.cellHeight
+                boxArt: false
+                choosenMedia: false
                 game: search ? search.currentGame(collectionList.currentIndex) : ""
                 selected: collectionList.focus
             }
