@@ -1460,7 +1460,7 @@ FocusScope {
 
                 function saveSetting() {
                     var cacheName;
-					//console.log("saveSetting():" + fullSettingName + " saved setting:",setting);
+                    //console.log("saveSetting():" + context + "_" + fullSettingName + " saved setting:",setting);
 					if (setting !== "to edit")
 					{
                         var previousIndex;
@@ -1474,9 +1474,9 @@ FocusScope {
                         else {
                             previousIndex = api.memory.get(context + "_" + fullSettingName + 'Index');
                             api.memory.set(context + "_" + fullSettingName + 'Index', savedIndex);
-                            //console.log("saveSetting():" + fullSettingName + 'Index', savedIndex);
+                            //console.log("saveSetting():" + context + "_" + fullSettingName + 'Index', savedIndex);
                             api.memory.set(context + "_" + fullSettingName, settingList[savedIndex]);
-                            //console.log("saveSetting():" + fullSettingName + " : ", settingList[savedIndex]);
+                            //console.log("saveSetting():" + context + "_" + fullSettingName + " : ", settingList[savedIndex]);
                         }
                         if(previousIndex !== savedIndex){
                             //console.log("settingsChanged !");
@@ -1484,8 +1484,8 @@ FocusScope {
                             //check if collection parameter changed / delete cache in this case
                             if(fullSettingName.includes("My Collection")){
                                 cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
-                                console.log(cacheName);
-                                console.log("cache unset: ",cacheName);
+                                //console.log(cacheName);
+                                //console.log("cache unset: ",cacheName);
                                 api.memory.unset(cacheName);
                             }
                         }
@@ -1500,7 +1500,7 @@ FocusScope {
                          }
                         else{
                             previousValue = api.memory.get(context + "_" + fullSettingName);
-                            //console.log("saveSetting():" + fullSettingName + " : ", settingtextfield.text);
+                            //console.log("saveSetting():" + context + "_" + fullSettingName + " : ", settingtextfield.text);
                             api.memory.set(context + "_" + fullSettingName, settingtextfield.text);
                         }
 
@@ -1510,7 +1510,7 @@ FocusScope {
                             //check if collection parameter changed / delete cache in this case
                             if(fullSettingName.includes("My Collection")){
                                 cacheName = fullSettingName.split(" - ")[0] + " - " + "cache";
-                                console.log("cache unset: ",cacheName);
+                                //console.log("cache unset: ",cacheName);
                                 api.memory.unset(cacheName);
                             }
                         }
@@ -1562,19 +1562,24 @@ FocusScope {
 						if (setting !== "to edit")
 						{
 							//tips to refresh index (and to force update of text as not possible when we reuse the same listview as for collection)
-                            //console.log("api.memory.get(" + fullSettingName + "'Index') : ",api.memory.get(fullSettingName + 'Index'));
 
                             var indexFromSettings;
                             if(context === "global"){
                                 indexFromSettings = (api.memory.get(fullSettingName + 'Index') || 0);
+                                //console.log("api.memory.get(" + fullSettingName + "'Index') : ",indexFromSettings);
                             }
                             else{
-                                indexFromSettings = (api.memory.get(context + "_" + fullSettingName + 'Index') || (api.memory.get(fullSettingName + 'Index') || 0));
+                                if(api.memory.has(context + "_" + fullSettingName + 'Index')){
+                                    indexFromSettings = api.memory.get(context + "_" + fullSettingName + 'Index');
+                                }
+                                else indexFromSettings = api.memory.get(fullSettingName + 'Index') || 0;
+                                //console.log("api.memory.get(" + context + "_" + fullSettingName + "'Index') : ",indexFromSettings);
                             }
 
 							//-----------------------------------------------------------------------
                             //console.log(fullSettingName + " : ",(setting !== "to edit") ? settingList[indexFromSettings] : "");
                             if(settingListDisplay !== ""){
+                                //console.log("settingList[indexFromSettings] : ",settingList[indexFromSettings]);
                                 //console.log("settingListDisplay[indexFromSettings] : ",settingListDisplay[indexFromSettings]);
                                 return settingListDisplay[indexFromSettings];
                             }
@@ -1609,10 +1614,10 @@ FocusScope {
 						if (setting === "to edit") 
 						{
                             if(context === "globale"){
-                                value = (api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "";
+                                value = (api.memory.has(fullSettingName)) ? api.memory.get(fullSettingName) : "";
                             }
                             else{
-                                value = (api.memory.get(context + "_" + fullSettingName)) ? api.memory.get(context + "_" + fullSettingName) : ((api.memory.get(fullSettingName)) ? api.memory.get(fullSettingName) : "");
+                                value = (api.memory.has(context + "_" + fullSettingName)) ? api.memory.get(context + "_" + fullSettingName) : ((api.memory.has(fullSettingName)) ? api.memory.get(fullSettingName) : "");
                             }
 						}
 						return value;
