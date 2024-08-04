@@ -23,8 +23,8 @@ Item {
 
     property var game
     property bool selected
-    property bool boxArt: true
-    property bool choosenMedia: true
+    property bool boxArt: false
+    property bool choosenMedia: false
     property bool playVideo: game ? (game.assets.videoList.length && (settings.AllowThumbVideo === "Yes") && !boxArt && !choosenMedia) : false
 
     property bool validated: selected && (videoToStop || demoLaunched)
