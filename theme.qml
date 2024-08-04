@@ -136,24 +136,13 @@ FocusScope {
     // Load settings
     property var settings: {
         return {
-            PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
-            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
-            GridThumbnailMedia:            api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d",
-            GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5",
-            SystemHeaderLogoGradientEffect:    api.memory.has("System Header Logo with pink gradient effect") ? api.memory.get("System Header Logo with pink gradient effect") : "No",
-            GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
-            AllowGameBackgroundOverlay:    api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No",
-            GameLogo:                      api.memory.has("Game Logo") ? api.memory.get("Game Logo") : "Show",
-            GameLogoPosition:              api.memory.has("Game Logo position") ? api.memory.get("Game Logo position") : "Left",
-            GameRandomBackground:          api.memory.has("Randomize Background") ? api.memory.get("Randomize Background") : "No",
-            SystemLogo:                    api.memory.has("System Logo") ? api.memory.get("System Logo") : "Show",
-            SystemLogoPosition:            api.memory.has("System Logo position") ? api.memory.get("System Logo position") : "Left",
-            SystemLogoGradientEffect:      api.memory.has("System Logo with pink gradient effect") ? api.memory.get("System Logo with pink gradient effect") : "No",
-            GameBlurBackground:            api.memory.has("Blur Background") ? api.memory.get("Blur Background") : "No",
-            VideoPreview:                  api.memory.has("Video preview") ? api.memory.get("Video preview") : "Yes",
+            //General settings
             AllowThumbVideo:               api.memory.has("Allow video thumbnails") ? api.memory.get("Allow video thumbnails") : "Yes",
             AllowThumbVideoAudio:          api.memory.has("Play video thumbnail audio") ? api.memory.get("Play video thumbnail audio") : "No",
             HideLogo:                      api.memory.has("Hide logo when thumbnail video plays") ? api.memory.get("Hide logo when thumbnail video plays") : "No",
+            AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
+            MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
+            AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
             HideButtonHelp:                api.memory.has("Hide button help") ? api.memory.get("Hide button help") : "No",
             HelpButtonsStyle:              api.memory.has("Help buttons style") ? api.memory.get("Help buttons style") : "Gamepad",
             HideClock:                     api.memory.has("Hide Clock") ? api.memory.get("Hide Clock") : "No",
@@ -161,21 +150,41 @@ FocusScope {
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
             ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
             SystemLogoStyle:               api.memory.has("System Logo Style") ? api.memory.get("System Logo Style") : "Color",
-            MouseHover:                    api.memory.has("Enable mouse hover") ? api.memory.get("Enable mouse hover") : "No",
-            AlwaysShowTitles:              api.memory.has("Always show titles") ? api.memory.get("Always show titles") : "No",
-            AnimateHighlight:              api.memory.has("Animate highlight") ? api.memory.get("Animate highlight") : "No",
+            SystemHeaderLogoGradientEffect:    api.memory.has("System Header Logo with pink gradient effect") ? api.memory.get("System Header Logo with pink gradient effect") : "No",
+            PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
+            DemoTriggeringDelay:           api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
+            DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
+
+            //Platform Page Settings
+            GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
+            GridThumbnailMedia:            api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d",
+            GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5",
+
+            //Game Details Settings
+            GameBackground:                api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot",
+            AllowGameBackgroundOverlay:    api.memory.has("Game Background overlay") ? api.memory.get("Game Background overlay") : "No",
+            GameLogo:                      api.memory.has("Game Logo") ? api.memory.get("Game Logo") : "Show",
+            GameLogoPosition:              api.memory.has("Game Logo position") ? api.memory.get("Game Logo position") : "Left",
+            SystemLogo:                    api.memory.has("System Logo") ? api.memory.get("System Logo") : "Show",
+            SystemLogoPosition:            api.memory.has("System Logo position") ? api.memory.get("System Logo position") : "Left",
+            SystemLogoGradientEffect:      api.memory.has("System Logo with pink gradient effect") ? api.memory.get("System Logo with pink gradient effect") : "No",
+            DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
+            VideoPreview:                  api.memory.has("Video preview") ? api.memory.get("Video preview") : "Yes",
             AllowVideoPreviewAudio:        api.memory.has("Video preview audio") ? api.memory.get("Video preview audio") : "Yes",
             AllowVideoPreviewOverlay:      api.memory.has("Video preview overlay") ? api.memory.get("Video preview overlay") : "Yes",
             OverlaysSource:                api.memory.has("Overlays source") ? api.memory.get("Overlays source") : "Default",
+            GameRandomBackground:          api.memory.has("Randomize Background") ? api.memory.get("Randomize Background") : "No",
+            GameBlurBackground:            api.memory.has("Blur Background") ? api.memory.get("Blur Background") : "No",
             ShowScanlines:                 api.memory.has("Show scanlines") ? api.memory.get("Show scanlines") : "Yes",
             ShowFilename:                  api.memory.has("Show file name") ? api.memory.get("Show file name") : "No",
             ShowFilehash:                  api.memory.has("Show file hash") ? api.memory.get("Show file hash") : "No",
-            DetailsDefault:                api.memory.has("Default to full details") ? api.memory.get("Default to full details") : "No",
-            ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "10",
+            ShowPlayStats:                 api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
+
+            //Home Page settings
             SystemsGroupDisplay:           api.memory.has("Systems group display") ? api.memory.get("Systems group display") : "No",
             SortSystemsBy:                 api.memory.has("Sort systems by") ? api.memory.get("Sort systems by") : "manufacturer",
             SortSystemsSecondlyBy:         api.memory.has("Sort systems secondly by") ? api.memory.get("Sort systems secondly by") : "releasedate",
-            //not used ?: ShowcaseFeaturedCollection:    api.memory.has("Featured collection") ? api.memory.get("Featured collection") : "Favorites",
+            ShowcaseColumns:               api.memory.has("Number of games showcased") ? api.memory.get("Number of games showcased") : "10",
             ShowcaseChangeFavoriteDisplayAutomatically:    api.memory.has("Change favorite display automatically") ? api.memory.get("Change favorite display automatically") : "Yes",
             ShowcaseCollection1:           api.memory.has("Collection 1") ? api.memory.get("Collection 1") : "Recently Played",
             ShowcaseCollection1_Thumbnail: api.memory.has("Collection 1 - Thumbnail") ? api.memory.get("Collection 1 - Thumbnail") : "Wide",
@@ -187,22 +196,24 @@ FocusScope {
             ShowcaseCollection4_Thumbnail: api.memory.has("Collection 4 - Thumbnail") ? api.memory.get("Collection 4 - Thumbnail") : "Tall",
             ShowcaseCollection5:           api.memory.has("Collection 5") ? api.memory.get("Collection 5") : "None",
             ShowcaseCollection5_Thumbnail: api.memory.has("Collection 5 - Thumbnail") ? api.memory.get("Collection 5 - Thumbnail") : "Wide",
+            //notes: 5 colletions settings are added/read automatically
+
+            //Regional Settings
+            PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu",
+
+            //Advanced settings
             WideRatio:                     api.memory.has("Wide - Ratio") ? api.memory.get("Wide - Ratio") : "0.64",
             TallRatio:                     api.memory.has("Tall - Ratio") ? api.memory.get("Tall - Ratio") : "0.66",
             ShowLoadingDetails:            api.memory.has("Show loading details") ? api.memory.get("Show loading details") : "No",
-            ShowPlayStats:                 api.memory.has("Show play stats") ? api.memory.get("Show play stats") : "No",
-            DemoTriggeringDelay:           api.memory.has("Demo triggering delay (in minutes)") ? api.memory.get("Demo triggering delay (in minutes)") : "Deactivated",
-            DemoShowFullDetails:           api.memory.has("Demo show full details") ? api.memory.get("Demo show full details") : "No",
-            PreferedRegion:                api.memory.has("Prefered region") ? api.memory.get("Prefered region") : "eu"
         }
     }
 
     function loadPlatformPageSettings(){
         //reset settings depending shortname if settings exists
         var context = api.collections.get(currentCollectionIndex).shortName;
-        settings.GridThumbnail = api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : api.memory.get("Grid Thumbnail")
-        settings.GridThumbnailMedia = api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
-        settings.GridColumns = api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : api.memory.get("Number of columns")
+        settings.GridThumbnail = api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : api.memory.get("Grid Thumbnail");
+        settings.GridThumbnailMedia = api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')");
+        settings.GridColumns = api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : api.memory.get("Number of columns");
     }
     function loadGameDetailsSettings(){
         //reset settings depending shortname if settings exists
