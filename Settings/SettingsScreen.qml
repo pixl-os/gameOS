@@ -300,6 +300,20 @@ FocusScope {
         settingDisplay: qsTr("Color,Steel,Carbon,White,Black")
         }
         ListElement {
+            settingName: "System Header Logo with pink gradient effect"
+            setting: "No,Yes"
+            settingNameDisplay: qsTr("System Header Logo with pink gradient effect")
+            settingDisplay: qsTr("No,Yes")
+            settingNeedReload: false
+        }
+        ListElement {
+            settingName: "Platform page style"
+            setting: "Grid,Vertical List"
+            settingNameDisplay: qsTr("Platform page style")
+            settingDisplay: qsTr("Grid,Vertical List")
+            settingNeedReload: true
+        }
+        ListElement {
             settingName: "Demo triggering delay (in minutes)"
             setting: "Deactivated,1,2,3,4,5,10,20,30"
             settingNameDisplay: qsTr("Demo triggering delay (in minutes)")
@@ -338,20 +352,6 @@ FocusScope {
             setting: "No,Yes"
             settingNameDisplay: qsTr("Show loading details")
             settingDisplay: qsTr("No,Yes")
-        }
-        ListElement {
-            settingName: "Platform page style"
-            setting: "Grid,Vertical List"
-            settingNameDisplay: qsTr("Platform page style")
-            settingDisplay: qsTr("Grid,Vertical List")
-            settingNeedReload: true
-        }
-        ListElement {
-            settingName: "System Header Logo with pink gradient effect"
-            setting: "No,Yes"
-            settingNameDisplay: qsTr("System Header Logo with pink gradient effect")
-            settingDisplay: qsTr("No,Yes")
-            settingNeedReload: false
         }
     }
 
@@ -466,7 +466,6 @@ FocusScope {
 
     ListModel {
         id: gridSettingsModel
-
         ListElement {
             settingName: "Grid Thumbnail"
             setting: "Wide,Tall,Square,Box Art,Choose Media"
@@ -474,7 +473,6 @@ FocusScope {
             settingDisplay: qsTr("Wide,Tall,Square,Box Art,Choose Media")
             settingNeedReload: false
         }
-
         ListElement {
             settingName: "Choosen Media (only if Grid Thumbnail is on 'Choose Media')"
             setting: "box3d,box2d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1"
@@ -482,7 +480,6 @@ FocusScope {
             settingDisplay: qsTr("box3d,box2d,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1")
             settingNeedReload: false
         }
-
         ListElement {
             settingName: "Number of columns"
             setting: "5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,1,2,3,4"
@@ -556,6 +553,12 @@ FocusScope {
             settingDisplay: qsTr("Yes,No")
         }
         ListElement {
+            settingName: "Video preview audio"
+            setting: "Yes,No"
+            settingNameDisplay: qsTr("Video preview audio")
+            settingDisplay: qsTr("Yes,No")
+        }
+        ListElement {
             settingName: "Video preview overlay"
             setting: "Yes,No"
             settingNameDisplay: qsTr("Video preview overlay")
@@ -566,12 +569,6 @@ FocusScope {
             setting: "Default,Share"
             settingNameDisplay: qsTr("Overlays source")
             settingDisplay: qsTr("Default,Share")
-        }
-        ListElement {
-            settingName: "Video preview audio"
-            setting: "Yes,No"
-            settingNameDisplay: qsTr("Video preview audio")
-            settingDisplay: qsTr("Yes,No")
         }
         ListElement {
             settingName: "Randomize Background"
@@ -637,7 +634,7 @@ FocusScope {
 
     property string context: "global"
     property var designerArr: [designerPage]
-    property var settingsArr: context === "global" ? [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : [gridPage, gamePage]
+    property var settingsArr: context === "global" ? [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : (settings.PlatformView === "Grid" ? [gridPage, gamePage] :  [gamePage])
     property real itemheight: vpx(50)
     property var settingsCol: []
 
