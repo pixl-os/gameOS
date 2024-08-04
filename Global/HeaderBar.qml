@@ -124,7 +124,8 @@ FocusScope {
             Item {
                 id: searchbar
 
-                property bool selected: (buttonbar.currentIndex === 0) && root.focus
+                property bool selected: ((buttonbar.currentIndex === 0) || ListView.isCurrentItem) && root.focus
+                focus: selected
                 onSelectedChanged:{
                     //console.log("onSelectedChanged");
                     //console.log("searchbar.selected :",searchbar.selected); 
@@ -223,6 +224,14 @@ FocusScope {
                     console.log("buttonbar.currentIndex : ", buttonbar.currentIndex);
                     console.log("buttonbar.isCurrentItem : ", buttonbar.isCurrentItem);
                     console.log("root.focus : ", root.focus);*/
+                    // Details
+                    if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        buttonbar.currentIndex = 7;
+                        searchbar.selected = false;
+                        platformsettings.selected = true;
+                        return;
+                    }
                     // Back
                     if (api.keys.isCancel(event) && !event.isAutoRepeat) {
                         if(!searchInput.focus){
@@ -482,6 +491,7 @@ FocusScope {
                 id: platformsettings
 
                 property bool selected: ListView.isCurrentItem && root.focus
+                focus: selected
                 height: searchbar.height
                 width: height
 
@@ -522,6 +532,14 @@ FocusScope {
                 }
 
                 Keys.onPressed: {
+                    // Details
+                    if (api.keys.isFilters(event) && !event.isAutoRepeat) {
+                        event.accepted = true;
+                        buttonbar.currentIndex = 0;
+                        platformsettings.selected = false;
+                        searchbar.selected = true;
+                        return;
+                    }
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
@@ -535,6 +553,16 @@ FocusScope {
         ListView {
             id: buttonbar
             currentIndex: 0
+            onCurrentIndexChanged: {
+                //forced due to issue
+                if (currentIndex === 0){
+                    searchbar.selected = true;
+                }
+                else{
+                    searchbar.selected = false;
+                }
+            }
+
             focus: true
             model: headermodel
             spacing: vpx(10)
