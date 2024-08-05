@@ -19,6 +19,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 import "../Dialogs"
 
 FocusScope {
@@ -1060,6 +1061,50 @@ FocusScope {
                 }
             }
         }
+
+        //to manage system logo from settings by system
+        Image {
+            id: platformlogo
+            Image {
+                id: logobg
+
+                anchors.fill: platformlogo
+                source: "../assets/images/gradient.png"
+                asynchronous: true
+                visible: false
+            }
+            anchors {
+                top: parent.top; topMargin: vpx(10)
+                bottom: parent.bottom; bottomMargin: vpx(10)
+                left: headertitle.right; leftMargin: globalMargin
+            }
+            fillMode: Image.PreserveAspectFit
+            source: {
+                if ( context !== "global"){
+                    //to force update of currentCollection because bug identified in some case :-(
+                    currentCollection = api.collections.get(currentCollectionIndex);
+                    if(settings.SystemLogoStyle === "White")
+                    {
+                        return "../assets/images/logospng/" + context + ".png";
+                    }
+                    else
+                    {
+                        return "../assets/images/logospng/" + context + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                    }
+                }
+                else return "";
+            }
+            smooth: true
+            asynchronous: true
+            visible: context === "global" ? false : true
+            OpacityMask {
+                anchors.fill: logobg
+                source: logobg
+                opacity: 0.9
+                maskSource: platformlogo
+                visible: (settings.SystemHeaderLogoGradientEffect === "Yes") && (context !== "global") ? true : false
+            }
+        }
     }
 
     ListView {
@@ -1610,7 +1655,7 @@ FocusScope {
 						var value = "";
 						if (setting === "to edit") 
 						{
-                            if(context === "globale"){
+                            if(context === "global"){
                                 value = (api.memory.has(fullSettingName)) ? api.memory.get(fullSettingName) : "";
                             }
                             else{

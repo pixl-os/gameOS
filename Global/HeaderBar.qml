@@ -50,16 +50,17 @@ FocusScope {
             }
             fillMode: Image.PreserveAspectFit
             source: {
-	    	//to force update of currentCollection because bug identified in some case :-(
-	    	currentCollection = api.collections.get(currentCollectionIndex);
-                if(settings.SystemLogoStyle === "White")
-                {
-                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + ".png";
+                if(typeof(currentCollection) !== "undefined"){
+                    if(settings.SystemLogoStyle === "White")
+                    {
+                        return "../assets/images/logospng/" + currentCollection.shortName + ".png";
+                    }
+                    else
+                    {
+                        return "../assets/images/logospng/" + currentCollection.shortName + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
+                    }
                 }
-                else
-                {
-                    return "../assets/images/logospng/" + Utils.processPlatformName(currentCollection.shortName) + "_" + settings.SystemLogoStyle.toLowerCase() + ".png";
-                }
+                return "";
             }
             smooth: true
             asynchronous: true
@@ -84,14 +85,14 @@ FocusScope {
             //to alert when system is in beta
             source: "../assets/images/beta.png";
             //for the moment, just check if first core for this system still low
-            visible: currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false
+            visible: typeof(currentCollection) !== "undefined" ? (currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false) : false
         }
 
         // Platform title
         Text {
             id: softwareplatformtitle
 
-            text: currentCollection.name
+            text: typeof(currentCollection) !== "undefined" ? currentCollection.name : ""
 
             anchors {
                 top:    parent.top;
@@ -543,6 +544,7 @@ FocusScope {
                     // Accept
                     if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                         event.accepted = true;
+                        currentCollection = api.collections.get(currentCollectionIndex);
                         settingsScreen(currentCollection.shortName);
                     }
                 }

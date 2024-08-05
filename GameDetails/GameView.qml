@@ -45,8 +45,10 @@ FocusScope {
 
     function reloadProperties(){
         //console.log("reloadProperties()");
-        loadGameDetailsSettings(game.collections.get(0).shortName);
-        canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false
+        if(typeof(game) !== "undefined"){
+            loadGameDetailsSettings(game.collections.get(0).shortName);
+            canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false;
+        }
     }
 
     onCanPlayVideoChanged:{

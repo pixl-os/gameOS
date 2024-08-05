@@ -219,7 +219,7 @@ FocusScope {
     function loadGameDetailsSettings(context){
         //reset settings depending shortname if settings exists
         if(context === "") context = api.collections.get(currentCollectionIndex).shortName;
-        console.log("loadGameDetailsSettings: ", context);
+        //console.log("loadGameDetailsSettings: ", context);
 
         //Game Details Settings
         settings.GameBackground =                api.memory.has(context + "_" + "Game Background") ? api.memory.get(context + "_" +"Game Background") : (api.memory.has("Game Background") ? api.memory.get("Game Background") : "Screenshot");
@@ -273,6 +273,8 @@ FocusScope {
     onCurrentCollectionIndexChanged: {
         storedCollectionGameIndex = 0
         searchTerm = "";
+        //fix current collection
+        currentCollection           = api.collections.get(currentCollectionIndex);
         //console.log("currentCollectionIndex : ",currentCollectionIndex)
         //console.log("currentCollection.shortName  : ",currentCollection.shortName)
     }
