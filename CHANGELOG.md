@@ -1,222 +1,245 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - 2023-XX-XX - v1.28
+- features:
+    - use name of directory name now as title in theme to clarify source of media(s) available in game view
+    - new configuration management:
+        - choose media for platform grid thumbnail
+        - have any settings icon from platform grid/list view
+        - add missing media and improve "boxArt" feature combinaisons
+        - move the 2 "general" platform/system page parameters in general settings
+        - update/reload media in case of choosen one and when we change system by L2/R2
+        - take global settings if no "system" settings already exists
+        - quick selection of search/settings using filter button (north one)
+        - re-org settings before work on game details one
+        - for vertical list and game details view (+ improvements)
+        - add system logo in settings by system/platform
+
+- fixes: 
+    - set at 90% of opacity to be able to well see logo as NES one fro example (for platform page/game details)
+    - add missing media and improve "boxArt" feature combinaisons
+    - fix for null/undefined objects in collections regex
+    - to reset/reload media/size/flags to improve gridview display (linked to pixL issue: #6)
+    - video thumbnail fix for horizontal collection
+    - move demo settings in general (linked to pixL issue #32)
+
 ## [pixL-master] - 2023-07-08 - v1.27
 - logo:
-	- add missing color logos for port and engine ones (still to do for the others... steel, carbon, white and black)
+    - add missing color logos for port and engine ones (still to do for the others... steel, carbon, white and black)
 
 - sound:
-	- reduce size of .wav file sound effect to win in velocity during navigation
+    - reduce size of .wav file sound effect to win in velocity during navigation
 
 ## [pixL-master] - 2023-05-01 - v1.26
 - logo:
-	- Add new PS3 system logos
-	- Add new NAMCO357 system logos
-	- Add new SYS2x6 system logos
+    - Add new PS3 system logos
+    - Add new NAMCO357 system logos
+    - Add new SYS2x6 system logos
 
 - features:
-	- feature to display now the battery level also if available (using .svg pictures)
-	- add parameter in settings to display battery level in horizontally (by default) or vertically
-	- add last french translation needed
-	
+    - feature to display now the battery level also if available (using .svg pictures)
+    - add parameter in settings to display battery level in horizontally (by default) or vertically
+    - add last french translation needed
+    
 - fixes:
-	- fix grouplist to change group logo from click
-	- fix "helpbar" generation
-	- fix to manage better cases of multi-screens game videos
+    - fix grouplist to change group logo from click
+    - fix "helpbar" generation
+    - fix to manage better cases of multi-screens game videos
 
 ## [pixL-master] - 2024-02-03 - v1.25
 - new features:
-	- management of icons/filters for lightgun games
-	- dynamic icons size for vertical list depending of number of icons to display (heart for favorite, cup for ra and lightgun)
-	- add management of "lightgun" flag in "my colletions"
-	- start "country" filtering (with  + add "asia" as region
-	- add more countries (until 14) and languages (until 15) in filters for list/grid
+    - management of icons/filters for lightgun games
+    - dynamic icons size for vertical list depending of number of icons to display (heart for favorite, cup for ra and lightgun)
+    - add management of "lightgun" flag in "my colletions"
+    - start "country" filtering (with  + add "asia" as region
+    - add more countries (until 14) and languages (until 15) in filters for list/grid
 
 - fixes:
-	- fix some error cases when qml object is missing('undefined') from pegasus-frontend
+    - fix some error cases when qml object is missing('undefined') from pegasus-frontend
 
 ## [pixL-master] - 2023-11-01 - v1.24
 - new features:
-	- management of "screenshots" specifically to be able to display it in this theme
-	- add filters for languages and regions from grid/list (using info from game title, depending scraps)
-	- using hash library to display cup icon in dynamic/boxart grid for retroachievements
-	- add calling of RA hash checking in lists after loading of media and avoid during scrolling
-	- add favorites/retroachievements icons management in vertical list
+    - management of "screenshots" specifically to be able to display it in this theme
+    - add filters for languages and regions from grid/list (using info from game title, depending scraps)
+    - using hash library to display cup icon in dynamic/boxart grid for retroachievements
+    - add calling of RA hash checking in lists after loading of media and avoid during scrolling
+    - add favorites/retroachievements icons management in vertical list
 
 - fixes:
-	- fix banner video launching when no favorite exists
-	- fix overlays usage in "embedded" mode used in vertical list
-	- fix scrapped video using overlay with 16/9 ratio/black bars
-	- fix to avoid to zoom video in case of "game & watch" system for preview video
-	- fix to avoid to display system logo for embedded views in vertical lists
+    - fix banner video launching when no favorite exists
+    - fix overlays usage in "embedded" mode used in vertical list
+    - fix scrapped video using overlay with 16/9 ratio/black bars
+    - fix to avoid to zoom video in case of "game & watch" system for preview video
+    - fix to avoid to display system logo for embedded views in vertical lists
 
 ## [pixL-master] - 2023-07-28 - v1.23
 - logo:
-	- Add new sega model 2 system logos
-	- Add new Nintendo Wii U system logos
+    - Add new sega model 2 system logos
+    - Add new Nintendo Wii U system logos
 - overlay:
-	- Feature to keep possibility to find overlays without decorations in his .cfg name
-	- Improvement to manage several types of overlays with custom, 720p and 1080p resolutions
+    - Feature to keep possibility to find overlays without decorations in his .cfg name
+    - Improvement to manage several types of overlays with custom, 720p and 1080p resolutions
 
 ## [pixL-master] - 2023-04-29 - v1.22
 - new features:
-	- restore gradient effect on system logos for gameView/grid/verticalList using parameters #[49]
+    - restore gradient effect on system logos for gameView/grid/verticalList using parameters #[49]
 - improvements:
-	- 'my Collections':
-		- improve usage of filtering by disabling if only one system requested
-		- create empty collection to load quickly the empty ones
-		- fix about list type without index that generate issues
-		- add "cache" feature for My Collections including optimization
-		- add possibility to exclude on file path
-		- add parameter in My Collection to activate 'cache' usage
-		- add System Manufacturer filtering + improve System filtering also
-		- add sorting by default, name, release date, system, manufacturer and rating
-		- update 'import' versions + video fix to avoid memory leaks for showCaseViewMenu
-		- remove top genre/publisher buggy for showCaseViewMenu
-		- dynamic collections loading for showcaseViewMenu / best memory management
-		- fix sorting also when we use cache for collection
-		- new translation fr due to change in settings + one fix
+    - 'my Collections':
+        - improve usage of filtering by disabling if only one system requested
+        - create empty collection to load quickly the empty ones
+        - fix about list type without index that generate issues
+        - add "cache" feature for My Collections including optimization
+        - add possibility to exclude on file path
+        - add parameter in My Collection to activate 'cache' usage
+        - add System Manufacturer filtering + improve System filtering also
+        - add sorting by default, name, release date, system, manufacturer and rating
+        - update 'import' versions + video fix to avoid memory leaks for showCaseViewMenu
+        - remove top genre/publisher buggy for showCaseViewMenu
+        - dynamic collections loading for showcaseViewMenu / best memory management
+        - fix sorting also when we use cache for collection
+        - new translation fr due to change in settings + one fix
 - logo:
-	- Add new logos for system Switch
-	- Add new logos for system Philips CDI
-	- Add new logos for system Megaduck
+    - Add new logos for system Switch
+    - Add new logos for system Philips CDI
+    - Add new logos for system Megaduck
 
 ## [pixL-master] - 2023-01-21 - v1.21
 - new features:
-	- add management of systems group activable in theme's general settings
-	- adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
-	- sorting systems by name, release date or manufacturer
-	- add a second sorting by name, release date or manufacturer criteria
-	- 2 ways to display groups using one or 2 slots on screen
-	- dynamic help to know how to pass from systems to group when we one slot
-	- display of 'release date' under systems logo when sorting use it.
-	- propose now to reload theme itself when settings changed
-	- remove limit on favorite displayed in banner
-	- 'My Collections' feature: 
-		- add internal new flag to avoid process all List of Collectiions during change of settings
-		- add filtering on several  systems as planned initially
+    - add management of systems group activable in theme's general settings
+    - adapt default parameters to well manage activation of groups, display of overlay/video/grid elements
+    - sorting systems by name, release date or manufacturer
+    - add a second sorting by name, release date or manufacturer criteria
+    - 2 ways to display groups using one or 2 slots on screen
+    - dynamic help to know how to pass from systems to group when we one slot
+    - display of 'release date' under systems logo when sorting use it.
+    - propose now to reload theme itself when settings changed
+    - remove limit on favorite displayed in banner
+    - 'My Collections' feature: 
+        - add internal new flag to avoid process all List of Collectiions during change of settings
+        - add filtering on several  systems as planned initially
 
 - fixes:
-	- improve back button usage in gameview and launchgame view
-	- improve behavior with header and grid selection
-	- improve collections selection after gameplay session
-	- add cartridge media and improve orders
-	- avoid display several times same assets from lists
-	- control backgrounds list content to propose always fanart before screenshot as background asset
-	- improve game launching
-	- game exit on initial one in case of favorite launch from banner
-	- typo on Details Hardware Picture 
-	- save position on collection to well come back when we exit from game
-	- manage better margin between menu and details/retroachievements parts
-	- select game in collection from currentGame
-	- change way to manage currentGame using index and not object that we can't well save in JSON format
-	- manage more cases with collections
-	- avoid error when game is not yet set for highlight object
-	- save/restore searchTerm to be able to restore it after game session
-	- reset searchTerm when we change system or group
-	- avoid loading of collections during settings browsing
-	- fix way to select type of collections by default + keep 3 collections only by default
+    - improve back button usage in gameview and launchgame view
+    - improve behavior with header and grid selection
+    - improve collections selection after gameplay session
+    - add cartridge media and improve orders
+    - avoid display several times same assets from lists
+    - control backgrounds list content to propose always fanart before screenshot as background asset
+    - improve game launching
+    - game exit on initial one in case of favorite launch from banner
+    - typo on Details Hardware Picture 
+    - save position on collection to well come back when we exit from game
+    - manage better margin between menu and details/retroachievements parts
+    - select game in collection from currentGame
+    - change way to manage currentGame using index and not object that we can't well save in JSON format
+    - manage more cases with collections
+    - avoid error when game is not yet set for highlight object
+    - save/restore searchTerm to be able to restore it after game session
+    - reset searchTerm when we change system or group
+    - avoid loading of collections during settings browsing
+    - fix way to select type of collections by default + keep 3 collections only by default
 
 - translations: 
-	- done for new menus/helps/dialogbox
+    - done for new menus/helps/dialogbox
 
 ## [pixL-master] - 2022-11-18 - v1.20 
 - new design management :
-	- fix demo mode launched in game #[16]
-	- fix for resolution upper than 1080p support in gameview #[17]
-	
+    - fix demo mode launched in game #[16]
+    - fix for resolution upper than 1080p support in gameview #[17]
+    
 - other new feature:
-	- optimize scan folder for load all media download by scraper
-	- fix list of media
-	- add logo for roms in base
-	- set now version and details in theme.cfg for each release
+    - optimize scan folder for load all media download by scraper
+    - fix list of media
+    - add logo for roms in base
+    - set now version and details in theme.cfg for each release
 
 - multi-languages-support :
-	- fix in qml code to translate in french for collection 6 to 10 #[23]
-	- fix in qml code to be able to translate in french for platform page style #[24]
-	- add fr for wide and tall #[25]
-	- correction wording "Meileurs" to "Meilleurs"
+    - fix in qml code to translate in french for collection 6 to 10 #[23]
+    - fix in qml code to be able to translate in french for platform page style #[24]
+    - add fr for wide and tall #[25]
+    - correction wording "Meileurs" to "Meilleurs"
 
 ## [recalbox-integration] - 2022-09-12
 - new design management :
-	- Introduction of parameters to 'design' themes
-	- first way to select list to be focus at theme loading 
-	- new parameter to manage ratio of icon in systems list
-	- add round beta logo and change screenshots to imageviewer
-	- add more parameters to configure system logos
-	- system list and logo sizing/position fixed
-	- add support of system music for custom
-	- add management of region and especially for systems list background for the moment
-	- add recalbox.conf parameter to activate the designer from theme
-	- manage default, custom or no theme logo in theme designer
-	- add more ratio percentages capability from 5% to 100% now.
-	- change default logo to use the pixl one
-	- restore info to add favorites when video is displayed
-	- add more parameters for video/favorites banner and systems list
-	- improvement and flexibility for video management now (keep linked to favorites banner
-	- add width for theme logo management
-	- introduce new component in theme to manage details/description on systems
-	- add screenscraper regional management
-	- rework SettingsScreen to have dedicated "Designer" menu
-	- beta version of detail lists, still to improve management of data/position
-	- cleaning unused parameters for the moment from settings
-	- integration of path expression to manage link/path dynamically
-	- improvements to well manage backgrounds finally and other details for systems list
-	- reactivation softwareListMenu + some adaptations
-	- some fixes to well play/stop music
-	- tentative using gameview directly
-	- add "embedded" property to manage behavior in vertical list
-	- to manage focus of embedded gameview, listview and helps
-	- add feature for "embedded" + improvements shorcuts/helps
-	- improve help for vertical game list view and assocaited commands
-	- new feature to display hash (crc32) in game info
-	- optimization of margin + auto horizontal scrolling for details and title
-	- optimization to manage position in purcentage for embedded or not
-	- keep focus on details when we come back in list
-	- using purcentage to calculate size of logo for embedded or not gameview
-	- add icon in media of gameview for manuals
-	- change name and place for selection of grid or vertical list
-	- add L1/R1 and L2/R2 management in vertical list
-	- dynamic calculations for 1080p & 72Op overlays and all screen resolutions
+    - Introduction of parameters to 'design' themes
+    - first way to select list to be focus at theme loading 
+    - new parameter to manage ratio of icon in systems list
+    - add round beta logo and change screenshots to imageviewer
+    - add more parameters to configure system logos
+    - system list and logo sizing/position fixed
+    - add support of system music for custom
+    - add management of region and especially for systems list background for the moment
+    - add recalbox.conf parameter to activate the designer from theme
+    - manage default, custom or no theme logo in theme designer
+    - add more ratio percentages capability from 5% to 100% now.
+    - change default logo to use the pixl one
+    - restore info to add favorites when video is displayed
+    - add more parameters for video/favorites banner and systems list
+    - improvement and flexibility for video management now (keep linked to favorites banner
+    - add width for theme logo management
+    - introduce new component in theme to manage details/description on systems
+    - add screenscraper regional management
+    - rework SettingsScreen to have dedicated "Designer" menu
+    - beta version of detail lists, still to improve management of data/position
+    - cleaning unused parameters for the moment from settings
+    - integration of path expression to manage link/path dynamically
+    - improvements to well manage backgrounds finally and other details for systems list
+    - reactivation softwareListMenu + some adaptations
+    - some fixes to well play/stop music
+    - tentative using gameview directly
+    - add "embedded" property to manage behavior in vertical list
+    - to manage focus of embedded gameview, listview and helps
+    - add feature for "embedded" + improvements shorcuts/helps
+    - improve help for vertical game list view and assocaited commands
+    - new feature to display hash (crc32) in game info
+    - optimization of margin + auto horizontal scrolling for details and title
+    - optimization to manage position in purcentage for embedded or not
+    - keep focus on details when we come back in list
+    - using purcentage to calculate size of logo for embedded or not gameview
+    - add icon in media of gameview for manuals
+    - change name and place for selection of grid or vertical list
+    - add L1/R1 and L2/R2 management in vertical list
+    - dynamic calculations for 1080p & 72Op overlays and all screen resolutions
 
 - emulator-loading-improvements :
-	- stop playing video if lost focus (onCanPlayVideoChanged)
-	- deactivate LaunchGameScreen() in multiwindows cases
-	- introduction of rotation animation for button component
-	- introduce 'play game' button using spinner when game is launhed in multi-windows mode
-	- change finally to use api and not any variable
-	- usage of api.launchedgame in gameview to animate "play game" button
-	- ignore L1/R2 if guide button is pressed
-	- spinner management for game running in multi-windows mode
-	- change using global variable to check Guide Button state
-	
+    - stop playing video if lost focus (onCanPlayVideoChanged)
+    - deactivate LaunchGameScreen() in multiwindows cases
+    - introduction of rotation animation for button component
+    - introduce 'play game' button using spinner when game is launhed in multi-windows mode
+    - change finally to use api and not any variable
+    - usage of api.launchedgame in gameview to animate "play game" button
+    - ignore L1/R2 if guide button is pressed
+    - spinner management for game running in multi-windows mode
+    - change using global variable to check Guide Button state
+    
 - multi-languages-support :
-	- add project files to manage linguist tool now for translations
-	- add first .ts files for fr, en_GB and en_US genarted by lupdate
-	- Set QML files as source to be managed by Linguist tools
-	- add first .qm files generated by lrelease in /lang directory
-	- add robustness code if a field is not translated (still work)
-	- for refresh list when locale name change
-	- tag a maximum of string that we could translate in SettingsScreen using qsTr()
-	- add qsTr() for all qml files
-	- first full translation done for french
-	- add more trad especially for sorting, showcase and my collection
-	- add fix also for gridviewMenu
+    - add project files to manage linguist tool now for translations
+    - add first .ts files for fr, en_GB and en_US genarted by lupdate
+    - Set QML files as source to be managed by Linguist tools
+    - add first .qm files generated by lrelease in /lang directory
+    - add robustness code if a field is not translated (still work)
+    - for refresh list when locale name change
+    - tag a maximum of string that we could translate in SettingsScreen using qsTr()
+    - add qsTr() for all qml files
+    - first full translation done for french
+    - add more trad especially for sorting, showcase and my collection
+    - add fix also for gridviewMenu
 
 - other new feature:
-	- select random game in games list with R1+L1 (from Grid or VerticalList)
+    - select random game in games list with R1+L1 (from Grid or VerticalList)
 
 - fixes :
-	- replace many var by string, int or bool
-	- fixes to ignore hotkeys in vertical list/grid/gameview to avoid issue when we switch in multi-windows using Hotkey + R1
-	- fixes on video reading in background, in horizontal list during launching of game if we keep theme loaded.
-	- fixes on header for search in case of grid and vertical list
-	- fixes for clipping of horizontal list used in gameview and especially in vertical list
-	- fixes on helpers and translation
-	- fixes for API robustness and for parameters not yet available
-	- fixes on logos
-	- fixes on platform name display
-	- update fr translation for randome game helper
+    - replace many var by string, int or bool
+    - fixes to ignore hotkeys in vertical list/grid/gameview to avoid issue when we switch in multi-windows using Hotkey + R1
+    - fixes on video reading in background, in horizontal list during launching of game if we keep theme loaded.
+    - fixes on header for search in case of grid and vertical list
+    - fixes for clipping of horizontal list used in gameview and especially in vertical list
+    - fixes on helpers and translation
+    - fixes for API robustness and for parameters not yet available
+    - fixes on logos
+    - fixes on platform name display
+    - update fr translation for randome game helper
 
 ## [recalbox-integration] - 2022-07-08
 - New logos for: NAOMI 2, PORTS & Screenshots (5 by systems)
@@ -226,26 +249,26 @@ All notable changes to this project will be documented in this file (focus on ch
 
 ## [recalbox-integration] - 2022-05-30
 - new overlays management feature:
-	- new overlays/logos options for video/screenshot in gameview
-	- manage overlays source from share_init(default) or share
-	- fix to stretch video/screenshot in 4/3 by default
-	- manage autoresize and custom overlays positionning
-	- manage systems without overlay and to keep stretching
-	- manage custom overlays for arcade/no-intro
-	- fix for skylines dedicated & overlays reset to avoid bugs
-	- fix to hide it during demo, just keep help at bottom/right
-	- fix path of "input_overlay"
-	- additional parameter to let show logo if no overlay for any system
-	
+    - new overlays/logos options for video/screenshot in gameview
+    - manage overlays source from share_init(default) or share
+    - fix to stretch video/screenshot in 4/3 by default
+    - manage autoresize and custom overlays positionning
+    - manage systems without overlay and to keep stretching
+    - manage custom overlays for arcade/no-intro
+    - fix for skylines dedicated & overlays reset to avoid bugs
+    - fix to hide it during demo, just keep help at bottom/right
+    - fix path of "input_overlay"
+    - additional parameter to let show logo if no overlay for any system
+    
 - logos:
-	- add 5 logos for system TRIFORCE
-	- fix to update 5 logos for system ODYSSEY2
-	- add 5 logos for system XBOX & CHIHIRO
-	
+    - add 5 logos for system TRIFORCE
+    - fix to update 5 logos for system ODYSSEY2
+    - add 5 logos for system XBOX & CHIHIRO
+    
 - platform gridview display improvements:
-	- change to use L1/R1 for letter nav & L2/R2 for system nav
-	- fix to replace depreacted default value
-	- fix on gridspacer to add more checked boxarts to calcualte right width ratio
+    - change to use L1/R1 for letter nav & L2/R2 for system nav
+    - fix to replace depreacted default value
+    - fix on gridspacer to add more checked boxarts to calcualte right width ratio
 
 ## [recalbox-integration] - 2022-12-02
 - demo mode: remove fading/lists and highlight in demo mode
