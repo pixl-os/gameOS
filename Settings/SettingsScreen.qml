@@ -476,9 +476,9 @@ FocusScope {
         }
         ListElement {
             settingName: "Choosen Media (only if Grid Thumbnail is on 'Choose Media')"
-            setting: "box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1"
+            setting: "box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia"
             settingNameDisplay: qsTr("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
-            settingDisplay: qsTr("box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1")
+            settingDisplay: qsTr("box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia")
             settingNeedReload: false
         }
         ListElement {
