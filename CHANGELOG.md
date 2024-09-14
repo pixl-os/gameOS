@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-XX-XX - v1.28
+## [pixL-master] - 2023-09-16 - v1.28
 - features:
     - use name of directory name now as title in theme to clarify source of media(s) available in game view
     - new configuration management:
@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file (focus on ch
     - to reset/reload media/size/flags to improve gridview display (linked to pixL issue: #6)
     - video thumbnail fix for horizontal collection
     - move demo settings in general (linked to pixL issue #32)
+    - add finally boxFront in media selection in settings to be able to display some cases
 
 ## [pixL-master] - 2023-07-08 - v1.27
 - logo:
