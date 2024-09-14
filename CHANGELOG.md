@@ -15,9 +15,10 @@ All notable changes to this project will be documented in this file (focus on ch
         - re-org settings before work on game details one
         - for vertical list and game details view (+ improvements)
         - add system logo in settings by system/platform
+        - add "fullmedia" for obtain many media with multi-resultat-scrape
 
 - fixes: 
-    - set at 90% of opacity to be able to well see logo as NES one fro example (for platform page/game details)
+    - set at 90% of opacity to be able to well see logo as NES one for example (for platform page/game details)
     - add missing media and improve "boxArt" feature combinaisons
     - fix for null/undefined objects in collections regex
     - to reset/reload media/size/flags to improve gridview display (linked to pixL issue: #6)

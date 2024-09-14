@@ -184,6 +184,10 @@ Item {
             if (data.assets.mix !== "")
               return data.assets.mix;
             break
+          case "fullmedia":
+            if (data.assets.fullmedia !== "")
+              return data.assets.fullmedia;
+            break
           default:
               console.log("Unknown asset");
         }
