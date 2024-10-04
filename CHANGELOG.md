@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file (focus on ch
     - video thumbnail fix for horizontal collection
     - move demo settings in general (linked to pixL issue #32)
     - add finally boxFront in media selection in settings to be able to display some cases
+    - fix medias display in game view description
 
 ## [pixL-master] - 2023-07-08 - v1.27
 - logo:

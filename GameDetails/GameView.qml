@@ -849,8 +849,9 @@ FocusScope {
 
             Image {
                 id: boxart
-
-                source: Utils.boxArt(game);
+                // Load settings
+                property string choosenMedia: settings.GridThumbnail === "Choose Media" ? settings.GridThumbnailMedia : ""
+                source: Utils.boxArt(game, choosenMedia);
                 width: embedded ? (parent.width * (parseFloat("25%")/100)) : (parent.width * (parseFloat("30%")/100))
                 height: parent.height * (parseFloat("95%")/100)
                 fillMode: Image.PreserveAspectFit

@@ -509,7 +509,7 @@ function chooseMedia(data,asset) {
   return "";
 }
 
-function boxArt(data, media) {
+function boxArt(data, media = "") {
   if (data !== null) {
     if (media !== ""){
       return chooseMedia(data,media);
