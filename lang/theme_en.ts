@@ -276,21 +276,6 @@
     </message>
 </context>
 <context>
-    <name>MediaItem</name>
-    <message>
-        <source>Video</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MediaView</name>
     <message>
         <source>Back</source>
@@ -449,10 +434,6 @@
     </message>
     <message>
         <source>Grid Thumbnail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wide,Tall,Square,Box Art</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -712,10 +693,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings changed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Do you want to reload theme to well apply the change ? (Adviced)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -781,6 +758,22 @@
     </message>
     <message>
         <source>Lightgun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wide,Tall,Square,Box Art,Choose Media</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choosen Media (only if Grid Thumbnail is on &apos;Choose Media&apos;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings changed - need reload</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
