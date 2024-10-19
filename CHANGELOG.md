@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file (focus on ch
         - for vertical list and game details view (+ improvements)
         - add system logo in settings by system/platform
         - add "fullmedia" for obtain many media with multi-resultat-scrape
+        - add missing french translation associated
 
 - fixes: 
     - set at 90% of opacity to be able to well see logo as NES one for example (for platform page/game details)
