@@ -785,11 +785,11 @@
     </message>
     <message>
         <source>Wide,Tall,Square,Box Art,Choose Media</source>
-        <translation>Large,Haut,Carré,Boîte artistique,Choisissez le support</translation>
+        <translation>Large,Haut,Carré,BoxArt,Choisir Média</translation>
     </message>
     <message>
         <source>Choosen Media (only if Grid Thumbnail is on &apos;Choose Media&apos;)</source>
-        <translation>Média choisi (uniquement si la miniature de la grille est sur «&#xa0;Choisir le média&#xa0;»)</translation>
+        <translation>Média choisi (si vignette de grille est sur &apos;Choisir Média&apos;)</translation>
     </message>
     <message>
         <source>box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia</source>
