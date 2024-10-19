@@ -785,7 +785,7 @@
     </message>
     <message>
         <source>Wide,Tall,Square,Box Art,Choose Media</source>
-        <translation>Large, haut, carré, boîte artistique, choisissez le support</translation>
+        <translation>Large,Haut,Carré,Boîte artistique,Choisissez le support</translation>
     </message>
     <message>
         <source>Choosen Media (only if Grid Thumbnail is on &apos;Choose Media&apos;)</source>
