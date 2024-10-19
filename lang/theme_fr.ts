@@ -785,19 +785,19 @@
     </message>
     <message>
         <source>Wide,Tall,Square,Box Art,Choose Media</source>
-        <translation type="unfinished"></translation>
+        <translation>Large, haut, carré, boîte artistique, choisissez le support</translation>
     </message>
     <message>
         <source>Choosen Media (only if Grid Thumbnail is on &apos;Choose Media&apos;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Média choisi (uniquement si la miniature de la grille est sur «&#xa0;Choisir le média&#xa0;»)</translation>
     </message>
     <message>
         <source>box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia</source>
-        <translation type="unfinished"></translation>
+        <translation>box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia</translation>
     </message>
     <message>
         <source>Settings changed - need reload</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres modifiés - besoin de recharger</translation>
     </message>
 </context>
 <context>
