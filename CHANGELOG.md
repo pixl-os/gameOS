@@ -1,7 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2023-09-16 - v1.28
+## [pixL-master] - 2024-12-23 - v1.29
+- fixes:
+	- fix video not played in some cases for item highlighted in collections
+
+## [pixL-master] - 2024-09-16 - v1.28
 - features:
     - use name of directory name now as title in theme to clarify source of media(s) available in game view
     - new configuration management:
@@ -28,14 +32,14 @@ All notable changes to this project will be documented in this file (focus on ch
     - add finally boxFront in media selection in settings to be able to display some cases
     - fix medias display in game view description
 
-## [pixL-master] - 2023-07-08 - v1.27
+## [pixL-master] - 2024-07-08 - v1.27
 - logo:
     - add missing color logos for port and engine ones (still to do for the others... steel, carbon, white and black)
 
 - sound:
     - reduce size of .wav file sound effect to win in velocity during navigation
 
-## [pixL-master] - 2023-05-01 - v1.26
+## [pixL-master] - 2024-05-01 - v1.26
 - logo:
     - Add new PS3 system logos
     - Add new NAMCO357 system logos
