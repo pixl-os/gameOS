@@ -40,12 +40,19 @@ Item {
 	}
 
     onGameChanged: {
-        if(detailed_debug) {
+        
+		//fix to force update of playVideo state to avoid bug
+		playVideo = game ? (game.assets.videoList.length && (settings.AllowThumbVideo === "Yes") && !boxArt && !choosenMedia) : false
+		
+		if(detailed_debug) {
             console.log("ItemHighlight.onGameChanged - selected : ", selected);
             console.log("ItemHighlight.onGameChanged - videoToStop : ", videoToStop);
+			console.log("ItemHighlight.onGameChanged - boxArt: ", boxArt);
+			console.log("ItemHighlight.onGameChanged - choosenMedia: ", choosenMedia);
+			console.log("ItemHighlight.onGameChanged - playVideo: ", playVideo);
         }
         videoPreviewLoader.sourceComponent = undefined;
-        //videoToStop = false;
+
         if (playVideo && selected && !videoToStop && !demoLaunched) {
             if(detailed_debug) console.log("ItemHighlight.onGameChanged - videoDelay.restart()");
             videoDelay.restart();
