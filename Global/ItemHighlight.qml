@@ -83,6 +83,9 @@ Item {
         interval: 600
         onTriggered: {
             if (game && game.assets.videos.length && playVideo) {
+                if(detailed_debug) console.log("ItemHighlight.videoDelay - load video");
+                //07/02/2025: seems that to set "undefined" seems tp force clear/reset of memory/object that avoid crash later ?!
+                videoPreviewLoader.sourceComponent = undefined;
                 videoPreviewLoader.sourceComponent = videoPreviewWrapper;
             }
         }
@@ -93,6 +96,7 @@ Item {
 
         interval: 1000
         onTriggered: {
+            if(detailed_debug) console.log("ItemHighlight.stopvideo");
             videoPreviewLoader.sourceComponent = undefined;
             videoDelay.stop();
         }
@@ -111,7 +115,7 @@ Item {
                         if((game !== null) && (typeof(game) !== "undefined")){
                             if(game.assets.videoList.length >=1) video_path = game.assets.videoList[0];
                         }
-						if(detailed_debug) console.log("video_path: ",video_path);
+                        if(detailed_debug) console.log("videocomponent.video_path: ",video_path);
 						return video_path;
 					}
 			
@@ -120,9 +124,65 @@ Item {
             loops: MediaPlayer.Infinite
             autoPlay: true
 
-            //onPlaying: videocomponent.seek(5000)
+            //07/02/2025: workaround added to reload/restart video in case of issue and to avoid crash/stuck video replay
+            // it seems linked to CPU and/or QT framework version... could be usefull to keep in future.
+            property int previousPosition: -1
+            property int counterCheckPosition: 0
+            onPositionChanged: {
+                if(detailed_debug){
+                    console.log("ItemHighlight.videocomponent - seekable: ",seekable);
+                    console.log("ItemHighlight.videocomponent - loops: ",loops);
+                    console.log("ItemHighlight.videocomponent - position: ",position);
+                    console.log("ItemHighlight.videocomponent - previousPosition: ",previousPosition);
+                    console.log("ItemHighlight.videocomponent - counterCheckPosition: ",counterCheckPosition);
+                }
+                //do something only if video is completed loaded
+                if(seekable === true){
+                    //check if video stuck at start (tentative to force seek to 0 first)
+                    if((previousPosition > position) && (position === 0)){
+                        //restart if stuck after 3 positions checks
+                        if(counterCheckPosition >= 2){
+                            console.log("ItemHighlight.videocomponent - force restart video (0)");
+                            previousPosition = -1;
+                            counterCheckPosition = 0;
+                            //seek video to 0
+                            seek(0);
+                        }
+                        else counterCheckPosition += 1;
+                    }
+                    //in case  of video crash at start (tentative to force seek didn't work - stay blocked at 0)
+                    else if((previousPosition <= position) && (position === 0)){
+                        //reload if stuck after 3 positions checks
+                        if(counterCheckPosition >= 2){
+                            console.log("ItemHighlight.videocomponent - force reload video (1)");
+                            previousPosition = -1;
+                            counterCheckPosition = 0;
+                            //reload video
+                            videoPreviewLoader.sourceComponent = undefined;
+                            videoPreviewLoader.sourceComponent = videoPreviewWrapper;
+                        }
+                        else counterCheckPosition += 1;
+                    }
+                    //check if video stuck at during playing - force reload imediatelly
+                    else if((previousPosition === position) && (position !== 0)){
+                        //restart if stuck after 3 positions checks
+                        if(counterCheckPosition >= 2){
+                            console.log("ItemHighlight.videocomponent - force reload video (2)");
+                            previousPosition = -1;
+                            counterCheckPosition = 0;
+                            //reload video
+                            videoPreviewLoader.sourceComponent = undefined;
+                            videoPreviewLoader.sourceComponent = videoPreviewWrapper;
+                        }
+                        else counterCheckPosition += 1;
+                    }
+                    else{
+                        previousPosition = position;
+                        if (position !== 0) counterCheckPosition = 0;
+                    }
+                }
+            }
         }
-
     }
 
     DropShadow {
