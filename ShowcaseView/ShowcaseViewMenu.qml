@@ -995,40 +995,47 @@ FocusScope {
                     shortName : "arcade"
                     name: qsTr("Arcade system")
                     names: qsTr("Arcade systems")
+                    index: 0
                 }
                 ListElement {
                     shortName : "console"
                     name: qsTr("Home console")
                     names: qsTr("Home consoles")
+                    index: 1
                 }
                 ListElement {
                     shortName : "handheld"
                     name: qsTr("Handheld console")
                     names: qsTr("Handheld consoles")
+                    index: 2
                 }
                 ListElement {
                     shortName : "computer"
                     name: qsTr("Computer")
                     names: qsTr("Computers")
                     visible: false
+                    index: 3
                 }
                 ListElement {
                     shortName : "port"
                     name: qsTr("Port")
                     names: qsTr("Ports")
+                    index: 4
                 }
                 ListElement {
                     shortName : "engine"
                     name: qsTr("Engine")
                     names: qsTr("Engines")
+                    index: 5
                 }
                 ListElement {
                     shortName : "virtual"
                     name: qsTr("Virtual system")
                     names: qsTr("Virtual systems")
+                    index: 6
                 }
             }
-
+            property variant groupsCount: [0, 0, 0, 0, 0, 0, 0] // Initialize as an empty list
             //FILTERING for Group of systems to display (Display only group if not empty)
             SortFilterProxyModel {
                 id: groupsDisplayed
@@ -1048,11 +1055,14 @@ FocusScope {
                                 if(api.collections.get(i) !== null){
                                     if(api.collections.get(i).type === model.shortName){
                                         //console.log("api.collections.get(i).type : ", api.collections.get(i).type)
-                                        return true;
+                                        //console.log("model.index :", model.index);
+                                        grouplist.groupsCount[model.index] = grouplist.groupsCount[model.index] + 1;
+                                        //console.log("grouplist.groupsCount[model.index] :", grouplist.groupsCount[model.index]);
                                     }
                                 }
                             }
-                            return false;
+                            if(grouplist.groupsCount[model.index] !== 0) return true;
+                            else return false;
                         }
                     }
                 ]
@@ -1201,7 +1211,7 @@ FocusScope {
                 Text {
                     id: grouptitle
                     text: {
-                        return (groupSelected.count + " " + ((groupSelected.count > 1) ? model.names + api.tr : model.name + api.tr));
+                        return (grouplist.groupsCount[model.index] + " " + ((grouplist.groupsCount[model.index] > 1) ? model.names + api.tr : model.name + api.tr));
                     }
                     color: theme.text
                     font {

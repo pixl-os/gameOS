@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
 	- fix collections to force reset/reload/restart of videos to avoid crash/stuck video replay
+	- fix about counts of system in groups (problem only when titles were always visible)
 
 ## [pixL-master] - 2024-12-23 - v1.29
 - fixes:
