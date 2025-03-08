@@ -196,7 +196,7 @@ FocusScope {
                     OverlayWidthRatio = overlayNewWidth / video_fullscreen_x;
                 }
                 //it's just a tips when we have no info to know really expected image size
-                else if((custom_viewport_height > 720) || (custom_viewport_width > 1280)){
+                else if(((custom_viewport_height + custom_viewport_y)  > 720) || ((custom_viewport_width + custom_viewport_x) > 1280)){
                     //initial ratio overlay in 1080p
                     initialOverlayRatio = 1920 / 1080;
                     //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
