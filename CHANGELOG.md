@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file (focus on ch
     - fix handheld carbon logo typo
 - features:
    - adapt gameview video display for new 'lcd games' system as done for 'game & watch' one
+- fixes:
+	- fix auto detection of overlays resolution (for pokémon mini for example)
 
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
