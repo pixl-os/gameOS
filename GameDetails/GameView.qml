@@ -48,6 +48,9 @@ FocusScope {
         if(typeof(game) !== "undefined"){
             loadGameDetailsSettings(game.collections.get(0).shortName);
             canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false;
+            //state to confirm that game a game is selected
+            api.internal.system.notify("gamelistbrowsing", game.collections.get(0), game);
+
         }
     }
 
