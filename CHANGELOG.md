@@ -4,15 +4,18 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2025-XX-XX - v1.31
 - logo:
     - Add new LCD Games system logos
+    - fix handheld carbon logo typo
+- features:
+   - adapt gameview video display for new 'lcd games' system as done for 'game & watch' one
 
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
-	- fix collections to force reset/reload/restart of videos to avoid crash/stuck video replay
-	- fix about counts of system in groups (problem only when titles were always visible)
+   - fix collections to force reset/reload/restart of videos to avoid crash/stuck video replay
+   - fix about counts of system in groups (problem only when titles were always visible)
 
 ## [pixL-master] - 2024-12-23 - v1.29
 - fixes:
-	- fix video not played in some cases for item highlighted in collections
+   - fix video not played in some cases for item highlighted in collections
 
 ## [pixL-master] - 2024-09-16 - v1.28
 - features:
