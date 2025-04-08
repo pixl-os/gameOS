@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file (focus on ch
    - adapt gameview video display for new 'lcd games' system as done for 'game & watch' one
 - fixes:
 	- fix auto detection of overlays resolution (for pokémon mini for example)
+	- fix to hide overlay if 16/9 video detected
 
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
