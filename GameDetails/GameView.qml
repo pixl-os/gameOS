@@ -100,6 +100,7 @@ FocusScope {
         var game_filename = word[word.length-1];
         var extension = game_filename.split('.');
         var game_fileextension = extension[extension.length-1];
+        var system_overlay_selected = false;
         //console.log("getOverlaysParameters() - game_filename : ", game_filename);
         //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
@@ -122,8 +123,13 @@ FocusScope {
 
         if(overlay_exists !== true){
             //check if system overlays exists
+            //console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
             overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
-            if(overlay_exists === true) overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg";
+            if(overlay_exists === true){
+                // to know that system overlay is selected finally
+                system_overlay_selected = true;
+                overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg";
+            }
         }
         else{
             overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
@@ -255,6 +261,12 @@ FocusScope {
                     custom_viewport_y = 0
                     custom_viewport_height = root.height * Math.abs(vr_viewport - vr_video)
                 }
+                else if ((Math.abs(vr_viewport - vr_video) > 0.4) && (video_ratio == "16:9")){
+                    //reset overlay to avoid to display overlay because ratio is too different and video is identified à 16:9
+                    overlay_png_filename_fullpath = "";
+                    overlay_cfg_filename_fullpath = "";
+                    input_overlay_cfg_filename_fullpath = "";
+                }
                 //value change
                 //console.log("vr_video : ", vr_video);
                 //console.log("vr_viewport : ", vr_viewport);
@@ -262,6 +274,7 @@ FocusScope {
                 //console.log("custom_viewport_y : ", custom_viewport_y);
                 //console.log("custom_viewport_height : ", custom_viewport_height);
                 //console.log("custom_viewport_width : ", custom_viewport_width);
+	            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
             }
         }
         //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
