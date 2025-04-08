@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file (focus on ch
 - fixes:
 	- fix auto detection of overlays resolution (for pokémon mini for example)
 	- fix to hide overlay if 16/9 video detected
+	- fix if video 4:3 record as 16:9 (with vertical black bands)
 
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
