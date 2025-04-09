@@ -1109,6 +1109,9 @@ FocusScope {
                         platformlist.currentIndex = 0;
                         platformlist.savedIndex = 0;
                         searchTerm = "";
+                        if(shortName !== "" && shortName !== null && typeof(shortName) !== "undefined"){
+                            api.internal.system.notify("groupbrowsing", shortName);
+                        }
                     }
 
                     if(selected && (designs.GroupMusicSource !== "No")){
@@ -1470,6 +1473,9 @@ FocusScope {
                     }
                     else{
                         if (modelData.shortName !=="imageviewer") playMusic.stop();
+                    }
+                    if(modelData.shortName !== "" && modelData.shortName !== null && typeof(modelData.shortName) !== "undefined"){
+                        api.internal.system.notify("systembrowsing", modelData);
                     }
                 }
 

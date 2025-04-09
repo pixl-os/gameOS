@@ -122,6 +122,13 @@ FocusScope {
                 choosenMedia: false
                 game: search ? search.currentGame(collectionList.currentIndex) : ""
                 selected: collectionList.focus
+                onGameChanged: {
+                    if(typeof(game) !== "undefined" && game !== null){
+                        if(typeof(game.collections) !== "undefined"){
+                            api.internal.system.notify("collectionbrowsing", game.collections.get(0), game);
+                        }
+                    }
+                }
             }
         }
 

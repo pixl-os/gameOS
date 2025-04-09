@@ -23,6 +23,9 @@ import "../utils.js" as Utils
 
 FocusScope {
     id: root
+
+    ListCollectionGames { id: list; }
+
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
@@ -36,6 +39,8 @@ FocusScope {
 
     function reloadProperties(){
         //console.log("reloadProperties()");
+        console.log("currentCollectionIndex : ", currentCollectionIndex);
+        api.internal.system.notify("gamelistbrowsing", api.collections.get(currentCollectionIndex));
         //to avoid to launch video during reload
         showBoxes = true;
         showChoosenMedia = true;
@@ -171,8 +176,6 @@ FocusScope {
         return true;
     }
 
-    ListCollectionGames { id: list; }
-
     // Load settings
     property bool showBoxes: settings.GridThumbnail === "Box Art"
     property bool showChoosenMedia: settings.GridThumbnail === "Choose Media"
@@ -286,6 +289,12 @@ FocusScope {
             Component.onCompleted: {
                 currentIndex = storedCollectionGameIndex;
                 positionViewAtIndex(currentIndex, ListView.Visible);
+            }
+
+            onCurrentIndexChanged:{
+                if(list.currentGame(currentIndex) !== null){
+                    api.internal.system.notify("gamelistbrowsing", api.collections.get(currentCollectionIndex), list.currentGame(currentIndex));
+                }
             }
 
             populate: Transition {
