@@ -81,8 +81,9 @@ FocusScope {
     property string overlay_cfg_filename_fullpath: ""
     property string overlay_png_filename_fullpath: ""
     property string input_overlay_cfg_filename_fullpath: ""
-    property string video_ratio: ""
-	property string video_resolution: ""
+    //property string video_ratio: "" //w:h ratio of full video if available
+    //property string video_resolution: "" //wxh of full video
+    property string video_view: "" //w:h:x:y of "real" video without any black bands (horizontal and/or vertical ones)
 
     property string overlaySource:{
        if(settings.OverlaysSource === "Default"){
@@ -91,6 +92,29 @@ FocusScope {
        else{
            return "/recalbox/share/overlays";
        }
+    }
+
+    //to check if "view" identified in video respect the format W:H:X:Y
+    function isValidVideoViewFormat(inputString) {
+        // Regular expression to match the format
+        const formatRegex = /^\d+:\d+:\d+:\d+$/;
+
+        // Check if the string matches the format
+        if (!formatRegex.test(inputString)) {
+            return false; // Doesn't match the W:H:X:Y format
+        }
+
+        // Split the string by the colon delimiter
+        const parts = inputString.split(":");
+
+        // Optionally, you can convert the parts to numbers and perform further validation
+        // (e.g., check if they are non-negative integers if that's a requirement)
+        for (let i = 0; i < parts.length; ++i) {
+            if (isNaN(parseInt(parts[i]))) {
+                return false; // One of the parts is not a valid integer
+            }
+        }
+        return true; // String matches the format and all parts are integers
     }
 
     //function to prepare resize of video and screenshot depending Overlays configuration
@@ -170,13 +194,13 @@ FocusScope {
                 video_fullscreen_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
 
                 //size of root
-                //console.log("root.width : ", root.width);
-                //console.log("root.height : ", root.height);
+                console.log("root.width : ", root.width);
+                console.log("root.height : ", root.height);
                 //initial values
-                //console.log("custom_viewport_x : ", custom_viewport_x);
-                //console.log("custom_viewport_y : ", custom_viewport_y);
-                //console.log("custom_viewport_height : ", custom_viewport_height);
-                //console.log("custom_viewport_width : ", custom_viewport_width);
+                console.log("initial custom_viewport_x : ", custom_viewport_x);
+                console.log("initial custom_viewport_y : ", custom_viewport_y);
+                console.log("initial custom_viewport_height : ", custom_viewport_height);
+                console.log("initial custom_viewport_width : ", custom_viewport_width);
 
                 //variables
                 let initialOverlayRatio;
@@ -185,7 +209,7 @@ FocusScope {
 
                 //calculate initial ratio of image
                 let initialImageRatio = custom_viewport_width / custom_viewport_height;
-                //console.log("initialImageRatio : ",initialImageRatio);
+                console.log("initial custom viewport Ratio : ",initialImageRatio);
 
                 //for full screen size available in overlays .cfg files
                 if((video_fullscreen_x > 1) && (video_fullscreen_y > 1)){
@@ -245,69 +269,64 @@ FocusScope {
                     custom_viewport_y = 0
                     custom_viewport_height = root.height
                 }
-                //calculate video ratio for later
-                
-				//old method to get ratio "x:y"
-				//example of command to check: ffprobe -hide_banner daytona2.mp4 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}'
-                //console.log("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
-                //video_ratio = api.internal.system.run("ffprobe -hide_banner '" + game.assets.videos[0] + "' 2>&1 | grep -i DAR |awk -F'DAR |]' '{print$2}' | tr -d '\\n' | tr -d '\\r'");
-
-                //new method to get ratio "x:y"
+                //previous method to get ratio "x:y"
 				//ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 input.mp4
-				video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
+				//video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
 
-				//new method to get resolution "lxh"
+				//previous method to get resolution "lxh"
 				//ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
-				video_resolution = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
+				//video_resolution = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
 
-				//compare ratio of custom viewport and video itself
-				var video_ratio_width;
-				var video_ratio_height;
-				if(video_ratio !== "N/A"){
-					video_ratio_width = parseInt(video_ratio.split(':')[0]);
-					video_ratio_height = parseInt(video_ratio.split(':')[1]);
+				//new method to get really detect black bands in a video if exists
+				//timeout 0.2 ffmpeg -i "/recalbox/share/roms/easyrpg/media/videos/ActRazer/ActRazer.mp4" -vframes 10 -vf cropdetect -f null - 2>&1 | grep "crop=" | tail -n 1 | awk -F'crop=' '{print $2}'
+				video_view = api.internal.system.run("timeout 0.2 ffmpeg -i '" + decodeURIComponent(game.assets.videos[0]) + "' -vframes 30 -vf cropdetect -f null - 2>&1 | grep 'crop=' | tail -n 1 | awk -F'crop=' '{print $2}' | tr -d '\\n' | tr -d '\\r'");
+				//to do anything only format is valid to avoid issues
+				if(isValidVideoViewFormat(video_view)){
+					//to get ratio of video view (video without black bands if exists)
+					var video_view_width = parseInt(video_view.split(':')[0]);
+					var video_view_height = parseInt(video_view.split(':')[1]);
+					var video_view_x = parseInt(video_view.split(':')[2]);
+					var video_view_y = parseInt(video_view.split(':')[3]);
+						
+					//var vr_video = video_ratio_width / video_ratio_height
+					var vr_video_view = video_view_width / video_view_height
+					var vr_viewport = parseInt(custom_viewport_width) / parseInt(custom_viewport_height)
+					
+					//ratio between video and overlay
+					var scale_overlay_vs_video_width = parseInt(custom_viewport_width) / video_view_width
+					var scale_overlay_vs_video_height = parseInt(custom_viewport_height) / video_view_height
+					
+					// if video is really in an other "bigger" ratio than overlay viewport
+					// example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
+					if (Math.abs(vr_video_view - vr_viewport) > 0.3){
+						//reset overlay to avoid to display overlay because ratio is too different
+						overlay_png_filename_fullpath = "";
+						overlay_cfg_filename_fullpath = "";
+						input_overlay_cfg_filename_fullpath = "";
+						custom_viewport_y = 0
+						custom_viewport_x = 0
+						custom_viewport_height = root.height
+						custom_viewport_width = root.width
+					}
+					else {
+						//new method to recenter video
+						custom_viewport_x = custom_viewport_x - (video_view_x * scale_overlay_vs_video_width)
+						custom_viewport_y = custom_viewport_y - (video_view_y * scale_overlay_vs_video_height)
+						custom_viewport_width = (video_view_width * scale_overlay_vs_video_width) + (video_view_x * scale_overlay_vs_video_width * 2)
+						custom_viewport_height = (video_view_height * scale_overlay_vs_video_height) + (video_view_y * scale_overlay_vs_video_height * 2)
+					}
 				}
-				else{
-					video_ratio_width = parseInt(video_resolution.split('x')[0]);
-					video_ratio_height = parseInt(video_resolution.split('x')[1]);
-				}
-				
-                var vr_video = video_ratio_width / video_ratio_height
-                var vr_viewport = parseInt(custom_viewport_width) / parseInt(custom_viewport_height)
-                //check if ratio are too different
-                //if video is record in 4/3 but need 16/9 ratio from overlay (as multiple screens game)
-                if(Math.abs(vr_viewport - vr_video) > 1){
-                    //certainly video has black band at top and bottom
-                    //we will try to zoom it (case of Warrior blade and without impact for Ninja warrior for example)
-                    //good on 16/9 but not perfect on 16/10 (still black area bt it's better and acceptable)
-                    custom_viewport_y = 0
-                    custom_viewport_height = root.height * Math.abs(vr_viewport - vr_video)
-                }
-                //if video is record in 16/9, with 16/9 ratio and don't need overlay for this case finally
-                else if ((Math.abs(vr_viewport - vr_video) > 0.4) && (video_ratio === "16:9")){
-                    //reset overlay to avoid to display overlay because ratio is too different and video is identified à 16:9
-                    overlay_png_filename_fullpath = "";
-                    overlay_cfg_filename_fullpath = "";
-                    input_overlay_cfg_filename_fullpath = "";
-                }
-                //if video is record in 16/9 but display 4/3 video using overlay
-                else if ((Math.abs(vr_viewport - vr_video) > 0.4) && (video_ratio === "N/A")){
-                    ///resize viewport from 4/3 to 16/9 (full screen)
-                    custom_viewport_y = 0
-                    custom_viewport_x = 0
-                    custom_viewport_height = root.height
-                    custom_viewport_width = root.width
-                }
-                //value change
-                // console.log("video_ratio : ", video_ratio);
-                // console.log("video_resolution : ", video_resolution);
-                // console.log("vr_video : ", vr_video);
-                // console.log("vr_viewport : ", vr_viewport);
-                // console.log("custom_viewport_x : ", custom_viewport_x);
-                // console.log("custom_viewport_y : ", custom_viewport_y);
-                // console.log("custom_viewport_height : ", custom_viewport_height);
-                // console.log("custom_viewport_width : ", custom_viewport_width);
-                // console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+                //console.log("video_view : ", video_view);
+                //console.log("vr_video_view : ", vr_video_view);
+                //console.log("vr_viewport : ", vr_viewport);
+                //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
+                //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
+                //console.log("new custom_viewport_x : ", custom_viewport_x);
+                //console.log("new custom_viewport_y : ", custom_viewport_y);
+                //console.log("new custom_viewport_height : ", custom_viewport_height);
+                //console.log("new custom_viewport_width : ", custom_viewport_width);
+                //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
+                //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
             }
         }
         //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
@@ -570,15 +589,15 @@ FocusScope {
                         else return "";
                 }
                 /*we will resize the video only if it's not 16/9 ratio (to manage 4/3 & Tate mode)*/
-                height: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
-                width: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
+                height: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_height === 0 ? parent.height : custom_viewport_height) : parent.height
+                width: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? (custom_viewport_width === 0 ? (height/3)*4 : custom_viewport_width) :  parent.width
                 anchors.top: {
                     if(custom_viewport_y !== 0) return  parent.top;
                 }
                 anchors.left: {
                     if(custom_viewport_x !== 0) return  parent.left;
                 }
-                anchors.leftMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)  && (video_ratio !== "16:9")) ? custom_viewport_x : 0
+                anchors.leftMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_x : 0
                 anchors.topMargin: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? custom_viewport_y : 0
                 anchors.horizontalCenter:{
                     if(custom_viewport_x === 0) return  parent.horizontalCenter;
@@ -588,6 +607,7 @@ FocusScope {
                 }
 
                 fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? VideoOutput.Stretch : ((game.collections.get(0).shortName !== "gw") && (game.collections.get(0).shortName !== "lcdgames") ? VideoOutput.PreserveAspectCrop : VideoOutput.PreserveAspectFit)
+                fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? VideoOutput.Stretch : ((game.collections.get(0).shortName !== "gw") && (game.collections.get(0).shortName !== "lcdgames") ? VideoOutput.PreserveAspectCrop : VideoOutput.PreserveAspectFit)
                 muted: settings.AllowVideoPreviewAudio === "No"
                 loops: MediaPlayer.Infinite
                 autoPlay: true
