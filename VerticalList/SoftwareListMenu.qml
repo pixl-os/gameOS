@@ -40,6 +40,7 @@ FocusScope {
 
     function reloadProperties(){
         //console.log("reloadProperties()");
+        api.internal.system.notify("gamelistbrowsing", api.collections.get(currentCollectionIndex));
         loadPlatformPageSettings();
     }
 
@@ -335,6 +336,7 @@ FocusScope {
                     //we restore header searchActive state to keep cursor/edition during a search/filtering.
                     headercontainer.searchInput.searchActive = true;
                 }
+                api.internal.system.notify("gamelistbrowsing", api.collections.get(currentCollectionIndex), currentGame);
             }
             //console.log("----- onCurrentIndexChanged after -----");
             //console.log(" headercontainer.searchActive : ", headercontainer.searchActive);
@@ -613,6 +615,9 @@ FocusScope {
         gameActivated();
         softwarelist.focus = false;
         gameview.focus = true;
+        if(currentGame !== null){
+            api.internal.system.notify("gameviewselected", currentGame.collections.get(0), currentGame);
+        }
     }
 
     Keys.onReleased: {
