@@ -44,7 +44,7 @@ FocusScope {
     clip: embedded
 
     function reloadProperties(){
-        //console.log("reloadProperties()");
+      //console.log("reloadProperties()");
         if(typeof(game) !== "undefined"){
             loadGameDetailsSettings(game.collections.get(0).shortName);
             canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false;
@@ -81,7 +81,7 @@ FocusScope {
     property string overlay_cfg_filename_fullpath: ""
     property string overlay_png_filename_fullpath: ""
     property string input_overlay_cfg_filename_fullpath: ""
-    //property string video_ratio: "" //w:h ratio of full video if available
+    property string video_ratio: "" //w:h ratio of full video if available
     //property string video_resolution: "" //wxh of full video
     property string video_view: "" //w:h:x:y of "real" video without any black bands (horizontal and/or vertical ones)
 
@@ -126,9 +126,9 @@ FocusScope {
         var extension = game_filename.split('.');
         var game_fileextension = extension[extension.length-1];
         var system_overlay_selected = false;
-        //console.log("getOverlaysParameters() - game_filename : ", game_filename);
+      //console.log("getOverlaysParameters() - game_filename : ", game_filename);
         //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-        //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
+      //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
 
         //reset overlay to avoid to reuse it for one that doesn't exist
         overlay_png_filename_fullpath = "";
@@ -148,7 +148,7 @@ FocusScope {
 
         if(overlay_exists !== true){
             //check if system overlays exists
-            //console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
+          //console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
             overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
             if(overlay_exists === true){
                 // to know that system overlay is selected finally
@@ -159,23 +159,23 @@ FocusScope {
         else{
             overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
         }
-        //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
-        //console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
+      //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
+      //console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
         if(overlay_exists === true){
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
-            //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+          //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
             input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-            //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
+          //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
             //get path of input_overlay cfg
             var cfgpath = input_overlay_cfg_filename_fullpath;
             var cfgword = cfgpath.split('/');
             var cfg_filename = cfgword[cfgword.length-1];
-            //console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
+          //console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
             //use path of input_overlay cfg and png filename
             var overlay0_overlay = api.internal.system.run("cat \"" + input_overlay_cfg_filename_fullpath + "\" | grep -E \"overlay0_overlay\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-            //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
+          //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
             overlay_png_filename_fullpath = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
-            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
 
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
@@ -194,13 +194,13 @@ FocusScope {
                 video_fullscreen_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
 
                 //size of root
-              //console.log("root.width : ", root.width);
-              //console.log("root.height : ", root.height);
+            //console.log("root.width : ", root.width);
+            //console.log("root.height : ", root.height);
                 //initial values
-              //console.log("initial custom_viewport_x : ", custom_viewport_x);
-              //console.log("initial custom_viewport_y : ", custom_viewport_y);
-              //console.log("initial custom_viewport_height : ", custom_viewport_height);
-              //console.log("initial custom_viewport_width : ", custom_viewport_width);
+            //console.log("initial custom_viewport_x : ", custom_viewport_x);
+            //console.log("initial custom_viewport_y : ", custom_viewport_y);
+            //console.log("initial custom_viewport_height : ", custom_viewport_height);
+            //console.log("initial custom_viewport_width : ", custom_viewport_width);
 
                 //variables
                 let initialOverlayRatio;
@@ -209,32 +209,32 @@ FocusScope {
 
                 //calculate initial ratio of image
                 let initialImageRatio = custom_viewport_width / custom_viewport_height;
-                //console.log("initial custom viewport Ratio : ",initialImageRatio);
+              //console.log("initial custom viewport Ratio : ",initialImageRatio);
 
                 //for full screen size available in overlays .cfg files
                 if((video_fullscreen_x > 1) && (video_fullscreen_y > 1)){
                     //initial ratio overlay in custom (but could be 1080p ou 720p if set like this)
                     initialOverlayRatio = video_fullscreen_x / video_fullscreen_y;
-                    //console.log("Custom initialOverlayRatio : ",initialOverlayRatio);
+                  //console.log("Custom initialOverlayRatio : ",initialOverlayRatio);
                     //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
                     //we start by height and y
                     custom_viewport_y = Math.ceil(custom_viewport_y * (root.height/video_fullscreen_y));
-                    //console.log("recalculated custom_viewport_y : ",custom_viewport_y);
+                  //console.log("recalculated custom_viewport_y : ",custom_viewport_y);
                     
                     custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/video_fullscreen_y));
-                    //console.log("recalculated  custom_viewport_height : ",custom_viewport_height);
+                  //console.log("recalculated  custom_viewport_height : ",custom_viewport_height);
                     
                     //x is more complex to recalculate
                     //need to calculate the new size of overlay display (include cut)
                     overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                  //console.log("overlayNewWidth : ",overlayNewWidth);
                     OverlayWidthRatio = overlayNewWidth / video_fullscreen_x;
                 }
                 //it's just a tips when we have no info to know really expected image size
                 else if(((custom_viewport_height + custom_viewport_y)  > 720) || ((custom_viewport_width + custom_viewport_x) > 1280)){
                     //initial ratio overlay in 1080p
                     initialOverlayRatio = 1920 / 1080;
-                    //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
+                  //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
                     //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
                     //we start by height and y
                     custom_viewport_y = Math.floor(custom_viewport_y * (root.height/1080));
@@ -242,13 +242,13 @@ FocusScope {
                     //x is more complex to recalculate
                     //need to calculate the new size of overlay display (include cut)
                     overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                  //console.log("overlayNewWidth : ",overlayNewWidth);
                     OverlayWidthRatio = overlayNewWidth / 1920;
                 }
                 else{
                     //initial ratio overlay in 720p (estimated) in this case
                     initialOverlayRatio = 1280 / 720;
-                    //console.log("720p initialOverlayRatio : ",initialOverlayRatio);
+                  //console.log("720p initialOverlayRatio : ",initialOverlayRatio);
                     //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
                     //we start by height and y
                     custom_viewport_y = Math.floor(custom_viewport_y * (root.height/720));
@@ -256,14 +256,14 @@ FocusScope {
                     //x is more complex to recalculate
                     //need to calculate the new size of overlay display (include cut)
                     overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                    //console.log("overlayNewWidth : ",overlayNewWidth);
+                  //console.log("overlayNewWidth : ",overlayNewWidth);
                     OverlayWidthRatio = overlayNewWidth / 1280;
                 }
                 //we adapt x width and x from height
                 custom_viewport_width = Math.ceil(custom_viewport_height * initialImageRatio);
-                //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
+              //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
                 custom_viewport_x = Math.floor(custom_viewport_x * OverlayWidthRatio) - Math.ceil((overlayNewWidth - root.width)/2);
-                //console.log("intermediate custom_viewport_x : ",custom_viewport_x);
+              //console.log("intermediate custom_viewport_x : ",custom_viewport_x);
                 
                 //check if custom_viewport is not completely visible (case of 16/10 screen as steamdeck)
                 if(custom_viewport_x < 0){
@@ -275,10 +275,10 @@ FocusScope {
                     custom_viewport_y = 0
                     custom_viewport_height = root.height
                 }
-              //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
-                //previous method to get ratio "x:y"
+                //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
+                //method to get ratio "x:y"
                 //ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 input.mp4
-                //video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
+                video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
 
                 //previous method to get resolution "lxh"
                 //ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
@@ -286,7 +286,7 @@ FocusScope {
 
                 //new method to get really detect black bands in a video if exists
                 //timeout 0.2 ffmpeg -i "/recalbox/share/roms/easyrpg/media/videos/ActRazer/ActRazer.mp4" -vframes 10 -vf cropdetect -f null - 2>&1 | grep "crop=" | tail -n 1 | awk -F'crop=' '{print $2}'
-                video_view = api.internal.system.run("timeout 0.2 ffmpeg -i '" + decodeURIComponent(game.assets.videos[0]) + "' -vframes 30 -vf cropdetect -f null - 2>&1 | grep 'crop=' | tail -n 1 | awk -F'crop=' '{print $2}' | tr -d '\\n' | tr -d '\\r'");
+                video_view = api.internal.system.run("timeout 0.2 ffmpeg -i '" + decodeURIComponent(game.assets.videos[0]) + "' -vframes 60 -vf cropdetect -f null - 2>&1 | grep 'crop=' | tail -n 1 | awk -F'crop=' '{print $2}' | tr -d '\\n' | tr -d '\\r'");
                 //to do anything only format is valid to avoid issues
                 if(isValidVideoViewFormat(video_view)){
                     //to get ratio of video view (video without black bands if exists)
@@ -305,7 +305,8 @@ FocusScope {
                     
                     // if video is really in an other "bigger" ratio than overlay viewport
                     // example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
-                    if (Math.abs(vr_video_view - vr_viewport) > 0.3){
+                    //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
+                    if ((Math.abs(vr_video_view - vr_viewport) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
                         //reset overlay to avoid to display overlay because ratio is too different
                         overlay_png_filename_fullpath = "";
                         overlay_cfg_filename_fullpath = "";
@@ -323,23 +324,24 @@ FocusScope {
                         custom_viewport_height = Math.ceil(video_view_height * scale_overlay_vs_video_height) + (Math.ceil(video_view_y * scale_overlay_vs_video_height) * 2)
                     }
                 }
-              //console.log("video_view : ", video_view);
-              //console.log("vr_video_view : ", vr_video_view);
-              //console.log("vr_viewport : ", vr_viewport);
-              //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
-              //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
-              //console.log("new custom_viewport_x : ", custom_viewport_x);
-              //console.log("new custom_viewport_y : ", custom_viewport_y);
-              //console.log("new custom_viewport_height : ", custom_viewport_height);
-              //console.log("new custom_viewport_width : ", custom_viewport_width);
-              //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
-              //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+            //console.log("video_view : ", video_view);
+            //console.log("video_ratio : ", video_ratio);
+            //console.log("vr_video_view : ", vr_video_view);
+            //console.log("vr_viewport : ", vr_viewport);
+            //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
+            //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
+            //console.log("new custom_viewport_x : ", custom_viewport_x);
+            //console.log("new custom_viewport_y : ", custom_viewport_y);
+            //console.log("new custom_viewport_height : ", custom_viewport_height);
+            //console.log("new custom_viewport_width : ", custom_viewport_width);
+            //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
+            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
             }
         }
-        //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
-        //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
-        //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
-        //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
+      //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
+      //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
+      //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
+      //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
@@ -484,7 +486,7 @@ FocusScope {
     }
 
     onGameChanged: {
-        //console.log("GameView - onGameChanged");
+      //console.log("GameView - onGameChanged");
         //reset default value for a new game loading
         reset();
     }    
@@ -492,7 +494,7 @@ FocusScope {
     Connections {
         target: game
         function onRetroAchievementsInitialized() {
-            //console.log("GameView - retroAchievements is now initialized !");
+          //console.log("GameView - retroAchievements is now initialized !");
             setRetroAchievements();    
         }
     }
@@ -510,7 +512,7 @@ FocusScope {
       } else {
         stopvideo.stop();
         // Turn on video
-        //console.log("Turn on video");
+      //console.log("Turn on video");
         if(canPlayVideo)
             videoDelay.restart();
       }
@@ -523,7 +525,7 @@ FocusScope {
         repeat: false
         interval: 2000 // wait 2 seconds before to launch the video (important when embedded in vertical list)
         onTriggered: {
-            //console.log("videoEmbeddedLaunch.onTriggered");
+          //console.log("videoEmbeddedLaunch.onTriggered");
             if (embedded) {
                 //launch initialization of retroachievements
                 //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
@@ -590,7 +592,7 @@ FocusScope {
                 property bool videoExists: game ? game.assets.videos.length : false
                 source: {
                         if(videoExists){
-                            //console.log("video path:",game.assets.videos[0]);
+                          //console.log("video path:",game.assets.videos[0]);
                             return game.assets.videos[0];
                         }
                         else return "";
@@ -1078,7 +1080,7 @@ FocusScope {
             }
 
             onSelectedGameChanged: {
-                //console.log("onSelectedGameChanged");
+              //console.log("onSelectedGameChanged");
                 if (launchedGame) {
                     if (api.launchedgame.path === game.path){
                         icon = "../assets/images/loading.png";
@@ -1102,12 +1104,12 @@ FocusScope {
                 else icon = "../assets/images/icon_play.svg";
             }
             iconRotation.onStarted: {
-                    //console.log("iconRotation.onStarted");
+                  //console.log("iconRotation.onStarted");
                     icon = "../assets/images/loading.png";
             }
 
             iconRotation.onFinished:{
-                    //console.log("iconRotation.onFinished");
+                  //console.log("iconRotation.onFinished");
                     //if finish and during the last cycle
                     if (iconRotation.loops === 1) icon = "../assets/images/icon_play.svg";
             }
@@ -1317,12 +1319,12 @@ FocusScope {
             spacing: vpx(10)
             keyNavigationWraps: true
             Keys.onLeftPressed: { 
-                                    //console.log("api.launchedgame : ",api.launchedgame);
-                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
-                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                  //console.log("api.launchedgame : ",api.launchedgame);
+                                  //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                  //console.log("gameToLaunched : ", gameToLaunched)
                                     if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
-                                        //console.log("Block Keys.onLeftPressed on ListView(menu) of GameView");
+                                      //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                      //console.log("Block Keys.onLeftPressed on ListView(menu) of GameView");
                                         return;
                                     }
                                     //if embedded and if we do left to come back to list
@@ -1339,22 +1341,22 @@ FocusScope {
                                         }
                                     }
 
-                                    //console.log("Menu - Keys.onLeftPressed");
+                                  //console.log("Menu - Keys.onLeftPressed");
                                     sfxNav.play(); 
                                     do{    
                                         decrementCurrentIndex();
                                     }while(!currentItem.enabled);                                
                                 }
             Keys.onRightPressed:{ 
-                                    //console.log("api.launchedgame : ",api.launchedgame);
-                                    //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
-                                    //console.log("gameToLaunched : ", gameToLaunched)
+                                  //console.log("api.launchedgame : ",api.launchedgame);
+                                  //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                                  //console.log("gameToLaunched : ", gameToLaunched)
                                     if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-                                        //console.log("api.launchedgame.path : ",api.launchedgame.path);
-                                        //console.log("Block Keys.onRightPressed on ListView(menu) of GameView");
+                                      //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                                      //console.log("Block Keys.onRightPressed on ListView(menu) of GameView");
                                         return;
                                     }
-                                    //console.log("Menu - Keys.onLeftPressed");
+                                  //console.log("Menu - Keys.onLeftPressed");
                                     sfxNav.play(); 
                                     do{    
                                         incrementCurrentIndex();
@@ -1472,7 +1474,7 @@ FocusScope {
         displayMarginEnd: 150
         cacheBuffer: 250
         onCurrentIndexChanged: {
-            //console.log("onCurrentIndexChanged - focus: ", root.focus);
+          //console.log("onCurrentIndexChanged - focus: ", root.focus);
             if(root.focus){
                 if (content.currentIndex === 0) {
                     toggleVideo(true);
@@ -1483,11 +1485,11 @@ FocusScope {
         }
         keyNavigationWraps: true
         Keys.onUpPressed: { 
-                            //console.log("api.launchedgame : ",api.launchedgame);
-                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                          //console.log("api.launchedgame : ",api.launchedgame);
+                          //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
                             if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
-                                //console.log("Block Keys.onUpPressed on ListView(content) of GameView");
+                              //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                              //console.log("Block Keys.onUpPressed on ListView(content) of GameView");
                                 return;
                             }
                             sfxNav.play(); 
@@ -1508,11 +1510,11 @@ FocusScope {
                             }
                           }
         Keys.onDownPressed: { 
-                            //console.log("api.launchedgame : ",api.launchedgame);
-                            //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+                          //console.log("api.launchedgame : ",api.launchedgame);
+                          //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
                             if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-                                //console.log("api.launchedgame.path : ",api.launchedgame.path);
-                                //console.log("Block Keys.onDownPressed on ListView(content) of GameView");
+                              //console.log("api.launchedgame.path : ",api.launchedgame.path);
+                              //console.log("Block Keys.onDownPressed on ListView(content) of GameView");
                                 return;
                             }
                           sfxNav.play();
@@ -1533,7 +1535,7 @@ FocusScope {
         onClose: closeMedia();
     }
     Keys.onReleased: {
-        //console.log("Keys.onReleased::hotkeyPressed : ", hotkeyPressed);
+      //console.log("Keys.onReleased::hotkeyPressed : ", hotkeyPressed);
         // Guide
         if (api.keys.isGuide(event) && !event.isAutoRepeat) {
             hotkeyPressed = false;
@@ -1545,13 +1547,13 @@ FocusScope {
     }
     // Input handling
     Keys.onPressed: {
-        //console.log("api.launchedgame : ",api.launchedgame);
-        //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
-        //console.log("Keys.onPressed::hotkeyPressed : ", hotkeyPressed);
+      //console.log("api.launchedgame : ",api.launchedgame);
+      //console.log("appWindow.activeFocusItem : ", appWindow.activeFocusItem)
+      //console.log("Keys.onPressed::hotkeyPressed : ", hotkeyPressed);
         if((api.launchedgame && !appWindow.activeFocusItem) || gameToLaunched){
-            //console.log("api.launchedgame.path : ",api.launchedgame.path);
+          //console.log("api.launchedgame.path : ",api.launchedgame.path);
             event.accepted = true;
-            //console.log("Block Keys.onPressed on GameView");
+          //console.log("Block Keys.onPressed on GameView");
             return;
         }
         //to ignore keys if hotkey still pressed
@@ -1663,7 +1665,7 @@ FocusScope {
     }
 
     onFocusChanged: {
-        //console.log("onFocusChanged - focus",focus);
+      //console.log("onFocusChanged - focus",focus);
         if (focus) {
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
@@ -1713,18 +1715,18 @@ FocusScope {
     SearchGameByModel {
         id: searchGameIndex;
         onMaxChanged:{
-            //console.log("onMaxChanged - activated :",searchGameIndex.activated);
-            //console.log("onMaxChanged - max :",searchGameIndex.max);
-            //console.log("onMaxChanged - game_crc :",game_crc);
-            //console.log("onMaxChanged - game_name :",game_name);
-            //console.log("onMaxChanged - crc :",searchGameIndex.crc);
-            //console.log("onMaxChanged - crcToFind :",searchGameIndex.crcToFind);
-            //console.log("onMaxChanged - filenameRegEx :",searchGameIndex.filenameRegEx);
-            //console.log("onMaxChanged - filenameToFilter :",searchGameIndex.filenameToFilter);
-            //console.log("onMaxChanged - system :",searchGameIndex.system);
-            //console.log("onMaxChanged - sytemToFind :",searchGameIndex.systemToFilter);
-            //console.log("onMaxChanged - result.games.get(0).path", searchGameIndex.result.games.get(0).path);
-            //console.log("onMaxChanged - result.games.get(0).files.get(0).path", searchGameIndex.result.games.get(0).files.get(0).path);
+          //console.log("onMaxChanged - activated :",searchGameIndex.activated);
+          //console.log("onMaxChanged - max :",searchGameIndex.max);
+          //console.log("onMaxChanged - game_crc :",game_crc);
+          //console.log("onMaxChanged - game_name :",game_name);
+          //console.log("onMaxChanged - crc :",searchGameIndex.crc);
+          //console.log("onMaxChanged - crcToFind :",searchGameIndex.crcToFind);
+          //console.log("onMaxChanged - filenameRegEx :",searchGameIndex.filenameRegEx);
+          //console.log("onMaxChanged - filenameToFilter :",searchGameIndex.filenameToFilter);
+          //console.log("onMaxChanged - system :",searchGameIndex.system);
+          //console.log("onMaxChanged - sytemToFind :",searchGameIndex.systemToFilter);
+          //console.log("onMaxChanged - result.games.get(0).path", searchGameIndex.result.games.get(0).path);
+          //console.log("onMaxChanged - result.games.get(0).files.get(0).path", searchGameIndex.result.games.get(0).files.get(0).path);
             if(searchGameIndex.max === 1){
                 currentGameIndex = searchGameIndex.sourceGameIndexFound(0);
             }
@@ -1737,7 +1739,7 @@ FocusScope {
         searchGameIndex.sourceModel = game.collections.get(0).games;
         searchGameIndex.filenameToFind = true; //force to search exact file name and not a filter using regex
         searchGameIndex.filename = game.path;
-        //console.log("Component.onCompleted - filename :",searchGameIndex.filename);
+      //console.log("Component.onCompleted - filename :",searchGameIndex.filename);
         //activate search at the end
         searchGameIndex.activated = true;
         //init overlays parameters
