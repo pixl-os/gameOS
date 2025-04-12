@@ -606,7 +606,6 @@ FocusScope {
                     if(custom_viewport_y === 0) return parent.verticalCenter;
                 }
 
-                fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true) && (video_ratio !== "16:9")) ? VideoOutput.Stretch : ((game.collections.get(0).shortName !== "gw") && (game.collections.get(0).shortName !== "lcdgames") ? VideoOutput.PreserveAspectCrop : VideoOutput.PreserveAspectFit)
                 fillMode: ((settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)) ? VideoOutput.Stretch : ((game.collections.get(0).shortName !== "gw") && (game.collections.get(0).shortName !== "lcdgames") ? VideoOutput.PreserveAspectCrop : VideoOutput.PreserveAspectFit)
                 muted: settings.AllowVideoPreviewAudio === "No"
                 loops: MediaPlayer.Infinite
