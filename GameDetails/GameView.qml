@@ -117,6 +117,29 @@ FocusScope {
         return true; // String matches the format and all parts are integers
     }
 
+    //to check if "ratio" identified in video respect the format W:H (as 4:3, 3:5, 16:10, 16:9...)
+    function isValidVideoRatioFormat(inputString) {
+        // Regular expression to match the format
+        const formatRegex = /^\d+:\d+$/;
+
+        // Check if the string matches the format
+        if (!formatRegex.test(inputString)) {
+            return false; // Doesn't match the W:H format
+        }
+
+        // Split the string by the colon delimiter
+        const parts = inputString.split(":");
+
+        // Optionally, you can convert the parts to numbers and perform further validation
+        // (e.g., check if they are non-negative integers if that's a requirement)
+        for (let i = 0; i < parts.length; ++i) {
+            if (isNaN(parseInt(parts[i]))) {
+                return false; // One of the parts is not a valid integer
+            }
+        }
+        return true; // String matches the format and all parts are integers
+    }
+    
     //function to prepare resize of video and screenshot depending Overlays configuration
     function getOverlaysParameters(){
         //to find game name
@@ -194,13 +217,13 @@ FocusScope {
                 video_fullscreen_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
 
                 //size of root
-            //console.log("root.width : ", root.width);
-            //console.log("root.height : ", root.height);
+          //console.log("root.width : ", root.width);
+          //console.log("root.height : ", root.height);
                 //initial values
-            //console.log("initial custom_viewport_x : ", custom_viewport_x);
-            //console.log("initial custom_viewport_y : ", custom_viewport_y);
-            //console.log("initial custom_viewport_height : ", custom_viewport_height);
-            //console.log("initial custom_viewport_width : ", custom_viewport_width);
+          //console.log("initial custom_viewport_x : ", custom_viewport_x);
+          //console.log("initial custom_viewport_y : ", custom_viewport_y);
+          //console.log("initial custom_viewport_height : ", custom_viewport_height);
+          //console.log("initial custom_viewport_width : ", custom_viewport_width);
 
                 //variables
                 let initialOverlayRatio;
@@ -264,6 +287,7 @@ FocusScope {
               //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
                 custom_viewport_x = Math.floor(custom_viewport_x * OverlayWidthRatio) - Math.ceil((overlayNewWidth - root.width)/2);
               //console.log("intermediate custom_viewport_x : ",custom_viewport_x);
+              //console.log("intermediate custom_viewport_width : ",custom_viewport_width);
                 
                 //check if custom_viewport is not completely visible (case of 16/10 screen as steamdeck)
                 if(custom_viewport_x < 0){
@@ -275,7 +299,8 @@ FocusScope {
                     custom_viewport_y = 0
                     custom_viewport_height = root.height
                 }
-                //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
+              //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
+              //console.log("intermediate custom_viewport_height : ",custom_viewport_height);
                 //method to get ratio "x:y"
                 //ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 input.mp4
                 video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
@@ -303,10 +328,17 @@ FocusScope {
                     var scale_overlay_vs_video_width = parseInt(custom_viewport_width) / video_view_width
                     var scale_overlay_vs_video_height = parseInt(custom_viewport_height) / video_view_height
                     
+                    //value by default for video ratio calculated
+                    var vr_video_ratio = vr_video_view;
+                    if(isValidVideoRatioFormat(video_ratio)){
+                        //calculate ratio from video_ratio also
+                        vr_video_ratio = parseFloat(parseInt(video_ratio.split(':')[0]) / parseInt(video_ratio.split(':')[1]));
+                    }
+                    
                     // if video is really in an other "bigger" ratio than overlay viewport
                     // example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
                     //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
-                    if ((Math.abs(vr_video_view - vr_viewport) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
+                    if ((Math.abs(vr_video_view - vr_viewport) > 0.35) && (Math.abs(vr_video_ratio - vr_viewport) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
                         //reset overlay to avoid to display overlay because ratio is too different
                         overlay_png_filename_fullpath = "";
                         overlay_cfg_filename_fullpath = "";
@@ -324,18 +356,19 @@ FocusScope {
                         custom_viewport_height = Math.ceil(video_view_height * scale_overlay_vs_video_height) + (Math.ceil(video_view_y * scale_overlay_vs_video_height) * 2)
                     }
                 }
-            //console.log("video_view : ", video_view);
-            //console.log("video_ratio : ", video_ratio);
-            //console.log("vr_video_view : ", vr_video_view);
-            //console.log("vr_viewport : ", vr_viewport);
-            //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
-            //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
-            //console.log("new custom_viewport_x : ", custom_viewport_x);
-            //console.log("new custom_viewport_y : ", custom_viewport_y);
-            //console.log("new custom_viewport_height : ", custom_viewport_height);
-            //console.log("new custom_viewport_width : ", custom_viewport_width);
-            //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
-            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+          //console.log("video_view : ", video_view);
+          //console.log("video_ratio : ", video_ratio);
+          //console.log("vr_video_view : ", vr_video_view);
+          //console.log("vr_viewport : ", vr_viewport);
+          //console.log("vr_video_ratio : ", vr_video_ratio);
+          //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
+          //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
+          //console.log("new custom_viewport_x : ", custom_viewport_x);
+          //console.log("new custom_viewport_y : ", custom_viewport_y);
+          //console.log("new custom_viewport_height : ", custom_viewport_height);
+          //console.log("new custom_viewport_width : ", custom_viewport_width);
+          //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
+          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
             }
         }
       //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
