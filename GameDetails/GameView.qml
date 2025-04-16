@@ -338,7 +338,7 @@ FocusScope {
                     // if video is really in an other "bigger" ratio than overlay viewport
                     // example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
                     //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
-                    if ((Math.abs(vr_video_view - vr_viewport) > 0.35) && (Math.abs(vr_video_ratio - vr_viewport) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
+                    if ((Math.abs(vr_video_view - initialImageRatio) > 0.35) && (Math.abs(vr_video_ratio - initialImageRatio) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
                         //reset overlay to avoid to display overlay because ratio is too different
                         overlay_png_filename_fullpath = "";
                         overlay_cfg_filename_fullpath = "";
