@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - 2025-05-08 - v1.32
+- fixes:
+	- fix gameview to add new way to calculate and check video ratio
+	- fix gameview to use initial ratio to compare with video ratio (to avoid issue in case of resize for screen ratio as steamdeck)
+	- fix gameview to reset/reload/restart of videos to avoid crash/stuck video replay
+	
 ## [pixL-master] - 2025-04-13 - v1.31
 - logo:
     - Add new LCD Games system logos
@@ -12,6 +18,7 @@ All notable changes to this project will be documented in this file (focus on ch
 	- fix to hide overlay if 16/9 video detected
 	- fix if video 4:3 record as 16:9 (with vertical black bands)
 	- finally, use new marvelous way to detect video 'view' and black bands automatically
+	- fix gameview to check more frames for video resizing
 
 ## [pixL-master] - 2025-02-08 - v1.30
 - fixes:
