@@ -185,6 +185,7 @@ FocusScope {
       //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
       //console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
         if(overlay_exists === true){
+          //console.log("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'");
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
           //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
             input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
@@ -202,6 +203,7 @@ FocusScope {
 
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
+                //examples :
                 //custom_viewport_x = "251"
                 //custom_viewport_y = "10"
                 //custom_viewport_width = "1415"
@@ -370,6 +372,12 @@ FocusScope {
           //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
           //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
             }
+            else{
+                custom_viewport_x = 0
+                custom_viewport_y = 0
+                custom_viewport_width = 0
+                custom_viewport_height = 0
+            }
         }
       //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
       //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
@@ -422,13 +430,13 @@ FocusScope {
         screenshot.opacity = 1;
         mediaScreen.opacity = 0;
         if(!embedded){
+            //init overlays parameters
+            root.getOverlaysParameters();
             //to start video for new game
             toggleVideo(true);
             //launch initialization of retroachievements
             //the initialization is done in a separate thread to avoid conflicts and blocking in user interface)
             game.initRetroAchievements();
-            //init overlays parameters
-            root.getOverlaysParameters();
         }
         else{
             //to be sure to stop video in all cases -> improve really performance of scrolling !!!
@@ -1790,10 +1798,10 @@ FocusScope {
                 }
                 else
                 {
-                    //launch video
-                    toggleVideo(true);
                     //init overlays parameters
                     root.getOverlaysParameters();
+                    //launch video
+                    toggleVideo(true);
                 }
             }
         } 
