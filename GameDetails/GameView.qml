@@ -140,6 +140,8 @@ FocusScope {
         return true; // String matches the format and all parts are integers
     }
     
+    property bool overlay_exists_temp: false
+    property string overlay_png_filename_fullpath_tmp: ""
     //function to prepare resize of video and screenshot depending Overlays configuration
     function getOverlaysParameters(){
         //to find game name
@@ -153,27 +155,31 @@ FocusScope {
         //game_filename = game_filename.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       //console.log("getOverlaysParameters() - 'escaped' game_filename : ", game_filename);
 
-        //reset overlay to avoid to reuse it for one that doesn't exist
-        overlay_png_filename_fullpath = "";
+        //reset overlay to avoid to; reuse it for one that doesn't exist
+        overlay_exists = false
+		overlay_png_filename_fullpath = "";
         overlay_cfg_filename_fullpath = "";
         input_overlay_cfg_filename_fullpath = "";
 
         //check if custom overlays exists
-        overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
-        if(overlay_exists !== true){
+        overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+        console.log("overlay_exists_temp : " + overlay_exists_temp)
+		if(overlay_exists_temp !== true){
             //if not found, we retry if exist any without decoration using () or []
             var result = game_filename.split("("); // we search first ( to remove decoration using it
             var result2 = result[0].split("["); // we search first [ to remove decoration using it
             game_filename = result2[0].trim(); //we use trim() to remove space at the begin and end of the string
             game_filename = game_filename + "." + game_fileextension // we add extension in this case also as done usually
-            overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+            overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
+            console.log("overlay_exists_temp : " + overlay_exists_temp)
         }
 
-        if(overlay_exists !== true){
+        if(overlay_exists_temp !== true){
             //check if system overlays exists
-          //console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
-            overlay_exists = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
-            if(overlay_exists === true){
+            console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
+            overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
+            console.log("overlay_exists_temp : " + overlay_exists_temp)
+            if(overlay_exists_temp === true){
                 // to know that system overlay is selected finally
                 system_overlay_selected = true;
                 overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg";
@@ -183,8 +189,8 @@ FocusScope {
             overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
         }
       //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
-      //console.log("getOverlaysParameters() - overlay_exists : ", overlay_exists);
-        if(overlay_exists === true){
+      //console.log("getOverlaysParameters() - overlay_exists_temp : ", overlay_exists_temp);
+        if(overlay_exists_temp === true){
           //console.log("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'");
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
           //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
@@ -198,8 +204,8 @@ FocusScope {
             //use path of input_overlay cfg and png filename
             var overlay0_overlay = api.internal.system.run("cat \"" + input_overlay_cfg_filename_fullpath + "\" | grep -E \"overlay0_overlay\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
           //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
-            overlay_png_filename_fullpath = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
-          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+            overlay_png_filename_fullpath_tmp = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
+          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
 
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
@@ -342,7 +348,7 @@ FocusScope {
                     //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
                     if ((Math.abs(vr_video_view - initialImageRatio) > 0.35) && (Math.abs(vr_video_ratio - initialImageRatio) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
                         //reset overlay to avoid to display overlay because ratio is too different
-                        overlay_png_filename_fullpath = "";
+                        overlay_png_filename_fullpath_tmp = "";
                         overlay_cfg_filename_fullpath = "";
                         input_overlay_cfg_filename_fullpath = "";
                         custom_viewport_y = 0
@@ -370,7 +376,7 @@ FocusScope {
           //console.log("new custom_viewport_height : ", custom_viewport_height);
           //console.log("new custom_viewport_width : ", custom_viewport_width);
           //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
-          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath : ", overlay_png_filename_fullpath);
+          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
             }
             else{
                 custom_viewport_x = 0
@@ -383,6 +389,8 @@ FocusScope {
       //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
       //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
       //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
+	  overlay_png_filename_fullpath = overlay_png_filename_fullpath_tmp;
+	  overlay_exists = overlay_exists_temp;
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
@@ -421,6 +429,8 @@ FocusScope {
 
     // Reset the screen to default state
     function reset(){
+        overlay_png_filename_fullpath = "";
+        overlay_exists = false;
         reloadProperties();
         content.currentIndex = 0;
         menu.currentIndex = 0;
@@ -527,7 +537,7 @@ FocusScope {
     }
 
     onGameChanged: {
-      //console.log("GameView - onGameChanged");
+        //console.log("GameView - onGameChanged");
         //reset default value for a new game loading
         reset();
     }    
@@ -735,13 +745,14 @@ FocusScope {
                 opacity: 0.2
                 visible: !iamsteam && (settings.ShowScanlines === "Yes")
             }
-
+			
+			//overlay
             Image {
                 id: overlaycomponent
                 property bool videoExists: game ? game.assets.videos.length : false
 
                 source:{
-                    if(videoExists && (overlay_exists === true)){
+                    if(videoExists && (settings.AllowVideoPreviewOverlay === "Yes") && (overlay_exists === true)){
                             return "file://" + overlay_png_filename_fullpath;
                     }
                     else return "";
@@ -827,7 +838,7 @@ FocusScope {
         Image {
             id: overlayBackground
             source:{
-                if(overlay_exists === true) return "file://" + overlay_png_filename_fullpath;
+                if((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) return "file://" + overlay_png_filename_fullpath;
                 else return "";
             }
             anchors.fill: parent
@@ -1838,6 +1849,7 @@ FocusScope {
     }
 
     Component.onCompleted: {
+        overlay_exists = false;
         reloadProperties();
         //set currentGameIndex
         searchGameIndex.sourceModel = game.collections.get(0).games;
