@@ -1559,10 +1559,9 @@ FocusScope {
                     Image{
                         id: betaLogo
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
                         width: parent.width/2
                         height: parent.height/2
-
+                        anchors.horizontalCenter: parent.right
                         //to alert when system is in beta
                         source: "../assets/images/beta-round.png";
                         fillMode: Image.PreserveAspectFit
@@ -1570,7 +1569,7 @@ FocusScope {
                         smooth: true
                         scale: selected ? 0.9 : 0.8
                         //for the moment, just check if first core for this system still low
-                        visible: modelData.getCoreCompatibilityAt(0) === "low" ? true : false
+                        visible: (selected && (modelData.getCoreCompatibilityAt(0) === "low")) ? true : false
                     }
                 }
 
