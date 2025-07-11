@@ -815,7 +815,14 @@ FocusScope {
 
             property var randoScreenshot: game ? game.assets.screenshotList[randoScreenshotNumber] : ""
             property var randoFanart: game ? game.assets.backgroundList[randoFanartNumber] : ""
-            property var actualBackground: (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
+            property var actualBackground:{
+                var bg = (settings.GameBackground === "Screenshot") ? randoScreenshot : Utils.fanArt(game) || randoFanart;
+                //to force to display details if no background (to avoid a blank page)
+                if((typeof(bg) === "undefined")){
+                    detailsOpacity = 1;
+                }
+                return bg;
+            }
             source: actualBackground || ""
 
             fillMode: ((settings.AllowGameBackgroundOverlay === "Yes") && (overlay_exists === true)) ? Image.Stretch : Image.PreserveAspectCrop
