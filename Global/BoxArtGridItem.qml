@@ -30,6 +30,19 @@ Item {
         return steamAppID(gameData) + '/library_600x900_2x.jpg';
     }
 
+    //function to get icon from teknoparrot if nothing available from scrap
+    function teknoParrotIcon(gameData) {
+        if (gameData){
+            if(gameData.collections.get(0).getCoreAt(0) === "teknoparrot"){
+                var path = gameData.files.get(0).path;
+                var words = path.split('/')
+                var romname = words[words.length-1].split('.')[0];
+                return "/usr/bin/teknoparrot/Icons/" + romname + ".png";
+            }
+        }
+        return ""
+    }
+
     function boxArt(data) {
       if (data !== null) {
         if (data.assets.boxFront.includes("/header.jpg")) 
@@ -54,6 +67,8 @@ Item {
           else if (data.assets.wheelsteel !== "")
             return data.assets.wheelsteel;
         }
+        //check and return teknoparrot Icon path
+        return teknoParrotIcon(data);
       }
       return "";
     }
