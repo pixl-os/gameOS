@@ -18,11 +18,31 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import "qrc:/qmlutils" as PegasusUtils
 import "../moment.js" as DateUtils
+import "../utils.js" as Utils
 
 Item {
     id: infocontainer
 
     property var gameData: currentGame
+
+    //added to manage case without scrap
+    property var teknoParrotData: gameData && (gameData.summary || gameData.description) ? "" : Utils.teknoParrotJSONData(gameData)
+    property string teknoParrotDescription : {
+        if(teknoParrotData !== ""){
+            var description = "Platform: " + teknoParrotData.platform + "\n" +
+                              "Known compatibilities:\n" +
+                              "\tAMD : " + teknoParrotData.amd + "\n" +
+                              ((teknoParrotData.amd_issues !== null) ? "\tAMD issues : " + teknoParrotData.amd_issues + "\n\n" : "") +
+                              "\tIntel : " + teknoParrotData.intel + "\n" +
+                              ((teknoParrotData.intel_issues !== null) ? "\tIntel issues : " + teknoParrotData.intel_issues + "\n" : "") +
+                              "\tNvidia : " + teknoParrotData.nvidia + "\n" +
+                              ((teknoParrotData.nvidia_issues !== null) ? "\tNvidia issues : " + teknoParrotData.nvidia_issues + "\n" : "") +
+                              ((teknoParrotData.general_issues !== null) ? "General issues : " + teknoParrotData.general_issues : "")
+            return description
+        }
+        else return ""
+    }
+
 
     // Game title
     PegasusUtils.HorizontalAutoScroll{
@@ -42,7 +62,7 @@ Item {
         Text {
             id: gametitletext
 
-            text: gameData ? gameData.title : ""
+            text: gameData ? (teknoParrotData !== "" ? teknoParrotData.game_name : gameData.title) : ""
 
             color: theme.text
             font.family: titleFont.name
@@ -168,7 +188,7 @@ Item {
             height: parent.height
             anchors { left: genretitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: gameData ? gameData.genre : ""
+            text: gameData ? (teknoParrotData !== "" ? teknoParrotData.game_genre : gameData.genre) : ""
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
@@ -213,7 +233,7 @@ Item {
             height: parent.height
             anchors { left: releasetitle.right; leftMargin: vpx(5) }
             verticalAlignment: Text.AlignVCenter
-            text: gameData ? gameData.releaseYear : ""
+            text: gameData ? (teknoParrotData !== "" ? teknoParrotData.release_year : gameData.releaseYear) : ""
             font.pixelSize: vpx(16)
             font.family: subtitleFont.name
             color: theme.text
@@ -469,7 +489,7 @@ Item {
 
         Text {
             width: parent.width
-            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : qsTr("No description available") + api.tr
+            text: gameData && (gameData.summary || gameData.description) ? gameData.description || gameData.summary : (teknoParrotData !== "" ? teknoParrotDescription : qsTr("No description available") + api.tr)
             font.pixelSize: vpx(16)
             font.family: bodyFont.name
             color: theme.text

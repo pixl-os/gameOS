@@ -363,6 +363,36 @@ function teknoParrotIcon(gameData) {
     }
     return ""
 }
+//MetaData JSON file format:
+// {
+//   "game_name": "Battle Fantasia",
+//   "game_genre": "Fighting",
+//   "icon_name": "BattleFantasia.png",
+//   "platform": "Taito Type X2",
+//   "release_year": "2007",
+//   "nvidia": "OK",
+//   "nvidia_issues": null,
+//   "amd": "OK",
+//   "amd_issues": null,
+//   "intel": "NO_INFO",
+//   "intel_issues": null,
+//   "general_issues": null
+// }
+//function to get JSON data from teknoparrot metadata if nothing available from scrap
+function teknoParrotJSONData(gameData) {
+    if (gameData){
+        if(gameData.collections.get(0).getCoreAt(0) === "teknoparrot"){
+            var path = gameData.files.get(0).path;
+            var words = path.split('/')
+            var romname = words[words.length-1].split('.')[0];
+            var JSONpath = "/usr/bin/teknoparrot/Metadata/" + romname + ".json";
+            const fileContent = api.internal.system.run("cat \"" + JSONpath + "\"");
+            const JSONData = JSON.parse(fileContent);
+            return JSONData;
+        }
+    }
+    return ""
+}
 
 function chooseMedia(data,asset) {
   if (data !== null && (asset !== null || asset !== "")) {
