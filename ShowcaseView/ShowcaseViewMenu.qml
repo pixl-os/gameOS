@@ -1559,7 +1559,7 @@ FocusScope {
                     Image{
                         id: betaLogo
                         anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width/2
+                        width: parent.height/2
                         height: parent.height/2
                         anchors.horizontalCenter: parent.right
                         //to alert when system is in beta
