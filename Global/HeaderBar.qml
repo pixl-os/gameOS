@@ -77,13 +77,13 @@ FocusScope {
         //beta logo
         Image{
             id: betaLogo
-            anchors.top: platformlogo.top
-            anchors.right: platformlogo.right
-            width: platformlogo.width/2
-            height: platformlogo.height/2
-
+            anchors.verticalCenter: platformlogo.verticalCenter
+            anchors.horizontalCenter: platformlogo.right
+            width: parent.height/2
+            height: parent.height/2
             //to alert when system is in beta
-            source: "../assets/images/beta.png";
+            source: "../assets/images/beta-round.png";
+            fillMode: Image.PreserveAspectFit
             //for the moment, just check if first core for this system still low
             visible: typeof(currentCollection) !== "undefined" ? (currentCollection.getCoreCompatibilityAt(0) === "low" ? true : false) : false
         }
