@@ -13,7 +13,7 @@ FocusScope {
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
-        //console.log("list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
+        //console.log("gameActivated(): list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
         //check added when search is empty and we try to launch a game in all cases
         if(list.currentGame(gamegrid.currentIndex) !== null){
             storedCollectionGameIndex = gamegrid.currentIndex
@@ -145,13 +145,6 @@ FocusScope {
     property int numColumns: settings.GridColumns ? settings.GridColumns : 6
     property int titleMargin: settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0
 
-    GridSpacer {
-        id: fakebox
-
-        width: vpx(100); height: vpx(100)
-        games: list.games
-    }
-
     Rectangle {
         id: navigationOverlay
         anchors.fill: parent;
@@ -224,7 +217,6 @@ FocusScope {
             id: gamegrid
 
             // Figuring out the aspect ratio for box art
-            property real cellHeightRatio: fakebox.paintedHeight / fakebox.paintedWidth
             property real savedCellHeight: {
                 if (settings.GridThumbnail === "Tall") {
                     return cellWidth / settings.TallRatio;

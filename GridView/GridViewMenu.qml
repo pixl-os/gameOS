@@ -26,7 +26,7 @@ FocusScope {
     // While not necessary to do it here, this means we don't need to change it in both
     // touch and gamepad functions each time
     function gameActivated() {
-        //console.log("list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
+        //console.log("gameActivated(): list.currentGame(gamegrid.currentIndex) : ",list.currentGame(gamegrid.currentIndex));
         //check added when search is empty and we try to launch a game in all cases
         if(list.currentGame(gamegrid.currentIndex) !== null){
             storedCollectionGameIndex = gamegrid.currentIndex
@@ -259,7 +259,18 @@ FocusScope {
             id: gamegrid
 
             // Figuring out the aspect ratio for box art
-            property real cellHeightRatio: fakebox.paintedHeight / fakebox.paintedWidth
+            property real previousCellHeightRatio: 1.0 //default value
+            property real cellHeightRatio: {
+                //console.log("fakebox.paintedHeight : " + fakebox.paintedHeight)
+                //console.log("fakebox.paintedWidth : " + fakebox.paintedWidth)
+                //0.0 value for CellHeightRatio can disturb first box calculation
+                //that's why we use previous value calculated or default "1.0" ratio
+                if ((fakebox.paintedHeight) !== 0 && (fakebox.paintedWidth !== 0)){
+                    previousCellHeightRatio = fakebox.paintedHeight / fakebox.paintedWidth
+                }
+                //console.log("cellHeightRatio : " + previousCellHeightRatio)
+                return previousCellHeightRatio
+            }
             property real savedCellHeight: {
                 if (settings.GridThumbnail === "Tall") {
                     return cellWidth / settings.TallRatio;
