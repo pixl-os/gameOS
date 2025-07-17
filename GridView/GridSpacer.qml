@@ -31,11 +31,12 @@ Image {
                 var gamesource = currentCollection.games.get(i);
                 if (Utils.boxArt(gamesource, choosenMedia) !== "")
                 {
-                    //console.log("Utils.boxArt(gamesource) : ", Utils.boxArt(gamesource))
+                    //console.log("fakesource : '" + Utils.boxArt(gamesource, choosenMedia) + "'")
                     return Utils.boxArt(gamesource, choosenMedia);
                 }
             }
         }
+        //console.log("fakesource : ''")
         return "";
     }
 
