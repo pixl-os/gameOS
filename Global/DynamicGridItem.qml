@@ -16,37 +16,10 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import "../utils.js" as Utils
 
 Item {
     id: root
-
-    // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
-    function steamAppID (gameData) {
-        var str = gameData.assets.boxFront.split("header");
-        return str[0];
-    }
-
-    function steamLogo(gameData) {
-        return steamAppID(gameData) + "/logo.png"
-    }
-
-    function logo(data) {
-      if (data !== null) {
-        if (data.assets.boxFront.includes("/header.jpg"))
-          return steamLogo(data);
-        else {
-          if (data.assets.logo !== "")
-            return data.assets.logo;
-          else if (data.assets.wheel !== "")
-            return data.assets.wheel;
-          else if (data.assets.wheelcarbon !== "")
-            return data.assets.wheelcarbon;
-          else if (data.assets.wheelsteel !== "")
-            return data.assets.wheelsteel;
-        }
-      }
-      return "";
-    }
 
     signal activated
     signal highlighted
@@ -54,6 +27,9 @@ Item {
 
     property bool selected
     property var gameData: modelData
+
+    //added to manage case without scrap
+    property var teknoParrotData: gameData && (gameData.summary || gameData.description) ? "" : Utils.teknoParrotJSONData(gameData)
 
 
     // In order to use the retropie icons here we need to do a little collection specific hack
@@ -179,8 +155,10 @@ Item {
             anchors.fill: parent
             anchors.centerIn: parent
             anchors.margins: root.width/10
-            property var logoImage: (gameData && gameData.collections.get(0).shortName === "retropie") ? gameData.assets.boxFront : (gameData.collections.get(0).shortName === "steam") ? logo(gameData) : gameData.assets.logo
-            source: modelData ? logoImage || "" : ""
+            property var logoImage: (gameData && gameData.collections.get(0).shortName === "retropie") ? gameData.assets.boxFront : (gameData.collections.get(0).shortName === "steam") ? Utils.logo(gameData) : gameData.assets.logo
+
+            source: modelData ? (teknoParrotData !== "" ? Utils.teknoParrotIcon(gameData) : (logoImage || "")) : ""
+
             sourceSize: Qt.size(favelogo.width, favelogo.height)
             fillMode: Image.PreserveAspectFit
             asynchronous: true
@@ -228,7 +206,8 @@ Item {
     Text {
         id: title
 
-        text: modelData ? modelData.title : ''
+        text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
+
         color: theme.text
         font {
             family: subtitleFont.name
@@ -253,7 +232,8 @@ Item {
     Text {
         id: platformname
 
-        text: modelData.title
+        text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
+
         anchors { fill: parent; margins: vpx(10) }
         color: "white"
         scale: selected ? 1.1 : 1
