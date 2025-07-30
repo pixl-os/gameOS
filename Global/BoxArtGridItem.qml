@@ -36,7 +36,10 @@ Item {
             if(gameData.collections.get(0).getCoreAt(0) === "teknoparrot"){
                 var path = gameData.files.get(0).path;
                 var words = path.split('/')
-                var romname = words[words.length-1].split('.')[0];
+                //add management of "-" to manage several versions of the same game in the same system
+                //examples naming in this case: 
+                //DO6.tp or DO6-1.tp or DO6-proto.tp or DO6-v25.1.tp
+                var romname = words[words.length-1].split('.')[0].split('-')[0];
                 return "/usr/bin/teknoparrot/Icons/" + romname + ".png";
             }
         }
