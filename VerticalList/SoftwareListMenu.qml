@@ -379,6 +379,11 @@ FocusScope {
             Item {
                 id: delegatecontainer
 
+                property var gameData: modelData
+
+                //added to manage case without scrap
+                property var teknoParrotData: gameData && (gameData.summary || gameData.description) ? "" : Utils.teknoParrotJSONData(gameData)
+
                 width: ListView.view.width
                 height: itemheight
                 property bool selected: ListView.isCurrentItem
@@ -414,7 +419,7 @@ FocusScope {
                     Text {
                         id: gametitle
 
-                        text: modelData.title
+                        text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
 
                         height: parent.height
                         /*anchors {

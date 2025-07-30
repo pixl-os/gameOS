@@ -16,69 +16,18 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import "../utils.js" as Utils
 
 Item {
     id: root
 
-    // NOTE: This is technically duplicated from utils.js but importing that file into every delegate causes crashes
-    function steamAppID (gameData) {
-        var str = gameData.assets.boxFront.split("header");
-        return str[0];
-    }
-
-    function steamBoxArt(gameData) {
-        return steamAppID(gameData) + '/library_600x900_2x.jpg';
-    }
-
-    //function to get icon from teknoparrot if nothing available from scrap
-    function teknoParrotIcon(gameData) {
-        if (gameData){
-            if(gameData.collections.get(0).getCoreAt(0) === "teknoparrot"){
-                var path = gameData.files.get(0).path;
-                var words = path.split('/')
-                //add management of "-" to manage several versions of the same game in the same system
-                //examples naming in this case: 
-                //DO6.tp or DO6-1.tp or DO6-proto.tp or DO6-v25.1.tp
-                var romname = words[words.length-1].split('.')[0].split('-')[0];
-                return "/usr/bin/teknoparrot/Icons/" + romname + ".png";
-            }
-        }
-        return ""
-    }
-
-    function boxArt(data) {
-      if (data !== null) {
-        if (data.assets.boxFront.includes("/header.jpg")) 
-          return steamBoxArt(data);
-        else {
-          if (data.assets.boxFront !== "")
-            return data.assets.boxFront;
-          else if (data.assets.poster !== "")
-            return data.assets.poster;
-          else if (data.assets.banner !== "")
-            return data.assets.banner;
-          else if (data.assets.tile !== "")
-            return data.assets.tile;
-          else if (data.assets.cartridge !== "")
-            return data.assets.cartridge;
-          else if (data.assets.logo !== "")
-            return data.assets.logo;
-          else if (data.assets.wheel !== "")
-            return data.assets.wheel;
-          else if (data.assets.wheelcarbon !== "")
-            return data.assets.wheelcarbon;
-          else if (data.assets.wheelsteel !== "")
-            return data.assets.wheelsteel;
-        }
-        //check and return teknoparrot Icon path
-        return teknoParrotIcon(data);
-      }
-      return "";
-    }
-
     property bool selected
     Behavior on scale { NumberAnimation { duration: 100 } }
     property var gameData
+
+    //added to manage case without scrap
+    property var teknoParrotData: gameData && (gameData.summary || gameData.description) ? "" : Utils.teknoParrotJSONData(gameData)
+
     property int columns: 6
 
     scale: selected ? 1.1 : 1
@@ -109,7 +58,7 @@ Item {
             anchors.fill: parent
             anchors.margins: vpx(2)
             asynchronous: true
-            source: boxArt(gameData)
+            source: Utils.boxArt(gameData)
             sourceSize { width: root.width; height: root.height }
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter
@@ -249,7 +198,8 @@ Item {
     Text {
         id: title
 
-        text: modelData ? modelData.title : ''
+        text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
+
         color: theme.text
         font {
             family: subtitleFont.name
@@ -273,9 +223,10 @@ Item {
     Text {
         id: platformname
 
-        text: modelData.title
+        text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
+
         anchors { fill: parent; margins: vpx(10) }
-        color: "white"
+        color: "red"
         scale: selected ? 1.1 : 1
         Behavior on opacity { NumberAnimation { duration: 100 } }
         font.pixelSize: vpx(18)

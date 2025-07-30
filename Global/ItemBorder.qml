@@ -16,9 +16,15 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import "../utils.js" as Utils
 
 Item {
     id: root
+
+    property var gameData: modelData
+
+    //added to manage case without scrap
+    property var teknoParrotData: gameData && (gameData.summary || gameData.description) ? "" : Utils.teknoParrotJSONData(gameData)
 
     Image {
         id: border
@@ -81,7 +87,8 @@ Item {
         Text {
             id: bubbletitle
 
-            text: modelData.title
+            text: modelData ? (teknoParrotData !== "" ? teknoParrotData.game_name : modelData.title) : ""
+
             color: theme.text
             font {
                 family: subtitleFont.name
