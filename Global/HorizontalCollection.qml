@@ -47,6 +47,15 @@ FocusScope {
         anchors { left: parent.left; leftMargin: vpx(10) }
     }
 
+    onActiveFocusChanged:
+    {
+        if (activeFocus){
+            //to refresh state/event
+            var game = search.currentGame(collectionList.currentIndex);
+            api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+        }
+    }
+
     ListView {
         id: collectionList
 
@@ -69,6 +78,12 @@ FocusScope {
         keyNavigationWraps: true
         
         property int savedIndex: 0
+        onActiveFocusChanged: {
+            //to refresh state/event
+            var game = search.currentGame(collectionList.currentIndex);
+            api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+        }
+
         onFocusChanged: {
             if(detailed_debug) console.log("onFocusChanged - focus : ",focus);
             if (focus){
@@ -122,13 +137,6 @@ FocusScope {
                 choosenMedia: false
                 game: search ? search.currentGame(collectionList.currentIndex) : ""
                 selected: collectionList.focus
-                onGameChanged: {
-                    if(typeof(game) !== "undefined" && game !== null){
-                        if(typeof(game.collections) !== "undefined"){
-                            api.internal.system.notify("collectionbrowsing", game.collections.get(0), game);
-                        }
-                    }
-                }
             }
         }
 

@@ -300,6 +300,12 @@ FocusScope {
             focus: false
             game: currentGame
             embedded: true
+
+            onActiveFocusChanged:{
+                if(!activeFocus){
+                    api.internal.system.notify("gamelistbrowsing", api.collections.get(currentCollectionIndex));
+                }
+            }
         }
     }
 
@@ -401,7 +407,6 @@ FocusScope {
                     visible: selected && !gameview.focus && !headercontainer.focus
 
                 }
-
 
                 // Description
                 PegasusUtils.HorizontalAutoScroll
@@ -615,9 +620,6 @@ FocusScope {
         gameActivated();
         softwarelist.focus = false;
         gameview.focus = true;
-        if(currentGame !== null){
-            api.internal.system.notify("gameviewselected", currentGame.collections.get(0), currentGame);
-        }
     }
 
     Keys.onReleased: {

@@ -789,6 +789,14 @@ FocusScope {
                             logoAnim.start()
                     }
 
+                    onActiveFocusChanged: {
+                        if(activeFocus){
+                            //to refresh state/event
+                            var game = modelData;
+                            api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+                        }
+                    }
+
                     Rectangle {
 
                         anchors.fill: parent
@@ -2170,6 +2178,8 @@ FocusScope {
     {
         //console.log("onActiveFocusChanged : ", activeFocus);
         if (activeFocus){
+            //to init state/event
+            api.internal.system.notify("none");
             previousHelpbarModel = ""; // to force reload for transkation
             previousHelpbarModel = gridviewHelpModel; // the same in case of showcaseview
             currentHelpbarModel = ""; // to force reload for transkation
