@@ -159,14 +159,14 @@ FocusScope {
 
         //reset overlay to avoid to; reuse it for one that doesn't exist
         overlay_exists = false
-		overlay_png_filename_fullpath = "";
+        overlay_png_filename_fullpath = "";
         overlay_cfg_filename_fullpath = "";
         input_overlay_cfg_filename_fullpath = "";
 
         //check if custom overlays exists
         overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
         console.log("overlay_exists_temp : " + overlay_exists_temp)
-		if(overlay_exists_temp !== true){
+        if(overlay_exists_temp !== true){
             //if not found, we retry if exist any without decoration using () or []
             var result = game_filename.split("("); // we search first ( to remove decoration using it
             var result2 = result[0].split("["); // we search first [ to remove decoration using it
@@ -190,24 +190,24 @@ FocusScope {
         else{
             overlay_cfg_filename_fullpath = root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg";
         }
-      //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
-      //console.log("getOverlaysParameters() - overlay_exists_temp : ", overlay_exists_temp);
+        //console.log("getOverlaysParameters() - overlay_cfg_filename_fullpath : ", overlay_cfg_filename_fullpath);
+        //console.log("getOverlaysParameters() - overlay_exists_temp : ", overlay_exists_temp);
         if(overlay_exists_temp === true){
-          //console.log("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'");
+            //console.log("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'");
             aspect_ratio_index = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"aspect_ratio_index\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
-          //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
+            //console.log("getOverlaysParameters() - aspect_ratio_index : ", aspect_ratio_index);
             input_overlay_cfg_filename_fullpath = api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"input_overlay\" | grep -E '/' | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-          //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
+            //console.log("getOverlaysParameters() - input_overlay_cfg_filename_fullpath : ", input_overlay_cfg_filename_fullpath);
             //get path of input_overlay cfg
             var cfgpath = input_overlay_cfg_filename_fullpath;
             var cfgword = cfgpath.split('/');
             var cfg_filename = cfgword[cfgword.length-1];
-          //console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
+            //console.log("getOverlaysParameters() - cfg_filename : ", cfg_filename);
             //use path of input_overlay cfg and png filename
             var overlay0_overlay = api.internal.system.run("cat \"" + input_overlay_cfg_filename_fullpath + "\" | grep -E \"overlay0_overlay\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim(); //to remove " by nothing & trim
-          //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
+            //console.log("getOverlaysParameters() - overlay0_overlay : ", overlay0_overlay);
             overlay_png_filename_fullpath_tmp = input_overlay_cfg_filename_fullpath.replace(cfg_filename,overlay0_overlay);
-          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
+            //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
 
             if(aspect_ratio_index === 23){
                 //get the following parameter in this case
@@ -225,174 +225,176 @@ FocusScope {
                 //optional: check if fullscreen expected details are set
                 video_fullscreen_x = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_x\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
                 video_fullscreen_y = parseInt(api.internal.system.run("cat \"" + overlay_cfg_filename_fullpath + "\" | grep -E \"video_fullscreen_y\" | awk -F '=' '{print $2}'").replace(/\"/g, "").trim()); //to remove " by nothing & trim
+            }
+            else{
+                //arbitrary ones in this case
+                custom_viewport_x = 251
+                custom_viewport_y = 10
+                custom_viewport_width = 1415
+                custom_viewport_height = 1060
+                video_fullscreen_x = 1920
+                video_fullscreen_y = 1080
+            }
+            //size of root
+            //console.log("root.width : ", root.width);
+            //console.log("root.height : ", root.height);
+            //initial values
+            //console.log("initial custom_viewport_x : ", custom_viewport_x);
+            //console.log("initial custom_viewport_y : ", custom_viewport_y);
+            //console.log("initial custom_viewport_height : ", custom_viewport_height);
+            //console.log("initial custom_viewport_width : ", custom_viewport_width);
 
-                //size of root
-          //console.log("root.width : ", root.width);
-          //console.log("root.height : ", root.height);
-                //initial values
-          //console.log("initial custom_viewport_x : ", custom_viewport_x);
-          //console.log("initial custom_viewport_y : ", custom_viewport_y);
-          //console.log("initial custom_viewport_height : ", custom_viewport_height);
-          //console.log("initial custom_viewport_width : ", custom_viewport_width);
+            //variables
+            let initialOverlayRatio;
+            let overlayNewWidth;
+            let OverlayWidthRatio;
 
-                //variables
-                let initialOverlayRatio;
-                let overlayNewWidth;
-                let OverlayWidthRatio;
+            //calculate initial ratio of image
+            let initialImageRatio = custom_viewport_width / custom_viewport_height;
+            //console.log("initial custom viewport Ratio : ",initialImageRatio);
 
-                //calculate initial ratio of image
-                let initialImageRatio = custom_viewport_width / custom_viewport_height;
-              //console.log("initial custom viewport Ratio : ",initialImageRatio);
-
-                //for full screen size available in overlays .cfg files
-                if((video_fullscreen_x > 1) && (video_fullscreen_y > 1)){
-                    //initial ratio overlay in custom (but could be 1080p ou 720p if set like this)
-                    initialOverlayRatio = video_fullscreen_x / video_fullscreen_y;
-                  //console.log("Custom initialOverlayRatio : ",initialOverlayRatio);
-                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
-                    //we start by height and y
-                    custom_viewport_y = Math.ceil(custom_viewport_y * (root.height/video_fullscreen_y));
-                  //console.log("recalculated custom_viewport_y : ",custom_viewport_y);
-                    
-                    custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/video_fullscreen_y));
-                  //console.log("recalculated  custom_viewport_height : ",custom_viewport_height);
-                    
-                    //x is more complex to recalculate
-                    //need to calculate the new size of overlay display (include cut)
-                    overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                  //console.log("overlayNewWidth : ",overlayNewWidth);
-                    OverlayWidthRatio = overlayNewWidth / video_fullscreen_x;
-                }
-                //it's just a tips when we have no info to know really expected image size
-                else if(((custom_viewport_height + custom_viewport_y)  > 720) || ((custom_viewport_width + custom_viewport_x) > 1280)){
-                    //initial ratio overlay in 1080p
-                    initialOverlayRatio = 1920 / 1080;
-                  //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
-                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
-                    //we start by height and y
-                    custom_viewport_y = Math.floor(custom_viewport_y * (root.height/1080));
-                    custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/1080));
-                    //x is more complex to recalculate
-                    //need to calculate the new size of overlay display (include cut)
-                    overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                  //console.log("overlayNewWidth : ",overlayNewWidth);
-                    OverlayWidthRatio = overlayNewWidth / 1920;
-                }
-                else{
-                    //initial ratio overlay in 720p (estimated) in this case
-                    initialOverlayRatio = 1280 / 720;
-                  //console.log("720p initialOverlayRatio : ",initialOverlayRatio);
-                    //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
-                    //we start by height and y
-                    custom_viewport_y = Math.floor(custom_viewport_y * (root.height/720));
-                    custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/720));
-                    //x is more complex to recalculate
-                    //need to calculate the new size of overlay display (include cut)
-                    overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
-                  //console.log("overlayNewWidth : ",overlayNewWidth);
-                    OverlayWidthRatio = overlayNewWidth / 1280;
-                }
-                //we adapt x width and x from height
-                custom_viewport_width = Math.ceil(custom_viewport_height * initialImageRatio);
-              //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
-                custom_viewport_x = Math.floor(custom_viewport_x * OverlayWidthRatio) - Math.ceil((overlayNewWidth - root.width)/2);
-              //console.log("intermediate custom_viewport_x : ",custom_viewport_x);
-              //console.log("intermediate custom_viewport_width : ",custom_viewport_width);
+            //for full screen size available in overlays .cfg files
+            if((video_fullscreen_x > 1) && (video_fullscreen_y > 1)){
+                //initial ratio overlay in custom (but could be 1080p ou 720p if set like this)
+                initialOverlayRatio = video_fullscreen_x / video_fullscreen_y;
+                //console.log("Custom initialOverlayRatio : ",initialOverlayRatio);
+                //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                //we start by height and y
+                custom_viewport_y = Math.ceil(custom_viewport_y * (root.height/video_fullscreen_y));
+                //console.log("recalculated custom_viewport_y : ",custom_viewport_y);
                 
-                //check if custom_viewport is not completely visible (case of 16/10 screen as steamdeck)
-                if(custom_viewport_x < 0){
-                    custom_viewport_x = 0
-                    custom_viewport_width = root.width
-                }
-                //check if custom_viewport is not completely visible (in tate case ?!)
-                if(custom_viewport_y < 0){
-                    custom_viewport_y = 0
-                    custom_viewport_height = root.height
-                }
-              //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
-              //console.log("intermediate custom_viewport_height : ",custom_viewport_height);
-                //method to get ratio "x:y"
-                //ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 input.mp4
-                video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
+                custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/video_fullscreen_y));
+                //console.log("recalculated  custom_viewport_height : ",custom_viewport_height);
+                
+                //x is more complex to recalculate
+                //need to calculate the new size of overlay display (include cut)
+                overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
+                //console.log("overlayNewWidth : ",overlayNewWidth);
+                OverlayWidthRatio = overlayNewWidth / video_fullscreen_x;
+            }
+            //it's just a tips when we have no info to know really expected image size
+            else if(((custom_viewport_height + custom_viewport_y)  > 720) || ((custom_viewport_width + custom_viewport_x) > 1280)){
+                //initial ratio overlay in 1080p
+                initialOverlayRatio = 1920 / 1080;
+                //console.log("1080p initialOverlayRatio : ",initialOverlayRatio);
+                //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                //we start by height and y
+                custom_viewport_y = Math.floor(custom_viewport_y * (root.height/1080));
+                custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/1080));
+                //x is more complex to recalculate
+                //need to calculate the new size of overlay display (include cut)
+                overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
+                //console.log("overlayNewWidth : ",overlayNewWidth);
+                OverlayWidthRatio = overlayNewWidth / 1920;
+            }
+            else{
+                //initial ratio overlay in 720p (estimated) in this case
+                initialOverlayRatio = 1280 / 720;
+                //console.log("720p initialOverlayRatio : ",initialOverlayRatio);
+                //Need to adapt, the overlay is certainly in 1080p and Window size could change (if 720p,1080p or custom as embedded case)
+                //we start by height and y
+                custom_viewport_y = Math.floor(custom_viewport_y * (root.height/720));
+                custom_viewport_height = Math.ceil(custom_viewport_height * (root.height/720));
+                //x is more complex to recalculate
+                //need to calculate the new size of overlay display (include cut)
+                overlayNewWidth = Math.ceil(root.height * initialOverlayRatio);
+                //console.log("overlayNewWidth : ",overlayNewWidth);
+                OverlayWidthRatio = overlayNewWidth / 1280;
+            }
+            //we adapt x width and x from height
+            custom_viewport_width = Math.ceil(custom_viewport_height * initialImageRatio);
+            //console.log("OverlayWidthRatio : ",OverlayWidthRatio);
+            custom_viewport_x = Math.floor(custom_viewport_x * OverlayWidthRatio) - Math.ceil((overlayNewWidth - root.width)/2);
+            //console.log("intermediate custom_viewport_x : ",custom_viewport_x);
+            //console.log("intermediate custom_viewport_width : ",custom_viewport_width);
+            
+            //check if custom_viewport is not completely visible (case of 16/10 screen as steamdeck)
+            if(custom_viewport_x < 0){
+                custom_viewport_x = 0
+                custom_viewport_width = root.width
+            }
+            //check if custom_viewport is not completely visible (in tate case ?!)
+            if(custom_viewport_y < 0){
+                custom_viewport_y = 0
+                custom_viewport_height = root.height
+            }
+            //console.log("intermediate custom_viewport_y : ",custom_viewport_y);
+            //console.log("intermediate custom_viewport_height : ",custom_viewport_height);
+            //method to get ratio "x:y"
+            //ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 input.mp4
+            video_ratio = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=display_aspect_ratio -of default=noprint_wrappers=1:nokey=1 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
 
-                //previous method to get resolution "lxh"
-                //ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
-                //video_resolution = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
+            //previous method to get resolution "lxh"
+            //ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
+            //video_resolution = api.internal.system.run("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 '" + game.assets.videos[0] + "' 2>&1 | tr -d '\\n' | tr -d '\\r'");
 
-                //new method to get really detect black bands in a video if exists
+            //new method to get really detect black bands in a video if exists
                 //timeout 0.2 ffmpeg -i "/recalbox/share/roms/easyrpg/media/videos/ActRazer/ActRazer.mp4" -vframes 10 -vf cropdetect -f null - 2>&1 | grep "crop=" | tail -n 1 | awk -F'crop=' '{print $2}'
                 video_view = api.internal.system.run("timeout 0.2 ffmpeg -i '" + decodeURIComponent(game.assets.videos[0]) + "' -vframes 60 -vf cropdetect -f null - 2>&1 | grep 'crop=' | tail -n 1 | awk -F'crop=' '{print $2}' | tr -d '\\n' | tr -d '\\r'");
                 //to do anything only format is valid to avoid issues
                 if(isValidVideoViewFormat(video_view)){
-                    //to get ratio of video view (video without black bands if exists)
-                    var video_view_width = parseInt(video_view.split(':')[0]);
-                    var video_view_height = parseInt(video_view.split(':')[1]);
-                    var video_view_x = parseInt(video_view.split(':')[2]);
-                    var video_view_y = parseInt(video_view.split(':')[3]);
-                        
-                    //var vr_video = video_ratio_width / video_ratio_height
-                    var vr_video_view = video_view_width / video_view_height
-                    var vr_viewport = parseInt(custom_viewport_width) / parseInt(custom_viewport_height)
+                //to get ratio of video view (video without black bands if exists)
+                var video_view_width = parseInt(video_view.split(':')[0]);
+                var video_view_height = parseInt(video_view.split(':')[1]);
+                var video_view_x = parseInt(video_view.split(':')[2]);
+                var video_view_y = parseInt(video_view.split(':')[3]);
                     
-                    //ratio between video and overlay
-                    var scale_overlay_vs_video_width = parseInt(custom_viewport_width) / video_view_width
-                    var scale_overlay_vs_video_height = parseInt(custom_viewport_height) / video_view_height
-                    
-                    //value by default for video ratio calculated
-                    var vr_video_ratio = vr_video_view;
-                    if(isValidVideoRatioFormat(video_ratio)){
-                        //calculate ratio from video_ratio also
-                        vr_video_ratio = parseFloat(parseInt(video_ratio.split(':')[0]) / parseInt(video_ratio.split(':')[1]));
-                    }
-                    
-                    // if video is really in an other "bigger" ratio than overlay viewport
-                    // example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
-                    //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
-                    if ((Math.abs(vr_video_view - initialImageRatio) > 0.35) && (Math.abs(vr_video_ratio - initialImageRatio) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
-                        //reset overlay to avoid to display overlay because ratio is too different
-                        overlay_png_filename_fullpath_tmp = "";
-                        overlay_cfg_filename_fullpath = "";
-                        input_overlay_cfg_filename_fullpath = "";
-                        custom_viewport_y = 0
-                        custom_viewport_x = 0
-                        custom_viewport_height = root.height
-                        custom_viewport_width = root.width
-                    }
-                    else {
-                        //new method to recenter video
-                        custom_viewport_x = custom_viewport_x - Math.floor(video_view_x * scale_overlay_vs_video_width)
-                        custom_viewport_y = custom_viewport_y - Math.floor(video_view_y * scale_overlay_vs_video_height)
-                        custom_viewport_width = Math.ceil(video_view_width * scale_overlay_vs_video_width) + (Math.ceil(video_view_x * scale_overlay_vs_video_width) * 2)
-                        custom_viewport_height = Math.ceil(video_view_height * scale_overlay_vs_video_height) + (Math.ceil(video_view_y * scale_overlay_vs_video_height) * 2)
-                    }
+                //var vr_video = video_ratio_width / video_ratio_height
+                var vr_video_view = video_view_width / video_view_height
+                var vr_viewport = parseInt(custom_viewport_width) / parseInt(custom_viewport_height)
+                
+                //ratio between video and overlay
+                var scale_overlay_vs_video_width = parseInt(custom_viewport_width) / video_view_width
+                var scale_overlay_vs_video_height = parseInt(custom_viewport_height) / video_view_height
+                
+                //value by default for video ratio calculated
+                var vr_video_ratio = vr_video_view;
+                if(isValidVideoRatioFormat(video_ratio)){
+                    //calculate ratio from video_ratio also
+                    vr_video_ratio = parseFloat(parseInt(video_ratio.split(':')[0]) / parseInt(video_ratio.split(':')[1]));
                 }
-          //console.log("video_view : ", video_view);
-          //console.log("video_ratio : ", video_ratio);
-          //console.log("vr_video_view : ", vr_video_view);
-          //console.log("vr_viewport : ", vr_viewport);
-          //console.log("vr_video_ratio : ", vr_video_ratio);
-          //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
-          //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
-          //console.log("new custom_viewport_x : ", custom_viewport_x);
-          //console.log("new custom_viewport_y : ", custom_viewport_y);
-          //console.log("new custom_viewport_height : ", custom_viewport_height);
-          //console.log("new custom_viewport_width : ", custom_viewport_width);
-          //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
-          //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
+                
+                // if video is really in an other "bigger" ratio than overlay viewport
+                // example: video displayed is 16/9 or 16/10 really versus 5/4 or 4/3 for viewport from overlay
+                //console.log("Math.abs(vr_video_view - vr_viewport) : " + Math.abs(vr_video_view - vr_viewport))
+                if ((Math.abs(vr_video_view - initialImageRatio) > 0.35) && (Math.abs(vr_video_ratio - initialImageRatio) > 0.35) && video_ratio !== "4:3" && video_ratio !== "5:4"){
+                    //reset overlay to avoid to display overlay because ratio is too different
+                    overlay_png_filename_fullpath_tmp = "";
+                    overlay_cfg_filename_fullpath = "";
+                    input_overlay_cfg_filename_fullpath = "";
+                    custom_viewport_y = 0
+                    custom_viewport_x = 0
+                    custom_viewport_height = root.height
+                    custom_viewport_width = root.width
+                }
+                else {
+                    //new method to recenter video
+                    custom_viewport_x = custom_viewport_x - Math.floor(video_view_x * scale_overlay_vs_video_width)
+                    custom_viewport_y = custom_viewport_y - Math.floor(video_view_y * scale_overlay_vs_video_height)
+                    custom_viewport_width = Math.ceil(video_view_width * scale_overlay_vs_video_width) + (Math.ceil(video_view_x * scale_overlay_vs_video_width) * 2)
+                    custom_viewport_height = Math.ceil(video_view_height * scale_overlay_vs_video_height) + (Math.ceil(video_view_y * scale_overlay_vs_video_height) * 2)
+                }
             }
-            else{
-                custom_viewport_x = 0
-                custom_viewport_y = 0
-                custom_viewport_width = 0
-                custom_viewport_height = 0
-            }
+        //console.log("video_view : ", video_view);
+        //console.log("video_ratio : ", video_ratio);
+        //console.log("vr_video_view : ", vr_video_view);
+        //console.log("vr_viewport : ", vr_viewport);
+        //console.log("vr_video_ratio : ", vr_video_ratio);
+        //console.log("scale_overlay_vs_video_width : ", scale_overlay_vs_video_width);
+        //console.log("scale_overlay_vs_video_height : ", scale_overlay_vs_video_height);
+        //console.log("new custom_viewport_x : ", custom_viewport_x);
+        //console.log("new custom_viewport_y : ", custom_viewport_y);
+        //console.log("new custom_viewport_height : ", custom_viewport_height);
+        //console.log("new custom_viewport_width : ", custom_viewport_width);
+        //console.log("game.assets.videos[0] : ", game.assets.videos[0]);
+        //console.log("getOverlaysParameters() - overlay_png_filename_fullpath_tmp : ", overlay_png_filename_fullpath_tmp);
         }
       //console.log("getOverlaysParameters() - custom_viewport_x : ", custom_viewport_x);
       //console.log("getOverlaysParameters() - custom_viewport_y : ", custom_viewport_y);
       //console.log("getOverlaysParameters() - custom_viewport_width : ", custom_viewport_width);
       //console.log("getOverlaysParameters() - custom_viewport_height : ", custom_viewport_height);
-	  overlay_png_filename_fullpath = overlay_png_filename_fullpath_tmp;
-	  overlay_exists = overlay_exists_temp;
+      overlay_png_filename_fullpath = overlay_png_filename_fullpath_tmp;
+      overlay_exists = overlay_exists_temp;
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
@@ -630,7 +632,7 @@ FocusScope {
         repeat: false
         interval: 1000
         onTriggered: {
-			if(detailed_debug) console.log("GameView.stopvideo");
+            if(detailed_debug) console.log("GameView.stopvideo");
             videoPreviewLoader.sourceComponent = undefined;
             videoDelay.stop();
             fadescreenshot.stop();
@@ -677,64 +679,64 @@ FocusScope {
                 loops: MediaPlayer.Infinite
                 autoPlay: true
 
-				//28/04/2025: as for ItemHighlight from Collections, a workaround added to reload/restart video in case of issue and to avoid crash/stuck video replay
-				// it seems linked to CPU and/or QT framework version... could be usefull to keep in future.
-				property int previousPosition: -1
-				property int counterCheckPosition: 0
-				onPositionChanged: {
-					if(detailed_debug){
-						console.log("GameView.videocomponent - seekable: ",seekable);
-						console.log("GameView.videocomponent - loops: ",loops);
-						console.log("GameView.videocomponent - position: ",position);
-						console.log("GameView.videocomponent - previousPosition: ",previousPosition);
-						console.log("GameView.videocomponent - counterCheckPosition: ",counterCheckPosition);
-					}
-					//do something only if video is completed loaded
-					if(seekable === true){
-						//check if video stuck at start (tentative to force seek to 0 first)
-						if((previousPosition > position) && (position === 0)){
-							//restart if stuck after 3 positions checks
-							if(counterCheckPosition >= 2){
-								console.log("GameView.videocomponent - force restart video (0)");
-								previousPosition = -1;
-								counterCheckPosition = 0;
-								//seek video to 0
-								seek(0);
-							}
-							else counterCheckPosition += 1;
-						}
-						//in case  of video crash at start (tentative to force seek didn't work - stay blocked at 0)
-						else if((previousPosition <= position) && (position === 0)){
-							//reload if stuck after 3 positions checks
-							if(counterCheckPosition >= 2){
-								console.log("GameView.videocomponent - force reload video (1)");
-								previousPosition = -1;
-								counterCheckPosition = 0;
-								//reload video
-								videoPreviewLoader.sourceComponent = undefined;
-								videoPreviewLoader.sourceComponent = videoPreviewWrapper;
-							}
-							else counterCheckPosition += 1;
-						}
-						//check if video stuck at during playing - force reload imediatelly
-						else if((previousPosition === position) && (position !== 0)){
-							//restart if stuck after 3 positions checks
-							if(counterCheckPosition >= 2){
-								console.log("GameView.videocomponent - force reload video (2)");
-								previousPosition = -1;
-								counterCheckPosition = 0;
-								//reload video
-								videoPreviewLoader.sourceComponent = undefined;
-								videoPreviewLoader.sourceComponent = videoPreviewWrapper;
-							}
-							else counterCheckPosition += 1;
-						}
-						else{
-							previousPosition = position;
-							if (position !== 0) counterCheckPosition = 0;
-						}
-					}
-				}
+                //28/04/2025: as for ItemHighlight from Collections, a workaround added to reload/restart video in case of issue and to avoid crash/stuck video replay
+                // it seems linked to CPU and/or QT framework version... could be usefull to keep in future.
+                property int previousPosition: -1
+                property int counterCheckPosition: 0
+                onPositionChanged: {
+                    if(detailed_debug){
+                        console.log("GameView.videocomponent - seekable: ",seekable);
+                        console.log("GameView.videocomponent - loops: ",loops);
+                        console.log("GameView.videocomponent - position: ",position);
+                        console.log("GameView.videocomponent - previousPosition: ",previousPosition);
+                        console.log("GameView.videocomponent - counterCheckPosition: ",counterCheckPosition);
+                    }
+                    //do something only if video is completed loaded
+                    if(seekable === true){
+                        //check if video stuck at start (tentative to force seek to 0 first)
+                        if((previousPosition > position) && (position === 0)){
+                            //restart if stuck after 3 positions checks
+                            if(counterCheckPosition >= 2){
+                                console.log("GameView.videocomponent - force restart video (0)");
+                                previousPosition = -1;
+                                counterCheckPosition = 0;
+                                //seek video to 0
+                                seek(0);
+                            }
+                            else counterCheckPosition += 1;
+                        }
+                        //in case  of video crash at start (tentative to force seek didn't work - stay blocked at 0)
+                        else if((previousPosition <= position) && (position === 0)){
+                            //reload if stuck after 3 positions checks
+                            if(counterCheckPosition >= 2){
+                                console.log("GameView.videocomponent - force reload video (1)");
+                                previousPosition = -1;
+                                counterCheckPosition = 0;
+                                //reload video
+                                videoPreviewLoader.sourceComponent = undefined;
+                                videoPreviewLoader.sourceComponent = videoPreviewWrapper;
+                            }
+                            else counterCheckPosition += 1;
+                        }
+                        //check if video stuck at during playing - force reload imediatelly
+                        else if((previousPosition === position) && (position !== 0)){
+                            //restart if stuck after 3 positions checks
+                            if(counterCheckPosition >= 2){
+                                console.log("GameView.videocomponent - force reload video (2)");
+                                previousPosition = -1;
+                                counterCheckPosition = 0;
+                                //reload video
+                                videoPreviewLoader.sourceComponent = undefined;
+                                videoPreviewLoader.sourceComponent = videoPreviewWrapper;
+                            }
+                            else counterCheckPosition += 1;
+                        }
+                        else{
+                            previousPosition = position;
+                            if (position !== 0) counterCheckPosition = 0;
+                        }
+                    }
+                }
             }
 
             // Scanlines
@@ -747,8 +749,8 @@ FocusScope {
                 opacity: 0.2
                 visible: !iamsteam && (settings.ShowScanlines === "Yes")
             }
-			
-			//overlay
+            
+            //overlay
             Image {
                 id: overlaycomponent
                 property bool videoExists: game ? game.assets.videos.length : false
