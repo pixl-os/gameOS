@@ -724,8 +724,8 @@ FocusScope {
 
         // Push the new game
         if (game !== null){
-            currentGame = game;
             api.internal.system.notify("gameviewselected", game.collections.get(0), game);
+            currentGame = game;
             //console.log("gameDetails - new currentGame.title:", currentGame.title);
         }
         

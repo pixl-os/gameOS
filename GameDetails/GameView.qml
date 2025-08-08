@@ -48,8 +48,6 @@ FocusScope {
         if(typeof(game) !== "undefined"){
             loadGameDetailsSettings(game.collections.get(0).shortName);
             canPlayVideo = ((settings.VideoPreview === "Yes") && (appWindow.activeFocusItem !== null)) ? true : false;
-            //state to confirm that game a game is selected
-            api.internal.system.notify("gameviewselected", game.collections.get(0), game);
         }
     }
 
@@ -1788,7 +1786,9 @@ FocusScope {
     onActiveFocusChanged:
     {
         if (activeFocus){
-            currentHelpbarModel = ""; // to force reload for transkation
+            //state to confirm that game a game is selected
+            api.internal.system.notify("gameviewselected", root.game.collections.get(0), root.game);
+            currentHelpbarModel = ""; // to force reload for translation
             currentHelpbarModel = gameviewHelpModel;
         }
     }
