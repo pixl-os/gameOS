@@ -827,6 +827,10 @@ FocusScope {
     ListModel {
         id: verticalListHelpModel
         ListElement {
+            name: qsTr("System Menu")
+            button: "mainMenu"
+        }
+        ListElement {
             name: qsTr("Back")
             button: "cancel"
         }

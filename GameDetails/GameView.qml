@@ -1763,7 +1763,10 @@ FocusScope {
     // Helpbar buttons
     ListModel {
         id: gameviewHelpModel
-
+        ListElement {
+            name: qsTr("Game Menu")
+            button: "mainMenu"
+        }
         ListElement {
             name: qsTr("Back")
             button: "cancel"
