@@ -621,7 +621,10 @@ FocusScope {
     // Helpbar buttons
     ListModel {
         id: gridviewHelpModel
-
+        ListElement {
+            name: qsTr("System Menu")
+            button: "mainMenu"
+        }
         ListElement {
             name: qsTr("Back")
             button: "cancel"
