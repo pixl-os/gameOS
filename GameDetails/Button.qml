@@ -23,6 +23,7 @@ FocusScope {
     property alias text: buttonlabel.text
     property alias icon: buttonicon.source
     property alias iconRotation: iconRotation
+    property alias flag: buttonflag.source
 
     property alias buttonWidth: container.width
     property real buttonMargin: vpx(25)
@@ -68,6 +69,21 @@ FocusScope {
                 to: 360;
                 duration: 500
                 running: false
+            }
+
+            Image {
+                id: buttonflag
+
+                source: ""
+                width: parent.height
+                height: parent.height
+                fillMode: Image.PreserveAspectFit
+                asynchronous: true
+                opacity: source !== "" ? 1 : 0
+                Behavior on opacity { NumberAnimation { duration: 100 } }
+                scale: selected ? 1.2 : 1
+                Behavior on scale { NumberAnimation { duration: 100 } }
+                anchors { left: parent.right; bottom: parent.top}
             }
         }
         

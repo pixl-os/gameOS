@@ -1331,7 +1331,6 @@ FocusScope {
             id: button3
 
             property string buttonText: game && game.favorite ? qsTr("Unfavorite") + api.tr : qsTr("Add favorite") + api.tr
-            //text: buttonText
             icon: favIcon
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
@@ -1341,6 +1340,33 @@ FocusScope {
                     sfxToggle.play();
                     game.favorite = !game.favorite;
                 } else {
+                    sfxNav.play();
+                    menu.currentIndex = ObjectModel.index;
+                }
+        }
+
+        Button {
+            id: buttonGameSettings
+
+            icon: "../assets/images/settingsicon.svg"
+            flag: {
+                //check if ovveride exists
+                var override_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".recalbox.conf\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
+                console.log("override_exists : " + override_exists);
+                if(override_exists === "true"){
+                    return "../assets/images/icon_exclamation_green.svg";
+                }
+                else return "";
+            }
+            height: parent.height
+            selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
+            onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
+            onActivated:
+                if (selected) {
+                    sfxToggle.play();
+                    gameSettings(game.collections.get(0),game)
+                }
+                else {
                     sfxNav.play();
                     menu.currentIndex = ObjectModel.index;
                 }
