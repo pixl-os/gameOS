@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file (focus on ch
 ## [pixL-master] - 2025-xx-xx - v1.33
 - logo:
     - Add new Jaguar-CD system logos (black, carbon, color, steel, white)
+	- add logo teknoparrot for future use ;-)
+	- add taito type x also (x+, x0, x2, x3, x4) - color only for the moment
+	- show round "beta" logo only when we select system from main view
+	- add color logos for 4 teknoparrot sub systems (lindbergh, nesicaxlive, ringedge, ringwide, namcoes3)
 
+- fixes:
+	- fix gridview spacer linked to old pixL issue #6
+	
+	- use icons of teknoparrot included in pixL OS + display details (if no scrap)
+	- use json metadata of teknoparrot included in pixL OS (if no scrap)
+	- feature to manage when we have several version of any game in the same directory for teknoparrot games
+	- management of  "notify" for group, collection, system, grid, vertical list and gameview for state/userscripts from Pegasus-fe
+	- tentative to well resize video when "black" area detected for overlays without viewport/fullscreen determined
+	- update to display now "start" button in help for system and game menus
+	- add new button in gameview for game menu and flag when override exist
 ## [pixL-master] - 2025-05-08 - v1.32
 - fixes:
 	- fix gameview to add new way to calculate and check video ratio
