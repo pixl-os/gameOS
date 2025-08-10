@@ -76,7 +76,8 @@ DISTFILES += \
     assets/fonts/SourceSansPro-Bold.ttf \
     assets/images/background.jpg \
     assets/images/battery-charging-white.svg \
-    assets/images/battery-empty-white.svg \    
+    assets/images/battery-empty-white.svg \
+    assets/images/icon_exclamation_green.svg \
     assets/images/beta.png \
     assets/images/borderimage.gif \
     assets/images/controller/0-arcade.png \
