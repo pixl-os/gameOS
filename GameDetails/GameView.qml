@@ -163,7 +163,7 @@ FocusScope {
 
         //check if custom overlays exists
         overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
-        console.log("overlay_exists_temp : " + overlay_exists_temp)
+        //console.log("overlay_exists_temp : " + overlay_exists_temp)
         if(overlay_exists_temp !== true){
             //if not found, we retry if exist any without decoration using () or []
             var result = game_filename.split("("); // we search first ( to remove decoration using it
@@ -171,14 +171,14 @@ FocusScope {
             game_filename = result2[0].trim(); //we use trim() to remove space at the begin and end of the string
             game_filename = game_filename + "." + game_fileextension // we add extension in this case also as done usually
             overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game_filename + ".cfg\" && echo \"true\"");
-            console.log("overlay_exists_temp : " + overlay_exists_temp)
+            //console.log("overlay_exists_temp : " + overlay_exists_temp)
         }
 
         if(overlay_exists_temp !== true){
             //check if system overlays exists
-            console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
+            //console.log("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
             overlay_exists_temp = api.internal.system.run("test -f \"" + root.overlaySource + "/" + game.collections.get(0).shortName + "/" + game.collections.get(0).shortName + ".cfg\" && echo \"true\"");
-            console.log("overlay_exists_temp : " + overlay_exists_temp)
+            //console.log("overlay_exists_temp : " + overlay_exists_temp)
             if(overlay_exists_temp === true){
                 // to know that system overlay is selected finally
                 system_overlay_selected = true;
@@ -695,7 +695,7 @@ FocusScope {
                         if((previousPosition > position) && (position === 0)){
                             //restart if stuck after 3 positions checks
                             if(counterCheckPosition >= 2){
-                                console.log("GameView.videocomponent - force restart video (0)");
+                                //console.log("GameView.videocomponent - force restart video (0)");
                                 previousPosition = -1;
                                 counterCheckPosition = 0;
                                 //seek video to 0
@@ -707,7 +707,7 @@ FocusScope {
                         else if((previousPosition <= position) && (position === 0)){
                             //reload if stuck after 3 positions checks
                             if(counterCheckPosition >= 2){
-                                console.log("GameView.videocomponent - force reload video (1)");
+                                //console.log("GameView.videocomponent - force reload video (1)");
                                 previousPosition = -1;
                                 counterCheckPosition = 0;
                                 //reload video
@@ -720,7 +720,7 @@ FocusScope {
                         else if((previousPosition === position) && (position !== 0)){
                             //restart if stuck after 3 positions checks
                             if(counterCheckPosition >= 2){
-                                console.log("GameView.videocomponent - force reload video (2)");
+                                //console.log("GameView.videocomponent - force reload video (2)");
                                 previousPosition = -1;
                                 counterCheckPosition = 0;
                                 //reload video
@@ -1352,7 +1352,7 @@ FocusScope {
             flag: {
                 //check if ovveride exists
                 var override_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".recalbox.conf\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
-                console.log("override_exists : " + override_exists);
+                //console.log("override_exists : " + override_exists);
                 if(override_exists === "true"){
                     return "../assets/images/icon_exclamation_green.svg";
                 }
