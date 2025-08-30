@@ -396,7 +396,7 @@ FocusScope {
     }
 
     ListPublisher { id: publisherCollection; publisher: game && game.publisher ? game.publisher : ""; max: 10; enabled: embedded ? false : true }
-    ListGenre { id: genreCollection; genre: game ? game.genreList[0] : ""; max: 10; enabled: embedded ? false : true }
+    ListGenre { id: genreCollection; genre: ((typeof(game) !== "undefined") && (game !== null)) && (typeof(game.genreList[0]) !== "undefined") ? game.genreList[0] : ""; max: 10; enabled: embedded ? false : true }
 
     //function used by mediaArray() to add only new assets in mediaList
     function addNewAssetOnly(asset,mediaList){
@@ -1592,7 +1592,7 @@ FocusScope {
             itemHeight: itemWidth / settings.TallRatio;
             height: itemHeight + vpx(40) + globalMargin
 
-            title: game ? qsTr("More games of") + " " + game.genreList[0].toLowerCase() + api.tr  : ""
+            title: ((typeof(game) !== "undefined") && (game !== null) && (typeof(game.genreList[0]) !== "undefined")) ? qsTr("More games of") + " " + game.genreList[0].toLowerCase() + api.tr  : ""
             search: collection
 
             focus: selected
