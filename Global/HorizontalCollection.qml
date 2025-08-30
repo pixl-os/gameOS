@@ -50,9 +50,13 @@ FocusScope {
     onActiveFocusChanged:
     {
         if (activeFocus){
-            //to refresh state/event
-            var game = search.currentGame(collectionList.currentIndex);
-            api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+            if ((typeof(search) !== "undefined") && (search !== null)){
+                //to refresh state/event
+                var game = search.currentGame(collectionList.currentIndex);
+                if ((typeof(game) !== "undefined") && (game !== null)){
+                    api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+                }
+            }
         }
     }
 
@@ -79,9 +83,13 @@ FocusScope {
         
         property int savedIndex: 0
         onActiveFocusChanged: {
-            //to refresh state/event
-            var game = search.currentGame(collectionList.currentIndex);
-            api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+            if ((typeof(search) !== "undefined") && (search !== null)){
+                //to refresh state/event
+                var game = search.currentGame(collectionList.currentIndex);
+                if ((typeof(game) !== "undefined") && (game !== null)){
+                    api.internal.system.notify("collectionbrowsing",game.collections.get(0), game);
+                }
+            }
         }
 
         onFocusChanged: {
