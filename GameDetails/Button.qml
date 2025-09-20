@@ -23,7 +23,10 @@ FocusScope {
     property alias text: buttonlabel.text
     property alias icon: buttonicon.source
     property alias iconRotation: iconRotation
-    property alias flag: buttonflag.source
+    property alias flagTopRight: buttonflag.source
+    property alias flagTopRightLabel: buttonflaglabel.text
+    property alias flagBottomRight: buttonflag2.source
+    property alias flagBottomRightLabel: buttonflag2label.text
 
     property alias buttonWidth: container.width
     property real buttonMargin: vpx(25)
@@ -70,23 +73,62 @@ FocusScope {
                 duration: 500
                 running: false
             }
+        }
 
-            Image {
-                id: buttonflag
+        Image {
+            id: buttonflag
 
-                source: ""
-                width: parent.height
-                height: parent.height
-                fillMode: Image.PreserveAspectFit
-                asynchronous: true
-                opacity: source !== "" ? 1 : 0
-                Behavior on opacity { NumberAnimation { duration: 100 } }
-                scale: selected ? 1.2 : 1
-                Behavior on scale { NumberAnimation { duration: 100 } }
-                anchors { left: parent.right; bottom: parent.top}
+            source: ""
+            width: parent.height/3
+            height: parent.height/3
+            fillMode: Image.PreserveAspectFit
+            asynchronous: true
+            opacity: source !== "" ? 1 : 0
+            Behavior on opacity { NumberAnimation { duration: 100 } }
+            scale: selected ? 1.2 : 1
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            anchors { horizontalCenterOffset: -vpx(5);
+                      horizontalCenter: parent.right;
+                      verticalCenterOffset: vpx(5);
+                      verticalCenter:  parent.top}
+            Text {
+                id: buttonflaglabel
+                font.family: subtitleFont.name
+                font.pixelSize: vpx(8)
+                font.bold: false
+                color: theme.text
+                anchors { bottom: parent.top; bottomMargin: vpx(0) }
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
-        
+
+        Image {
+            id: buttonflag2
+
+            source: ""
+            width: parent.height/3
+            height: parent.height/3
+            fillMode: Image.PreserveAspectFit
+            asynchronous: true
+            opacity: source !== "" ? 1 : 0
+            Behavior on opacity { NumberAnimation { duration: 100 } }
+            scale: selected ? 1.2 : 1
+            Behavior on scale { NumberAnimation { duration: 100 } }
+            anchors { horizontalCenterOffset: - vpx(5);
+                      horizontalCenter: parent.right;
+                      verticalCenterOffset: - vpx(5);
+                      verticalCenter: parent.bottom}
+            Text {
+                id: buttonflag2label
+                font.family: subtitleFont.name
+                font.pixelSize: vpx(8)
+                font.bold: false
+                color: theme.text
+                anchors { bottom: parent.bottom; bottomMargin: vpx(-10) }
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+
         Text {
             id: buttonlabel
 

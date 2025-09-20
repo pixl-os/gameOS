@@ -132,7 +132,9 @@ DISTFILES += \
     assets/images/icon_cup.svg \
     assets/images/icon_details.svg \
     assets/images/icon_down.png \
+    assets/images/icon_file.png \
     assets/images/icon_heart.svg \
+    assets/images/icon_keyboard.png \
     assets/images/icon_manual.png \
     assets/images/icon_mediaplayer.svg \
     assets/images/icon_play.svg \
