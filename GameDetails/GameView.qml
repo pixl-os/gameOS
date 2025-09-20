@@ -1349,15 +1349,36 @@ FocusScope {
             id: buttonGameSettings
 
             icon: "../assets/images/settingsicon.svg"
-            flag: {
-                //check if ovveride exists
+
+            flagTopRight: {
+                //check if override exists
                 var override_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".recalbox.conf\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
                 //console.log("override_exists : " + override_exists);
                 if(override_exists === "true"){
-                    return "../assets/images/icon_exclamation_green.svg";
+                    flagTopRightLabel = ".conf";
+                    return "../assets/images/icon_file.png";
                 }
                 else return "";
             }
+
+            flagBottomRight: {
+                //check if padtokey file exists (.p2k.cfg)
+                var p2k_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".p2k.cfg\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
+                //check if evmapy key file exists (.keys)
+                var keys_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".keys\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
+                //console.log("override_exists : " + override_exists);
+                //console.log("key_exists : " + key_exists);
+                if(p2k_exists === "true"){
+                    flagBottomRightLabel = ".p2k.cfg";
+                    return "../assets/images/icon_keyboard.png";
+                }
+                else if(keys_exists === "true"){
+                    flagBottomRightLabel = ".keys";
+                    return "../assets/images/icon_keyboard.svg";;
+                }
+                else return "";
+            }
+
             height: parent.height
             selected: ListView.isCurrentItem && menu.focus && (root.embedded ? root.focus : true)
             onHighlighted: { menu.currentIndex = ObjectModel.index; content.currentIndex = 0; }
