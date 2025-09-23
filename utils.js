@@ -361,7 +361,7 @@ function teknoParrotIcon(gameData) {
             //examples naming in this case: 
             //DO6.tp or DO6-1.tp or DO6-proto.tp or DO6-v25.1.tp
             var romname = words[words.length-1].split('.')[0].split('-')[0];
-            return "/usr/bin/teknoparrot/Icons/" + romname + ".png";
+            return "file:///usr/bin/teknoparrot/Icons/" + romname + ".png";
         }
     }
     return ""
