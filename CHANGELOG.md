@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
+## [pixL-master] - 2025-xx-xx - v1.33
+- logo:
+    - Add new Jaguar-CD system logos (black, carbon, color, steel, white)
+
 ## [pixL-master] - 2025-05-08 - v1.32
 - fixes:
 	- fix gameview to add new way to calculate and check video ratio
