@@ -1808,25 +1808,32 @@ FocusScope {
     // Helpbar buttons
     ListModel {
         id: gameviewHelpModel
-        ListElement {
-            name: qsTr("Game Menu")
-            button: "mainMenu"
-        }
-        ListElement {
-            name: qsTr("Back")
-            button: "cancel"
-        }
-        ListElement {
-            name: qsTr("Toggle favorite")
-            button: "details"
-        }
-        ListElement {
-            name: qsTr("Netplay")
-            button: "filters"
-        }
-        ListElement {
-            name: qsTr("Launch")
-            button: "accept"
+        // 1. Use Component.onCompleted to execute the dynamic logic once
+        //    the component (the ListModel) is ready.
+        Component.onCompleted: {
+            // 2. Determine the dynamic 'name' value outside of ListElement
+            var buttonName = api.internal.recalbox.getBoolParameter("pegasus.theme.use.start.game.menu", false) ? qsTr("Game Menu") : qsTr("Main Menu");
+            // 3. Append the element to the model using the calculated value
+            gameviewHelpModel.append({
+                name: buttonName,
+                button: "mainMenu"
+            });
+            gameviewHelpModel.append({
+                name: qsTr("Back"),
+                button: "cancel"
+            });
+            gameviewHelpModel.append({
+                name: qsTr("Toggle favorite"),
+                button: "details"
+            });
+            gameviewHelpModel.append({
+                name: qsTr("Netplay"),
+                button: "filters"
+            });
+            gameviewHelpModel.append({
+                name: qsTr("Launch"),
+                button: "accept"
+            });
         }
     }
 

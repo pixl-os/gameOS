@@ -828,29 +828,36 @@ FocusScope {
     // Helpbar buttons
     ListModel {
         id: verticalListHelpModel
-        ListElement {
-            name: qsTr("System Menu")
-            button: "mainMenu"
-        }
-        ListElement {
-            name: qsTr("Back")
+        // 1. Use Component.onCompleted to execute the dynamic logic once
+        //    the component (the ListModel) is ready.
+        Component.onCompleted: {
+            // 2. Determine the dynamic 'name' value outside of ListElement
+            var buttonName = api.internal.recalbox.getBoolParameter("pegasus.theme.use.start.system.menu", true) ? qsTr("System Menu") : qsTr("Main Menu");
+            // 3. Append the element to the model using the calculated value
+            verticalListHelpModel.append({
+                name: buttonName,
+                button: "mainMenu"
+            });
+            verticalListHelpModel.append({
+            name: qsTr("Back"),
             button: "cancel"
-        }
-        ListElement {
-            name: qsTr("Toggle favorite")
-            button: "details"
-        }
-        ListElement {
-            name: qsTr("Filters/Search")
-            button: "filters"
-        }
-        ListElement {
-            name: qsTr("Launch")
-            button: "accept"
-        }
-        ListElement {
-            name: qsTr("random game (L1+R1)")
-            button: "random"
+            });
+            verticalListHelpModel.append({
+                name: qsTr("Toggle favorite"),
+                button: "details"
+            });
+            verticalListHelpModel.append({
+                name: qsTr("Filters/Search"),
+                button: "filters"
+            });
+            verticalListHelpModel.append({
+                name: qsTr("View details"),
+                button: "accept"
+            });
+            verticalListHelpModel.append({
+              name: qsTr("random game (L1+R1)"),
+              button: "random"
+            });
         }
     }
         
