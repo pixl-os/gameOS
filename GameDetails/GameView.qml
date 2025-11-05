@@ -1348,17 +1348,20 @@ FocusScope {
         Button {
             id: buttonGameSettings
 
+            property string override_exists: "false"
+
             icon: "../assets/images/settingsicon.svg"
 
             flagTopRight: {
-                //check if override exists
-                var override_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".recalbox.conf\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
                 //console.log("override_exists : " + override_exists);
                 if(override_exists === "true"){
                     flagTopRightLabel = ".conf";
                     return "../assets/images/icon_file.png";
                 }
-                else return "";
+                else{
+                    flagTopRightLabel = "";
+                    return "";
+                }
             }
 
             flagBottomRight: {
@@ -1366,7 +1369,6 @@ FocusScope {
                 var p2k_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".p2k.cfg\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
                 //check if evmapy key file exists (.keys)
                 var keys_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".keys\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
-                //console.log("override_exists : " + override_exists);
                 //console.log("key_exists : " + key_exists);
                 if(p2k_exists === "true"){
                     flagBottomRightLabel = ".p2k.cfg";
@@ -1376,7 +1378,10 @@ FocusScope {
                     flagBottomRightLabel = ".keys";
                     return "../assets/images/icon_keyboard.svg";;
                 }
-                else return "";
+                else {
+                    flagBottomRightLabel = "";
+                    return "";
+                }
             }
 
             height: parent.height
@@ -1840,6 +1845,11 @@ FocusScope {
     onActiveFocusChanged:
     {
         if (activeFocus){
+            //console.log("onActiveFocusChanged - activeFocus",activeFocus);
+            //recheck availability of some files
+            //check if override exists
+            buttonGameSettings.override_exists = api.internal.system.run("test -f \"" + game.files.get(0).path + ".recalbox.conf\" && echo \"true\" | tr -d '\\n' | tr -d '\\r'");
+
             //state to confirm that game a game is selected
             api.internal.system.notify("gameviewselected", root.game.collections.get(0), root.game);
             currentHelpbarModel = ""; // to force reload for translation
@@ -1848,7 +1858,7 @@ FocusScope {
     }
 
     onFocusChanged: {
-      //console.log("onFocusChanged - focus",focus);
+        //console.log("onFocusChanged - focus",focus);
         if (focus) {
             currentHelpbarModel = gameviewHelpModel;
             menu.focus = true;
