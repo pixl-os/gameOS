@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file (focus on ch
 
 ## [pixL-master] - 2025-xx-xx - v1.33
 - logo:
-    - Add new Jaguar-CD system logos (black, carbon, color, steel, white)
+	- add new Jaguar-CD system logos (black, carbon, color, steel, white)
 	- add logo teknoparrot for future use ;-)
 	- add taito type x also (x+, x0, x2, x3, x4) - color only for the moment
 	- show round "beta" logo only when we select system from main view
@@ -11,7 +11,10 @@ All notable changes to this project will be documented in this file (focus on ch
 
 - fixes:
 	- fix gridview spacer linked to old pixL issue #6
-	
+	- fix to remove errors when game/search are not defined
+	- fix icon/icon title display for override/.p2k/.key
+
+- features:
 	- use icons of teknoparrot included in pixL OS + display details (if no scrap)
 	- use json metadata of teknoparrot included in pixL OS (if no scrap)
 	- feature to manage when we have several version of any game in the same directory for teknoparrot games
@@ -19,6 +22,9 @@ All notable changes to this project will be documented in this file (focus on ch
 	- tentative to well resize video when "black" area detected for overlays without viewport/fullscreen determined
 	- update to display now "start" button in help for system and game menus
 	- add new button in gameview for game menu and flag when override exist
+	- add possibility to have top/bottom flags on Settings button of gameview
+	- add management of the 2 new options to let user decide about 'start' button behaviors
+
 ## [pixL-master] - 2025-05-08 - v1.32
 - fixes:
 	- fix gameview to add new way to calculate and check video ratio
