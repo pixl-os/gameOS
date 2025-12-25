@@ -1817,7 +1817,8 @@ FocusScope {
         //    the component (the ListModel) is ready.
         Component.onCompleted: {
             // 2. Determine the dynamic 'name' value outside of ListElement
-            var buttonName = api.internal.recalbox.getBoolParameter("pegasus.theme.use.start.game.menu", false) ? qsTr("Game Menu") : qsTr("Main Menu");
+            var buttonUsage = api.internal.recalbox.getStringParameter("pegasus.theme.gameview.start.usage", "MainMenu");
+            var buttonName = (buttonUsage === "GameMenu" ? qsTr("Game Menu") : (buttonUsage === "SystemMenu" ? qsTr("System Menu") : qsTr("Main Menu")));
             // 3. Append the element to the model using the calculated value
             gameviewHelpModel.append({
                 name: buttonName,

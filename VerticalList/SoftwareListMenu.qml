@@ -832,7 +832,8 @@ FocusScope {
         //    the component (the ListModel) is ready.
         Component.onCompleted: {
             // 2. Determine the dynamic 'name' value outside of ListElement
-            var buttonName = api.internal.recalbox.getBoolParameter("pegasus.theme.use.start.system.menu", true) ? qsTr("System Menu") : qsTr("Main Menu");
+            var buttonUsage = api.internal.recalbox.getStringParameter("pegasus.theme.gamelist.start.usage", "GameMenu");
+            var buttonName = (buttonUsage === "GameMenu" ? qsTr("Game Menu") : (buttonUsage === "SystemMenu" ? qsTr("System Menu") : qsTr("Main Menu")));
             // 3. Append the element to the model using the calculated value
             verticalListHelpModel.append({
                 name: buttonName,
