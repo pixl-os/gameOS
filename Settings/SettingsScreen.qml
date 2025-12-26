@@ -633,9 +633,16 @@ FocusScope {
         }
     }
 
+    property var systemPage: {
+        return {
+            pageName: qsTr("System Configuration") + api.tr,
+            listmodel: ""
+        }
+    }
+
     property string context: "global"
     property var designerArr: [designerPage]
-    property var settingsArr: context === "global" ? [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : (settings.PlatformView === "Grid" ? [gridPage, gamePage] :  [gamePage])
+    property var settingsArr: context === "global" ? [generalPage, showcasePage, gridPage, gamePage, regionalPage, advancedPage] : (settings.PlatformView === "Grid" ? [gridPage, gamePage, systemPage] :  [gamePage, systemPage])
     property real itemheight: vpx(50)
     property var settingsCol: []
 
@@ -1167,6 +1174,12 @@ FocusScope {
         Keys.onUpPressed: { 
             sfxNav.play();
             var previousIndex = currentIndex;
+
+            //if previous one was the System Configuration one
+            if(settingsArr[pagelist.currentIndex].pageName === (qsTr("System Configuration") + api.tr)){
+                displaySystemConfigurationHelp(false);
+            }
+
             decrementCurrentIndex();
             if ((previousIndex === currentIndex) && api.internal.recalbox.getBoolParameter("theme.designer"))
             {
@@ -1203,7 +1216,10 @@ FocusScope {
 			}
 			else 
 			{
-				settingsList.model = settingsArr[pagelist.currentIndex].listmodel;	
+                settingsList.model = settingsArr[pagelist.currentIndex].listmodel;
+                if(settingsArr[pagelist.currentIndex].pageName === (qsTr("System Configuration") + api.tr)){
+                    displaySystemConfigurationHelp(true);
+                }
 			}
  		}
         Keys.onPressed: {
@@ -1211,7 +1227,13 @@ FocusScope {
             if (api.keys.isAccept(event) && !event.isAutoRepeat) {
                 event.accepted = true;
                 sfxAccept.play();
-                settingsList.focus = true;
+                if(settingsArr[pagelist.currentIndex].pageName !== (qsTr("System Configuration") + api.tr)){
+                    settingsList.focus = true;
+                }
+                else{
+                    sfxToggle.play();
+                    systemSettings(api.collections.get(currentCollectionIndex));
+                }
             }
             // Back
             if (api.keys.isCancel(event) && !event.isAutoRepeat) {
@@ -1285,6 +1307,29 @@ FocusScope {
 			settingsHelpModel.remove((settingsHelpModel.count)-1);
 		}
 	}
+
+    function displaySystemConfigurationHelp(visible)
+    {
+        if (visible)
+        {
+            //remove the last index corresponding to append done before.
+            settingsHelpModel.remove((settingsHelpModel.count)-1);
+            settingsHelpModel.append({
+                name: qsTr("System Menu"),
+                button: "accept"
+            });
+        }
+        else
+        {
+            //remove the last index corresponding to append done before.
+            settingsHelpModel.remove((settingsHelpModel.count)-1);
+            settingsHelpModel.append({
+                name: qsTr("Next/Change/Edit"),
+                button: "accept"
+            });
+        }
+    }
+
 
     ListView {
         id: collectionslist
@@ -1807,7 +1852,7 @@ FocusScope {
     {
         //console.log("onActiveFocusChanged : ", activeFocus);
         if (activeFocus){
-            currentHelpbarModel = ""; // to force reload for transkation
+            currentHelpbarModel = ""; // to force reload for translation
             currentHelpbarModel = settingsHelpModel;
         }
     }
