@@ -24,15 +24,17 @@ All notable changes to this project will be documented in this file (focus on ch
 	- add new button in gameview for game menu and flag when override exist
 	- add possibility to have top/bottom flags on Settings button of gameview
 	- add management of the 2 new options to let user decide about 'start' button behaviors
+	- new management of menu triggering from "start" button for game/system/global menu
+	- add system configration menu from system/gamelist settings
 
 ## [pixL-master] - 2025-05-08 - v1.32
 - fixes:
 	- fix gameview to add new way to calculate and check video ratio
 	- fix gameview to use initial ratio to compare with video ratio (to avoid issue in case of resize for screen ratio as steamdeck)
 	- fix gameview to reset/reload/restart of videos to avoid crash/stuck video replay
-    - fix gameview to well reset overlay viewport info
-    - tentative to hide display of overlay when game is changed during demo mode (still to improve)
-	
+	- fix gameview to well reset overlay viewport info
+	- tentative to hide display of overlay when game is changed during demo mode (still to improve)
+
 ## [pixL-master] - 2025-04-13 - v1.31
 - logo:
     - Add new LCD Games system logos
