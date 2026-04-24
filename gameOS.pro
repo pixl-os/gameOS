@@ -18,6 +18,7 @@ SOURCES += \
 Dialogs/GenericOkCancelDialog.qml \
 Dialogs/GenericYesNoDialog.qml \
 Dialogs/Shade.qml \
+GameDetails/Box3DView.qml \
 GameDetails/Button.qml \
 GameDetails/GameView.qml \
 GameDetails/LaunchGame.qml \

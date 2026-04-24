@@ -1055,7 +1055,16 @@ FocusScope {
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
                 smooth: true
+                visible: Box3DView.imageSource === "" ? true : false
             }
+
+            Box3DView {
+                    imageSource: Utils.boxArt(game, "boxFull")
+                    anchors {
+                        left: boxart.left;right: boxart.right;
+                        top: boxart.top; bottom: boxart.bottom;
+                    }
+                }
 
             GameInfo {
                 id: info
