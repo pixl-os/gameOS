@@ -78,6 +78,11 @@ DISTFILES += \
     assets/images/background.jpg \
     assets/images/battery-charging-white.svg \
     assets/images/battery-empty-white.svg \
+    assets/images/boxes/neogeo_back.png \
+    assets/images/boxes/neogeo_back_backside.png \
+    assets/images/boxes/neogeo_front.png \
+    assets/images/boxes/neogeo_front_backside.png \
+    assets/images/boxes/neogeo_spine.png \
     assets/images/icon_exclamation_green.svg \
     assets/images/beta.png \
     assets/images/borderimage.gif \
