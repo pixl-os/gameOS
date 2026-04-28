@@ -82,6 +82,7 @@ DISTFILES += \
     assets/images/boxes/neogeo_back_backside.png \
     assets/images/boxes/neogeo_front.png \
     assets/images/boxes/neogeo_front_backside.png \
+    assets/images/boxes/neogeo_latch.png \
     assets/images/boxes/neogeo_spine.png \
     assets/images/icon_exclamation_green.svg \
     assets/images/beta.png \

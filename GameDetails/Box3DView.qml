@@ -5,47 +5,104 @@ import "../utils.js" as Utils
 View3D {
     id:viewRoot
 
-    property var game
-    property string gameSystem: viewRoot.game ? viewRoot.game.collections.get(0).shortName : ""
+    // Function to get box dimensions, UV mapping based and other informations on the system
+    function getBoxInfo(game) {
 
-    property url imageSource: viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : ""
+        let system = game ? game.collections.get(0).shortName : "";
 
-    //to manage box overlays if exists
-    property url imageSourceFrontOverlay: "../assets/images/boxes/" + gameSystem + "_front.png"
-    property url imageSourceFrontOverlayBackSide: "../assets/images/boxes/" + gameSystem + "_front_backside.png"
-    property url imageSourceBackOverlay: "../assets/images/boxes/" + gameSystem + "_back.png"
-    property url imageSourceBackOverlayBackSide: "../assets/images/boxes/" + gameSystem + "_back_backside.png"
-    property url imageSourceSpineOverlay: "../assets/images/boxes/" + gameSystem + "_spine.png"
+        //to manage box overlays if exists
+        let hasFrontOverlay = false;
+        let hasFrontOverlayBackSide = false;
+        let hasBackOverlay = false;
+        let hasBackOverlayBackSide = false;
+        let hasSpineOverlay = false;
+        let hasLatchOverlay = false;
+        let latchAjustement = 0.0;
+        let hasBottomOverlay = false;
+        let hasTopOverlay = false;
 
-    // Internal property to hold current dimensions
-    readonly property var dims: getBoxDimensions(viewRoot.gameSystem)
+        let defaultColor = "white"
+        let useSpineForRightFace = false;
 
-    // Environment setup optimized for VM
-    environment: SceneEnvironment {
-        antialiasingMode: SceneEnvironment.MSAA
-        antialiasingQuality: SceneEnvironment.High
-    }
+        let zoom = 275
 
-    // Function to get box dimensions and UV mapping based on the system
-    function getBoxDimensions(system) {
         let d = { w: 1.4, h: 2.0, t: 0.35 }; // Default proportions (NeoGeo style)
+        let o =  "" //keep empty by default, possible values : "vertical" or "horizontal"
         let uv = {
             front: { s: 0.42, p: 0.58 },
             spine: { s: 0.15, p: 0.43 },
             back:  { s: 0.43, p: 0.00 }
         };
 
+        /***************************** part to add/change/update by system *************************************/
         if (system === "neogeo") {
             d = { w: 1.45, h: 2.0, t: 0.32 };
-            uv = { front: { s: 0.4558, p: 0.55 }, spine: { s: 0.075, p: 0.46 }, back: { s: 0.4540, p: 0.00 } };
+            uv = { front: { s: 0.4558, p: 0.55 },
+                   spine: { s: 0.075, p: 0.46 },
+                   back: { s: 0.4540, p: 0.00 }
+            };
+            o = "vertical";
+            hasFrontOverlay = true;
+            hasFrontOverlayBackSide = true;
+            hasBackOverlay = true;
+            hasBackOverlayBackSide = true;
+            hasSpineOverlay = true;
+            hasLatchOverlay = true;
+            latchAjustement = 10.0;
         }
+        else if (system === "snes") { //box orientation is usually horizontal
+            console.log("game.title : " + game.title);
+            if(game.title.toLowerCase().includes("(japan)")){
+                console.log("region : japan");
+                let d = { w: 1.09, h: 2.0, t: 0.31 };
+                uv = { front: { s: 0.43, p: 0.57 },
+                       spine: { s: 0.1238, p: 0.44 },
+                       back: { s: 0.43, p: 0.00 }
+                };
+                o =  "vertical";
+                useSpineForRightFace = true;
+            }
+            else{
+                console.log("region : other");
+                let d = { w: 1.41, h: 2.0, t: 0.36 };
+                uv = { front: { s: 0.455, p: 0.545 },
+                       spine: { s: 0.089, p: 0.455 },
+                       back: { s: 0.45, p: 0.00 }
+                };
+                o =  "horizontal";
+                useSpineForRightFace = true;
+            }
+        }
+
+        /******************************************************************************************************/
 
         // Return everything in a single object
         return {
+            //box system
+            system: system,
             // Box sizes
             width: d.w,
             height: d.h,
             thickness: d.t,
+
+            //Box texture orientation
+            orientation: o, // "horizontal" or "vertical"
+
+            //BoxOverlay to put in front of textures and by faces
+            hasFrontOverlay: hasFrontOverlay,
+            hasFrontOverlayBackSide: hasFrontOverlayBackSide,
+            hasBackOverlay: hasBackOverlay,
+            hasBackOverlayBackSide: hasBackOverlayBackSide,
+            hasSpineOverlay: hasSpineOverlay,
+            hasLatchOverlay: hasLatchOverlay,
+            latchAjustement: latchAjustement,
+            hasTopOverlay: hasTopOverlay,
+            hasBottomOverlay: hasBottomOverlay,
+
+            //default color to replace texture if missing
+            defaultColor: defaultColor,
+            useSpineForRightFace: useSpineForRightFace,
+            zoom: zoom,
 
             // Calculate offsets based on scale (1 unit in scale = 50 units in position for #Cube)
             zOffset: (d.t * 100) / 2,
@@ -69,6 +126,55 @@ View3D {
         };
     }
 
+    property var game
+    property url imageSource: viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
+    visible: viewRoot.imageSource == "" ? false : true;
+    property var box: viewRoot.game ? getBoxInfo(viewRoot.game) : nil
+
+    property string previousOrientation: ""
+
+    onGameChanged:{
+        viewRoot.game ? console.log("game.title : " + game.title) : console.log("game.title : " + "");
+        // for texture from scrap
+        viewRoot.imageSource = viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
+        //console.log("View3D viewRoot.imageSource : " + viewRoot.imageSource);
+        viewRoot.visible = viewRoot.imageSource == "" ? false : true;
+        //console.log("viewRoot.imageSource : " + viewRoot.imageSource);
+        //console.log("animation3D.property : " + animation3D.property);
+        //console.log("previousOrientation : " + previousOrientation);
+        //check if image exists and if any orientation exixts (if not, it's not configured and deactivated by default)
+        if(viewRoot.imageSource != ""){
+            viewRoot.box = getBoxInfo(viewRoot.game);
+            if(viewRoot.box.orientation !== ""){
+                //console.log("viewRoot.box.orientation : " + viewRoot.box.orientation);
+                if(previousOrientation !== viewRoot.box.orientation){
+                    //stop animation during update
+                    animation3D.running = false;
+                    viewRoot.update();
+                    animation3D.running = true;
+                }
+            }
+        }
+        previousOrientation = viewRoot.imageSource != "" ? viewRoot.box.orientation : "";
+        //console.log("new previousOrientation : " + previousOrientation);
+    }
+
+    //to manage box overlays if exists in this theme
+    property url imageSourceFrontOverlay: box.hasFrontOverlay ?  "../assets/images/boxes/" + viewRoot.box.system + "_front.png" : ""
+    property url imageSourceFrontOverlayBackSide: box.hasFrontOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_front_backside.png" : ""
+    property url imageSourceBackOverlay: box.hasBackOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_back.png" : ""
+    property url imageSourceBackOverlayBackSide: box.hasBackOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_back_backside.png" : ""
+    property url imageSourceSpineOverlay: box.hasSpineOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_spine.png" : ""
+    property url imageSourceLatchOverlay: box.hasLatchOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_latch.png" : ""
+    property url imageSourceTopOverlay: box.hasTopOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_top.png" : ""
+    property url imageSourceBottomOverlay: box.hasBottomOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_bottom.png" : ""
+
+    // Environment setup optimized for VM
+    environment: SceneEnvironment {
+        antialiasingMode: SceneEnvironment.MSAA
+        antialiasingQuality: SceneEnvironment.High
+    }
+
     // Parent Node to group all faces. Rotating this node rotates the entire box.
     Node {
         id: boxParent
@@ -77,17 +183,22 @@ View3D {
         // --- 1. FRONT FACE ---
         Model {
             id: frontFace
-            source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.width, viewRoot.dims.height, 1)
-            z: viewRoot.dims.zOffset
+            // Hide it visually
+            visible: (viewRoot.imageSource == "") ? false : true
+            opacity: visible ? 1.0 : 0.0
+            // This stops the engine from processing the #Cube geometry entirely.
+            source: visible ? "#Rectangle" : ""
+            scale: Qt.vector3d(viewRoot.box.width, viewRoot.box.height, 1)
+            z: viewRoot.box.zOffset
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSource
                         // Mapping remains identical to your previous logic
-                        scaleU: viewRoot.dims.uvFrontS
-                        positionU: viewRoot.dims.uvFrontP
+                        scaleU: viewRoot.box.uvFrontS
+                        positionU: viewRoot.box.uvFrontP
                         // Ensures the texture doesn't wrap unexpectedly
                         tilingModeHorizontal: Texture.ClampToEdge
                         tilingModeVertical: Texture.ClampToEdge
@@ -107,19 +218,19 @@ View3D {
             // 1. Define the scale (e.g., 8% larger in width and height)
             property real scaleWidthFactor: 1.14
             property real scaleHeightFactor: 1.03
-            scale: Qt.vector3d(viewRoot.dims.width * scaleWidthFactor,
-                               viewRoot.dims.height * scaleHeightFactor,
+            scale: Qt.vector3d(viewRoot.box.width * scaleWidthFactor,
+                               viewRoot.box.height * scaleHeightFactor,
                                1)
             // 2. Calculate the X offset to align the right edges
             // Formula: (OverlayWidth - BoxWidth) / 2
             // We move it to the left (negative X)
-            x: (viewRoot.dims.xOffset * scaleWidthFactor) - viewRoot.dims.xOffset
+            x: (viewRoot.box.xOffset * scaleWidthFactor) - viewRoot.box.xOffset
             // 3. Position in front
             z: frontFace.z + 1
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "white"
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceFrontOverlay
                         tilingModeHorizontal: Texture.ClampToEdge
@@ -139,11 +250,11 @@ View3D {
             source: visible ? "#Rectangle" : ""
             property real scaleWidthFactor: 1.14
             property real scaleHeightFactor: 1.03
-            scale: Qt.vector3d((viewRoot.dims.width * scaleWidthFactor),
-                               (viewRoot.dims.height * scaleHeightFactor),
+            scale: Qt.vector3d((viewRoot.box.width * scaleWidthFactor),
+                               (viewRoot.box.height * scaleHeightFactor),
                                1)
             // X offset logic remains the same
-            x: (viewRoot.dims.xOffset * scaleWidthFactor) - viewRoot.dims.xOffset
+            x: (viewRoot.box.xOffset * scaleWidthFactor) - viewRoot.box.xOffset
             // Position in back
             z: frontFace.z - 1
             // Rotate 180 degrees so the "front" of the plane faces the back
@@ -151,7 +262,7 @@ View3D {
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "white"
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceFrontOverlayBackSide
                         tilingModeHorizontal: Texture.ClampToEdge
@@ -162,21 +273,27 @@ View3D {
                 }
             ]
         }
+
         // --- 2. THE SPINE (Left Side) ---
         Model {
             id: spineFace
-            source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.thickness, viewRoot.dims.height, 1)
-            x: -viewRoot.dims.xOffset
+            // Hide it visually
+            visible: (viewRoot.imageSource == "") ? false : true
+            opacity: visible ? 1.0 : 0.0
+            // This stops the engine from processing the #Cube geometry entirely.
+            source: visible ? "#Rectangle" : ""
+            scale: Qt.vector3d(viewRoot.box.thickness, viewRoot.box.height, 1)
+            x: -viewRoot.box.xOffset
             // Rotate the plane to face the side (ZY plane)
             eulerRotation.y: -90
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSource
-                        scaleU: viewRoot.dims.uvSpineS
-                        positionU: viewRoot.dims.uvSpineP
+                        scaleU: viewRoot.box.uvSpineS
+                        positionU: viewRoot.box.uvSpineP
                         tilingModeHorizontal: Texture.ClampToEdge
                         tilingModeVertical: Texture.ClampToEdge
                     }
@@ -195,16 +312,16 @@ View3D {
             // 1. Define the scale (e.g., 8% larger in width and height)
             property real scaleWidthFactor: 1.05
             property real scaleHeightFactor: 1.03
-            scale: Qt.vector3d(viewRoot.dims.thickness * scaleWidthFactor,
-                               viewRoot.dims.height * scaleHeightFactor,
+            scale: Qt.vector3d(viewRoot.box.thickness * scaleWidthFactor,
+                               viewRoot.box.height * scaleHeightFactor,
                                1)
-            x: - (viewRoot.dims.xOffset + 1)
+            x: - (viewRoot.box.xOffset + 1)
             // Rotate the plane to face the side (ZY plane)
             eulerRotation.y: -90
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "white"
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceSpineOverlay
                         tilingModeHorizontal: Texture.ClampToEdge
@@ -217,17 +334,22 @@ View3D {
         // --- 3. BACK FACE ---
         Model {
             id: backFace
-            source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.width, viewRoot.dims.height, 0.001)
-            z: -viewRoot.dims.zOffset
+            // Hide it visually
+            visible: (viewRoot.imageSource == "") ? false : true
+            opacity: visible ? 1.0 : 0.0
+            // This stops the engine from processing the #Cube geometry entirely.
+            source: visible ? "#Rectangle" : ""
+            scale: Qt.vector3d(viewRoot.box.width, viewRoot.box.height, 0.001)
+            z: -viewRoot.box.zOffset
             eulerRotation.y: 180
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSource
-                        scaleU: viewRoot.dims.uvBackS
-                        positionU: viewRoot.dims.uvBackP
+                        scaleU: viewRoot.box.uvBackS
+                        positionU: viewRoot.box.uvBackP
                     }
                 }
             ]
@@ -247,21 +369,21 @@ View3D {
             // 1. Define the scale (e.g., 8% larger in width and height)
             property real scaleWidthFactor: 1.14
             property real scaleHeightFactor: 1.03
-            scale: Qt.vector3d(viewRoot.dims.width * scaleWidthFactor,
-                               viewRoot.dims.height * scaleHeightFactor,
+            scale: Qt.vector3d(viewRoot.box.width * scaleWidthFactor,
+                               viewRoot.box.height * scaleHeightFactor,
                                1)
             eulerRotation.y: 180
             // 2. Calculate the X offset to align the right edges
             // Formula: (OverlayWidth - BoxWidth) / 2
             // We move it to the left (negative X)
-            x: (viewRoot.dims.xOffset * scaleWidthFactor) - viewRoot.dims.xOffset
+            x: (viewRoot.box.xOffset * scaleWidthFactor) - viewRoot.box.xOffset
 
             // 3. Position in front
             z: backFace.z - 1
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "white"
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceBackOverlay
                         tilingModeHorizontal: Texture.ClampToEdge
@@ -286,25 +408,25 @@ View3D {
             property real scaleWidthFactor: 1.14
             property real scaleHeightFactor: 1.03
             //eulerRotation.y: 180
-            scale: Qt.vector3d(viewRoot.dims.width * scaleWidthFactor,
-                               viewRoot.dims.height * scaleHeightFactor,
+            scale: Qt.vector3d(viewRoot.box.width * scaleWidthFactor,
+                               viewRoot.box.height * scaleHeightFactor,
                                0.01)
 
             // 2. Calculate the X offset to align the right edges
             // Formula: (OverlayWidth - BoxWidth) / 2
             // We move it to the left (negative X)
-            x: (viewRoot.dims.xOffset * scaleWidthFactor) - viewRoot.dims.xOffset
+            x: (viewRoot.box.xOffset * scaleWidthFactor) - viewRoot.box.xOffset
 
             // 3. Position in back
             z: backFace.z + 1
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "white"
+                    diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceBackOverlayBackSide
-                        tilingModeHorizontal: Texture.ClampToEdge
-                        tilingModeVertical: Texture.ClampToEdge
+                        /*tilingModeHorizontal: Texture.ClampToEdge
+                        tilingModeVertical: Texture.ClampToEdge*/
                         scaleU: -1
                         positionU: 1
                     }
@@ -312,19 +434,59 @@ View3D {
             ]
         }
 
-
-        // --- 4. RIGHT SIDE ---
+        // --- 4. RIGHT FACE ---
         Model {
             id: rightFace
-            source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.thickness, viewRoot.dims.height, 1)
-            x: viewRoot.dims.xOffset
+            // Hide it visually
+            visible: ((viewRoot.imageSource !== "") && viewRoot.box.useSpineForRightFace) ? true : false
+            opacity: visible ? true : false
+            // This stops the engine from processing the #Cube geometry entirely.
+            source: visible ? "#Rectangle" : ""
+            scale: Qt.vector3d(viewRoot.box.thickness, viewRoot.box.height, 1)
+            x: viewRoot.box.xOffset + viewRoot.box.latchAjustement
             // Rotate 90 degrees to face the right side
             eulerRotation.y: 90
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "black"
+                    diffuseColor: viewRoot.box.defaultColor
+                    diffuseMap: Texture {
+                        source: viewRoot.imageSource
+                        scaleU: viewRoot.box.uvSpineS
+                        positionU: viewRoot.box.uvSpineP
+                        tilingModeHorizontal: Texture.ClampToEdge
+                        tilingModeVertical: Texture.ClampToEdge
+                    }
+                }
+            ]
+        }
+
+        // --- 4bis. RIGHT OVERLAY - Latch Overlay ---
+        Model {
+            id: latchOverlay
+            // Hide it visually
+            visible: viewRoot.imageSourceLatchOverlay == "" ? false : true
+            opacity: visible ? true : false
+            // This stops the engine from processing the #Cube geometry entirely.
+            source: visible ? "#Rectangle" : ""
+            // 1. Define the scale (e.g., 8% larger in width and height)
+            property real scaleWidthFactor: 1.05
+            property real scaleHeightFactor: 1.03
+            scale: Qt.vector3d(viewRoot.box.thickness * scaleWidthFactor,
+                               viewRoot.box.height * scaleHeightFactor,
+                               1)
+            x: viewRoot.box.xOffset + viewRoot.box.latchAjustement
+            // Rotate 90 degrees to face the right side
+            eulerRotation.y: 90
+            materials: [
+                DefaultMaterial {
+                    lighting: DefaultMaterial.NoLighting
+                    diffuseColor: viewRoot.box.defaultColor
+                    diffuseMap: Texture {
+                        source: viewRoot.imageSourceLatchOverlay
+                        tilingModeHorizontal: Texture.ClampToEdge
+                        tilingModeVertical: Texture.ClampToEdge
+                    }
                 }
             ]
         }
@@ -333,14 +495,14 @@ View3D {
         Model {
             id: topFace
             source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.width / 100, viewRoot.dims.thickness / 100, 1)
-            y: viewRoot.dims.yOffset
+            scale: Qt.vector3d(viewRoot.box.width, viewRoot.box.thickness, 1)
+            y: viewRoot.box.yOffset
             // Rotate -90 degrees around X to face upwards
             eulerRotation.x: -90
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "black"
+                    diffuseColor: viewRoot.box.defaultColor
                 }
             ]
         }
@@ -349,27 +511,50 @@ View3D {
         Model {
             id: bottomFace
             source: "#Rectangle"
-            scale: Qt.vector3d(viewRoot.dims.width / 100, viewRoot.dims.thickness / 100, 1)
-            y: -viewRoot.dims.yOffset
+            scale: Qt.vector3d(viewRoot.box.width, viewRoot.box.thickness, 1)
+            y: -viewRoot.box.yOffset
             // Rotate 90 degrees around X to face downwards
             eulerRotation.x: 90
             materials: [
                 DefaultMaterial {
                     lighting: DefaultMaterial.NoLighting
-                    diffuseColor: "black"
+                    diffuseColor: viewRoot.box.defaultColor
                 }
             ]
         }
 
         // Continuous rotation animation to showcase the 3D effect
-        NumberAnimation on eulerRotation.y {
+        NumberAnimation {
+            id: animation3D
+            target: boxParent
+            property: "eulerRotation." + ((viewRoot.box.orientation === "horizontal") ? "x" : "y" ) // Dynamically build the property string
             from: 0; to: 360; duration: 10000; loops: Animation.Infinite
+            running: viewRoot.enabled
+
+            // When 'running' becomes false, snap the rotation back to 0
+            onRunningChanged: {
+                if (!running) {
+                    //console.log("previousOrientation : " + previousOrientation);
+                    //console.log("viewRoot.box.orientation : " + viewRoot.box.orientation);
+                    if(previousOrientation !== viewRoot.box.orientation){
+                        //console.log("reset rotation values !!!!");
+                        boxParent.eulerRotation.x = 0;
+                        boxParent.eulerRotation.y = 0;
+                        if(viewRoot.box.orientation === "horizontal"){
+                            boxParent.eulerRotation.z = 90;
+                        }
+                        else{
+                            boxParent.eulerRotation.z = 0;
+                        }
+                    }
+                }
+            }
         }
     }
+
     // Camera positioned to view the box
     PerspectiveCamera {
         id: camera
-        // Change from 500 to 350 to zoom in (smaller number = closer)
-        z: 250
+        z: viewRoot.box.zoom
     }
 }
