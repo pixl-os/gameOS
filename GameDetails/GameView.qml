@@ -1055,7 +1055,7 @@ FocusScope {
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
                 smooth: true
-                visible: box3d.visible ? false : true
+                visible: box3d.imageSource != "" ? false : true
             }
 
             Box3DView {

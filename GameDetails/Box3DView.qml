@@ -5,7 +5,7 @@ import "../utils.js" as Utils
 View3D {
     id:viewRoot
 
-    // Function to get box dimensions, UV mapping based and other informations on the system
+     // Function to get box dimensions, UV mapping based and other informations on the system
     function getBoxInfo(game) {
 
         let system = game ? game.collections.get(0).shortName : "";
@@ -34,7 +34,7 @@ View3D {
             back:  { s: 0.43, p: 0.00 }
         };
 
-        /***************************** part to add/change/update by system *************************************/
+        //***************************** part to add/change/update by system *************************************
         if (system === "neogeo") {
             d = { w: 1.45, h: 2.0, t: 0.32 };
             uv = { front: { s: 0.4558, p: 0.55 },
@@ -74,7 +74,7 @@ View3D {
             }
         }
 
-        /******************************************************************************************************/
+        //******************************************************************************************************
 
         // Return everything in a single object
         return {
@@ -128,17 +128,18 @@ View3D {
 
     property var game
     property url imageSource: viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
-    visible: viewRoot.imageSource == "" ? false : true;
+
     property var box: viewRoot.game ? getBoxInfo(viewRoot.game) : nil
 
     property string previousOrientation: ""
 
     onGameChanged:{
+        //console.log("onGameChanged")
         viewRoot.game ? console.log("game.title : " + game.title) : console.log("game.title : " + "");
         // for texture from scrap
         viewRoot.imageSource = viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
         //console.log("View3D viewRoot.imageSource : " + viewRoot.imageSource);
-        viewRoot.visible = viewRoot.imageSource == "" ? false : true;
+        
         //console.log("viewRoot.imageSource : " + viewRoot.imageSource);
         //console.log("animation3D.property : " + animation3D.property);
         //console.log("previousOrientation : " + previousOrientation);
@@ -179,6 +180,28 @@ View3D {
     Node {
         id: boxParent
         position: Qt.vector3d(0, 0, 0)
+        
+        Component.onDestruction: {
+        //console.log("Component.onDestruction")
+        
+        // 1. Instantly stop the animation to release the property binding
+        animation3D.stop();
+        
+        // 2. Clear out the meshes to prevent the engine from rendering 
+        // a final frame with missing/null textures
+        frontFace.source = "";
+        frontOverlay.source = "";
+        frontOverlay_back.source = "";
+        spineFace.source = "";
+        spinOverlay.source = "";
+        backFace.source = "";
+        backOverlay.source = "";
+        backOverlay_back.source = "";
+        rightFace.source = "";
+        latchOverlay.source = "";
+        topFace.source = "";
+        bottomFace.source = "";
+        }
 
         // --- 1. FRONT FACE ---
         Model {
@@ -425,8 +448,8 @@ View3D {
                     diffuseColor: viewRoot.box.defaultColor
                     diffuseMap: Texture {
                         source: viewRoot.imageSourceBackOverlayBackSide
-                        /*tilingModeHorizontal: Texture.ClampToEdge
-                        tilingModeVertical: Texture.ClampToEdge*/
+                        //tilingModeHorizontal: Texture.ClampToEdge
+                        //tilingModeVertical: Texture.ClampToEdge
                         scaleU: -1
                         positionU: 1
                     }
