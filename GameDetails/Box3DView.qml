@@ -9,7 +9,9 @@ View3D {
     function getBoxInfo(game) {
 
         let system = game ? game.collections.get(0).shortName : "";
-
+        //default value
+        let validSystem = true;
+        let imageSource = "";
         //to manage box overlays if exists
         let hasFrontOverlay = false;
         let hasFrontOverlayBackSide = false;
@@ -24,7 +26,8 @@ View3D {
         let defaultColor = "white"
         let useSpineForRightFace = false;
 
-        let zoom = 275
+        let zoom = 265 // zoom used usually in game view for all system
+        let referenceWidth = 540 //maximum witdh in 720p for 3D view
 
         let d = { w: 1.4, h: 2.0, t: 0.35 }; // Default proportions (NeoGeo style)
         let o =  "" //keep empty by default, possible values : "vertical" or "horizontal"
@@ -33,9 +36,10 @@ View3D {
             spine: { s: 0.15, p: 0.43 },
             back:  { s: 0.43, p: 0.00 }
         };
-
+        //console.log("getBoxInfo - system : " + system);
         //***************************** part to add/change/update by system *************************************
         if (system === "neogeo") {
+            zoom = 265 // zoom used usally in game view for neogeo
             d = { w: 1.45, h: 2.0, t: 0.32 };
             uv = { front: { s: 0.4558, p: 0.55 },
                    spine: { s: 0.075, p: 0.46 },
@@ -51,9 +55,9 @@ View3D {
             latchAjustement = 10.0;
         }
         else if (system === "snes") { //box orientation is usually horizontal
-            console.log("game.title : " + game.title);
+            //console.log("game.title : " + game.title);
             if(game.title.toLowerCase().includes("(japan)")){
-                console.log("region : japan");
+                //console.log("region : japan");
                 let d = { w: 1.09, h: 2.0, t: 0.31 };
                 uv = { front: { s: 0.43, p: 0.57 },
                        spine: { s: 0.1238, p: 0.44 },
@@ -63,7 +67,7 @@ View3D {
                 useSpineForRightFace = true;
             }
             else{
-                console.log("region : other");
+                //console.log("region : other");
                 let d = { w: 1.41, h: 2.0, t: 0.36 };
                 uv = { front: { s: 0.455, p: 0.545 },
                        spine: { s: 0.089, p: 0.455 },
@@ -73,31 +77,40 @@ View3D {
                 useSpineForRightFace = true;
             }
         }
-
+        else{
+            validSystem = false;
+        }
+        // for texture from scrap
+        if(validSystem){
+            imageSource = game ? Utils.boxArt(game, "boxFull") : "";
+        }
+        else{
+            imageSource = ""
+        }
         //******************************************************************************************************
 
         // Return everything in a single object
         return {
             //box system
             system: system,
+            //image source of texture
+            imageSource: imageSource,
             // Box sizes
             width: d.w,
             height: d.h,
             thickness: d.t,
-
             //Box texture orientation
             orientation: o, // "horizontal" or "vertical"
-
             //BoxOverlay to put in front of textures and by faces
-            hasFrontOverlay: hasFrontOverlay,
-            hasFrontOverlayBackSide: hasFrontOverlayBackSide,
-            hasBackOverlay: hasBackOverlay,
-            hasBackOverlayBackSide: hasBackOverlayBackSide,
-            hasSpineOverlay: hasSpineOverlay,
-            hasLatchOverlay: hasLatchOverlay,
+            hasFrontOverlay: imageSource != "" ? hasFrontOverlay : false,
+            hasFrontOverlayBackSide: imageSource != "" ? hasFrontOverlayBackSide : false,
+            hasBackOverlay: imageSource != "" ? hasBackOverlay : false,
+            hasBackOverlayBackSide: imageSource != "" ? hasBackOverlayBackSide : false,
+            hasSpineOverlay: imageSource != "" ? hasSpineOverlay : false,
+            hasLatchOverlay: imageSource != "" ? hasLatchOverlay : false,
             latchAjustement: latchAjustement,
-            hasTopOverlay: hasTopOverlay,
-            hasBottomOverlay: hasBottomOverlay,
+            hasTopOverlay: imageSource != "" ? hasTopOverlay : false,
+            hasBottomOverlay: imageSource != "" ? hasBottomOverlay : false,
 
             //default color to replace texture if missing
             defaultColor: defaultColor,
@@ -127,25 +140,68 @@ View3D {
     }
 
     property var game
-    property url imageSource: viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
-
-    property var box: viewRoot.game ? getBoxInfo(viewRoot.game) : nil
-
+    property var box
+    property url imageSource
     property string previousOrientation: ""
 
+    //to manage box overlays if exists in this theme
+    property url imageSourceFrontOverlay
+    property url imageSourceFrontOverlayBackSide
+    property url imageSourceBackOverlay
+    property url imageSourceBackOverlayBackSide
+    property url imageSourceSpineOverlay
+    property url imageSourceLatchOverlay
+    property url imageSourceTopOverlay
+    property url imageSourceBottomOverlay
+
+// 1. Create a private flag initialized to false
+    property bool _isComponentReady: false
+    
+    Component.onCompleted: {
+        //console.log("Visible width of View3D is now (on Completed):", width)
+        
+        // 2. Set the flag to true now that the component is fully built
+        _isComponentReady = true
+        
+        // Optional: If game was already changed during startup, 
+        // run the logic once right here now that we are ready
+        if (width > 0) {
+            executeGameLogic()
+        }
+    }
     onGameChanged:{
+        // 3. Guard clause: Ignore the signal if the component isn't ready yet
+        if (!_isComponentReady)
+            return;
+            
+        // 4. Guard clause: Ensure we have a valid layout size
+        if (width === 0)
+            return;
+        executeGameLogic()
+    }
+    
+    function executeGameLogic(){
         //console.log("onGameChanged")
-        viewRoot.game ? console.log("game.title : " + game.title) : console.log("game.title : " + "");
-        // for texture from scrap
-        viewRoot.imageSource = viewRoot.game ? Utils.boxArt(viewRoot.game, "boxFull") : "";
-        //console.log("View3D viewRoot.imageSource : " + viewRoot.imageSource);
+        //viewRoot.game ? console.log("game.title : " + game.title) : console.log("game.title : " + "");
         
         //console.log("viewRoot.imageSource : " + viewRoot.imageSource);
         //console.log("animation3D.property : " + animation3D.property);
         //console.log("previousOrientation : " + previousOrientation);
         //check if image exists and if any orientation exixts (if not, it's not configured and deactivated by default)
+        viewRoot.box = viewRoot.game ? getBoxInfo(viewRoot.game) : nil
+        viewRoot.imageSource = viewRoot.box.imageSource
+        //to manage box overlays if exists in this theme
+        viewRoot.imageSource = viewRoot.box.imageSource
+        viewRoot.imageSourceFrontOverlay = viewRoot.box.hasFrontOverlay ?  "../assets/images/boxes/" + viewRoot.box.system + "_front.png" : ""
+        viewRoot.imageSourceFrontOverlayBackSide = viewRoot.box.hasFrontOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_front_backside.png" : ""
+        viewRoot.imageSourceBackOverlay = viewRoot.box.hasBackOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_back.png" : ""
+        viewRoot.imageSourceBackOverlayBackSide = viewRoot.box.hasBackOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_back_backside.png" : ""
+        viewRoot.imageSourceSpineOverlay = viewRoot.box.hasSpineOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_spine.png" : ""
+        viewRoot.imageSourceLatchOverlay = viewRoot.box.hasLatchOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_latch.png" : ""
+        viewRoot.imageSourceTopOverlay = viewRoot.box.hasTopOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_top.png" : ""
+        viewRoot.imageSourceBottomOverlay = viewRoot.box.hasBottomOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_bottom.png" : ""
+
         if(viewRoot.imageSource != ""){
-            viewRoot.box = getBoxInfo(viewRoot.game);
             if(viewRoot.box.orientation !== ""){
                 //console.log("viewRoot.box.orientation : " + viewRoot.box.orientation);
                 if(previousOrientation !== viewRoot.box.orientation){
@@ -156,19 +212,13 @@ View3D {
                 }
             }
         }
+        else{
+            //stop animation during update
+            animation3D.running = false;
+        }
         previousOrientation = viewRoot.imageSource != "" ? viewRoot.box.orientation : "";
         //console.log("new previousOrientation : " + previousOrientation);
     }
-
-    //to manage box overlays if exists in this theme
-    property url imageSourceFrontOverlay: box.hasFrontOverlay ?  "../assets/images/boxes/" + viewRoot.box.system + "_front.png" : ""
-    property url imageSourceFrontOverlayBackSide: box.hasFrontOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_front_backside.png" : ""
-    property url imageSourceBackOverlay: box.hasBackOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_back.png" : ""
-    property url imageSourceBackOverlayBackSide: box.hasBackOverlayBackSide ? "../assets/images/boxes/" + viewRoot.box.system + "_back_backside.png" : ""
-    property url imageSourceSpineOverlay: box.hasSpineOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_spine.png" : ""
-    property url imageSourceLatchOverlay: box.hasLatchOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_latch.png" : ""
-    property url imageSourceTopOverlay: box.hasTopOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_top.png" : ""
-    property url imageSourceBottomOverlay: box.hasBottomOverlay ? "../assets/images/boxes/" + viewRoot.box.system + "_bottom.png" : ""
 
     // Environment setup optimized for VM
     environment: SceneEnvironment {
