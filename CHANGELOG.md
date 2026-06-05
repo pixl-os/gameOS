@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file (focus on change done on recalbox-integration branch).
 
-## [pixL-master] - 2025-xx-xx - v1.33
+## [pixL-master] - 2026-xx-xx - v1.33
 - logo:
 	- add new Jaguar-CD system logos (black, carbon, color, steel, white)
 	- add logo teknoparrot for future use ;-)
@@ -26,6 +26,12 @@ All notable changes to this project will be documented in this file (focus on ch
 	- add management of the 2 new options to let user decide about 'start' button behaviors
 	- new management of menu triggering from "start" button for game/system/global menu
 	- add system configration menu from system/gamelist settings
+    - new feature to manage 3D Box display in rotation:
+        - using boxes "borders" for neogeo
+        - for super nes/nintendo and super famicom
+        - new way to manage visibility to avoid crash at destroy in pixL
+        - new way to manage overlay/zoom in vertical list and grid
+        - set as "Beta" in version for the moment
 
 ## [pixL-master] - 2025-05-08 - v1.32
 - fixes:
