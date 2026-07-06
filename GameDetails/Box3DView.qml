@@ -606,21 +606,23 @@ View3D {
 
             // When 'running' becomes false, snap the rotation back to 0
             onRunningChanged: {
+				//console.log("previousOrientation : " + previousOrientation);
+				//console.log("viewRoot.box.orientation : " + viewRoot.box.orientation);
                 if (!running) {
-                    //console.log("previousOrientation : " + previousOrientation);
-                    //console.log("viewRoot.box.orientation : " + viewRoot.box.orientation);
+					//console.log("reset rotation values !!!!");
+					boxParent.eulerRotation.x = 0;
+					boxParent.eulerRotation.y = 0;
+                }
+				else{
                     if(previousOrientation !== viewRoot.box.orientation){
-                        //console.log("reset rotation values !!!!");
-                        boxParent.eulerRotation.x = 0;
-                        boxParent.eulerRotation.y = 0;
                         if(viewRoot.box.orientation === "horizontal"){
                             boxParent.eulerRotation.z = 90;
                         }
                         else{
                             boxParent.eulerRotation.z = 0;
                         }
-                    }
-                }
+					}
+				}
             }
         }
     }

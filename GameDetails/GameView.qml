@@ -1061,7 +1061,7 @@ FocusScope {
             Box3DView {
                 id: box3d
                 game: root.game
-                enabled: detailsScreen.visible
+                enabled: detailsScreen.opacity !== 0
                 anchors {
                     left: boxart.left;right: boxart.right;
                     top: boxart.top; bottom: boxart.bottom;
