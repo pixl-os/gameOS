@@ -62,7 +62,7 @@ Item {
             anchors.fill: parent
             anchors.margins: vpx(2)
             asynchronous: true
-            source: boxArt(gameData, choosenMedia)
+            source: Utils.boxArt(gameData, choosenMedia)
             sourceSize { width: root.width; height: root.height }
             fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter
