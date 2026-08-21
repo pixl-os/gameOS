@@ -414,17 +414,25 @@ FocusScope {
             addNewAssetOnly(game.assets.videoList,mediaList);
             addNewAssetOnly(game.assets.manualList,mediaList);
             addNewAssetOnly(game.assets.marqueeList,mediaList);
+            addNewAssetOnly(game.assets.fanartList,mediaList);
             addNewAssetOnly(game.assets.bezelList,mediaList);
             addNewAssetOnly(game.assets.cartridgeList,mediaList);
             addNewAssetOnly(game.assets.boxFrontList,mediaList);
             addNewAssetOnly(game.assets.boxBackList,mediaList);
+            addNewAssetOnly(game.assets.box2dList,mediaList);
+            addNewAssetOnly(game.assets.box3dList,mediaList);
             addNewAssetOnly(game.assets.boxFullList,mediaList);
             addNewAssetOnly(game.assets.boxSpineList,mediaList);
             addNewAssetOnly(game.assets.logoList,mediaList);
+            addNewAssetOnly(game.assets.wheelList,mediaList);
+            addNewAssetOnly(game.assets.wheelsteelList,mediaList);
+            addNewAssetOnly(game.assets.wheelcarbonList,mediaList);
             addNewAssetOnly(game.assets.backgroundList,mediaList);
             addNewAssetOnly(game.assets.titlescreenList,mediaList);
             addNewAssetOnly(game.assets.mapsList,mediaList);
             addNewAssetOnly(game.assets.musicList,mediaList);
+            addNewAssetOnly(game.assets.screenshotList,mediaList);
+            addNewAssetOnly(game.assets.thumbnailList,mediaList);
         }
         return mediaList;
     }
