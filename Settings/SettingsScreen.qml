@@ -469,16 +469,16 @@ FocusScope {
         id: gridSettingsModel
         ListElement {
             settingName: "Grid Thumbnail"
-            setting: "Wide,Tall,Square,Box Art,Choose Media"
+            setting: "Wide,Tall,Square,Box Art"
             settingNameDisplay: qsTr("Grid Thumbnail")
-            settingDisplay: qsTr("Wide,Tall,Square,Box Art,Choose Media")
+            settingDisplay: qsTr("Wide,Tall,Square,Box Art")
             settingNeedReload: false
         }
         ListElement {
-            settingName: "Choosen Media (only if Grid Thumbnail is on 'Choose Media')"
-            setting: "box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia"
-            settingNameDisplay: qsTr("Choosen Media (only if Grid Thumbnail is on 'Choose Media')")
-            settingDisplay: qsTr("box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia")
+            settingName: "Choosen Media (for Wide, Tall & Square thumbnail)"
+            setting: "default,box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia"
+            settingNameDisplay: qsTr("Choosen Media (for Wide, Tall & Square thumbnail)")
+            settingDisplay: qsTr("default,box3d,box2d,boxFront,boxBack,boxSpine,boxFull,cartridge,cartridgetexture,wheel,wheelcarbon,wheelsteel,fanart,map,marquee,bezel,screenmarquee,screenmarqueesmall,steam,background,image,screenshot,screenshot_bis,thumbnail,titlescreen,mix,extra1,fullmedia")
             settingNeedReload: false
         }
         ListElement {

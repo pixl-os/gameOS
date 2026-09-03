@@ -49,7 +49,7 @@ FocusScope {
         gamegrid.delegate = null;
         loadPlatformPageSettings();
         showBoxes = (settings.GridThumbnail === "Box Art");
-        showChoosenMedia = (settings.GridThumbnail === "Choose Media");
+        showChoosenMedia = ((!showBoxes) && (settings.GridThumbnailMedia !== "default") );
         if(showChoosenMedia) choosenMedia = settings.GridThumbnailMedia;
         else choosenMedia = "";
         gamegrid.sourceThumbnail = showBoxes ? "BoxArtGridItem.qml" : (showChoosenMedia ? "ChoosenMediaGridItem.qml" : "DynamicGridItem.qml");
@@ -57,6 +57,14 @@ FocusScope {
         fakebox.choosenMedia = choosenMedia;
         numColumns = settings.GridColumns ? settings.GridColumns : 6;
         titleMargin = settings.AlwaysShowTitles === "Yes" ? vpx(30) : 0;
+
+        //logs for debug ;-) to activate
+        //console.log("showBoxes : ", showBoxes);
+        //console.log("settings.GridThumbnailMedia : ", settings.GridThumbnailMedia);
+        //console.log("showChoosenMedia : ", showChoosenMedia);
+        //console.log("choosenMedia : ", choosenMedia);
+        //console.log("gamegrid.sourceThumbnail : ", gamegrid.sourceThumbnail);
+
     }
 
     property var sortedGames: null;
@@ -282,6 +290,7 @@ FocusScope {
                 } else if (settings.GridThumbnail === "Wide") {
                     return cellWidth * settings.WideRatio;
                 } else {
+                    //the default ratio for "Box Art" is the one calculated
                     return cellWidth * cellHeightRatio;
                 }
             }
@@ -306,7 +315,8 @@ FocusScope {
                 bottom: parent.bottom; bottomMargin: helpMargin + vpx(40)
             }
             cellWidth: width / numColumns
-            cellHeight: ((showBoxes || showChoosenMedia) ? cellWidth * cellHeightRatio : savedCellHeight) + titleMargin
+            //new sizing since 03/09/2028
+            cellHeight: savedCellHeight + titleMargin
             preferredHighlightBegin: vpx(0)
             preferredHighlightEnd: gamegrid.height - helpMargin - vpx(40)
             highlightRangeMode: GridView.ApplyRange

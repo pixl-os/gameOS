@@ -157,7 +157,7 @@ FocusScope {
 
             //Platform Page Settings
             GridThumbnail:                 api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art",
-            GridThumbnailMedia:            api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d",
+            GridThumbnailMedia:            api.memory.has("Choosen Media (for Wide, Tall & Square thumbnail)") ? api.memory.get("Choosen Media (for Wide, Tall & Square thumbnail)") : "box3d",
             GridColumns:                   api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5",
 
             //Game Details Settings
@@ -213,7 +213,7 @@ FocusScope {
         var context = api.collections.get(currentCollectionIndex).shortName;
         //Platform Page Settings
         settings.GridThumbnail =        api.memory.has(context + "_" + "Grid Thumbnail") ? api.memory.get(context + "_" + "Grid Thumbnail") : (api.memory.has("Grid Thumbnail") ? api.memory.get("Grid Thumbnail") : "Box Art");
-        settings.GridThumbnailMedia =   api.memory.has(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get(context + "_" + "Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : (api.memory.has("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") ? api.memory.get("Choosen Media (only if Grid Thumbnail is on 'Choose Media')") : "box3d");
+        settings.GridThumbnailMedia =   api.memory.has(context + "_" + "Choosen Media (for Wide, Tall & Square thumbnail)") ? api.memory.get(context + "_" + "Choosen Media (for Wide, Tall & Square thumbnail)") : (api.memory.has("Choosen Media (for Wide, Tall & Square thumbnail)") ? api.memory.get("Choosen Media (for Wide, Tall & Square thumbnail)") : "box3d");
         settings.GridColumns =          api.memory.has(context + "_" + "Number of columns") ? api.memory.get(context + "_" + "Number of columns") : (api.memory.has("Number of columns") ? api.memory.get("Number of columns") : "5");
     }
     function loadGameDetailsSettings(context){
