@@ -351,6 +351,31 @@ function steamHeader(gameData) {
   return steamAppID(gameData) + "/header.jpg"
 }
 
+//function to get bezel/overlay from pixL if nothing available from scrap
+function pixLBezel(gameData) {
+    if (gameData){
+        var system = gameData.collections.get(0).shortName;
+        var path = gameData.files.get(0).path;
+        var words = path.split('/');
+        var romname = words[words.length-1].split('.')[0];
+        //console.log("test -f \"" +"/recalbox/share/overlays/" + system + "/" + romname + ".png\" && echo \"true\"");
+        var overlay_exists_rom = api.internal.system.run("test -f \"" +"/recalbox/share/overlays/" + system + "/" + romname + ".png\" && echo \"true\"");
+        //console.log("overlay_exists_rom : ", overlay_exists_rom);
+        if(overlay_exists_rom.includes("true")){
+            //console.log("file:///recalbox/share/overlays/" + system + "/" + romname + ".png");
+            return "file:///recalbox/share/overlays/" + system + "/" + romname + ".png";
+        }
+        //console.log("test -f \"" +"/recalbox/share/overlays/" + system + "/" + system + ".png\" && echo \"true\"");
+        var overlay_exists_system = api.internal.system.run("test -f \"" +"/recalbox/share/overlays/" + system + "/" + system + ".png\" && echo \"true\"");
+        //console.log("overlay_exists_system : ", overlay_exists_system);
+        if(overlay_exists_system.includes("true")){
+            //console.log("file:///recalbox/share/overlays/" + system + "/" + system + ".png");
+            return "file:///recalbox/share/overlays/" + system + "/" + system + ".png";
+        }
+    }
+    return ""
+}
+
 //function to get icon from teknoparrot if nothing available from scrap
 function teknoParrotIcon(gameData) {
     if (gameData){
@@ -466,6 +491,8 @@ function chooseMedia(data,asset) {
       case "bezel":
         if (data.assets.bezel !== "")
           return data.assets.bezel;
+        else //try to find any bezel in pixl
+          return pixLBezel(data);
         break
       case "panel":
         if (data.assets.panel !== "")
