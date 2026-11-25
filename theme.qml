@@ -149,6 +149,7 @@ FocusScope {
             BatteryStyle:                  api.memory.has("Battery Style") ? api.memory.get("Battery Style") : "Horizontal",
             ColorLayout:                   api.memory.has("Color Layout") ? api.memory.get("Color Layout") : "Original",
             ColorBackground:               api.memory.has("Color Background") ? api.memory.get("Color Background") : "Original",
+            ColorText:                     api.memory.has("Color Text") ? api.memory.get("Color Text") : "Original",
             SystemLogoStyle:               api.memory.has("System Logo Style") ? api.memory.get("System Logo Style") : "Color",
             SystemHeaderLogoGradientEffect:    api.memory.has("System Header Logo with pink gradient effect") ? api.memory.get("System Header Logo with pink gradient effect") : "No",
             PlatformView:                  api.memory.has("Platform page style") ? api.memory.get("Platform page style") : "Grid",
@@ -526,118 +527,140 @@ FocusScope {
         api.memory.unset('To Game');
     }
 
+    // Prepends a 2-character hex alpha channel (e.g., "00" or "FF") to a hex color string.
+    function withAlpha(colorStr, alphaHex) {
+        // Return an empty string if the input is missing or not a string.
+        if (!colorStr || typeof colorStr !== "string") return "";
+
+        // Strip whitespace and a leading '#' so we can inspect the raw hex digits.
+        var clean = colorStr.trim().replace(/^#/, "");
+
+        // If the input already includes an alpha byte (#AARRGGBB = 8 hex chars), strip the existing alpha.
+        if (clean.length === 8) {
+            clean = clean.slice(2);
+        }
+
+        // Return QML-compatible #AARRGGBB hex format.
+        return "#" + alphaHex + clean;
+    }
+
+    // Adjusts the brightness of a hex color by adding `amount` to each RGB channel.
+    function shiftColor(hexColor, amount) {
+        // Normalize input by trimming spaces and removing a leading '#'.
+        var clean = hexColor.trim().replace(/^#/, "");
+
+        // Drop the alpha byte if an 8-digit (#AARRGGBB) hex string is passed.
+        if (clean.length === 8) {
+            clean = clean.slice(2);
+        }
+
+        // Fall back to the original value if the result is not a standard 6-digit RRGGBB hex string.
+        if (clean.length !== 6) {
+            return hexColor;
+        }
+
+        // Parse red, green, and blue channels from base-16 hex pairs.
+        var r = parseInt(clean.slice(0, 2), 16);
+        var g = parseInt(clean.slice(2, 4), 16);
+        var b = parseInt(clean.slice(4, 6), 16);
+
+        // Clamp a channel value to the valid [0, 255] byte range.
+        function clampByte(val) {
+            return Math.max(0, Math.min(255, Math.round(val)));
+        }
+
+        // Shift each RGB channel while staying within valid bounds.
+        r = clampByte(r + amount);
+        g = clampByte(g + amount);
+        b = clampByte(b + amount);
+
+        // Convert a single channel byte back into a zero-padded 2-digit lowercase hex string.
+        function toHex(val) {
+            var h = val.toString(16);
+            return h.length === 1 ? "0" + h : h;
+        }
+
+        // Reassemble the adjusted #RRGGBB hex color.
+        return "#" + toHex(r) + toHex(g) + toHex(b);
+    }
+
+    // Generates a subtle secondary color from a background hex color based on perceived luminance.
+    function autoSecondary(bgHex) {
+        // Normalize input and strip a leading '#'.
+        var clean = bgHex.trim().replace(/^#/, "");
+
+        // Strip leading alpha if an 8-digit hex string is provided.
+        if (clean.length === 8) {
+            clean = clean.slice(2);
+        }
+
+        // Return the default fallback color if the hex string is not 6 characters long.
+        if (clean.length !== 6) {
+            return "#202a44";
+        }
+
+        // Normalize RGB channels to the [0.0, 1.0] range for luminance calculation.
+        var r = parseInt(clean.slice(0, 2), 16) / 255;
+        var g = parseInt(clean.slice(2, 4), 16) / 255;
+        var b = parseInt(clean.slice(4, 6), 16) / 255;
+
+        // Compute approximate relative/perceived luminance (0 = dark, 1 = light).
+        var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+        // Lighten dark backgrounds (+18) and darken light backgrounds (-18) for subtle contrast.
+        var delta = luminance < 0.5 ? 18 : -18;
+        return shiftColor(bgHex, delta);
+    }
+
     // Theme settings
     property var theme: {
 
-        var background =         "#000000";
-        var text =                 "#ebebeb";
-        var gradientstart =             "#001f1f1f";
-        var gradientend =         "#FF000000";
-        var secondary =         "#303030";
+        // Default / "Original" values
+        var background =        "#1d253d";
+        var text =              "#ececec";
+        var gradientstart =     "#000d111d";
+        var gradientend =       "#FF0d111d";
+        var secondary =         "#202a44";
+        var accent =            "#f00980";
 
         if (settings.ColorBackground === "Original") {
-            background =      "#1d253d";
-            text =           "#ececec";
-            gradientstart =  "#000d111d";
-            gradientend =    "#FF0d111d";
+            //keep default one
         }
-        else if (settings.ColorBackground === "Black") {
-            background =     "#000000";
-            gradientstart = "#001f1f1f";
-            gradientend =     "#FF000000";
-        }
-        else if (settings.ColorBackground === "White") {
-            background =     "#ebebeb";
-            gradientstart = "#00ebebeb";
-            gradientend =     "#FFebebeb";
-            text         =     "#101010";
-        }
-        else if (settings.ColorBackground === "Gray") {
-            background =     "#1f1f1f";
-            gradientstart = "#001f1f1f";
-            gradientend =     "#FF1F1F1F";
-        }
-        else if (settings.ColorBackground === "Blue") {
-            background =     "#1d253d";
-            gradientstart = "#001d253d";
-            gradientend =     "#FF1d253d";
-        }
-        else if (settings.ColorBackground === "Green") {
-            background =     "#054b16";
-            gradientstart = "#00054b16";
-            gradientend =     "#00054b16";
-        }
-        else if (settings.ColorBackground === "Red") {
-            background =     "#520000";
-            gradientstart = "#00520000";
-            gradientend =     "#FF520000";
+        else {
+            background =     settings.ColorBackground;
+            gradientstart = withAlpha(background, "00");
+            gradientend = withAlpha(background, "FF");
+            secondary = autoSecondary(background);
         }
 
-        var accent = "#288928";
+        if (settings.ColorText === "Original") {
+            //keep default one
+        }
+        else text = settings.ColorText;
+
         if (settings.ColorLayout === "Original") {
-            accent = "#f00980";
-            secondary = "#202a44";
+            //keep default one
         }
-        else if (settings.ColorLayout === "Dark Green") {
-            accent = "#288928";
+        else accent = settings.ColorLayout;
+
+        //set pegasus also
+        if(backgroundThemeColor == "From Theme"){
+            themeColor.main = background;
+            themeColor.secondary = secondary;
+            themeColor.screenHeader = secondary;
         }
-        else if (settings.ColorLayout === "Light Green") {
-            accent = "#65b032";
+        if(textThemeColor == "From Theme"){
+            themeColor.textTitle = text;
+            themeColor.textLabel = text;
+            themeColor.textSublabel = text;
+            themeColor.textSectionTitle = accent;
+            themeColor.textValue = text;
         }
-        else if (settings.ColorLayout === "Turquoise") {
-            accent = "#288e80";
+        if(selectedThemeColor == "From Theme"){
+            themeColor.screenUnderline = accent;
+            themeColor.underline = accent;
         }
-        else if (settings.ColorLayout === "Dark Red") {
-            accent = "#ab283b";
-        }
-        else if (settings.ColorLayout === "Light Red") {
-            accent = "#e52939";
-        }
-        else if (settings.ColorLayout === "Dark Pink") {
-            accent = "#c52884";
-        }
-        else if (settings.ColorLayout === "Light Pink") {
-            accent = "#ee6694";
-        }
-        else if (settings.ColorLayout === "Dark Blue") {
-            accent = "#30519c";
-        }
-        else if (settings.ColorLayout === "Light Blue") {
-            accent = "#288dcf";
-        }
-        else if (settings.ColorLayout === "Orange") {
-            accent = "#ed5b28";
-        }
-        else if (settings.ColorLayout === "Yellow") {
-            accent = "#ed9728";
-        }
-        else if (settings.ColorLayout === "Magenta") {
-            accent = "#b857c6";
-        }
-        else if (settings.ColorLayout === "Purple") {
-            accent = "#825fb1";
-        }
-        else if (settings.ColorLayout === "Dark Gray") {
-            accent = "#5e5c5d";
-        }
-        else if (settings.ColorLayout === "Light Gray") {
-            accent = "#818181";
-        }
-        else if (settings.ColorLayout === "Dark Gray") {
-            accent = "#5e5c5d";
-        }
-        else if (settings.ColorLayout === "Steel") {
-            accent = "#768294";
-        }
-        else if (settings.ColorLayout === "Stone") {
-            accent = "#658780";
-        }
-        else if (settings.ColorLayout === "Dark Brown") {
-            accent = "#806044";
-        }
-        else if (settings.ColorLayout === "Light Brown") {
-            accent = "#7e715c";
-        }
+
         return {
             main:           background,
             secondary:      secondary,

@@ -283,16 +283,22 @@ FocusScope {
             settingDisplay: qsTr("Horizontal,Vertical")
         }
         ListElement {
-            settingName: "Color Layout"
-            setting: "Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown"
-            settingNameDisplay: qsTr("Color Layout")
-            settingDisplay: qsTr("Original,Dark Green,Light Green,Turquoise,Dark Red,Light Red,Dark Pink,Light Pink,Dark Blue,Light Blue,Orange,Yellow,Magenta,Purple,Dark Gray,Light Gray,Steel,Stone,Dark Brown,Light Brown")
+            settingName: "Color Background"
+            setting: "Original,#FFFFFF,#000000,#FFD700,#00FFFF,#FF7F50,#90EE90,#ADD8E6,#E6E6FA,#FFA500,#FFFF00,#FF69B4,#FFB6C1,#FF7F7F,#008000,#0000FF,#FF0000,#FF00FF,#800080,#40E0D0,#00FF00,#006400,#00008B,#8B0000,#4682B4,#8B8589,#5C4033,#C4A484,#808080,#404040,#D3D3D3,#C0C0C0"
+            settingNameDisplay: qsTr("Color Background")
+            settingDisplay: qsTr("Original,White,Black,Gold,Cyan,Coral,Light Green,Light Blue,Lavender,Orange,Yellow,Dark Pink,Light Pink,Light Red,Green,Blue,Red,Magenta,Purple,Turquoise,Lime,Dark Green,Dark Blue,Dark Red,Steel,Stone,Dark Brown,Light Brown,Gray,Dark Gray,Light Gray,Silver")
         }
         ListElement {
-            settingName: "Color Background"
-            setting: "Original,Black,Gray,Blue,Green,Red"
-            settingNameDisplay: qsTr("Color Background")
-            settingDisplay: qsTr("Original,Black,Gray,Blue,Green,Red")
+            settingName: "Color Text"
+            setting: "Original,#FFFFFF,#000000,#FFD700,#00FFFF,#FF7F50,#90EE90,#ADD8E6,#E6E6FA,#FFA500,#FFFF00,#FF69B4,#FFB6C1,#FF7F7F,#008000,#0000FF,#FF0000,#FF00FF,#800080,#40E0D0,#00FF00,#006400,#00008B,#8B0000,#4682B4,#8B8589,#5C4033,#C4A484,#808080,#404040,#D3D3D3,#C0C0C0"
+            settingNameDisplay: qsTr("Color Text")
+            settingDisplay: qsTr("Original,White,Black,Gold,Cyan,Coral,Light Green,Light Blue,Lavender,Orange,Yellow,Dark Pink,Light Pink,Light Red,Green,Blue,Red,Magenta,Purple,Turquoise,Lime,Dark Green,Dark Blue,Dark Red,Steel,Stone,Dark Brown,Light Brown,Gray,Dark Gray,Light Gray,Silver")
+        }
+        ListElement {
+            settingName: "Color Layout"
+            setting: "Original,#FFFFFF,#000000,#FFD700,#00FFFF,#FF7F50,#90EE90,#ADD8E6,#E6E6FA,#FFA500,#FFFF00,#FF69B4,#FFB6C1,#FF7F7F,#008000,#0000FF,#FF0000,#FF00FF,#800080,#40E0D0,#00FF00,#006400,#00008B,#8B0000,#4682B4,#8B8589,#5C4033,#C4A484,#808080,#404040,#D3D3D3,#C0C0C0"
+            settingNameDisplay: qsTr("Color Layout")
+            settingDisplay: qsTr("Original,White,Black,Gold,Cyan,Coral,Light Green,Light Blue,Lavender,Orange,Yellow,Dark Pink,Light Pink,Light Red,Green,Blue,Red,Magenta,Purple,Turquoise,Lime,Dark Green,Dark Blue,Dark Red,Steel,Stone,Dark Brown,Light Brown,Gray,Dark Gray,Light Gray,Silver")
         }
         ListElement {
         settingName: "System Logo Style"
@@ -1112,6 +1118,32 @@ FocusScope {
                 visible: (settings.SystemHeaderLogoGradientEffect === "Yes") && (context !== "global") ? true : false
             }
         }
+
+        Rectangle {
+            id: settingsbutton
+            width: vpx(40)
+            height: vpx(40)
+            anchors {
+                verticalCenter: headertitle.verticalCenter
+                left: headertitle.right; leftMargin: vpx(10)
+            }
+            color: theme.accent
+            radius: height/2
+            opacity: 1
+            visible: context === "global" ? true : false
+            Image {
+                id: settingsicon
+                width: height
+                height: vpx(24)
+                anchors.centerIn: settingsbutton
+                smooth: true
+                asynchronous: true
+                source: "../assets/images/settingsicon.svg"
+                opacity: 0.8
+            }
+        }
+
+
     }
 
     ListView {

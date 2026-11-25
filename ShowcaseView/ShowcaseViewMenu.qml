@@ -459,10 +459,6 @@ FocusScope {
             color: focus ? theme.accent : "white"
             radius: height/2
             opacity: focus ? 1 : 0.2
-            anchors {
-                verticalCenter: parent.verticalCenter
-                right: settingsButton.left; rightMargin: vpx(50)
-            }
             onFocusChanged: {
                 sfxNav.play()
                 if (focus)
